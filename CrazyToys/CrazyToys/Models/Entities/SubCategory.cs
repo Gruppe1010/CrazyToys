@@ -1,11 +1,12 @@
-﻿using CrazyToys.Models.DTOs;
+﻿
+using CrazyToys.Web.Models.DTOs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
-namespace CrazyToys.Models.Entities
+namespace CrazyToys.Web.Models.Entities
 {
     public class SubCategory
     {

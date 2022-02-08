@@ -7,7 +7,7 @@ using System;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Extensions;
 
-namespace CrazyToys
+namespace CrazyToys.Web
 {
     public class Startup
     {

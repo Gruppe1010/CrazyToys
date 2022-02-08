@@ -1,4 +1,4 @@
-﻿namespace CrazyToys.Models.DTOs
+﻿namespace CrazyToys.Web.Models.DTOs
 {
     public class AgeGroupDTO
     {

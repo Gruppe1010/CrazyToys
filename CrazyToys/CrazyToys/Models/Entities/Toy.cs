@@ -1,8 +1,9 @@
-﻿using CrazyToys.Models.DTOs;
+﻿
+using CrazyToys.Web.Models.DTOs;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CrazyToys.Models.Entities
+namespace CrazyToys.Web.Models.Entities
 {
     public class Toy
     {

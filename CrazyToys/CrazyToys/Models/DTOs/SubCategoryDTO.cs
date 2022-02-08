@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace CrazyToys.Models.DTOs
+namespace CrazyToys.Web.Models.DTOs
+
 {
     public class SubCategoryDTO
     {

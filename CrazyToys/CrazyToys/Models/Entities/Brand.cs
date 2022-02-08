@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CrazyToys.Models.Entities
+namespace CrazyToys.Web.Models.Entities
 {
     public class Brand
     {

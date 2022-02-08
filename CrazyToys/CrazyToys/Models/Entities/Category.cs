@@ -1,9 +1,6 @@
-﻿using CrazyToys.Web.Models.DTOs;
-using System;
+﻿using CrazyToys.Web.Models.Entities;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
 
 namespace CrazyToys.Web.Models.Entities
 {

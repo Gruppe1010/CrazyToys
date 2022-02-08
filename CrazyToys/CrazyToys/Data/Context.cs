@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using CrazyToys.Models.Entities;
+using CrazyToys.Web.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
 
