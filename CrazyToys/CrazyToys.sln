@@ -4,10 +4,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrazyToys.Web", "CrazyToys\CrazyToys.Web.csproj", "{4D63B620-857A-468A-8907-A8E4587832F0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{52CA9499-085B-4A40-924F-8B3324744026} = {52CA9499-085B-4A40-924F-8B3324744026}
+		{AE035BC6-8984-4B9F-B983-F3E308338416} = {AE035BC6-8984-4B9F-B983-F3E308338416}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrazyToys.Interfaces", "CrazyToys.Interfaces\CrazyToys.Interfaces.csproj", "{52CA9499-085B-4A40-924F-8B3324744026}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrazyToys.Interfaces", "CrazyToys.Interfaces\CrazyToys.Interfaces.csproj", "{52CA9499-085B-4A40-924F-8B3324744026}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrazyToys.Services", "CrazyToys.Services\CrazyToys.Services.csproj", "{AE035BC6-8984-4B9F-B983-F3E308338416}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrazyToys.Services", "CrazyToys.Services\CrazyToys.Services.csproj", "{AE035BC6-8984-4B9F-B983-F3E308338416}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
