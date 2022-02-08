@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrazyToys.Interfaces", "Cra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrazyToys.Services", "CrazyToys.Services\CrazyToys.Services.csproj", "{AE035BC6-8984-4B9F-B983-F3E308338416}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrazyToys.Entities", "CrazyToys.Entities\CrazyToys.Entities.csproj", "{638DD57E-4F56-46B2-883A-3740F5842B42}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,10 @@ Global
 		{AE035BC6-8984-4B9F-B983-F3E308338416}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE035BC6-8984-4B9F-B983-F3E308338416}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE035BC6-8984-4B9F-B983-F3E308338416}.Release|Any CPU.Build.0 = Release|Any CPU
+		{638DD57E-4F56-46B2-883A-3740F5842B42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{638DD57E-4F56-46B2-883A-3740F5842B42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{638DD57E-4F56-46B2-883A-3740F5842B42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{638DD57E-4F56-46B2-883A-3740F5842B42}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
