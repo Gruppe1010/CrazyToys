@@ -1,7 +1,5 @@
-using CrazyToys.Web.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -41,10 +39,12 @@ namespace CrazyToys
         public void ConfigureServices(IServiceCollection services)
         {
 
+            /*
 
             services.AddDbContext<Context>(options =>
                 options.UseSqlServer(
                     _config.GetConnectionString("Context")));
+            */
 
             #pragma warning disable IDE0022 // Use expression body for methods
             services.AddUmbraco(_env, _config)

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace CrazyToys.Web.Migrations
+namespace CrazyToys.Data.Migrations
 {
     public partial class Initial : Migration
     {
@@ -10,25 +10,25 @@ namespace CrazyToys.Web.Migrations
                 name: "AgeGroups",
                 columns: table => new
                 {
-                    IdAgeGroup = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    AgeGroupId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Interval = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AgeGroups", x => x.IdAgeGroup);
+                    table.PrimaryKey("PK_AgeGroups", x => x.AgeGroupId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Brands",
                 columns: table => new
                 {
-                    IdBrand = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    BrandId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LogoUrl = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Brands", x => x.IdBrand);
+                    table.PrimaryKey("PK_Brands", x => x.BrandId);
                 });
 
             migrationBuilder.CreateTable(
@@ -47,84 +47,101 @@ namespace CrazyToys.Web.Migrations
                 name: "Colours",
                 columns: table => new
                 {
-                    IdColour = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ColourId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Colours", x => x.IdColour);
+                    table.PrimaryKey("PK_Colours", x => x.ColourId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "SubCategories",
                 columns: table => new
                 {
-                    IdSubCategory = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CategoryID = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    SubCategoryId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SubCategories", x => x.IdSubCategory);
-                    table.ForeignKey(
-                        name: "FK_SubCategories_Categories_CategoryID",
-                        column: x => x.CategoryID,
-                        principalTable: "Categories",
-                        principalColumn: "CategoryId",
-                        onDelete: ReferentialAction.Restrict);
+                    table.PrimaryKey("PK_SubCategories", x => x.SubCategoryId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Toys",
                 columns: table => new
                 {
-                    IdToy = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ToyId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    BrandId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    BrandID = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     ShortDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LongDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ColourId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ColourID = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Price = table.Column<int>(type: "int", nullable: false),
                     Stock = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Toys", x => x.IdToy);
+                    table.PrimaryKey("PK_Toys", x => x.ToyId);
                     table.ForeignKey(
-                        name: "FK_Toys_Brands_BrandId",
-                        column: x => x.BrandId,
+                        name: "FK_Toys_Brands_BrandID",
+                        column: x => x.BrandID,
                         principalTable: "Brands",
-                        principalColumn: "IdBrand",
+                        principalColumn: "BrandId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Toys_Colours_ColourId",
-                        column: x => x.ColourId,
+                        name: "FK_Toys_Colours_ColourID",
+                        column: x => x.ColourID,
                         principalTable: "Colours",
-                        principalColumn: "IdColour",
+                        principalColumn: "ColourId",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CategorySubCategory",
+                columns: table => new
+                {
+                    CategoriesID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    SubCategoriesID = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CategorySubCategory", x => new { x.CategoriesID, x.SubCategoriesID });
+                    table.ForeignKey(
+                        name: "FK_CategorySubCategory_Categories_CategoriesID",
+                        column: x => x.CategoriesID,
+                        principalTable: "Categories",
+                        principalColumn: "CategoryId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CategorySubCategory_SubCategories_SubCategoriesID",
+                        column: x => x.SubCategoriesID,
+                        principalTable: "SubCategories",
+                        principalColumn: "SubCategoryId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "AgeGroupToy",
                 columns: table => new
                 {
-                    AgeGroupsId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ToysId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    AgeGroupsID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ToysID = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AgeGroupToy", x => new { x.AgeGroupsId, x.ToysId });
+                    table.PrimaryKey("PK_AgeGroupToy", x => new { x.AgeGroupsID, x.ToysID });
                     table.ForeignKey(
-                        name: "FK_AgeGroupToy_AgeGroups_AgeGroupsId",
-                        column: x => x.AgeGroupsId,
+                        name: "FK_AgeGroupToy_AgeGroups_AgeGroupsID",
+                        column: x => x.AgeGroupsID,
                         principalTable: "AgeGroups",
-                        principalColumn: "IdAgeGroup",
+                        principalColumn: "AgeGroupId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_AgeGroupToy_Toys_ToysId",
-                        column: x => x.ToysId,
+                        name: "FK_AgeGroupToy_Toys_ToysID",
+                        column: x => x.ToysID,
                         principalTable: "Toys",
-                        principalColumn: "IdToy",
+                        principalColumn: "ToyId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -132,19 +149,19 @@ namespace CrazyToys.Web.Migrations
                 name: "Images",
                 columns: table => new
                 {
-                    IdImage = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ImageId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     UrlLow = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UrlHigh = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ToyId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    ToyID = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Images", x => x.IdImage);
+                    table.PrimaryKey("PK_Images", x => x.ImageId);
                     table.ForeignKey(
-                        name: "FK_Images_Toys_ToyId",
-                        column: x => x.ToyId,
+                        name: "FK_Images_Toys_ToyID",
+                        column: x => x.ToyID,
                         principalTable: "Toys",
-                        principalColumn: "IdToy",
+                        principalColumn: "ToyId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -152,61 +169,64 @@ namespace CrazyToys.Web.Migrations
                 name: "SubCategoryToy",
                 columns: table => new
                 {
-                    SubCategoriesId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ToysId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    SubCategoriesID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ToysID = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SubCategoryToy", x => new { x.SubCategoriesId, x.ToysId });
+                    table.PrimaryKey("PK_SubCategoryToy", x => new { x.SubCategoriesID, x.ToysID });
                     table.ForeignKey(
-                        name: "FK_SubCategoryToy_SubCategories_SubCategoriesId",
-                        column: x => x.SubCategoriesId,
+                        name: "FK_SubCategoryToy_SubCategories_SubCategoriesID",
+                        column: x => x.SubCategoriesID,
                         principalTable: "SubCategories",
-                        principalColumn: "IdSubCategory",
+                        principalColumn: "SubCategoryId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_SubCategoryToy_Toys_ToysId",
-                        column: x => x.ToysId,
+                        name: "FK_SubCategoryToy_Toys_ToysID",
+                        column: x => x.ToysID,
                         principalTable: "Toys",
-                        principalColumn: "IdToy",
+                        principalColumn: "ToyId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AgeGroupToy_ToysId",
+                name: "IX_AgeGroupToy_ToysID",
                 table: "AgeGroupToy",
-                column: "ToysId");
+                column: "ToysID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Images_ToyId",
+                name: "IX_CategorySubCategory_SubCategoriesID",
+                table: "CategorySubCategory",
+                column: "SubCategoriesID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Images_ToyID",
                 table: "Images",
-                column: "ToyId");
+                column: "ToyID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SubCategories_CategoryID",
-                table: "SubCategories",
-                column: "CategoryID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SubCategoryToy_ToysId",
+                name: "IX_SubCategoryToy_ToysID",
                 table: "SubCategoryToy",
-                column: "ToysId");
+                column: "ToysID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Toys_BrandId",
+                name: "IX_Toys_BrandID",
                 table: "Toys",
-                column: "BrandId");
+                column: "BrandID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Toys_ColourId",
+                name: "IX_Toys_ColourID",
                 table: "Toys",
-                column: "ColourId");
+                column: "ColourID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "AgeGroupToy");
+
+            migrationBuilder.DropTable(
+                name: "CategorySubCategory");
 
             migrationBuilder.DropTable(
                 name: "Images");
@@ -218,13 +238,13 @@ namespace CrazyToys.Web.Migrations
                 name: "AgeGroups");
 
             migrationBuilder.DropTable(
+                name: "Categories");
+
+            migrationBuilder.DropTable(
                 name: "SubCategories");
 
             migrationBuilder.DropTable(
                 name: "Toys");
-
-            migrationBuilder.DropTable(
-                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "Brands");
