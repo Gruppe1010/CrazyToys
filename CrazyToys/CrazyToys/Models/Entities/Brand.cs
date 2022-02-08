@@ -9,6 +9,15 @@ namespace CrazyToys.Web.Models.Entities
         public string Name { get; set; }
         public string LogoUrl { get; set; }
 
+        public Brand(string iD, string name)
+        {
+            ID = iD;
+            Name = name;
+        }
 
+        public Brand(string iD, string name, string logoUrl) : this(iD, name)
+        {
+            LogoUrl = logoUrl;
+        }
     }
 }
