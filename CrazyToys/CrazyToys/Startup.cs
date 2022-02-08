@@ -1,3 +1,4 @@
+using CrazyToys.Web.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 namespace CrazyToys.Web
 {
@@ -45,6 +47,13 @@ namespace CrazyToys.Web
                 .AddComposers()
                 .Build();
 #pragma warning restore IDE0022 // Use expression body for methods
+
+            services.AddDbContext<Context>(options =>
+            options.UseSqlServer(
+                Configuration.GetConnectionString("Context")));
+
+            
+
 
         }
 

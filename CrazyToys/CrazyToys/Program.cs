@@ -8,9 +8,13 @@ namespace CrazyToys.Web
     public class Program
     {
         public static void Main(string[] args)
-            => CreateHostBuilder(args)
+        {
+            var db = Context()
+        
+            CreateHostBuilder(args)
                 .Build()
                 .Run();
+        }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
