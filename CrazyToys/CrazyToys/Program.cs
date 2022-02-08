@@ -9,7 +9,7 @@ namespace CrazyToys.Web
     {
         public static void Main(string[] args)
         {
-            var db = Context()
+           
         
             CreateHostBuilder(args)
                 .Build()
