@@ -7,8 +7,8 @@ namespace CrazyToys.Web.Models.Entities
     public class AgeGroup
     {
 
-        [Column("IdAgeGroup")]
-        public string Id { get; set; }
+        [Column("AgeGroupId")]
+        public string ID { get; set; }
         public string Interval { get; set; }
         public ICollection<Toy> Toys { get; set; }
 
@@ -16,7 +16,7 @@ namespace CrazyToys.Web.Models.Entities
 
         public AgeGroupDTO convertToDTO()
         {
-            return new AgeGroupDTO(Id, Interval);
+            return new AgeGroupDTO(ID, Interval);
         }
 
     }

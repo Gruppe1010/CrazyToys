@@ -4,8 +4,8 @@ namespace CrazyToys.Web.Models.Entities
 {
     public class Colour
     {
-        [Column("IdColour")]
-        public string Id { get; set; }
+        [Column("ColourId")]
+        public string ID { get; set; }
         public string Name { get; set; }
     }
 }

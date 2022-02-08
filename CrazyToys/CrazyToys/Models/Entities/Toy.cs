@@ -7,8 +7,8 @@ namespace CrazyToys.Web.Models.Entities
 {
     public class Toy
     {
-        [Column("IdToy")]
-        public string Id { get; set; }
+        [Column("ToyId")]
+        public string ID { get; set; }
         public string Name { get; set; }
         public Brand Brand { get; set; }
         public string ShortDescription { get; set; }
@@ -24,7 +24,7 @@ namespace CrazyToys.Web.Models.Entities
         public ToyDTO ConvertToDTO()
         {
             // TODO tag AgeGroups og SubCategories med - opret convertere til dem og find ud af hvordan man bruger Map - er det fordi det er en ICollection?
-            return new ToyDTO(Id, Name, Brand, ShortDescription, LongDescription, Colour, Price, Stock, Images);
+            return new ToyDTO(ID, Name, Brand, ShortDescription, LongDescription, Colour, Price, Stock, Images);
         }
 
     }

@@ -4,8 +4,8 @@ namespace CrazyToys.Web.Models.Entities
 {
     public class Brand
     {
-        [Column("IdBrand")]
-        public string Id { get; set; }
+        [Column("BrandId")]
+        public string ID { get; set; }
         public string Name { get; set; }
         public string LogoUrl { get; set; }
 
