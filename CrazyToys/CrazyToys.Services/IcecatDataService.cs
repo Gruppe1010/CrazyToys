@@ -1,7 +1,4 @@
-﻿
-
-
-using CrazyToys.Entities.Models.Entities;
+﻿using CrazyToys.Entities.Models.Entities;
 using CrazyToys.Interfaces;
 using Microsoft.Net.Http.Headers;
 using System;
@@ -41,7 +38,7 @@ namespace CrazyToys.Services
             brandDict.Add("3480", new Brand("3480", "Jumbo"));
         }
 
-        public async Task<Toy> getSingleProductAsync(string brandId, string productId)
+        public async Task<Toy> getSingleProduct(string brandId, string productId)
         {
             string username = "alphaslo";
             string password = "KJ6j1c9y8c2YwMq8GTjc";
