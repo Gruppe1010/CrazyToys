@@ -9,7 +9,7 @@ namespace CrazyToys.Interfaces
     {
         
 
-        Task<Toy> getSingleProductAsync(string brandId, string productId);
+        Task<Toy> getSingleProduct(string brandId, string productId);
 
         
 
