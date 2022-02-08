@@ -1,6 +1,5 @@
-﻿using CrazyToys.Interfaces;
-using CrazyToys.Web.Models.Entities;
-using Microsoft.Net.Http.Headers;
+﻿
+using CrazyToys.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,6 +11,7 @@ namespace CrazyToys.Services
 {
     public class IcecatDataService : IProductDataService
     {
+        /*
         private readonly IHttpClientFactory _httpClientFactory;
         private Dictionary<string, Brand> brandDict;
 
@@ -85,5 +85,6 @@ namespace CrazyToys.Services
             return new Toy();
             throw new NotImplementedException();
         }
+        */
     }
 }
