@@ -2,6 +2,9 @@
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Home>
 @{
 	Layout = "Master.cshtml";
+
+    var test = @Html.Raw(ViewData["Test"]);
+
 }
 
 
@@ -13,7 +16,7 @@
                     <div class="row">
                         <div class="col-xl-5 col-lg-7 col-md-8">
                             <div class="hero__text">
-                                <h6>Summer Collection</h6>
+                                <h6>@test</h6>
                                 <h2>@(!string.IsNullOrWhiteSpace(Model.Title) ? Model.Title : Model.Name)</h2>
                                 <p>A specialist label creating luxury essentials. Ethically crafted with an unwavering
                                 commitment to exceptional quality.</p>
