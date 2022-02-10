@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CrazyToys.Entities.Models.Entities
 {
@@ -7,5 +8,7 @@ namespace CrazyToys.Entities.Models.Entities
         [Column("ColourId")]
         public string ID { get; set; }
         public string Name { get; set; }
+        public ICollection<Toy> Toys { get; set; }
+
     }
 }

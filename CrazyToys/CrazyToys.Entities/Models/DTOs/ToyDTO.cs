@@ -22,8 +22,9 @@ namespace CrazyToys.Entities.Models.DTOs
 
         public ToyDTO(
             string id, string name, Brand brand, string shortDescription,
-            string longDescription, Colour colour,
+            string longDescription,
             /*
+            ICollection<Colour> colours,
             ICollection<AgeGroupDTO> ageGroupDTOs, 
             ICollection<SubCategoryDTO> subCategoryDTOs, */ // TODO opret convertere og find ud af hvordan man siger map
             int price, int stock, ICollection<Image> images)
@@ -33,8 +34,8 @@ namespace CrazyToys.Entities.Models.DTOs
             Brand = brand;
             ShortDescription = shortDescription;
             LongDescription = longDescription;
-            Colour = colour;
             /*
+            Colours = colours;
             AgeGroupDTOs = ageGroupDTOs;
             SubCategoryDTOs = subCategoryDTOs;*/
             Price = price;

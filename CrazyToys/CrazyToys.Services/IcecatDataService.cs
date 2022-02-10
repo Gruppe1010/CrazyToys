@@ -2,6 +2,7 @@
 using CrazyToys.Interfaces;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,7 +25,7 @@ namespace CrazyToys.Services
             _httpClientFactory = httpClientFactory;
             brandDict = new Dictionary<string, Brand>();
 
-            brandDict.Add("15111", new Brand("15111", "Barbie"));
+            brandDict.Add("15111", new Brand("15111", "Barbie", "https://images.icecat.biz/img/brand/thumb/15111_e16ba4de456d43bd993b5c39607aa845.jpg"));
             brandDict.Add("27814", new Brand("27814", "Bambolino"));
             brandDict.Add("23505", new Brand("23505", "Clown"));
             brandDict.Add("32046", new Brand("32046", "Fuzzikins Fuzzi"));
@@ -78,10 +79,28 @@ namespace CrazyToys.Services
 
             if (httpResponseMessage.IsSuccessStatusCode)
             {
-                string contentString =
+                string jsonContent =
                     await httpResponseMessage.Content.ReadAsStringAsync();
 
-                var json = JsonConvert.DeserializeObject(contentString);
+                var json = JsonConvert.DeserializeObject(jsonContent);
+
+                /*
+                string id = json["data"]["GeneralInfo"]["BrandPartCode"];
+                string name = json["data"]["GeneralInfo"]["Title"];
+                string shortDescription = json["data"]["GeneralInfo"]["SummaryDescription"]["ShortSummaryDescription"];
+                string longDescription = json["data"]["GeneralInfo"]["SummaryDescription"]["LongSummaryDescription"];
+                string colourString = json["data"]["GeneralInfo"]["FeatureGroups"]["Features"]["PresentationValue"];
+                */
+
+
+
+
+
+
+                // TODO gør noget med colour
+
+
+
             }
 
             return new Toy();

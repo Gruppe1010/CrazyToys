@@ -26,7 +26,10 @@ namespace CrazyToys.Web.Controllers
 
             ViewData["Test"] = test;//JsonConvert.SerializeObject(test);
 
-            _  = _icecatDataService.getSingleProduct("15111", "BARBIEKS55");
+            //_  = _icecatDataService.getSingleProduct("15111", "BARBIEKS55");
+            _ = _icecatDataService.getSingleProduct("5669", "HASB9940EU60");
+
+            
 
             // return a 'model' to the selected template/view for this page.
             return CurrentTemplate(CurrentPage);
