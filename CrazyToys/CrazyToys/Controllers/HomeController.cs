@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CrazyToys.Interfaces;
+using CrazyToys.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -7,31 +9,24 @@ using Umbraco.Cms.Web.Common.Controllers;
 
 namespace CrazyToys.Web.Controllers
 {
-    /*
-    public class HomeController : Controller
-    {
-        public IActionResult Index()
-        {
-            return View();
-        }
-    }
-    */
-
     public class HomeController : RenderController
     {
-        public HomeController(ILogger<HomeController> logger, ICompositeViewEngine compositeViewEngine, IUmbracoContextAccessor umbracoContextAccessor)
+
+        private readonly IProductDataService _icecatDataService;
+
+        public HomeController(ILogger<HomeController> logger, ICompositeViewEngine compositeViewEngine, IUmbracoContextAccessor umbracoContextAccessor, IProductDataService icecatDataService)
             : base(logger, compositeViewEngine, umbracoContextAccessor)
         {
+            _icecatDataService = icecatDataService;
         }
 
         public override IActionResult Index()
         {
-            // you are in control here!
-            System.Console.WriteLine("Vi er indeeeeeeeeeeeeeee");
-
             string test = "gruppe10";
 
             ViewData["Test"] = test;//JsonConvert.SerializeObject(test);
+
+            _  = _icecatDataService.getSingleProduct("15111", "BARBIEKS55");
 
             // return a 'model' to the selected template/view for this page.
             return CurrentTemplate(CurrentPage);

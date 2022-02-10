@@ -1,6 +1,7 @@
 ﻿using CrazyToys.Entities.Models.Entities;
 using CrazyToys.Interfaces;
 using Microsoft.Net.Http.Headers;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -63,7 +64,7 @@ namespace CrazyToys.Services
 
             HttpRequestMessage httpRequestMessage = new HttpRequestMessage(
                 HttpMethod.Get,
-                $"https://live.icecat.biz/api/?UserName=&Language=&Content=&Brand={brandName}&ProductCode={productId}")
+                $"https://live.icecat.biz/api/?Username={username}&Language=dk&Brand={brandName}&ProductCode={productId}")
             {
                 Headers =
                     {
@@ -77,10 +78,10 @@ namespace CrazyToys.Services
 
             if (httpResponseMessage.IsSuccessStatusCode)
             {
-                Stream contentStream =
-                    await httpResponseMessage.Content.ReadAsStreamAsync();
+                string contentString =
+                    await httpResponseMessage.Content.ReadAsStringAsync();
 
-
+                var json = JsonConvert.DeserializeObject(contentString);
             }
 
             return new Toy();
