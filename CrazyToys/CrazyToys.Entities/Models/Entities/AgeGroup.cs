@@ -8,11 +8,15 @@ namespace CrazyToys.Entities.Models.Entities
     {
 
         [Column("AgeGroupId")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string ID { get; set; }
         public string Interval { get; set; }
         public ICollection<Toy> Toys { get; set; }
 
-
+        public AgeGroup(string interval)
+        {
+            Interval = interval;
+        }
 
         public AgeGroupDTO convertToDTO()
         {

@@ -10,5 +10,11 @@ namespace CrazyToys.Entities.Models.Entities
         public string Name { get; set; }
         public ICollection<Toy> Toys { get; set; }
 
+        public Colour(string name)
+        {
+            Name = name;
+        }
     }
+
+
 }

@@ -19,6 +19,30 @@ namespace CrazyToys.Entities.Models.Entities
         public int Stock { get; set; }
         public ICollection<Image> Images { get; set; }
 
+        public Toy()
+        {
+            Colours = new List<Colour>();
+            AgeGroups = new List<AgeGroup>();
+            SubCategories = new List<SubCategory>();
+
+        }
+
+        public Toy(string iD, string name, Brand brand, string shortDescription, 
+            string longDescription, ICollection<Colour> colours, ICollection<AgeGroup> ageGroups, 
+            ICollection<SubCategory> subCategories, int price, int stock, ICollection<Image> images)
+        {
+            ID = iD;
+            Name = name;
+            Brand = brand;
+            ShortDescription = shortDescription;
+            LongDescription = longDescription;
+            Colours = colours;
+            AgeGroups = ageGroups;
+            SubCategories = subCategories;
+            Price = price;
+            Stock = stock;
+            Images = images;
+        }
 
         public ToyDTO ConvertToDTO()
         {
