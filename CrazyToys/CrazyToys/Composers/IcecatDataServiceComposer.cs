@@ -15,7 +15,10 @@ namespace CrazyToys.Web.Composers
     {
         public void Compose(IUmbracoBuilder builder)
         {
-            builder.Services.AddUnique<IProductDataService, IcecatDataService>();
+            //builder.Services.AddUnique<IProductDataService, IcecatDataService>();
+            //builder.Services.
+            //builder.Services.Add(IProductDataService);
+
         }
     }
 }
