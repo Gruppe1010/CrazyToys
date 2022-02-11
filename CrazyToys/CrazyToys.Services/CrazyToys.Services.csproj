@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CrazyToys.Data\CrazyToys.Data.csproj" />
     <ProjectReference Include="..\CrazyToys.Interfaces\CrazyToys.Interfaces.csproj" />
   </ItemGroup>
 
