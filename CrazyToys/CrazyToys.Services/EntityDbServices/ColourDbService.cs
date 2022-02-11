@@ -22,7 +22,7 @@ namespace CrazyToys.Services
         public async Task<Colour> Create(Colour colour)
         {
             _context.Colours.Add(colour);
-            int noget = await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             return colour;
         }
@@ -32,18 +32,28 @@ namespace CrazyToys.Services
             throw new NotImplementedException();
         }
 
-        public async Task<Colour> GetById(string id)
+        public Task<Colour> GetById(string id)
         {
-
-            if (!String.IsNullOrWhiteSpace(id))
+            /*
+            if (id != 0)
             {
                 var colour = await _context.Colours
                     .FirstOrDefaultAsync(c => c.ID == id);
 
                 return colour;
             }
+            */
             return null;
+
         }
+
+        /*
+        public async Task<Colour> Upsert(string name)
+        {
+            var colourId = _context.Colours.FromSqlRaw("UpsertColour", name);
+            return new Colour(colourId, name);
+        }
+        */
 
         public Task<Colour> UpdateById(string id)
         {

@@ -19,17 +19,19 @@ namespace CrazyToys.Services
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IEnitityCRUD<Brand> _brandDbService;
         private readonly IEnitityCRUD<SubCategory> _subCategoryDbService;
+        private readonly ColourDbService _colourDbService;
 
         //private Dictionary<string, Brand> brandDict;
         private Random random;
 
 
 
-        public IcecatDataService(IHttpClientFactory httpClientFactory, BrandDbService brandDbService, SubCategoryDbService subCategoryDbService)
+        public IcecatDataService(IHttpClientFactory httpClientFactory, BrandDbService brandDbService, SubCategoryDbService subCategoryDbService, ColourDbService colourDbService)
         {
             _httpClientFactory = httpClientFactory;
             _brandDbService = brandDbService;
             _subCategoryDbService = subCategoryDbService;
+            _colourDbService = colourDbService;
             random = new Random();
 
             /*
@@ -159,15 +161,16 @@ namespace CrazyToys.Services
                     string colourId = "1766";
                     string ageGroupId = "24697";
 
+                    var featureGroups = json["data"]["FeaturesGroups"];
 
-                    foreach (var featuresGroup in json["data"]["GeneralInfo"]["FeaturesGroups"])
+                    foreach (dynamic featuresGroup in json["data"]["FeaturesGroups"])
                     {
-                        var features = featuresGroup["Features"];
+                        dynamic features = featuresGroup["Features"];
 
-                        foreach (var feature in features)
+                        foreach (dynamic feature in features)
                         {
 
-                            var featureId = feature["Feature"]["ID"];
+                            string featureId = feature["Feature"]["ID"];
 
                             if (featureId.Equals(colourId))
                             {
@@ -178,17 +181,25 @@ namespace CrazyToys.Services
                                 // for hver farve
                                 Array.ForEach(colours, async colourName =>
                                 {
-                                    /*
+                                    // TODO kige på async
                                     //tjek om den er i db
-                                    Colour colour = await _colourDbService.GetByName(colourName);
+                                    //Task<Colour> colourTask = _colourDbService.GetByName(colourName);
+                                    //_colourDbService.Upsert(colourName);
+                                    //Colour colour = await colourTask;
+                            
+                                    /*
                                     if(colour == null)
                                     {
                                         // ellers læg i db
-                                       // colour = await _colourDbService.Create(new Colour(colourName));
-                                    }
-                                     og tilføj farven til toy-obj
+                                        Task<Colour> colourTask1 = _colourDbService.Create(new Colour(colourName));
+                                        colour = await colourTask1;
+                                     
+                                    } 
+                                    //og tilføj farven til toy-obj
                                     toy.Colours.Add(colour);
                                     */
+                                  
+                                    
                                 });
                             }
                             else if (featureId.Equals(ageGroupId))

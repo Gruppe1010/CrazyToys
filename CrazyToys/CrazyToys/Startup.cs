@@ -46,14 +46,17 @@ namespace CrazyToys
            
 
             services.AddDbContext<Context>(options =>
-            options.UseSqlServer(
-                _config.GetConnectionString("context")));
+            {
+                options.UseSqlServer(
+               _config.GetConnectionString("context"));
+
+            });
 
             
-            services.AddTransient<BrandDbService>();
-            services.AddTransient<SubCategoryDbService>();
-            services.AddTransient<ColourDbService>();
-            services.AddTransient<IProductDataService, IcecatDataService>();
+            services.AddScoped<BrandDbService>();
+            services.AddScoped<SubCategoryDbService>();
+            services.AddScoped<ColourDbService>();
+            services.AddScoped<IProductDataService, IcecatDataService>();
 
 
 

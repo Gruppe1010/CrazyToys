@@ -7,12 +7,18 @@ namespace CrazyToys.Entities.Models.Entities
     {
         [Column("ColourId")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string ID { get; set; }
+        public int ID { get; set; }
         public string Name { get; set; }
         public ICollection<Toy> Toys { get; set; }
 
         public Colour(string name)
         {
+            Name = name;
+        }
+
+        public Colour(int iD, string name)
+        {
+            ID = iD;
             Name = name;
         }
     }
