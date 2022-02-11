@@ -1,5 +1,10 @@
+using CrazyToys.Data.Data;
+using CrazyToys.Interfaces;
+using CrazyToys.Interfaces.EntityDbInterfaces;
+using CrazyToys.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -38,21 +43,39 @@ namespace CrazyToys
         /// </remarks>
         public void ConfigureServices(IServiceCollection services)
         {
-
-            /*
+           
 
             services.AddDbContext<Context>(options =>
-                options.UseSqlServer(
-                    _config.GetConnectionString("Context")));
-            */
+            options.UseSqlServer(
+                _config.GetConnectionString("context")));
 
-            #pragma warning disable IDE0022 // Use expression body for methods
+            
+            services.AddTransient<BrandDbService>();
+            services.AddTransient<SubCategoryDbService>();
+            services.AddTransient<IProductDataService, IcecatDataService>();
+
+
+
+#pragma warning disable IDE0022 // Use expression body for methods
             services.AddUmbraco(_env, _config)
                 .AddBackOffice()
                 .AddWebsite()
                 .AddComposers()
                 .Build();
-            #pragma warning restore IDE0022 // Use expression body for methods
+#pragma warning restore IDE0022 // Use expression body for methods
+
+            /*
+            services.AddSingleton<IEnitityCRUD, BrandDbService>();
+            services.AddSingleton<IEnitityCRUD, SubCategoryDbService>();
+            */
+            
+
+           
+          
+           
+
+
+
 
         }
 
@@ -81,5 +104,10 @@ namespace CrazyToys
                     u.UseWebsiteEndpoints();
                 });
         }
+
+   
+            
+
+        
     }
 }

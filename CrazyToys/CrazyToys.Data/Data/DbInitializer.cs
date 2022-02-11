@@ -65,7 +65,9 @@ namespace CrazyToys.Data.Data
                     new Category("Figurer"),
                     new Category("Bamser"),
                     new Category("Kreativ"),
-                    new Category("Spil")
+                    new Category("Spil"),
+                    new Category("Assorteret")
+
                 };
                 foreach (Category category in categories)
                 {
