@@ -1,5 +1,6 @@
 ﻿using CrazyToys.Entities.Models.Entities;
 using CrazyToys.Interfaces;
+using CrazyToys.Interfaces.EntityDbInterfaces;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -16,13 +17,22 @@ namespace CrazyToys.Services
     {
         
         private readonly IHttpClientFactory _httpClientFactory;
-        private Dictionary<string, Brand> brandDict;
+        private readonly IEnitityCRUD<Brand> _brandDbService;
+        private readonly IEnitityCRUD<SubCategory> _subCategoryDbService;
+
+        //private Dictionary<string, Brand> brandDict;
+        private Random random;
 
 
 
-        public IcecatDataService(IHttpClientFactory httpClientFactory)
+        public IcecatDataService(IHttpClientFactory httpClientFactory, BrandDbService brandDbService, SubCategoryDbService subCategoryDbService)
         {
             _httpClientFactory = httpClientFactory;
+            _brandDbService = brandDbService;
+            _subCategoryDbService = subCategoryDbService;
+            random = new Random();
+
+            /*
             brandDict = new Dictionary<string, Brand>();
 
             brandDict.Add("15111", new Brand("15111", "Barbie", "https://images.icecat.biz/img/brand/thumb/15111_e16ba4de456d43bd993b5c39607aa845.jpg"));
@@ -38,26 +48,186 @@ namespace CrazyToys.Services
             brandDict.Add("16046", new Brand("16046", "SESCreative", "https://images.icecat.biz/img/brand/thumb/16046_dd661f6b89de45819bb760a18e9c81ef.jpg"));
             brandDict.Add("23442", new Brand("23442", "RuboToys", "https://images.icecat.biz/img/brand/thumb/23442_16e7f8ad9bde491c8619a1d68d09c25a.jpg"));
             brandDict.Add("3480", new Brand("3480", "Jumbo", "https://images.icecat.biz/img/brand/thumb/3480_998702f9778f4b2cad3b2b69d98ee481.jpg"));
+            */
         }
 
 
         // 
-        public async Task<Toy> getSingleProduct(string brandId, string productId)
+        public async Task<Toy> GetSingleProduct(string brandId, string productId)
         {
+            Toy toy = null;
+
             string username = "alphaslo";
             string password = "KJ6j1c9y8c2YwMq8GTjc";
 
             byte[] byteArray = Encoding.ASCII.GetBytes($"{username}:{password}");
             string credentials = Convert.ToBase64String(byteArray);
 
-            string brandName;
-            Brand brand;
-            // TODO hent brand op fra db - gem på nyt Toy-obj
-            bool hasValue = brandDict.TryGetValue(brandId, out brand);
-            if (hasValue)
+            
+            Brand brand = await _brandDbService.GetById(brandId);
+            if (brand != null)
             {
-                brandName = brand.Name;
-                Console.WriteLine(brandName);
+                HttpRequestMessage httpRequestMessage = new HttpRequestMessage(
+                    HttpMethod.Get,
+                    $"https://live.icecat.biz/api/?Username={username}&Language=dk&Brand={brand.Name}&ProductCode={productId}")
+                {
+                    Headers =
+                    {
+                        { HeaderNames.Accept, "application/json" },
+                        { HeaderNames.Authorization, $"Basic {credentials} " }
+                    }
+                };
+
+                HttpClient httpClient = _httpClientFactory.CreateClient();
+                HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
+
+                if (httpResponseMessage.IsSuccessStatusCode)
+                {
+                    toy = new Toy();
+                    toy.Brand = brand;
+
+                    string jsonContent =
+                        await httpResponseMessage.Content.ReadAsStringAsync();
+
+                    dynamic json = JsonConvert.DeserializeObject(jsonContent);
+
+
+                    string id = json["data"]["GeneralInfo"]["BrandPartCode"];
+
+
+                    toy.ID = json["data"]["GeneralInfo"]["BrandPartCode"];
+                    toy.Name = json["data"]["GeneralInfo"]["Title"];
+
+                    toy.ShortDescription = json["data"]["GeneralInfo"]["SummaryDescription"]["ShortSummaryDescription"];
+                    toy.LongDescription = json["data"]["GeneralInfo"]["SummaryDescription"]["LongSummaryDescription"];
+
+
+                    // TODO gør noget med subcat
+                    string subCategoryId = json["data"]["GeneralInfo"]["Category"]["CategoryID"];
+
+                    // lav tjek på om subCatId allerede er i db - hvis 
+                    // vi var i gang med at snakke om om den ville lave en fejl hvis vi siger add(subcat) og den allerede findes
+                    // TODO tjek om den så overskriver den eller om den laver en fejl - hvis den laver en - 
+                    // dbService.SubCategoryExists()
+                    SubCategory subCategory = (SubCategory) await _subCategoryDbService.GetById(subCategoryId);
+                    if(subCategory == null)
+                    {
+                        // tilføj ny subcat til db
+                        string subCategoryName = json["data"]["GeneralInfo"]["Category"]["Name"]["Value"];
+
+                        // TODO hent Category-obj op som subCat skal være inde under
+
+                        subCategory = new SubCategory(subCategoryId, subCategoryName);
+
+                        // gem ned i db
+                        await _subCategoryDbService.Create(subCategory);
+
+                    }
+
+                    toy.SubCategory = subCategory;
+
+
+
+
+                    //TODO flere billeder
+                    string urlLow = json["data"]["Image"]["Pic500x500"];
+                    string urlHigh = json["data"]["Image"]["HighPic"];
+                    
+                    Image image = new Image(urlLow, urlHigh, 0);
+                    toy.Images.Add(image);
+
+                    // tilføj resten af billeder som ligger i Gallery-key
+                    foreach (dynamic img in json["data"]["Gallery"])
+                    {
+                        string galleryImageUrlLow = img["Pic500x500"];
+                        string galleryImageUrlHigh = img["Pic"];
+                        int galleryImageNo = img["No"];
+
+                        Image galleryImage = new Image(galleryImageUrlLow, galleryImageUrlHigh, galleryImageNo);
+                        toy.Images.Add(galleryImage);
+                    }
+
+                 
+
+
+
+
+                    // colour - 1766 
+                    // FeaturesGroups --> for hver på listen: ["Features"] for hver på listen: ["Feature"] if ["id"] = 1766 -->  item på ["Features"]["PresentationValue"]
+                    // stringen skal splittes op i strings og så tilføjes som seperate værdier i colour tabellen, som så skal tilføjes som refs til toy
+                    //string colourString = json["data"]["GeneralInfo"]["FeaturesGroups"]["Features"]["PresentationValue"];
+                    string colourId = "1766";
+                    string ageGroupId = "24697";
+
+
+                    foreach (var featuresGroup in json["data"]["GeneralInfo"]["FeaturesGroups"])
+                    {
+                        var features = featuresGroup["Features"];
+
+                        foreach (var feature in features)
+                        {
+
+                            var featureId = feature["Feature"]["ID"];
+
+                            if (featureId.Equals(colourId))
+                            {
+                                string presentationValue = feature["PresentationValue"];
+
+                                string[] colours = presentationValue.Split(", ");
+
+                                // for hver farve
+                                Array.ForEach(colours, async colourName =>
+                                {
+                                    /*
+                                    //tjek om den er i db
+                                    Colour colour = await _colourDbService.GetByName(colourName);
+                                    if(colour == null)
+                                    {
+                                        // ellers læg i db
+                                       // colour = await _colourDbService.Create(new Colour(colourName));
+                                    }
+                                     og tilføj farven til toy-obj
+                                    toy.Colours.Add(colour);
+                                    */
+                                });
+                            }
+                            else if (featureId.Equals(ageGroupId))
+                            {
+                                string presentationValue = feature["PresentationValue"];
+
+
+
+                            }
+                        }
+
+                    }
+
+
+                    // agegroups - 24697
+                    // FeaturesGroups --> for hver på listen: ["Features"] for hver på listen: ["Feature"] if ["id"] = 1766 -->  item på ["Features"]["PresentationValue"]
+                    // hardcodes i db - lav noget tjek fordi den skal tildeles rigtigt
+
+
+
+
+                    // TODO noget med pris og stock
+
+                    //toy = new Toy(id, name, brand, shortDescription, longDescription, random.Next(0, 899), random.Next(0, 10), );
+
+
+
+
+                }
+
+
+
+
+
+
+
+
+
+
             }
             else
             {
@@ -66,61 +236,7 @@ namespace CrazyToys.Services
             }
 
 
-            HttpRequestMessage httpRequestMessage = new HttpRequestMessage(
-                HttpMethod.Get,
-                $"https://live.icecat.biz/api/?Username={username}&Language=dk&Brand={brandName}&ProductCode={productId}")
-            {
-                Headers =
-                    {
-                        { HeaderNames.Accept, "application/json" },
-                        { HeaderNames.Authorization, $"Basic {credentials} " }
-                    }
-            };
-
-            HttpClient httpClient = _httpClientFactory.CreateClient();
-            HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
-
-            if (httpResponseMessage.IsSuccessStatusCode)
-            {
-                string jsonContent =
-                    await httpResponseMessage.Content.ReadAsStringAsync();
-
-                dynamic json = JsonConvert.DeserializeObject(jsonContent);
-
-                string id = json["data"]["GeneralInfo"]["BrandPartCode"];
-                string name = json["data"]["GeneralInfo"]["Title"];
-                string 
-                string shortDescription = json["data"]["GeneralInfo"]["SummaryDescription"]["ShortSummaryDescription"];
-                string longDescription = json["data"]["GeneralInfo"]["SummaryDescription"]["LongSummaryDescription"];
-                string subCategoryId = json["data"]["GeneralInfo"]["Category"]["CategoryID"];
-
-                // lav tjek på om subCatId allerede er i db - hvis 
-                    // vi var i gang med at snakke om om den ville lave en fejl hvis vi siger add(subcat) og den allerede findes
-                    // TODO tjek om den så overskriver den eller om den laver en fejl - hvis den laver en - 
-                    // dbService.SubCategoryExists()
-
-
-                // colour
-                // stringen skal splittes op i strings og så tilføjes som seperate værdier i colour tabellen, som så skal tilføjes som refs til toy
-                string colourString = json["data"]["GeneralInfo"]["FeatureGroups"]["Features"]["PresentationValue"];
-
-                // agegroups hardcodes i db - lav noget tjek fordi den skal tildeles rigtigt
-
-
-
-                // TODO noget med pris og stock
-
-
-
-
-
-                // TODO gør noget med colour
-
-
-
-            }
-
-            return new Toy();
+            return toy;
             throw new NotImplementedException();
         }
         
