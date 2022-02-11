@@ -13,6 +13,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrazyToys.Interfaces", "CrazyToys.Interfaces\CrazyToys.Interfaces.csproj", "{52CA9499-085B-4A40-924F-8B3324744026}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrazyToys.Services", "CrazyToys.Services\CrazyToys.Services.csproj", "{AE035BC6-8984-4B9F-B983-F3E308338416}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F784C108-878E-4916-8E39-CEC0208DAAFE} = {F784C108-878E-4916-8E39-CEC0208DAAFE}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrazyToys.Entities", "CrazyToys.Entities\CrazyToys.Entities.csproj", "{638DD57E-4F56-46B2-883A-3740F5842B42}"
 EndProject
