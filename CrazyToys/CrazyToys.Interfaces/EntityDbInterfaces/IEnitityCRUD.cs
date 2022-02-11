@@ -13,6 +13,9 @@ namespace CrazyToys.Interfaces.EntityDbInterfaces
 
         Task<T> GetById(string id);
 
+        Task<T> GetByName(string name);
+
+
         Task<T> UpdateById(string id);
 
         Task<T> Create(T t);
