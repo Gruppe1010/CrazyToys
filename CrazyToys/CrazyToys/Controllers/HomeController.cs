@@ -1,9 +1,11 @@
-﻿using CrazyToys.Interfaces;
+﻿using CrazyToys.Entities.Models.Entities;
+using CrazyToys.Interfaces;
 using CrazyToys.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Web.Common.Controllers;
 
@@ -26,8 +28,8 @@ namespace CrazyToys.Web.Controllers
 
             ViewData["Test"] = test;//JsonConvert.SerializeObject(test);
 
-            //_  = _icecatDataService.getSingleProduct("15111", "BARBIEKS55");
-            _ = _icecatDataService.getSingleProduct("5669", "HASB9940EU60");
+            _icecatDataService.GetSingleProduct("15111", "BARBIEKS55");
+            //_ = _icecatDataService.GetSingleProduct("5669", "HASB9940EU60");
 
             
 
