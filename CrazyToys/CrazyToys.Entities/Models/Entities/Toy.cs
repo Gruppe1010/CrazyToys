@@ -14,7 +14,7 @@ namespace CrazyToys.Entities.Models.Entities
         public string LongDescription { get; set; }
         public ICollection<Colour> Colours { get; set; }
         public ICollection<AgeGroup> AgeGroups { get; set; }
-        public ICollection<SubCategory> SubCategories { get; set; }
+        public SubCategory SubCategory { get; set; }
         public int Price { get; set; }
         public int Stock { get; set; }
         public ICollection<Image> Images { get; set; }
@@ -23,13 +23,12 @@ namespace CrazyToys.Entities.Models.Entities
         {
             Colours = new List<Colour>();
             AgeGroups = new List<AgeGroup>();
-            SubCategories = new List<SubCategory>();
-
+            Images = new List<Image>();
         }
 
         public Toy(string iD, string name, Brand brand, string shortDescription, 
             string longDescription, ICollection<Colour> colours, ICollection<AgeGroup> ageGroups, 
-            ICollection<SubCategory> subCategories, int price, int stock, ICollection<Image> images)
+            SubCategory subCategory, int price, int stock, ICollection<Image> images)
         {
             ID = iD;
             Name = name;
@@ -38,7 +37,7 @@ namespace CrazyToys.Entities.Models.Entities
             LongDescription = longDescription;
             Colours = colours;
             AgeGroups = ageGroups;
-            SubCategories = subCategories;
+            SubCategory = subCategory;
             Price = price;
             Stock = stock;
             Images = images;
