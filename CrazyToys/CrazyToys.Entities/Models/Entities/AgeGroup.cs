@@ -9,6 +9,7 @@ namespace CrazyToys.Entities.Models.Entities
 
         [Column("AgeGroupId")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        // Hvis man laver id-proppen om til int generer den fra 1 og op af
         public string ID { get; set; }
         public string Interval { get; set; }
         public ICollection<Toy> Toys { get; set; }
