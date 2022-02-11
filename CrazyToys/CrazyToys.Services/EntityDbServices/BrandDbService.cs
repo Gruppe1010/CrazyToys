@@ -31,7 +31,6 @@ namespace CrazyToys.Services
 
         public async Task<Brand> GetById(string id)
         {
-
             if (!String.IsNullOrWhiteSpace(id))
             {
                 var brand = await _context.Brands
@@ -40,6 +39,11 @@ namespace CrazyToys.Services
                 return brand;
             }
             return null;
+        }
+
+        public Task<Brand> GetByName(string name)
+        {
+            throw new NotImplementedException();
         }
 
         public Task<Brand> UpdateById(string id)

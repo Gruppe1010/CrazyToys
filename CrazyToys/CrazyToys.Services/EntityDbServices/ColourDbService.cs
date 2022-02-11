@@ -19,9 +19,12 @@ namespace CrazyToys.Services
             _context = context;
         }
 
-        public Task<Colour> Create(Colour colour)
+        public async Task<Colour> Create(Colour colour)
         {
-            throw new NotImplementedException();
+            _context.Colours.Add(colour);
+            int noget = await _context.SaveChangesAsync();
+
+            return colour;
         }
 
         public Task<ICollection<Colour>> GetAll()
@@ -45,6 +48,19 @@ namespace CrazyToys.Services
         public Task<Colour> UpdateById(string id)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<Colour> GetByName(string name)
+        {
+            if (!String.IsNullOrWhiteSpace(name))
+            {
+                var colour = await _context.Colours
+                    .FirstOrDefaultAsync(c => c.Name == name);
+
+                return colour;
+            }
+            return null;
+
         }
     }
 

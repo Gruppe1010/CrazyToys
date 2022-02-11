@@ -23,7 +23,7 @@ namespace CrazyToys.Services
         public async Task<SubCategory> Create(SubCategory subCategory)
         {
 
-            _context.SubCategories.Add((SubCategory) subCategory);
+            _context.SubCategories.Add(subCategory);
             await _context.SaveChangesAsync();
 
             return subCategory;
@@ -44,6 +44,11 @@ namespace CrazyToys.Services
             var subCategory = await _context.SubCategories
                 .FirstOrDefaultAsync(b => b.ID == id);
             return subCategory;
+        }
+
+        public Task<SubCategory> GetByName(string name)
+        {
+            throw new NotImplementedException();
         }
 
         public Task<SubCategory> UpdateById(string id)
