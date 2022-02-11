@@ -52,6 +52,7 @@ namespace CrazyToys
             
             services.AddTransient<BrandDbService>();
             services.AddTransient<SubCategoryDbService>();
+            services.AddTransient<ColourDbService>();
             services.AddTransient<IProductDataService, IcecatDataService>();
 
 
