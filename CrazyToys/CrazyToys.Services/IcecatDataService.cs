@@ -24,12 +24,7 @@ namespace CrazyToys.Services
         private readonly IEntityCRUD<Colour> _colourDbService;
         private readonly IEntityCRUD<Toy> _toyDbService;
         private readonly IEntityCRUD<AgeGroup> _ageGroupDbService;
-
-
-
-        //private Dictionary<string, Brand> brandDict;
         private Random random;
-
 
 
         public IcecatDataService(IHttpClientFactory httpClientFactory, BrandDbService brandDbService, CategoryDbService categoryDbService, 
@@ -43,47 +38,23 @@ namespace CrazyToys.Services
             _toyDbService = toyDbService;
             _ageGroupDbService = ageGroupDbService;
             random = new Random();
-
-            /*
-            brandDict = new Dictionary<string, Brand>();
-
-            brandDict.Add("15111", new Brand("15111", "Barbie", "https://images.icecat.biz/img/brand/thumb/15111_e16ba4de456d43bd993b5c39607aa845.jpg"));
-            brandDict.Add("5669", new Brand("5669", "Hasbro", "https://images.icecat.biz/img/brand/thumb/5669_5c735b62136a4d32b553ed74c66cdb15.jpg"));
-            brandDict.Add("27814", new Brand("27814", "Bambolino", "https://images.icecat.biz/img/brand/thumb/27814_29d6d8a1fda04558a4cae1a0b9a7d175.jpg"));
-            brandDict.Add("23505", new Brand("23505", "Clown", "https://images.icecat.biz/img/brand/thumb/23505_3387646289f8463ebca32c8b5fded65b.jpg"));
-            brandDict.Add("32046", new Brand("32046", "Fuzzikins Fuzzi", "https://images.icecat.biz/img/brand/thumb/32046_d6cefd82d5714ed08af17b4eea0f3237.jpg"));
-            brandDict.Add("7375", new Brand("7375", "IMC Toys", "https://images.icecat.biz/img/brand/thumb/7375_62ea0b83ce6e454daf6b5a5910c53d87.jpg"));
-            brandDict.Add("24094", new Brand("24094", "LumoStars", "https://images.icecat.biz/img/brand/thumb/24094_277b2a8a5f75443ababf44ae56acf1cd.jpg"));
-            brandDict.Add("36068", new Brand("36068", "My Little Pony", "https://images.icecat.biz/img/brand/thumb/36068_33f45a22fbb042ff979cc93c18f17c00.jpg"));
-            brandDict.Add("16933", new Brand("16933", "Play-Doh", "https://images.icecat.biz/img/brand/thumb/16933_fd0ecf980706469dbc94333be9e1e435.jpg"));
-            brandDict.Add("15136", new Brand("15136", "Polly Pocket", "https://images.icecat.biz/img/brand/thumb/15136_55e19fa2894d4273810836c223673f4c.jpg"));
-            brandDict.Add("16046", new Brand("16046", "SESCreative", "https://images.icecat.biz/img/brand/thumb/16046_dd661f6b89de45819bb760a18e9c81ef.jpg"));
-            brandDict.Add("23442", new Brand("23442", "RuboToys", "https://images.icecat.biz/img/brand/thumb/23442_16e7f8ad9bde491c8619a1d68d09c25a.jpg"));
-            brandDict.Add("3480", new Brand("3480", "Jumbo", "https://images.icecat.biz/img/brand/thumb/3480_998702f9778f4b2cad3b2b69d98ee481.jpg"));
-            */
         }
 
 
-        // 
         public async Task<Toy> GetSingleProduct(string brandId, string productId)
         {
             Toy toy = null;
 
+            // TODO implementer lige noget sikkerhedsnoget her
             string username = "alphaslo";
             string password = "KJ6j1c9y8c2YwMq8GTjc";
 
             byte[] byteArray = Encoding.ASCII.GetBytes($"{username}:{password}");
             string credentials = Convert.ToBase64String(byteArray);
 
-            
             Brand brand = await _brandDbService.GetById(brandId);
             if (brand != null)
             {
-                bool hasAgeGroup = false;
-                var ageGroups = Task.Run(async () => await _ageGroupDbService.GetAll()).Result;
-                var categories = Task.Run(async () => await _categoryDbService.GetAll()).Result;
-
-
                 string brandNameWithoutSpaces = brand.Name.Replace(" ", "%20");
 
                 HttpRequestMessage httpRequestMessage = new HttpRequestMessage(
@@ -105,6 +76,9 @@ namespace CrazyToys.Services
                 {
                     toy = new Toy();
                     toy.Brand = brand;
+                    bool hasAgeGroup = false; // bruges til at sætte til "Ingens Aldersgruppe"-agegroupen, hvis ingen alder-presentationvalue fundet
+                    var ageGroups = Task.Run(async () => await _ageGroupDbService.GetAll()).Result;
+                    var categories = Task.Run(async () => await _categoryDbService.GetAll()).Result;
 
                     string jsonContent =
                         await httpResponseMessage.Content.ReadAsStringAsync();
@@ -117,16 +91,13 @@ namespace CrazyToys.Services
                     toy.ShortDescription = json["data"]["GeneralInfo"]["SummaryDescription"]["ShortSummaryDescription"];
                     toy.LongDescription = json["data"]["GeneralInfo"]["SummaryDescription"]["LongSummaryDescription"];
 
-                    // TODO gør noget med subcat
                     string subCategoryId = json["data"]["GeneralInfo"]["Category"]["CategoryID"];
 
-                    // lav tjek på om subCatId allerede er i db - hvis 
-                    // vi var i gang med at snakke om om den ville lave en fejl hvis vi siger add(subcat) og den allerede findes
-                    // TODO tjek om den så overskriver den eller om den laver en fejl - hvis den laver en - 
-                    // dbService.SubCategoryExists()
+                    // tjekker om subcat allerede findes ud fra id
                     SubCategory subCategory = await _subCategoryDbService.GetById(subCategoryId);
-                    if(subCategory == null)
+                    if(subCategory == null) // hvis nej
                     {
+                        // henter navnet og opretter den
                         string subCategoryName = json["data"]["GeneralInfo"]["Category"]["Name"]["Value"];
                         subCategory = new SubCategory(subCategoryId, subCategoryName);
 
@@ -142,7 +113,8 @@ namespace CrazyToys.Services
                                 }
                             }
                         }
-                        if(subCategory.Categories.Count < 1)
+                        // hvis der ikke er blevet tilføjet nogle ud fra sortingkeywords, så tilføj til assorteret
+                        if (subCategory.Categories.Count < 1)
                         {
                             foreach (Category category in categories)
                             {
@@ -152,9 +124,6 @@ namespace CrazyToys.Services
                                 }
                             }
                         }
-
-                        // gem ned i db
-                        //await _subCategoryDbService.Create(subCategory);
                     }
                     toy.SubCategory = subCategory;
 
@@ -175,7 +144,6 @@ namespace CrazyToys.Services
                         toy.Images.Add(galleryImage);
                     }
 
-                    // colour - 1766 
                     // FeaturesGroups --> for hver på listen: ["Features"] for hver på listen: ["Feature"] if ["id"] = 1766 -->  item på ["Features"]["PresentationValue"]
                     // stringen skal splittes op i strings og så tilføjes som seperate værdier i colour tabellen, som så skal tilføjes som refs til toy
                     //string colourString = json["data"]["GeneralInfo"]["FeaturesGroups"]["Features"]["PresentationValue"];
@@ -208,9 +176,6 @@ namespace CrazyToys.Services
                                                                      
                                     if(colour == null)
                                     {
-                                        // ellers læg i db - NEJ fordi den bliver oprettet når vi lægger toy-obj ned (tror vi)
-                                        //colour = Task.Run(async () => await _colourDbService.Create(new Colour(colourName))).Result;
-
                                         // opret nyt colour-obj
                                         colour = new Colour(colourName);
                                     } 
@@ -228,22 +193,13 @@ namespace CrazyToys.Services
                                 string age = presentationValue.Split(" ")[0].Split(".")[0];
                                 int ageAsInt = Convert.ToInt32(age);
 
-
+                                // hvis det er i måneder, skal det konverteres til år
                                 if (featureId.Equals(ageGroupMonthsId))
                                 {
                                     ageAsInt = ageAsInt / 12;
+                                    age = ageAsInt.ToString();
                                 }
-                                if (ageAsInt == 0)
-                                {
-                                    foreach (AgeGroup ageGroup in ageGroups)
-                                    {
-                                        if (ageGroup.Interval.Contains("0"))
-                                        {
-                                            toy.AgeGroups.Add(ageGroup);
-                                            break;
-                                        }
-                                    };
-                                }
+                                // hvis det er den sidste aldersgruppe-kategori skal den findes manuelt ud fra "9"
                                 else if (ageAsInt > 8)
                                 {
                                     foreach (AgeGroup ageGroup in ageGroups)
@@ -255,7 +211,7 @@ namespace CrazyToys.Services
                                         }
                                     };
                                 }
-                                else
+                                else // skal den findes ud fra selve tallet
                                 {
                                     foreach (AgeGroup ageGroup in ageGroups)
                                     {
@@ -269,20 +225,18 @@ namespace CrazyToys.Services
                             }
                         }
                     }
-
                     // TODO få random ud fra Category - mindre vigtigt
                     toy.Price = random.Next(0, 899);
                     toy.Stock = random.Next(0, 10);
-                }
 
-                if (!hasAgeGroup)
-                {
-                    // sæt til alle aldersgrupper
-                    toy.AgeGroups = ageGroups;
+                    if (!hasAgeGroup)
+                    {
+                        // sæt til alle aldersgrupper
+                        toy.AgeGroups = ageGroups;
+                    }
+                    toy = Task.Run(async () => await _toyDbService.Create(toy)).Result;
                 }
-                toy = Task.Run(async () => await _toyDbService.Create(toy)).Result;
             }
-
             return toy;
         }
     }
