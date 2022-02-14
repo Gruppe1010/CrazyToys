@@ -1,4 +1,4 @@
-﻿using CrazyToys.Entities.Models.Entities;
+﻿using CrazyToys.Entities.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +28,7 @@ namespace CrazyToys.Data.Data
                     new Brand("16933", "Play-Doh", "https://images.icecat.biz/img/brand/thumb/16933_fd0ecf980706469dbc94333be9e1e435.jpg"),
                     new Brand("15136", "Polly Pocket", "https://images.icecat.biz/img/brand/thumb/15136_55e19fa2894d4273810836c223673f4c.jpg"),
                     new Brand("16046", "SESCreative", "https://images.icecat.biz/img/brand/thumb/16046_dd661f6b89de45819bb760a18e9c81ef.jpg"),
-                    new Brand("23442", "RuboToys", "https://images.icecat.biz/img/brand/thumb/23442_16e7f8ad9bde491c8619a1d68d09c25a.jpg"),
+                    new Brand("23442", "Rubo Toys", "https://images.icecat.biz/img/brand/thumb/23442_16e7f8ad9bde491c8619a1d68d09c25a.jpg"),
                     new Brand("3480", "Jumbo", "https://images.icecat.biz/img/brand/thumb/3480_998702f9778f4b2cad3b2b69d98ee481.jpg")
                 };
 
@@ -48,7 +48,7 @@ namespace CrazyToys.Data.Data
                     new AgeGroup("3-4 år"),
                     new AgeGroup("5-6 år"),
                     new AgeGroup("7-8 år"),
-                    new AgeGroup("9+")
+                    new AgeGroup("9+"),
 
                 };
                 foreach (AgeGroup ageGroup in ageGroups)
