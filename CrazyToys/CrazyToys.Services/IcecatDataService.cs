@@ -22,6 +22,7 @@ namespace CrazyToys.Services
         private readonly IEntityCRUD<Category> _categoryDbService;
         private readonly IEntityCRUD<SubCategory> _subCategoryDbService;
         private readonly IEntityCRUD<Colour> _colourDbService;
+        private readonly IEntityCRUD<Toy> _toyDbService;
         private readonly IEntityCRUD<AgeGroup> _ageGroupDbService;
 
 
@@ -32,13 +33,14 @@ namespace CrazyToys.Services
 
 
         public IcecatDataService(IHttpClientFactory httpClientFactory, BrandDbService brandDbService, CategoryDbService categoryDbService, 
-            SubCategoryDbService subCategoryDbService, ColourDbService colourDbService, AgeGroupDbService ageGroupDbService)
+            SubCategoryDbService subCategoryDbService, ColourDbService colourDbService, ToyDbService toyDbService, AgeGroupDbService ageGroupDbService)
         {
             _httpClientFactory = httpClientFactory;
             _brandDbService = brandDbService;
             _categoryDbService = categoryDbService;
             _subCategoryDbService = subCategoryDbService;
             _colourDbService = colourDbService;
+            _toyDbService = toyDbService;
             _ageGroupDbService = ageGroupDbService;
             random = new Random();
 
@@ -109,16 +111,11 @@ namespace CrazyToys.Services
 
                     dynamic json = JsonConvert.DeserializeObject(jsonContent);
 
-
                     string id = json["data"]["GeneralInfo"]["BrandPartCode"];
-
-
                     toy.ID = json["data"]["GeneralInfo"]["BrandPartCode"];
                     toy.Name = json["data"]["GeneralInfo"]["Title"];
-
                     toy.ShortDescription = json["data"]["GeneralInfo"]["SummaryDescription"]["ShortSummaryDescription"];
                     toy.LongDescription = json["data"]["GeneralInfo"]["SummaryDescription"]["LongSummaryDescription"];
-
 
                     // TODO gør noget med subcat
                     string subCategoryId = json["data"]["GeneralInfo"]["Category"]["CategoryID"];
@@ -130,20 +127,34 @@ namespace CrazyToys.Services
                     SubCategory subCategory = await _subCategoryDbService.GetById(subCategoryId);
                     if(subCategory == null)
                     {
-                        // tilføj ny subcat til db
                         string subCategoryName = json["data"]["GeneralInfo"]["Category"]["Name"]["Value"];
-
-                        // TODO hent Category-obj op som subCat skal være inde under
-
-
-
-
-
                         subCategory = new SubCategory(subCategoryId, subCategoryName);
 
-                        // gem ned i db
-                        await _subCategoryDbService.Create(subCategory);
+                        // tjekker hvilke over-kategorier som denne subcategory skal være indenunder
+                        foreach (Category category in categories)
+                        {
+                            foreach(string sortingKeyword in category.SortingKeywords)
+                            {
+                                if (subCategoryName.Contains(sortingKeyword))
+                                {
+                                    subCategory.Categories.Add(category);
+                                    break;
+                                }
+                            }
+                        }
+                        if(subCategory.Categories.Count < 1)
+                        {
+                            foreach (Category category in categories)
+                            {
+                                if (category.Name.Equals("Assorteret"))
+                                {
+                                    subCategory.Categories.Add(category);
+                                }
+                            }
+                        }
 
+                        // gem ned i db
+                        //await _subCategoryDbService.Create(subCategory);
                     }
                     toy.SubCategory = subCategory;
 
@@ -197,8 +208,11 @@ namespace CrazyToys.Services
                                                                      
                                     if(colour == null)
                                     {
-                                        // ellers læg i db
-                                        colour = Task.Run(async () => await _colourDbService.Create(new Colour(colourName))).Result;
+                                        // ellers læg i db - NEJ fordi den bliver oprettet når vi lægger toy-obj ned (tror vi)
+                                        //colour = Task.Run(async () => await _colourDbService.Create(new Colour(colourName))).Result;
+
+                                        // opret nyt colour-obj
+                                        colour = new Colour(colourName);
                                     } 
                                     //og tilføj farven til toy-obj
                                     toy.Colours.Add(colour);
@@ -266,8 +280,9 @@ namespace CrazyToys.Services
                     // sæt til alle aldersgrupper
                     toy.AgeGroups = ageGroups;
                 }
-
+                toy = Task.Run(async () => await _toyDbService.Create(toy)).Result;
             }
+
             return toy;
         }
     }
