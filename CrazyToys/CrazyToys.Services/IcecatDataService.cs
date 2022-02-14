@@ -111,7 +111,7 @@ namespace CrazyToys.Services
                     // vi var i gang med at snakke om om den ville lave en fejl hvis vi siger add(subcat) og den allerede findes
                     // TODO tjek om den så overskriver den eller om den laver en fejl - hvis den laver en - 
                     // dbService.SubCategoryExists()
-                    SubCategory subCategory = (SubCategory) await _subCategoryDbService.GetById(subCategoryId);
+                    SubCategory subCategory = await _subCategoryDbService.GetById(subCategoryId);
                     if(subCategory == null)
                     {
                         // tilføj ny subcat til db
@@ -125,13 +125,8 @@ namespace CrazyToys.Services
                         await _subCategoryDbService.Create(subCategory);
 
                     }
-
                     toy.SubCategory = subCategory;
 
-
-
-
-                    //TODO flere billeder
                     string urlLow = json["data"]["Image"]["Pic500x500"];
                     string urlHigh = json["data"]["Image"]["HighPic"];
                     
@@ -148,11 +143,6 @@ namespace CrazyToys.Services
                         Image galleryImage = new Image(galleryImageUrlLow, galleryImageUrlHigh, galleryImageNo);
                         toy.Images.Add(galleryImage);
                     }
-
-                 
-
-
-
 
                     // colour - 1766 
                     // FeaturesGroups --> for hver på listen: ["Features"] for hver på listen: ["Feature"] if ["id"] = 1766 -->  item på ["Features"]["PresentationValue"]
@@ -181,30 +171,17 @@ namespace CrazyToys.Services
                                 // for hver farve
                                 Array.ForEach(colours, colourName =>
                                 {
-                                    // TODO kige på async
                                     //tjek om den er i db
                                     var colour = Task.Run(async () => await _colourDbService.GetByName(colourName)).Result;
-                                    //Task<Colour> colourTask = _colourDbService.GetByName(colourName);
-                                    //_colourDbService.Upsert(colourName);
-                                    //Colour colour = await colourTask;
-
-                                    
+                                                                     
                                     if(colour == null)
                                     {
                                         // ellers læg i db
-
                                         Colour c1 = new Colour(colourName);
                                         colour = Task.Run(async () => await _colourDbService.Create(c1)).Result;
-
-                                        //Task<Colour> colourTask1 = _colourDbService.Create(colourName);
-                                        //colour = await colourTask1;
-                                     
                                     } 
                                     //og tilføj farven til toy-obj
                                     toy.Colours.Add(colour);
-                                    
-
-
                                 });
                             }
                             else if (featureId.Equals(ageGroupId))
@@ -234,27 +211,8 @@ namespace CrazyToys.Services
 
 
                 }
-
-
-
-
-
-
-
-
-
-
             }
-            else
-            {
-                //TODO tjek om denne ødelægger program
-                throw new KeyNotFoundException();
-            }
-
-
             return toy;
-            throw new NotImplementedException();
         }
-        
     }
 }

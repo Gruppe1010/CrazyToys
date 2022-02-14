@@ -28,10 +28,14 @@ namespace CrazyToys.Web.Controllers
 
             ViewData["Test"] = test;//JsonConvert.SerializeObject(test);
 
-            _icecatDataService.GetSingleProduct("15111", "BARBIEKS55");
-            _icecatDataService.GetSingleProduct("5669", "HASB9940EU60");
 
-            
+            Toy toy = Task.Run(async () => await _icecatDataService.GetSingleProduct("15111", "BARBIEKS55")).Result;
+            Toy toy1 = Task.Run(async () => await _icecatDataService.GetSingleProduct("5669", "HASB9940EU60")).Result;
+
+            //_ = _icecatDataService.GetSingleProduct("15111", "BARBIEKS55");
+            //_ = _icecatDataService.GetSingleProduct("5669", "HASB9940EU60");
+
+
 
             // return a 'model' to the selected template/view for this page.
             return CurrentTemplate(CurrentPage);
