@@ -20,6 +20,7 @@ namespace CrazyToys.Entities.Entities
         {
             ID = iD;
             Name = name;
+            Categories = new List<Category>();
         }
 
         public SubCategoryDTO convertToDTO()
