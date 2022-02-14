@@ -11,6 +11,5 @@ namespace CrazyToys.Interfaces
         void GetIndex();
 
         void GetDaily();
-
     }
 }
