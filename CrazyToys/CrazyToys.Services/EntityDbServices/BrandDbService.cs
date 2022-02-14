@@ -36,6 +36,7 @@ namespace CrazyToys.Services
                 var brand = await _context.Brands
                     .FirstOrDefaultAsync(b => b.ID == id);
 
+                var test = "Hej";
                 return brand;
             }
             return null;

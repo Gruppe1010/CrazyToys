@@ -179,7 +179,7 @@ namespace CrazyToys.Services
                                 string[] colours = presentationValue.Split(", ");
 
                                 // for hver farve
-                                Array.ForEach(colours, async colourName =>
+                                Array.ForEach(colours, colourName =>
                                 {
                                     // TODO kige på async
                                     //tjek om den er i db

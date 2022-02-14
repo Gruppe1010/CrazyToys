@@ -29,7 +29,7 @@ namespace CrazyToys.Web.Controllers
             ViewData["Test"] = test;//JsonConvert.SerializeObject(test);
 
             _icecatDataService.GetSingleProduct("15111", "BARBIEKS55");
-            //_ = _icecatDataService.GetSingleProduct("5669", "HASB9940EU60");
+            _icecatDataService.GetSingleProduct("5669", "HASB9940EU60");
 
             
 
