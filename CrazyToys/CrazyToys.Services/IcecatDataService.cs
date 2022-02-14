@@ -183,23 +183,28 @@ namespace CrazyToys.Services
                                 {
                                     // TODO kige på async
                                     //tjek om den er i db
+                                    var colour = Task.Run(async () => await _colourDbService.GetByName(colourName)).Result;
                                     //Task<Colour> colourTask = _colourDbService.GetByName(colourName);
                                     //_colourDbService.Upsert(colourName);
                                     //Colour colour = await colourTask;
-                            
-                                    /*
+
+                                    
                                     if(colour == null)
                                     {
                                         // ellers læg i db
-                                        Task<Colour> colourTask1 = _colourDbService.Create(new Colour(colourName));
-                                        colour = await colourTask1;
+
+                                        Colour c1 = new Colour(colourName);
+                                        colour = Task.Run(async () => await _colourDbService.Create(c1)).Result;
+
+                                        //Task<Colour> colourTask1 = _colourDbService.Create(colourName);
+                                        //colour = await colourTask1;
                                      
                                     } 
                                     //og tilføj farven til toy-obj
                                     toy.Colours.Add(colour);
-                                    */
-                                  
                                     
+
+
                                 });
                             }
                             else if (featureId.Equals(ageGroupId))
