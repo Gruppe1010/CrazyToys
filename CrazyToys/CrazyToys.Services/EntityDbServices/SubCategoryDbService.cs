@@ -1,5 +1,5 @@
 ﻿using CrazyToys.Data.Data;
-using CrazyToys.Entities.Models.Entities;
+using CrazyToys.Entities.Entities;
 using CrazyToys.Interfaces;
 using CrazyToys.Interfaces.EntityDbInterfaces;
 using Microsoft.EntityFrameworkCore;
@@ -9,9 +9,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CrazyToys.Services
+namespace CrazyToys.Services.EntityDbServices
 {
-    public class SubCategoryDbService : IEnitityCRUD<SubCategory>
+    public class SubCategoryDbService : IEntityCRUD<SubCategory>
     {
         private readonly Context _context;
 
@@ -29,7 +29,7 @@ namespace CrazyToys.Services
             return subCategory;
         }
 
-        public Task<ICollection<SubCategory>> GetAll()
+        public Task<List<SubCategory>> GetAll()
         {
             throw new NotImplementedException();
         }
@@ -55,6 +55,8 @@ namespace CrazyToys.Services
         {
             throw new NotImplementedException();
         }
+
+
     }
 
 

@@ -1,5 +1,5 @@
 ﻿using CrazyToys.Data.Data;
-using CrazyToys.Entities.Models.Entities;
+using CrazyToys.Entities.Entities;
 using CrazyToys.Interfaces.EntityDbInterfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -8,9 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CrazyToys.Services
+namespace CrazyToys.Services.EntityDbServices
 {
-    public class ColourDbService : IEnitityCRUD<Colour>
+    public class ColourDbService : IEntityCRUD<Colour>
     {
         private readonly Context _context;
 
@@ -27,7 +27,7 @@ namespace CrazyToys.Services
             return colour;
         }
 
-        public Task<ICollection<Colour>> GetAll()
+        public Task<List<Colour>> GetAll()
         {
             throw new NotImplementedException();
         }
@@ -62,7 +62,7 @@ namespace CrazyToys.Services
 
         public async Task<Colour> GetByName(string name)
         {
-            if (!String.IsNullOrWhiteSpace(name))
+            if (!string.IsNullOrWhiteSpace(name))
             {
                 var colour = await _context.Colours
                     .FirstOrDefaultAsync(c => c.Name == name);
@@ -72,6 +72,8 @@ namespace CrazyToys.Services
             return null;
 
         }
+
+     
     }
 
 

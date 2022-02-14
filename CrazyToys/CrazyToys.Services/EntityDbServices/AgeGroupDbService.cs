@@ -10,48 +10,38 @@ using System.Threading.Tasks;
 
 namespace CrazyToys.Services.EntityDbServices
 {
-    public class BrandDbService : IEntityCRUD<Brand>
+    public class AgeGroupDbService : IEntityCRUD<AgeGroup>
     {
+
         private readonly Context _context;
 
-        public BrandDbService(Context context)
+        public AgeGroupDbService(Context context)
         {
             _context = context;
         }
-
-        public Task<Brand> Create(Brand brand)
+        public Task<AgeGroup> Create(AgeGroup t)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<Brand>> GetAll()
+        public async Task<List<AgeGroup>> GetAll()
+        {
+            return await _context.AgeGroups.ToListAsync();
+        }
+
+        public Task<AgeGroup> GetById(string id)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Brand> GetById(string id)
-        {
-            if (!string.IsNullOrWhiteSpace(id))
-            {
-                var brand = await _context.Brands
-                    .FirstOrDefaultAsync(b => b.ID == id);
-                return brand;
-            }
-            return null;
-        }
-
-        public Task<Brand> GetByName(string name)
+        public Task<AgeGroup> GetByName(string name)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Brand> UpdateById(string id)
+        public Task<AgeGroup> UpdateById(string id)
         {
             throw new NotImplementedException();
         }
-
     }
-
-
-
 }
