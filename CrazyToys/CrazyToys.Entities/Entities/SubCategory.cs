@@ -1,11 +1,11 @@
-﻿using CrazyToys.Entities.Models.DTOs;
+﻿using CrazyToys.Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
-namespace CrazyToys.Entities.Models.Entities
+namespace CrazyToys.Entities.Entities
 {
     public class SubCategory
     {
@@ -14,7 +14,7 @@ namespace CrazyToys.Entities.Models.Entities
         public string Name { get; set; }
         public ICollection<Category> Categories { get; set; }
 
-   
+
 
         public SubCategory(string iD, string name)
         {

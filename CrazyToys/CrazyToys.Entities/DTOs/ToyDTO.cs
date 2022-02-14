@@ -1,16 +1,17 @@
-﻿using CrazyToys.Entities.Models.Entities;
+﻿using CrazyToys.Entities.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace CrazyToys.Entities.Models.DTOs
+namespace CrazyToys.Entities.DTOs
 {
     public class ToyDTO
     {
         public string Id { get; set; }
         public string Name { get; set; }
         public Brand Brand { get; set; }
+        public string AgeGroup { get; set; }
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
         public Colour Colour { get; set; }
@@ -21,7 +22,7 @@ namespace CrazyToys.Entities.Models.DTOs
         public ICollection<Image> Images { get; set; }
 
         public ToyDTO(
-            string id, string name, Brand brand, string shortDescription,
+            string id, string name, Brand brand, string ageGroup, string shortDescription,
             string longDescription,
             /*
             ICollection<Colour> colours,
@@ -32,6 +33,7 @@ namespace CrazyToys.Entities.Models.DTOs
             Id = id;
             Name = name;
             Brand = brand;
+            AgeGroup = ageGroup;
             ShortDescription = shortDescription;
             LongDescription = longDescription;
             /*

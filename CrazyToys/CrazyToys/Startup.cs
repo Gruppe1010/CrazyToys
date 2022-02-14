@@ -1,7 +1,7 @@
 using CrazyToys.Data.Data;
 using CrazyToys.Interfaces;
-using CrazyToys.Interfaces.EntityDbInterfaces;
 using CrazyToys.Services;
+using CrazyToys.Services.EntityDbServices;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +12,7 @@ using System;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Extensions;
 
-namespace CrazyToys
+namespace CrazyToys.Web
 {
     public class Startup
     {
@@ -43,7 +43,7 @@ namespace CrazyToys
         /// </remarks>
         public void ConfigureServices(IServiceCollection services)
         {
-           
+
 
             services.AddDbContext<Context>(options =>
             {
@@ -52,10 +52,11 @@ namespace CrazyToys
 
             });
 
-            
+
             services.AddScoped<BrandDbService>();
             services.AddScoped<SubCategoryDbService>();
             services.AddScoped<ColourDbService>();
+            services.AddScoped<AgeGroupDbService>();
             services.AddScoped<IProductDataService, IcecatDataService>();
 
 
@@ -72,11 +73,11 @@ namespace CrazyToys
             services.AddSingleton<IEnitityCRUD, BrandDbService>();
             services.AddSingleton<IEnitityCRUD, SubCategoryDbService>();
             */
-            
 
-           
-          
-           
+
+
+
+
 
 
 
@@ -109,9 +110,9 @@ namespace CrazyToys
                 });
         }
 
-   
-            
 
-        
+
+
+
     }
 }

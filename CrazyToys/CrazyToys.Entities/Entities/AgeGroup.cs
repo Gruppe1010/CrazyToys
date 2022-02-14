@@ -1,8 +1,8 @@
-﻿using CrazyToys.Entities.Models.DTOs;
+﻿using CrazyToys.Entities.DTOs;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CrazyToys.Entities.Models.Entities
+namespace CrazyToys.Entities.Entities
 {
     public class AgeGroup
     {

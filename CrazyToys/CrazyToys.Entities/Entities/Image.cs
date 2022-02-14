@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CrazyToys.Entities.Models.Entities
+namespace CrazyToys.Entities.Entities
 {
     public class Image
     {
