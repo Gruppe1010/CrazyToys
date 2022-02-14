@@ -19,6 +19,7 @@ namespace CrazyToys.Services
         
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IEntityCRUD<Brand> _brandDbService;
+        private readonly IEntityCRUD<Category> _categoryDbService;
         private readonly IEntityCRUD<SubCategory> _subCategoryDbService;
         private readonly IEntityCRUD<Colour> _colourDbService;
         private readonly IEntityCRUD<AgeGroup> _ageGroupDbService;
@@ -30,10 +31,12 @@ namespace CrazyToys.Services
 
 
 
-        public IcecatDataService(IHttpClientFactory httpClientFactory, BrandDbService brandDbService, SubCategoryDbService subCategoryDbService, ColourDbService colourDbService, AgeGroupDbService ageGroupDbService)
+        public IcecatDataService(IHttpClientFactory httpClientFactory, BrandDbService brandDbService, CategoryDbService categoryDbService, 
+            SubCategoryDbService subCategoryDbService, ColourDbService colourDbService, AgeGroupDbService ageGroupDbService)
         {
             _httpClientFactory = httpClientFactory;
             _brandDbService = brandDbService;
+            _categoryDbService = categoryDbService;
             _subCategoryDbService = subCategoryDbService;
             _colourDbService = colourDbService;
             _ageGroupDbService = ageGroupDbService;
@@ -76,6 +79,8 @@ namespace CrazyToys.Services
             {
                 bool hasAgeGroup = false;
                 var ageGroups = Task.Run(async () => await _ageGroupDbService.GetAll()).Result;
+                var categories = Task.Run(async () => await _categoryDbService.GetAll()).Result;
+
 
                 string brandNameWithoutSpaces = brand.Name.Replace(" ", "%20");
 
@@ -129,6 +134,10 @@ namespace CrazyToys.Services
                         string subCategoryName = json["data"]["GeneralInfo"]["Category"]["Name"]["Value"];
 
                         // TODO hent Category-obj op som subCat skal være inde under
+
+
+
+
 
                         subCategory = new SubCategory(subCategoryId, subCategoryName);
 
@@ -205,64 +214,52 @@ namespace CrazyToys.Services
                                 string age = presentationValue.Split(" ")[0].Split(".")[0];
                                 int ageAsInt = Convert.ToInt32(age);
 
-                                if (featureId.Equals(ageGroupYearsId))
+
+                                if (featureId.Equals(ageGroupMonthsId))
                                 {
-                                    if (ageAsInt > 8)
-                                    {
-                                        foreach (AgeGroup ageGroup in ageGroups)
-                                        {
-                                            if (ageGroup.Interval.Contains("9"))
-                                            {
-                                                toy.AgeGroups.Add(ageGroup);
-                                                break;
-                                            }
-                                        };
-                                    }
-                                    else
-                                    {
-                                        foreach (AgeGroup ageGroup in ageGroups)
-                                        {
-                                            if (ageGroup.Interval.Contains(age))
-                                            {
-                                                toy.AgeGroups.Add(ageGroup);
-                                                break;
-                                            }
-                                        };
-                                    }
-
-                                } else
-                                {
-                                    string years = presentationValue.ToLower().Replace(" ", "").Replace("år", "");
-
-
+                                    ageAsInt = ageAsInt / 12;
                                 }
-
-
-
-
-
+                                if (ageAsInt == 0)
+                                {
+                                    foreach (AgeGroup ageGroup in ageGroups)
+                                    {
+                                        if (ageGroup.Interval.Contains("0"))
+                                        {
+                                            toy.AgeGroups.Add(ageGroup);
+                                            break;
+                                        }
+                                    };
+                                }
+                                else if (ageAsInt > 8)
+                                {
+                                    foreach (AgeGroup ageGroup in ageGroups)
+                                    {
+                                        if (ageGroup.Interval.Contains("9"))
+                                        {
+                                            toy.AgeGroups.Add(ageGroup);
+                                            break;
+                                        }
+                                    };
+                                }
+                                else
+                                {
+                                    foreach (AgeGroup ageGroup in ageGroups)
+                                    {
+                                        if (ageGroup.Interval.Contains(age))
+                                        {
+                                            toy.AgeGroups.Add(ageGroup);
+                                            break;
+                                        }
+                                    };
+                                }
                             }
                         }
-
                     }
 
-
-                    // agegroups - 24697
-                    // FeaturesGroups --> for hver på listen: ["Features"] for hver på listen: ["Feature"] if ["id"] = 1766 -->  item på ["Features"]["PresentationValue"]
-                    // hardcodes i db - lav noget tjek fordi den skal tildeles rigtigt
-
-
-
-
-                    // TODO noget med pris og stock
-
-                    //toy = new Toy(id, name, brand, shortDescription, longDescription, random.Next(0, 899), random.Next(0, 10), );
-
-
-
-
+                    // TODO få random ud fra Category - mindre vigtigt
+                    toy.Price = random.Next(0, 899);
+                    toy.Stock = random.Next(0, 10);
                 }
-
 
                 if (!hasAgeGroup)
                 {

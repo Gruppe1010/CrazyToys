@@ -54,6 +54,7 @@ namespace CrazyToys.Web
 
 
             services.AddScoped<BrandDbService>();
+            services.AddScoped<CategoryDbService>();
             services.AddScoped<SubCategoryDbService>();
             services.AddScoped<ColourDbService>();
             services.AddScoped<AgeGroupDbService>();

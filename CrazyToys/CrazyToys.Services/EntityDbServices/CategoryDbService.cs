@@ -10,37 +10,37 @@ using System.Threading.Tasks;
 
 namespace CrazyToys.Services.EntityDbServices
 {
-    public class AgeGroupDbService : IEntityCRUD<AgeGroup>
+    public class CategoryDbService : IEntityCRUD<Category>
     {
 
         private readonly Context _context;
 
-        public AgeGroupDbService(Context context)
+        public CategoryDbService(Context context)
         {
             _context = context;
         }
 
-        public Task<AgeGroup> Create(AgeGroup t)
+        public Task<Category> Create(Category t)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<List<AgeGroup>> GetAll()
+        public async Task<List<Category>> GetAll()
         {
-            return await _context.AgeGroups.ToListAsync();
+            return await _context.Categories.ToListAsync();
         }
 
-        public Task<AgeGroup> GetById(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<AgeGroup> GetByName(string name)
+        public Task<Category> GetById(string id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<AgeGroup> UpdateById(string id)
+        public Task<Category> GetByName(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Category> UpdateById(string id)
         {
             throw new NotImplementedException();
         }
