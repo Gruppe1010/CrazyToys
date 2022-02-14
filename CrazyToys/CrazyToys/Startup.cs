@@ -1,5 +1,7 @@
 using CrazyToys.Data.Data;
+using CrazyToys.Entities.Entities;
 using CrazyToys.Interfaces;
+using CrazyToys.Interfaces.EntityDbInterfaces;
 using CrazyToys.Services;
 using CrazyToys.Services.EntityDbServices;
 using Microsoft.AspNetCore.Builder;
@@ -43,8 +45,6 @@ namespace CrazyToys.Web
         /// </remarks>
         public void ConfigureServices(IServiceCollection services)
         {
-
-
             services.AddDbContext<Context>(options =>
             {
                 options.UseSqlServer(
@@ -52,38 +52,21 @@ namespace CrazyToys.Web
 
             });
 
-
-            services.AddScoped<BrandDbService>();
-            services.AddScoped<CategoryDbService>();
-            services.AddScoped<SubCategoryDbService>();
-            services.AddScoped<ColourDbService>();
-            services.AddScoped<ToyDbService>();
-            services.AddScoped<AgeGroupDbService>();
+            services.AddScoped<IEntityCRUD<Brand>, BrandDbService>();
+            services.AddScoped<IEntityCRUD<Category>, CategoryDbService>();
+            services.AddScoped<IEntityCRUD<SubCategory>, SubCategoryDbService>();
+            services.AddScoped<IEntityCRUD<Colour>, ColourDbService>();
+            services.AddScoped<IEntityCRUD<Toy>, ToyDbService>();
+            services.AddScoped<IEntityCRUD<AgeGroup>, AgeGroupDbService>();
             services.AddScoped<IProductDataService, IcecatDataService>();
 
-
-
-#pragma warning disable IDE0022 // Use expression body for methods
+            //pragma warning disable IDE0022 // Use expression body for methods
             services.AddUmbraco(_env, _config)
                 .AddBackOffice()
                 .AddWebsite()
                 .AddComposers()
                 .Build();
-#pragma warning restore IDE0022 // Use expression body for methods
-
-            /*
-            services.AddSingleton<IEnitityCRUD, BrandDbService>();
-            services.AddSingleton<IEnitityCRUD, SubCategoryDbService>();
-            */
-
-
-
-
-
-
-
-
-
+            //pragma warning restore IDE0022 // Use expression body for methods
         }
 
         /// <summary>
@@ -111,10 +94,5 @@ namespace CrazyToys.Web
                     u.UseWebsiteEndpoints();
                 });
         }
-
-
-
-
-
     }
 }

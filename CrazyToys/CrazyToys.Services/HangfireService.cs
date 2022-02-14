@@ -9,7 +9,12 @@ namespace CrazyToys.Services
 {
     public class HangfireService : IHangfireService
     {
-        public IProductDataService ProductDataService { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        private readonly IProductDataService _productDataService;
+
+        private HangfireService(IProductDataService productDataService)
+        {
+
+        }
 
         public void GetDaily()
         {

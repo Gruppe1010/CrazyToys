@@ -27,8 +27,8 @@ namespace CrazyToys.Services
         private Random random;
 
 
-        public IcecatDataService(IHttpClientFactory httpClientFactory, BrandDbService brandDbService, CategoryDbService categoryDbService, 
-            SubCategoryDbService subCategoryDbService, ColourDbService colourDbService, ToyDbService toyDbService, AgeGroupDbService ageGroupDbService)
+        public IcecatDataService(IHttpClientFactory httpClientFactory, IEntityCRUD<Brand> brandDbService, IEntityCRUD<Category> categoryDbService,
+            IEntityCRUD<SubCategory> subCategoryDbService, IEntityCRUD<Colour> colourDbService, IEntityCRUD<Toy> toyDbService, IEntityCRUD<AgeGroup> ageGroupDbService)
         {
             _httpClientFactory = httpClientFactory;
             _brandDbService = brandDbService;
@@ -200,7 +200,7 @@ namespace CrazyToys.Services
                                     age = ageAsInt.ToString();
                                 }
                                 // hvis det er den sidste aldersgruppe-kategori skal den findes manuelt ud fra "9"
-                                else if (ageAsInt > 8)
+                                if (ageAsInt > 8)
                                 {
                                     foreach (AgeGroup ageGroup in ageGroups)
                                     {
