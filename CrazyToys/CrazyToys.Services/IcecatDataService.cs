@@ -1,6 +1,7 @@
-﻿using CrazyToys.Entities.Models.Entities;
+﻿using CrazyToys.Entities.Entities;
 using CrazyToys.Interfaces;
 using CrazyToys.Interfaces.EntityDbInterfaces;
+using CrazyToys.Services.EntityDbServices;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -17,21 +18,25 @@ namespace CrazyToys.Services
     {
         
         private readonly IHttpClientFactory _httpClientFactory;
-        private readonly IEnitityCRUD<Brand> _brandDbService;
-        private readonly IEnitityCRUD<SubCategory> _subCategoryDbService;
-        private readonly ColourDbService _colourDbService;
+        private readonly IEntityCRUD<Brand> _brandDbService;
+        private readonly IEntityCRUD<SubCategory> _subCategoryDbService;
+        private readonly IEntityCRUD<Colour> _colourDbService;
+        private readonly IEntityCRUD<AgeGroup> _ageGroupDbService;
+
+
 
         //private Dictionary<string, Brand> brandDict;
         private Random random;
 
 
 
-        public IcecatDataService(IHttpClientFactory httpClientFactory, BrandDbService brandDbService, SubCategoryDbService subCategoryDbService, ColourDbService colourDbService)
+        public IcecatDataService(IHttpClientFactory httpClientFactory, BrandDbService brandDbService, SubCategoryDbService subCategoryDbService, ColourDbService colourDbService, AgeGroupDbService ageGroupDbService)
         {
             _httpClientFactory = httpClientFactory;
             _brandDbService = brandDbService;
             _subCategoryDbService = subCategoryDbService;
             _colourDbService = colourDbService;
+            _ageGroupDbService = ageGroupDbService;
             random = new Random();
 
             /*
@@ -69,9 +74,15 @@ namespace CrazyToys.Services
             Brand brand = await _brandDbService.GetById(brandId);
             if (brand != null)
             {
+                bool hasAgeGroup = false;
+                var ageGroups = Task.Run(async () => await _ageGroupDbService.GetAll()).Result;
+
+                string brandNameWithoutSpaces = brand.Name.Replace(" ", "%20");
+
                 HttpRequestMessage httpRequestMessage = new HttpRequestMessage(
                     HttpMethod.Get,
-                    $"https://live.icecat.biz/api/?Username={username}&Language=dk&Brand={brand.Name}&ProductCode={productId}")
+                    $"https://live.icecat.biz/api/?Username={username}&Language=dk&Brand={brandNameWithoutSpaces}&ProductCode={productId}")
+
                 {
                     Headers =
                     {
@@ -149,7 +160,8 @@ namespace CrazyToys.Services
                     // stringen skal splittes op i strings og så tilføjes som seperate værdier i colour tabellen, som så skal tilføjes som refs til toy
                     //string colourString = json["data"]["GeneralInfo"]["FeaturesGroups"]["Features"]["PresentationValue"];
                     string colourId = "1766";
-                    string ageGroupId = "24697";
+                    string ageGroupYearsId = "24697";
+                    string ageGroupMonthsId = "24019";
 
                     var featureGroups = json["data"]["FeaturesGroups"];
 
@@ -177,16 +189,55 @@ namespace CrazyToys.Services
                                     if(colour == null)
                                     {
                                         // ellers læg i db
-                                        Colour c1 = new Colour(colourName);
-                                        colour = Task.Run(async () => await _colourDbService.Create(c1)).Result;
+                                        colour = Task.Run(async () => await _colourDbService.Create(new Colour(colourName))).Result;
                                     } 
                                     //og tilføj farven til toy-obj
                                     toy.Colours.Add(colour);
                                 });
                             }
-                            else if (featureId.Equals(ageGroupId))
+                            else if (featureId.Equals(ageGroupYearsId) || featureId.Equals(ageGroupMonthsId))
                             {
+                                hasAgeGroup = true;
                                 string presentationValue = feature["PresentationValue"];
+                                toy.AgeGroup = presentationValue;
+
+                                // uanset om det er måned eller år, så er det efter kommaet ligemeget, fordi udregningen bliver det samme
+                                string age = presentationValue.Split(" ")[0].Split(".")[0];
+                                int ageAsInt = Convert.ToInt32(age);
+
+                                if (featureId.Equals(ageGroupYearsId))
+                                {
+                                    if (ageAsInt > 8)
+                                    {
+                                        foreach (AgeGroup ageGroup in ageGroups)
+                                        {
+                                            if (ageGroup.Interval.Contains("9"))
+                                            {
+                                                toy.AgeGroups.Add(ageGroup);
+                                                break;
+                                            }
+                                        };
+                                    }
+                                    else
+                                    {
+                                        foreach (AgeGroup ageGroup in ageGroups)
+                                        {
+                                            if (ageGroup.Interval.Contains(age))
+                                            {
+                                                toy.AgeGroups.Add(ageGroup);
+                                                break;
+                                            }
+                                        };
+                                    }
+
+                                } else
+                                {
+                                    string years = presentationValue.ToLower().Replace(" ", "").Replace("år", "");
+
+
+                                }
+
+
 
 
 
@@ -211,6 +262,14 @@ namespace CrazyToys.Services
 
 
                 }
+
+
+                if (!hasAgeGroup)
+                {
+                    // sæt til alle aldersgrupper
+                    toy.AgeGroups = ageGroups;
+                }
+
             }
             return toy;
         }
