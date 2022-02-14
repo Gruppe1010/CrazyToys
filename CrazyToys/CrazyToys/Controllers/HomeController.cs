@@ -29,8 +29,9 @@ namespace CrazyToys.Web.Controllers
             ViewData["Test"] = test;//JsonConvert.SerializeObject(test);
 
 
-            Toy toy = Task.Run(async () => await _icecatDataService.GetSingleProduct("15111", "BARBIEKS55")).Result;
-            Toy toy1 = Task.Run(async () => await _icecatDataService.GetSingleProduct("5669", "HASB9940EU60")).Result;
+            _ = Task.Run(async () => await _icecatDataService.GetSingleProduct("15111", "BARBIEKS55")).Result;
+            _ = Task.Run(async () => await _icecatDataService.GetSingleProduct("5669", "HASB9940EU60")).Result;
+            _ = Task.Run(async () => await _icecatDataService.GetSingleProduct("15111", "GXB29")).Result;
 
             //_ = _icecatDataService.GetSingleProduct("15111", "BARBIEKS55");
             //_ = _icecatDataService.GetSingleProduct("5669", "HASB9940EU60");
