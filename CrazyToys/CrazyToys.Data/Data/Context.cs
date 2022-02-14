@@ -10,10 +10,6 @@ namespace CrazyToys.Data.Data
 {
     public class Context : DbContext
     {
-        public Context(DbContextOptions<Context> options) : base(options)
-        {
-        }
-
         public DbSet<Colour> Colours { get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<Brand> Brands { get; set; }
@@ -22,8 +18,9 @@ namespace CrazyToys.Data.Data
         public DbSet<AgeGroup> AgeGroups { get; set; }
         public DbSet<Toy> Toys { get; set; }
 
-
-
+        public Context(DbContextOptions<Context> options) : base(options)
+        {
+        }
 
     }
 }
