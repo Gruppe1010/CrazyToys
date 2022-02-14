@@ -40,17 +40,28 @@ namespace CrazyToys.Services
             random = new Random();
         }
 
-
-        public async Task<Toy> GetSingleProduct(string brandId, string productId)
+        /**
+         * returns string[] - index 0 == username og index 1 er credentials
+         */
+        public string[] GetIcecatCredentials()
         {
-            Toy toy = null;
-
             // TODO implementer lige noget sikkerhedsnoget her
             string username = "alphaslo";
             string password = "KJ6j1c9y8c2YwMq8GTjc";
 
             byte[] byteArray = Encoding.ASCII.GetBytes($"{username}:{password}");
-            string credentials = Convert.ToBase64String(byteArray);
+            return new string[] { username, Convert.ToBase64String(byteArray) };
+        }
+
+
+        public async Task<Toy> GetSingleProduct(string brandId, string productId)
+        {
+            Toy toy = null;
+
+            string[] icecatCredentials = GetIcecatCredentials();
+
+            string username = icecatCredentials[0];
+            string credentials = icecatCredentials[1];
 
             Brand brand = await _brandDbService.GetById(brandId);
             if (brand != null)
@@ -92,40 +103,9 @@ namespace CrazyToys.Services
                     toy.LongDescription = json["data"]["GeneralInfo"]["SummaryDescription"]["LongSummaryDescription"];
 
                     string subCategoryId = json["data"]["GeneralInfo"]["Category"]["CategoryID"];
+                    string subCategoryName = json["data"]["GeneralInfo"]["Category"]["Name"]["Value"];
 
-                    // tjekker om subcat allerede findes ud fra id
-                    SubCategory subCategory = await _subCategoryDbService.GetById(subCategoryId);
-                    if(subCategory == null) // hvis nej
-                    {
-                        // henter navnet og opretter den
-                        string subCategoryName = json["data"]["GeneralInfo"]["Category"]["Name"]["Value"];
-                        subCategory = new SubCategory(subCategoryId, subCategoryName);
-
-                        // tjekker hvilke over-kategorier som denne subcategory skal være indenunder
-                        foreach (Category category in categories)
-                        {
-                            foreach(string sortingKeyword in category.SortingKeywords)
-                            {
-                                if (subCategoryName.Contains(sortingKeyword))
-                                {
-                                    subCategory.Categories.Add(category);
-                                    break;
-                                }
-                            }
-                        }
-                        // hvis der ikke er blevet tilføjet nogle ud fra sortingkeywords, så tilføj til assorteret
-                        if (subCategory.Categories.Count < 1)
-                        {
-                            foreach (Category category in categories)
-                            {
-                                if (category.Name.Equals("Assorteret"))
-                                {
-                                    subCategory.Categories.Add(category);
-                                }
-                            }
-                        }
-                    }
-                    toy.SubCategory = subCategory;
+                    toy.SubCategory = Task.Run(async () => await GetOrCreateSubCategory(subCategoryId, subCategoryName, categories)).Result;
 
                     string urlLow = json["data"]["Image"]["Pic500x500"];
                     string urlHigh = json["data"]["Image"]["HighPic"];
@@ -168,20 +148,9 @@ namespace CrazyToys.Services
 
                                 string[] colours = presentationValue.Split(", ");
 
-                                // for hver farve
-                                Array.ForEach(colours, colourName =>
-                                {
-                                    //tjek om den er i db
-                                    var colour = Task.Run(async () => await _colourDbService.GetByName(colourName)).Result;
-                                                                     
-                                    if(colour == null)
-                                    {
-                                        // opret nyt colour-obj
-                                        colour = new Colour(colourName);
-                                    } 
-                                    //og tilføj farven til toy-obj
-                                    toy.Colours.Add(colour);
-                                });
+                                // for hver farve tilføj til toy-obj
+                                Array.ForEach(colours, colourName => toy.Colours.Add(GetOrCreateColour(colourName)));
+
                             }
                             else if (featureId.Equals(ageGroupYearsId) || featureId.Equals(ageGroupMonthsId))
                             {
@@ -240,5 +209,60 @@ namespace CrazyToys.Services
             }
             return toy;
         }
+
+
+        public async Task<SubCategory> GetOrCreateSubCategory(string id, string name, List<Category> categories)
+        {
+            // tjekker om subcat allerede findes ud fra id
+            SubCategory subCategory = await _subCategoryDbService.GetById(id);
+            if (subCategory == null) // hvis nej
+            {
+                //opretter nyt obj
+                subCategory = new SubCategory(id, name);
+
+                //og tjekker hvilke over-kategorier som denne subcategory skal være indenunder
+                foreach (Category category in categories)
+                {
+                    foreach (string sortingKeyword in category.SortingKeywords)
+                    {
+                        if (name.Contains(sortingKeyword))
+                        {
+                            // og tilføjet categorier til dens liste, så de får en relation
+                            subCategory.Categories.Add(category);
+                            break;
+                        }
+                    }
+                }
+                // hvis der ikke er blevet tilføjet nogle ud fra sortingkeywords, så tilføj til assorteret
+                if (subCategory.Categories.Count < 1)
+                {
+                    foreach (Category category in categories)
+                    {
+                        if (category.Name.Equals("Assorteret"))
+                        {
+                            subCategory.Categories.Add(category);
+                        }
+                    }
+                }
+            }
+            return subCategory;
+
+        }
+
+        public Colour GetOrCreateColour(string name)
+        {
+            //tjek om den er i db
+            var colour = Task.Run(async () => await _colourDbService.GetByName(name)).Result;
+
+            if (colour == null)
+            {
+                // opret nyt colour-obj
+                colour = new Colour(name);
+            }
+            return colour;
+
+        }
+
+
     }
 }
