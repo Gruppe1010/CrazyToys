@@ -1,6 +1,6 @@
 ﻿
 
-using CrazyToys.Entities.Models.Entities;
+using CrazyToys.Entities.Entities;
 using System.Threading.Tasks;
 
 namespace CrazyToys.Interfaces
