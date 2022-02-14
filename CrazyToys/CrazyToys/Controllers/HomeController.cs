@@ -1,4 +1,4 @@
-﻿using CrazyToys.Entities.Models.Entities;
+﻿
 using CrazyToys.Interfaces;
 using CrazyToys.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +29,7 @@ namespace CrazyToys.Web.Controllers
             ViewData["Test"] = test;//JsonConvert.SerializeObject(test);
 
 
-            _ = Task.Run(async () => await _icecatDataService.GetSingleProduct("15111", "BARBIEKS55")).Result;
+            _ = Task.Run(async () => await _icecatDataService.GetSingleProduct("23442", "0401050")).Result;
             _ = Task.Run(async () => await _icecatDataService.GetSingleProduct("5669", "HASB9940EU60")).Result;
             _ = Task.Run(async () => await _icecatDataService.GetSingleProduct("15111", "GXB29")).Result;
 
