@@ -61,11 +61,12 @@ namespace CrazyToys.Data.Data
             {
                 var categories = new Category[]
                 { 
-                    new Category("Dukker"),
-                    new Category("Figurer"),
-                    new Category("Bamser"),
-                    new Category("Kreativ"),
-                    new Category("Spil"),
+                    new Category("Dukker", new string[] {"dukke"}),
+                    new Category("Figurer", new string[] {"figur"}),
+                    new Category("Bamser", new string[] {"bamse", "tøjdyr"}),
+                    new Category("Kreativ", new string[] {"kunst", "håndværk", "modellering"}),
+                    new Category("Spil", new string[] {"spil"}),
+                    new Category("Musiklegetøj", new string[] {"musik"}),
                     new Category("Assorteret")
 
                 };
