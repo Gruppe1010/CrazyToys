@@ -234,6 +234,7 @@ namespace CrazyToys.Services
                         // sæt til alle aldersgrupper
                         toy.AgeGroups = ageGroups;
                     }
+                    // TODO slet denne - det er ikke denne som skal lægge den ned i db
                     toy = Task.Run(async () => await _toyDbService.Create(toy)).Result;
                 }
             }
