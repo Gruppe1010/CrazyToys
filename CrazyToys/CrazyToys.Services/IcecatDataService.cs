@@ -43,14 +43,14 @@ namespace CrazyToys.Services
         /**
          * returns string[] - index 0 == username og index 1 er credentials
          */
-        public string[] GetIcecatCredentials()
+        public string GetIcecatCredentials()
         {
             // TODO implementer lige noget sikkerhedsnoget her
             string username = "alphaslo";
             string password = "KJ6j1c9y8c2YwMq8GTjc";
 
             byte[] byteArray = Encoding.ASCII.GetBytes($"{username}:{password}");
-            return new string[] { username, Convert.ToBase64String(byteArray) };
+            return Convert.ToBase64String(byteArray);
         }
 
 
@@ -58,10 +58,9 @@ namespace CrazyToys.Services
         {
             Toy toy = null;
 
-            string[] icecatCredentials = GetIcecatCredentials();
-
-            string username = icecatCredentials[0];
-            string credentials = icecatCredentials[1];
+            // TODO tilføj sikkerhed ift. brugernavn
+            string username = "alphaslo";
+            string credentials = GetIcecatCredentials();
 
             Brand brand = await _brandDbService.GetById(brandId);
             if (brand != null)
@@ -195,8 +194,8 @@ namespace CrazyToys.Services
                         }
                     }
                     // TODO få random ud fra Category - mindre vigtigt
-                    toy.Price = random.Next(0, 899);
-                    toy.Stock = random.Next(0, 10);
+                    toy.Price = random.Next(49, 899);
+                    toy.Stock = random.Next(1, 25);
 
                     if (!hasAgeGroup)
                     {
@@ -260,7 +259,6 @@ namespace CrazyToys.Services
                 colour = new Colour(name);
             }
             return colour;
-
         }
 
 
