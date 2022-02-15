@@ -45,33 +45,28 @@ namespace CrazyToys.Web
         /// </remarks>
         public void ConfigureServices(IServiceCollection services)
         {
-            
-            
             services.AddDbContext<Context>(options =>
             {
                 options.UseSqlServer(
                _config.GetConnectionString("context"));
+                options.EnableSensitiveDataLogging();
             });
-            
-            
             
             /*
             services.AddDbContext<Context>(options =>
             options.UseSqlServer(_config.GetConnectionString("context")),
             ServiceLifetime.Transient);
             */
-            
-
             services.AddScoped<IEntityCRUD<Brand>, BrandDbService>();
             services.AddScoped<IEntityCRUD<Category>, CategoryDbService>();
             services.AddScoped<IEntityCRUD<SubCategory>, SubCategoryDbService>();
             services.AddScoped<IEntityCRUD<Colour>, ColourDbService>();
             services.AddScoped<IEntityCRUD<Toy>, ToyDbService>();
             services.AddScoped<IEntityCRUD<AgeGroup>, AgeGroupDbService>();
-            services.AddScoped<IProductDataService, IcecatDataService>();
+            services.AddScoped<IcecatDataService>();
+            //services.AddScoped<IProductDataService, IcecatDataService>();
             services.AddScoped<IHangfireService, HangfireService>();
             
-
             //pragma warning disable IDE0022 // Use expression body for methods
             services.AddUmbraco(_env, _config)
                 .AddBackOffice()
@@ -93,6 +88,8 @@ namespace CrazyToys.Web
                 app.UseDeveloperExceptionPage();
             }
 
+
+
             app.UseUmbraco()
                 .WithMiddleware(u =>
                 {
@@ -105,6 +102,9 @@ namespace CrazyToys.Web
                     u.UseBackOfficeEndpoints();
                     u.UseWebsiteEndpoints();
                 });
+
+
+       
         }
     }
 }
