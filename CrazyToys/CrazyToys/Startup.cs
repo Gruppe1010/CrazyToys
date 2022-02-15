@@ -59,6 +59,8 @@ namespace CrazyToys.Web
             services.AddScoped<IEntityCRUD<Toy>, ToyDbService>();
             services.AddScoped<IEntityCRUD<AgeGroup>, AgeGroupDbService>();
             services.AddScoped<IProductDataService, IcecatDataService>();
+            services.AddScoped<IHangfireService, HangfireService>();
+            
 
             //pragma warning disable IDE0022 // Use expression body for methods
             services.AddUmbraco(_env, _config)
