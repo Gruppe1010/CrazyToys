@@ -8,7 +8,7 @@ namespace CrazyToys.Interfaces
 {
     public interface IHangfireService
     {
-        void GetIndex();
+        Task GetIndex();
 
         void GetDaily();
     }
