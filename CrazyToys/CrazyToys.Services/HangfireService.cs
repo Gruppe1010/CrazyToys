@@ -15,11 +15,15 @@ namespace CrazyToys.Services
     public class HangfireService : IHangfireService
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        private readonly IProductDataService _icecatDataService;
+        private readonly IcecatDataService _icecatDataService;
+
+        //private readonly IProductDataService _icecatDataService;
         private readonly IEntityCRUD<Brand> _brandDbService;
 
 
-        public HangfireService(IHttpClientFactory httpClientFactory, IProductDataService icecatDataService, IEntityCRUD<Brand> brandDbService)
+
+        public HangfireService(IHttpClientFactory httpClientFactory, IcecatDataService icecatDataService, //IProductDataService icecatDataService, 
+            IEntityCRUD<Brand> brandDbService)
         {
             _httpClientFactory = httpClientFactory;
             _icecatDataService = icecatDataService;
@@ -31,7 +35,7 @@ namespace CrazyToys.Services
             throw new NotImplementedException();
         }
 
-        public async void GetIndex()
+        public async Task GetIndex()
         {
             string credentials = _icecatDataService.GetIcecatCredentials();
 
@@ -63,38 +67,34 @@ namespace CrazyToys.Services
                 settings.IgnoreComments = true;
 
                 XmlReader reader = XmlReader.Create(contentStream, settings);
-                
-                    while (await reader.ReadAsync())
+
+                while (await reader.ReadAsync())
+                {
+                    switch (reader.Name)//(reader.NodeType)
                     {
-                        switch (reader.Name)//(reader.NodeType)
-                        {
-                            case "file": //XmlNodeType.Element: // Her ved vi at det er en file
+                        case "file": //XmlNodeType.Element: // Her ved vi at det er en file
 
-                                if (reader.NodeType != XmlNodeType.EndElement)
+                            if (reader.NodeType != XmlNodeType.EndElement)
+                            {
+                                string supplierId = reader.GetAttribute("Supplier_id");
+                                Console.WriteLine("supplierId: " + supplierId);
+
+
+                                Brand brand = await _brandDbService.GetById(supplierId);
+                                if (brand != null)
                                 {
-                                    string supplierId = reader.GetAttribute("Supplier_id");
-                                    Console.WriteLine("supplierId: " + supplierId);
+                                    string productId = reader.GetAttribute("Prod_ID");
 
+                                    Toy toy = await _icecatDataService.GetSingleProduct(supplierId, productId);
 
-                                    Brand brand = await _brandDbService.GetById(supplierId);
-                                    //Brand brand = Task.Run(async () => await _brandDbService.GetById(supplierId)).Result;
-                                    if (brand != null)
-                                    {
-                                        string productId = reader.GetAttribute("Prod_ID");
-
-                                        // TODO måske Task.Run .Result noget
-                                        var test = Task.Run(async () => await _icecatDataService.GetSingleProduct(supplierId, productId)).Result;
-
-                                        //await _icecatDataService.GetSingleProduct(supplierId, productId);
-
-                                    }
+                                    Toy addedToy = await _icecatDataService.AddToyToDb(toy);
                                 }
-                                break;
-                            default:
-                                break;
-                        }
+                            }
+                            break;
+                        default:
+                            break;
                     }
-                
+                }
             }
         }
     }
