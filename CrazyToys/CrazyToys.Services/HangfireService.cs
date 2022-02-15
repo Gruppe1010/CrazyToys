@@ -31,7 +31,7 @@ namespace CrazyToys.Services
             throw new NotImplementedException();
         }
 
-        public async Task GetIndex()
+        public async void GetIndex()
         {
             string credentials = _icecatDataService.GetIcecatCredentials();
 
@@ -48,6 +48,7 @@ namespace CrazyToys.Services
             };
 
             var httpClient = _httpClientFactory.CreateClient();
+            httpClient.Timeout = TimeSpan.FromMinutes(10);
             var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
 
             if (httpResponseMessage.IsSuccessStatusCode)
@@ -61,8 +62,8 @@ namespace CrazyToys.Services
                 settings.DtdProcessing = DtdProcessing.Ignore;
                 settings.IgnoreComments = true;
 
-                using (XmlReader reader = XmlReader.Create(contentStream, settings))
-                {
+                XmlReader reader = XmlReader.Create(contentStream, settings);
+                
                     while (await reader.ReadAsync())
                     {
                         switch (reader.Name)//(reader.NodeType)
@@ -74,13 +75,17 @@ namespace CrazyToys.Services
                                     string supplierId = reader.GetAttribute("Supplier_id");
                                     Console.WriteLine("supplierId: " + supplierId);
 
-                                    Brand brand = Task.Run(async () => await _brandDbService.GetById(supplierId)).Result;
+
+                                    Brand brand = await _brandDbService.GetById(supplierId);
+                                    //Brand brand = Task.Run(async () => await _brandDbService.GetById(supplierId)).Result;
                                     if (brand != null)
                                     {
                                         string productId = reader.GetAttribute("Prod_ID");
 
                                         // TODO måske Task.Run .Result noget
-                                        await _icecatDataService.GetSingleProduct(supplierId, productId);
+                                        var test = Task.Run(async () => await _icecatDataService.GetSingleProduct(supplierId, productId)).Result;
+
+                                        //await _icecatDataService.GetSingleProduct(supplierId, productId);
 
                                     }
                                 }
@@ -89,9 +94,7 @@ namespace CrazyToys.Services
                                 break;
                         }
                     }
-                }
-
-
+                
             }
         }
     }

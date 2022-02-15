@@ -45,12 +45,22 @@ namespace CrazyToys.Web
         /// </remarks>
         public void ConfigureServices(IServiceCollection services)
         {
+            
+            
             services.AddDbContext<Context>(options =>
             {
                 options.UseSqlServer(
                _config.GetConnectionString("context"));
-
             });
+            
+            
+            
+            /*
+            services.AddDbContext<Context>(options =>
+            options.UseSqlServer(_config.GetConnectionString("context")),
+            ServiceLifetime.Transient);
+            */
+            
 
             services.AddScoped<IEntityCRUD<Brand>, BrandDbService>();
             services.AddScoped<IEntityCRUD<Category>, CategoryDbService>();

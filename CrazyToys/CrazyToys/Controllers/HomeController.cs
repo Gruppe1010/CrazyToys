@@ -19,7 +19,7 @@ namespace CrazyToys.Web.Controllers
 
 
         public HomeController(ILogger<HomeController> logger, ICompositeViewEngine compositeViewEngine, 
-            IUmbracoContextAccessor umbracoContextAccessor, IHangfireService hangfireService) //IProductDataService icecatDataService)
+            IUmbracoContextAccessor umbracoContextAccessor, IHangfireService hangfireService)// IProductDataService icecatDataService)
             : base(logger, compositeViewEngine, umbracoContextAccessor)
         {
             //_icecatDataService = icecatDataService;
@@ -33,6 +33,7 @@ namespace CrazyToys.Web.Controllers
 
             ViewData["Test"] = test;//JsonConvert.SerializeObject(test);
 
+            
             _hangfireService.GetIndex();
             /*
             _ = Task.Run(async () => await _icecatDataService.GetSingleProduct("23442", "0401050")).Result;
