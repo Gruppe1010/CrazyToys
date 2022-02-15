@@ -24,6 +24,11 @@ namespace CrazyToys.Services.EntityDbServices
             throw new NotImplementedException();
         }
 
+        public Task<Brand> CreateOrUpdate(Brand t)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<List<Brand>> GetAll()
         {
             throw new NotImplementedException();
@@ -45,11 +50,10 @@ namespace CrazyToys.Services.EntityDbServices
             throw new NotImplementedException();
         }
 
-        public Task<Brand> UpdateById(string id)
+        public Task<Brand> Update(Brand t)
         {
             throw new NotImplementedException();
         }
-
     }
 
 

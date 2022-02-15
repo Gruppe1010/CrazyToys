@@ -15,9 +15,11 @@ namespace CrazyToys.Interfaces.EntityDbInterfaces
 
         Task<T> GetByName(string name);
 
-        Task<T> UpdateById(string id);
+        Task<T> Update(T t);
 
         Task<T> Create(T t);
+
+        Task<T> CreateOrUpdate(T t);
 
         //Task<Object> Delete(string id);
 

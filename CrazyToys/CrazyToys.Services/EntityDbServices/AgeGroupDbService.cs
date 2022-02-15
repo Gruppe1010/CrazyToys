@@ -25,6 +25,11 @@ namespace CrazyToys.Services.EntityDbServices
             throw new NotImplementedException();
         }
 
+        public Task<AgeGroup> CreateOrUpdate(AgeGroup t)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<List<AgeGroup>> GetAll()
         {
             return await _context.AgeGroups.ToListAsync();
@@ -40,7 +45,7 @@ namespace CrazyToys.Services.EntityDbServices
             throw new NotImplementedException();
         }
 
-        public Task<AgeGroup> UpdateById(string id)
+        public Task<AgeGroup> Update(AgeGroup t)
         {
             throw new NotImplementedException();
         }

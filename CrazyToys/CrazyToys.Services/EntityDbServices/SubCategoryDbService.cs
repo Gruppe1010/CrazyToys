@@ -29,6 +29,11 @@ namespace CrazyToys.Services.EntityDbServices
             return subCategory;
         }
 
+        public Task<SubCategory> CreateOrUpdate(SubCategory t)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<List<SubCategory>> GetAll()
         {
             throw new NotImplementedException();
@@ -51,10 +56,11 @@ namespace CrazyToys.Services.EntityDbServices
             throw new NotImplementedException();
         }
 
-        public Task<SubCategory> UpdateById(string id)
+        public Task<SubCategory> Update(SubCategory t)
         {
             throw new NotImplementedException();
         }
+
 
 
     }

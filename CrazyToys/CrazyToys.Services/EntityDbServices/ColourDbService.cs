@@ -55,7 +55,7 @@ namespace CrazyToys.Services.EntityDbServices
         }
         */
 
-        public Task<Colour> UpdateById(string id)
+        public Task<Colour> Update(Colour colour)
         {
             throw new NotImplementedException();
         }
@@ -73,7 +73,10 @@ namespace CrazyToys.Services.EntityDbServices
 
         }
 
-     
+        public Task<Colour> CreateOrUpdate(Colour t)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 
