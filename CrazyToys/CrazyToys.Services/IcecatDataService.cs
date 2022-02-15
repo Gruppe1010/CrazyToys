@@ -1,10 +1,8 @@
 ﻿using CrazyToys.Entities.Entities;
 using CrazyToys.Interfaces;
 using CrazyToys.Interfaces.EntityDbInterfaces;
-using CrazyToys.Services.EntityDbServices;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -28,7 +26,8 @@ namespace CrazyToys.Services
 
 
         public IcecatDataService(IHttpClientFactory httpClientFactory, IEntityCRUD<Brand> brandDbService, IEntityCRUD<Category> categoryDbService,
-            IEntityCRUD<SubCategory> subCategoryDbService, IEntityCRUD<Colour> colourDbService, IEntityCRUD<Toy> toyDbService, IEntityCRUD<AgeGroup> ageGroupDbService)
+            IEntityCRUD<SubCategory> subCategoryDbService, IEntityCRUD<Colour> colourDbService, IEntityCRUD<Toy> toyDbService, 
+            IEntityCRUD<AgeGroup> ageGroupDbService)
         {
             _httpClientFactory = httpClientFactory;
             _brandDbService = brandDbService;
@@ -53,7 +52,7 @@ namespace CrazyToys.Services
             return Convert.ToBase64String(byteArray);
         }
 
-
+     
         public async Task<Toy> GetSingleProduct(string brandId, string productId)
         {
             Toy toy = null;
@@ -84,11 +83,20 @@ namespace CrazyToys.Services
 
                 if (httpResponseMessage.IsSuccessStatusCode)
                 {
+
+
+
+
+
+
+
+
+
                     toy = new Toy();
                     toy.Brand = brand;
                     bool hasAgeGroup = false; // bruges til at sætte til "Ingens Aldersgruppe"-agegroupen, hvis ingen alder-presentationvalue fundet
-                    var ageGroups = Task.Run(async () => await _ageGroupDbService.GetAll()).Result;
-                    var categories = Task.Run(async () => await _categoryDbService.GetAll()).Result;
+                    var ageGroups = await _ageGroupDbService.GetAll();
+                    var categories = await _categoryDbService.GetAll();
 
                     string jsonContent =
                         await httpResponseMessage.Content.ReadAsStringAsync();
@@ -104,11 +112,11 @@ namespace CrazyToys.Services
                     string subCategoryId = json["data"]["GeneralInfo"]["Category"]["CategoryID"];
                     string subCategoryName = json["data"]["GeneralInfo"]["Category"]["Name"]["Value"];
 
-                    toy.SubCategory = Task.Run(async () => await GetOrCreateSubCategory(subCategoryId, subCategoryName, categories)).Result;
+                    toy.SubCategory =  await GetOrCreateSubCategory(subCategoryId, subCategoryName, categories);
 
                     string urlLow = json["data"]["Image"]["Pic500x500"];
                     string urlHigh = json["data"]["Image"]["HighPic"];
-                    
+
                     Image image = new Image(urlLow, urlHigh, 0);
                     toy.Images.Add(image);
 
@@ -148,7 +156,13 @@ namespace CrazyToys.Services
                                 string[] colours = presentationValue.Split(", ");
 
                                 // for hver farve tilføj til toy-obj
-                                Array.ForEach(colours, colourName => toy.Colours.Add(GetOrCreateColour(colourName)));
+                                foreach (string colourName in colours)
+                                {
+                                   toy.Colours.Add(await GetOrCreateColour(colourName));
+                                }
+
+
+                                //Array.ForEach(colours, colourName => await toy.Colours.Add(GetOrCreateColour(colourName)));
 
                             }
                             else if (featureId.Equals(ageGroupYearsId) || featureId.Equals(ageGroupMonthsId))
@@ -202,12 +216,28 @@ namespace CrazyToys.Services
                         // sæt til alle aldersgrupper
                         toy.AgeGroups = ageGroups;
                     }
-                    // TODO slet denne - det er ikke denne som skal lægge den ned i db
-                    toy = Task.Run(async () => await _toyDbService.Create(toy)).Result;
+                    return toy;
                 }
             }
             return toy;
+        
+        
         }
+
+        public async Task<Toy> AddToyToDb(Toy toy)
+        {
+            Toy toyFromDb = await _toyDbService.GetById(toy.ID); // TODO DENNE HER FUCKEEEEEEEEEKKKKKKKKKKKKKKKKK
+
+            if (toyFromDb != null)
+            {
+                return await _toyDbService.Update(toy);
+            }
+            else
+            {
+                return await _toyDbService.Create(toy);
+            }
+        }
+
 
 
         public async Task<SubCategory> GetOrCreateSubCategory(string id, string name, List<Category> categories)
@@ -248,10 +278,12 @@ namespace CrazyToys.Services
 
         }
 
-        public Colour GetOrCreateColour(string name)
+        public async Task<Colour> GetOrCreateColour(string name)
         {
             //tjek om den er i db
-            var colour = Task.Run(async () => await _colourDbService.GetByName(name)).Result;
+            var colour =  await _colourDbService.GetByName(name);
+
+            //var colour = Task.Run(async () => await _colourDbService.GetByName(name)).Result;
 
             if (colour == null)
             {
