@@ -1,19 +1,29 @@
-﻿using CrazyToys.Interfaces;
+﻿using CrazyToys.Entities.Entities;
+using CrazyToys.Interfaces;
+using CrazyToys.Interfaces.EntityDbInterfaces;
+using Microsoft.Net.Http.Headers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace CrazyToys.Services
 {
     public class HangfireService : IHangfireService
     {
+        private readonly IHttpClientFactory _httpClientFactory;
         private readonly IProductDataService _icecatDataService;
+        private readonly IEntityCRUD<Brand> _brandDbService;
 
-        private HangfireService(IProductDataService icecatDataService)
+
+        public HangfireService(IHttpClientFactory httpClientFactory, IProductDataService icecatDataService, IEntityCRUD<Brand> brandDbService)
         {
+            _httpClientFactory = httpClientFactory;
             _icecatDataService = icecatDataService;
+            _brandDbService = brandDbService;
         }
 
         public void GetDaily()
@@ -21,23 +31,14 @@ namespace CrazyToys.Services
             throw new NotImplementedException();
         }
 
-        public void GetIndex()
+        public async Task GetIndex()
         {
-
-            _toyContext.Brands.Add(new Brand("1", "gruppe10"));
-            await _toyContext.SaveChangesAsync();
-
-
-            string username = "alphaslo";
-            string password = "KJ6j1c9y8c2YwMq8GTjc";
-
-            var byteArray = Encoding.ASCII.GetBytes($"{username}:{password}");
-            string credentials = Convert.ToBase64String(byteArray);
-
+            string credentials = _icecatDataService.GetIcecatCredentials();
 
             var httpRequestMessage = new HttpRequestMessage(
                 HttpMethod.Get,
-                "https://data.Icecat.biz/export/freexml/EN/daily.index.xml")
+                //"https://data.Icecat.biz/export/freexml/EN/files.index.xml") // index
+                "https://data.Icecat.biz/export/freexml/EN/daily.index.xml") // daily
             {
                 Headers =
                     {
@@ -54,24 +55,6 @@ namespace CrazyToys.Services
                 var contentStream =
                     await httpResponseMessage.Content.ReadAsStreamAsync();
 
-                /* // Dat vi arbejde med string og lavede det om til json:
-                var noget  = contentString.Split("<files.index Generated=\"20220201050001\">"); // TODO denne er hardcodet - den er en anden i morgeeeen
-                var noget1 = noget[1].Split("</files.index>");
-                contentString = noget1[0];
-
-                contentString = "<files>" + contentString + "</files>";
-
-
-                XmlDocument doc = new XmlDocument();
-                doc.LoadXml(contentString);
-
-                string jsonString = JsonConvert.SerializeXmlNode(doc);
-
-                JObject json = JObject.Parse(jsonString);
-
-                IEnumerable<JProperty> generated = json.Properties();
-                */
-
                 XmlReaderSettings settings = new XmlReaderSettings();
                 settings.Async = true;
                 settings.IgnoreWhitespace = true;
@@ -80,7 +63,6 @@ namespace CrazyToys.Services
 
                 using (XmlReader reader = XmlReader.Create(contentStream, settings))
                 {
-
                     while (await reader.ReadAsync())
                     {
                         switch (reader.Name)//(reader.NodeType)
@@ -92,17 +74,16 @@ namespace CrazyToys.Services
                                     string supplierId = reader.GetAttribute("Supplier_id");
                                     Console.WriteLine("supplierId: " + supplierId);
 
-                                    if (brandDict.ContainsKey(supplierId))
+                                    Brand brand = Task.Run(async () => await _brandDbService.GetById(supplierId)).Result;
+                                    if (brand != null)
                                     {
                                         string productId = reader.GetAttribute("Prod_ID");
 
-                                        //brandDict[supplierId].ProductIdSet.Add(productId);
-
+                                        // TODO måske Task.Run .Result noget
+                                        await _icecatDataService.GetSingleProduct(supplierId, productId);
 
                                     }
                                 }
-
-
                                 break;
                             default:
                                 break;
