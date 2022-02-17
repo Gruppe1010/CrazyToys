@@ -20,6 +20,12 @@ namespace CrazyToys.Entities.Entities
         public int Stock { get; set; }
         public ICollection<Image> Images { get; set; }
 
+        public Toy(string iD, int price, int stock)
+        {
+            ID = iD;
+            Price = price;
+            Stock = stock;
+        }
 
         public Toy()
         {
@@ -51,6 +57,27 @@ namespace CrazyToys.Entities.Entities
             // TODO tag AgeGroups og SubCategories med - opret convertere til dem og find ud af hvordan man bruger Map - er det fordi det er en ICollection?
             return new ToyDTO(ID, Name, Brand, AgeGroup, ShortDescription, LongDescription, Price, Stock, Images);
         }
+
+        public void UpdateValuesToAnotherToysValues(Toy toy)
+        {
+            ID = toy.ID;
+            Name = toy.Name;
+            Brand = toy.Brand;
+            AgeGroup = toy.AgeGroup;
+            ShortDescription = toy.ShortDescription;
+            LongDescription = toy.LongDescription;
+            SubCategory = toy.SubCategory;
+            Price = toy.Price;
+            Stock = toy.Stock;
+            Images = toy.Images;
+
+
+            /*
+            Colours = toy.Colours;
+            AgeGroups = toy.AgeGroups;
+            */
+        }
+
 
     }
 }
