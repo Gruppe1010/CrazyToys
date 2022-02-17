@@ -231,8 +231,13 @@ namespace CrazyToys.Services
                     // hent alle farver som toyFromDb har
                     List<Colour> colours = await _toyDbService.GetColours(toyFromDb.ID); // gul, rød
 
+
+                    if (toy.Colours.Count > 1)
+                    {
+                        toy.Colours[1] = new Colour("NeonGrøn");
+                    }
                     //sammenlign farver på nyt obj, med de farver som allerede er tilknyttet toyFromDb
-                    for (int i = 0; i < toy.Colours.Count; i++)
+                    for (int i = toy.Colours.Count - 1; i >= 0; i--)
                     {
                         bool colourAlreadyAdded = false;
                         // vi tjekker om farven allerede er tilkoblet
@@ -260,7 +265,7 @@ namespace CrazyToys.Services
                     List<AgeGroup> ageGroups = await _toyDbService.GetAgeGroups(toyFromDb.ID); // gul, rød
 
                     //sammenlign ageGroups på nyt obj, med de ageGroups som allerede er tilknyttet toyFromDb
-                    for (int i = 0; i < toy.AgeGroups.Count; i++)
+                    for (int i = toy.AgeGroups.Count - 1; i >= 0; i--)
                     {
                         bool ageGroupAlreadyAdded = false;
                         // vi tjekker om ageGroup allerede er tilkoblet
