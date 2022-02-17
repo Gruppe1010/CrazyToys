@@ -178,11 +178,16 @@ namespace CrazyToys.Services
                             {
                                 hasAgeGroup = true;
                                 string presentationValue = feature["PresentationValue"];
+                               
                                 toy.AgeGroup = presentationValue;
-
                                 // uanset om det er måned eller år, så er det efter kommaet ligemeget, fordi udregningen bliver det samme
-                                string age = presentationValue.Split(" ")[0].Split(".")[0];
+                                Console.WriteLine("presentationValue før split: " + presentationValue);
+
+                                string age = presentationValue.Split(" ")[0].Replace(",", ".").Split(".")[0];
+                                Console.WriteLine("age efter split: " + age);
                                 int ageAsInt = Convert.ToInt32(age);
+                                Console.WriteLine("ageAsDouble: " + ageAsInt);
+
 
                                 // hvis det er i måneder, skal det konverteres til år
                                 if (featureId.Equals(ageGroupMonthsId))
