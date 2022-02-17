@@ -53,7 +53,7 @@ namespace CrazyToys.Services
         }
 
      
-        public async Task<Toy> GetSingleProduct(string brandId, string productId)
+        public async Task<Toy> GetSingleProduct(string brandId, string productId, string onMarket)
         {
             Toy toy = null;
 
@@ -81,9 +81,11 @@ namespace CrazyToys.Services
                 HttpClient httpClient = _httpClientFactory.CreateClient();
                 HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
 
+
                 if (httpResponseMessage.IsSuccessStatusCode)
                 {
                     toy = new Toy();
+                    toy.OnMarket = onMarket.Equals("0") ? false : true;
                     toy.Brand = brand;
                     bool hasAgeGroup = false; // bruges til at sætte til "Ingens Aldersgruppe"-agegroupen, hvis ingen alder-presentationvalue fundet
                     var ageGroups = await _ageGroupDbService.GetAll();
@@ -221,6 +223,15 @@ namespace CrazyToys.Services
 
             if (toyFromDb != null)
             {
+
+                foreach (Colour colour in toy.Colours)
+                {
+                    bool noget = _toyDbService.HasColour(toyFromDb.ID, colour.ID);
+
+                }
+
+
+
                 toyFromDb.UpdateValuesToAnotherToysValues(toy);
 
                 return await _toyDbService.Update(toyFromDb);

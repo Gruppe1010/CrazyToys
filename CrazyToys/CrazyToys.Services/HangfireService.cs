@@ -75,15 +75,20 @@ namespace CrazyToys.Services
                     {
 
                         string supplierId = reader.GetAttribute("Supplier_id");
-                        Console.WriteLine("supplierId: " + supplierId);
 
 
                         Brand brand = await _brandDbService.GetById(supplierId);
                         if (brand != null)
                         {
-                            string productId = reader.GetAttribute("Prod_ID");
+                            Console.WriteLine("supplierId: " + supplierId);
 
-                            Toy toy = await _icecatDataService.GetSingleProduct(supplierId, productId);
+                            string productId = reader.GetAttribute("Prod_ID");
+                            Console.WriteLine("productId: " + productId);
+
+                            string onMarket = reader.GetAttribute("On_Market");
+                            Console.WriteLine("onMarket: " + onMarket);
+
+                            Toy toy = await _icecatDataService.GetSingleProduct(supplierId, productId, onMarket);
 
                             Toy addedToy = await _icecatDataService.AddToyToDb(toy);
                         }
