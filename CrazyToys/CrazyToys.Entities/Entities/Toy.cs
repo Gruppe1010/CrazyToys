@@ -13,10 +13,10 @@ namespace CrazyToys.Entities.Entities
         public string AgeGroup { get; set; }
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
-        public ICollection<Colour> Colours { get; set; }
-        public ICollection<AgeGroup> AgeGroups { get; set; }
+        public IList<Colour> Colours { get; set; }
+        public IList<AgeGroup> AgeGroups { get; set; }
         public SubCategory SubCategory { get; set; }
-        public ICollection<Image> Images { get; set; }
+        public IList<Image> Images { get; set; }
         public int Price { get; set; }
         public int Stock { get; set; }
         public bool OnMarket { get; set; }
@@ -29,8 +29,8 @@ namespace CrazyToys.Entities.Entities
         }
 
         public Toy(string iD, string name, Brand brand, string ageGroup, string shortDescription,
-            string longDescription, ICollection<Colour> colours, ICollection<AgeGroup> ageGroups,
-            SubCategory subCategory, int price, int stock, ICollection<Image> images, bool onMarket)
+            string longDescription, List<Colour> colours, IList<AgeGroup> ageGroups,
+            SubCategory subCategory, int price, int stock, IList<Image> images, bool onMarket)
         {
             ID = iD;
             Name = name;
@@ -66,9 +66,9 @@ namespace CrazyToys.Entities.Entities
             Stock = toy.Stock;
             Images = toy.Images;
             OnMarket = toy.OnMarket;
+            Colours = toy.Colours;
 
             /*
-            Colours = toy.Colours;
             AgeGroups = toy.AgeGroups;
             */
             
