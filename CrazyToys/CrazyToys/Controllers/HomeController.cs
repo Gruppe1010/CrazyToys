@@ -21,7 +21,6 @@ namespace CrazyToys.Web.Controllers
         {
             //_icecatDataService = icecatDataService;
             _hangfireService = hangfireService;
-
         }
 
         //
@@ -71,9 +70,20 @@ namespace CrazyToys.Web.Controllers
 
             ViewData["Test"] = test;//JsonConvert.SerializeObject(test);
 
-            //var noget = Noget();
+            
             var getIndexTask = _hangfireService.GetIndex();
             getIndexTask.Wait();
+            
+
+            // hent alle PRODUKTER
+            /*
+            var getAllProductsTask = _hangfireService.GetAllProducts();
+            getIndexTask.Wait();
+            */
+
+
+
+
             //var result = getIndexTask.Result;
 
             //await _hangfireService.GetIndex();
