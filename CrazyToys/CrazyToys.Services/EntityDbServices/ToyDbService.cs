@@ -74,8 +74,6 @@ namespace CrazyToys.Services.EntityDbServices
 
         public async Task<List<Colour>> GetColours(string toyId)
         {
-            //var cat_id = 1; // Change this variable for your real cat_id
-
             var query = from colour in _context.Colours
                         where colour.Toys.Any(t => t.ID.Equals(toyId))
                         select colour;
@@ -83,52 +81,17 @@ namespace CrazyToys.Services.EntityDbServices
             var colours = await query.ToListAsync();
 
             return colours;
-
-
         }
 
-        public bool HasColour(string toyId, int colourId)
+        public async Task<List<AgeGroup>> GetAgeGroups(string toyId)
         {
-            //var colours = await _context.Toys.Where(toy => toy.ID == toyId && ).ToListAsync();
-            /*
+            var query = from ageGroup in _context.AgeGroups
+                        where ageGroup.Toys.Any(t => t.ID.Equals(toyId))
+                        select ageGroup;
 
-            var noget = _context.Toys
-            .Join(
-                _context.Colours,
-                toy => toy.ID,
-                colour => colour.ID.CustomerId,
-                (customer, invoice) => new
-                {
-                    InvoiceID = invoice.Id,
-                    CustomerName = customer.FirstName + "" + customer.LastName,
-                    InvoiceDate = invoice.Date
-                }
-            ).ToListAsync();
-            */
+            var ageGroups = await query.ToListAsync();
 
-
-            var nogetAndet = _context.Toys
-            .Where(toy => toy.ID.Equals(toyId))                      // only if you don't want all Users
-            .Select(toy => new
-            {    // Select only the properties you plan to use:
-                Colours = toy.Colours
-                     .Where(colour => colour.ID == colourId)         // only if you don't want all profiles
-                     .Select(colour => new
-                     {
-                         ID = colour.ID
-                     })
-                     .ToList(),
-            });
-
-
-
-            foreach (var item in nogetAndet)
-            {
-            }
-
-
-            var hej = 1;
-            return false;
+            return ageGroups;
         }
 
         public async Task<Toy> Update(Toy toy)
@@ -138,6 +101,5 @@ namespace CrazyToys.Services.EntityDbServices
 
             return toy;
         }
-
     }
 }
