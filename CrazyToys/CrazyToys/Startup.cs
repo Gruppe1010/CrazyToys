@@ -61,7 +61,7 @@ namespace CrazyToys.Web
             services.AddScoped<IEntityCRUD<Category>, CategoryDbService>();
             services.AddScoped<IEntityCRUD<SubCategory>, SubCategoryDbService>();
             services.AddScoped<IEntityCRUD<Colour>, ColourDbService>();
-            services.AddScoped<IEntityCRUD<Toy>, ToyDbService>();
+            services.AddScoped<ToyDbService>();
             services.AddScoped<IEntityCRUD<AgeGroup>, AgeGroupDbService>();
             services.AddScoped<IcecatDataService>();
             //services.AddScoped<IProductDataService, IcecatDataService>();
