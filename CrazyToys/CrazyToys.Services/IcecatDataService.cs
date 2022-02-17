@@ -83,15 +83,6 @@ namespace CrazyToys.Services
 
                 if (httpResponseMessage.IsSuccessStatusCode)
                 {
-
-
-
-
-
-
-
-
-
                     toy = new Toy();
                     toy.Brand = brand;
                     bool hasAgeGroup = false; // bruges til at sætte til "Ingens Aldersgruppe"-agegroupen, hvis ingen alder-presentationvalue fundet
@@ -226,11 +217,13 @@ namespace CrazyToys.Services
 
         public async Task<Toy> AddToyToDb(Toy toy)
         {
-            Toy toyFromDb = await _toyDbService.GetById(toy.ID); // TODO DENNE HER FUCKEEEEEEEEEKKKKKKKKKKKKKKKKK
+            Toy toyFromDb = await _toyDbService.GetById(toy.ID);
 
             if (toyFromDb != null)
             {
-                return await _toyDbService.Update(toy);
+                toyFromDb.UpdateValuesToAnotherToysValues(toy);
+
+                return await _toyDbService.Update(toyFromDb);
             }
             else
             {
