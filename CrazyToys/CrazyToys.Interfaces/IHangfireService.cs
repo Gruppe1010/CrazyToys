@@ -8,8 +8,6 @@ namespace CrazyToys.Interfaces
 {
     public interface IHangfireService
     {
-        Task GetIndex();
-
-        void GetDaily();
+        Task GetProductsFromIcecat(string url);
     }
 }
