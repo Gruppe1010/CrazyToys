@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CrazyToys.Entities.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,8 +9,8 @@ namespace CrazyToys.Interfaces.EntityDbInterfaces
 {
     public interface IToyDbService
     {
+        Task<List<Colour>> GetColours(string toyId);
 
-        bool HasColour(string toyId, int colourId);
-
+        Task<List<AgeGroup>> GetAgeGroups(string toyId);
     }
 }
