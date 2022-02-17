@@ -165,12 +165,6 @@ namespace CrazyToys.Services
                                 string presentationValue = feature["PresentationValue"];
                                
                                 toy.AgeGroup = presentationValue;
-
-                                if (productId.Equals("960145"))
-                                {
-                                    Console.WriteLine(productId);
-                                }
-
                                 // uanset om det er måned eller år, så er det efter kommaet ligemeget, fordi udregningen bliver det samme
                                 Console.WriteLine("presentationValue før split: " + presentationValue);
 
