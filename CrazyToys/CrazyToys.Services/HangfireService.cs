@@ -22,7 +22,7 @@ namespace CrazyToys.Services
 
 
 
-        public HangfireService(IHttpClientFactory httpClientFactory, IcecatDataService icecatDataService, //IProductDataService icecatDataService, 
+        public HangfireService(IHttpClientFactory httpClientFactory, IcecatDataService icecatDataService,
             IEntityCRUD<Brand> brandDbService)
         {
             _httpClientFactory = httpClientFactory;
@@ -30,19 +30,12 @@ namespace CrazyToys.Services
             _brandDbService = brandDbService;
         }
 
-        public void GetDaily()
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task GetIndex()
+        public async Task GetProductsFromIcecat(string url)
         {
             string credentials = _icecatDataService.GetIcecatCredentials();
 
             var httpRequestMessage = new HttpRequestMessage(
-                HttpMethod.Get,
-                //"https://data.Icecat.biz/export/freexml/EN/files.index.xml") // index
-                "https://data.Icecat.biz/export/freexml/EN/daily.index.xml") // daily
+                HttpMethod.Get, url)
             {
                 Headers =
                     {
@@ -78,17 +71,20 @@ namespace CrazyToys.Services
                         Brand brand = await _brandDbService.GetById(supplierId);
                         if (brand != null)
                         {
-                            Console.WriteLine("supplierId: " + supplierId);
-
                             string productId = reader.GetAttribute("Prod_ID");
-                            Console.WriteLine("productId: " + productId);
-
+                            Console.WriteLine("productId" + productId);
                             string onMarket = reader.GetAttribute("On_Market");
-                            Console.WriteLine("onMarket: " + onMarket);
 
                             Toy toy = await _icecatDataService.GetSingleProduct(supplierId, productId, onMarket);
 
-                            Toy addedToy = await _icecatDataService.AddToyToDb(toy);
+                            if (url.Contains("daily"))
+                            {
+                                Toy addedToy = await _icecatDataService.CreateOrUpdateToyInDb(toy);
+                            } 
+                            else
+                            {
+                                Toy addedToy = await _icecatDataService.CreateToyInDb(toy);
+                            }
                         }
                     }
                 }
