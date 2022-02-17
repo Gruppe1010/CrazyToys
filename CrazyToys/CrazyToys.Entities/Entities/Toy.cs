@@ -67,13 +67,7 @@ namespace CrazyToys.Entities.Entities
             Images = toy.Images;
             OnMarket = toy.OnMarket;
             Colours = toy.Colours;
-
-            /*
             AgeGroups = toy.AgeGroups;
-            */
-            
         }
-
-
     }
 }
