@@ -70,29 +70,23 @@ namespace CrazyToys.Services
 
                 while (await reader.ReadAsync())
                 {
-                    switch (reader.Name)//(reader.NodeType)
+
+                    if (reader.Name == "file" && (reader.NodeType != XmlNodeType.EndElement))
                     {
-                        case "file": //XmlNodeType.Element: // Her ved vi at det er en file
 
-                            if (reader.NodeType != XmlNodeType.EndElement)
-                            {
-                                string supplierId = reader.GetAttribute("Supplier_id");
-                                Console.WriteLine("supplierId: " + supplierId);
+                        string supplierId = reader.GetAttribute("Supplier_id");
+                        Console.WriteLine("supplierId: " + supplierId);
 
 
-                                Brand brand = await _brandDbService.GetById(supplierId);
-                                if (brand != null)
-                                {
-                                    string productId = reader.GetAttribute("Prod_ID");
+                        Brand brand = await _brandDbService.GetById(supplierId);
+                        if (brand != null)
+                        {
+                            string productId = reader.GetAttribute("Prod_ID");
 
-                                    Toy toy = await _icecatDataService.GetSingleProduct(supplierId, productId);
+                            Toy toy = await _icecatDataService.GetSingleProduct(supplierId, productId);
 
-                                    Toy addedToy = await _icecatDataService.AddToyToDb(toy);
-                                }
-                            }
-                            break;
-                        default:
-                            break;
+                            Toy addedToy = await _icecatDataService.AddToyToDb(toy);
+                        }
                     }
                 }
             }
