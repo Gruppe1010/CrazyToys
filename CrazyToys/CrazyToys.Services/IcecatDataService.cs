@@ -1,6 +1,7 @@
 ﻿using CrazyToys.Entities.Entities;
 using CrazyToys.Interfaces;
 using CrazyToys.Interfaces.EntityDbInterfaces;
+using CrazyToys.Services.EntityDbServices;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using System;
@@ -14,19 +15,19 @@ namespace CrazyToys.Services
 {
     public class IcecatDataService : IProductDataService
     {
-        
+
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IEntityCRUD<Brand> _brandDbService;
         private readonly IEntityCRUD<Category> _categoryDbService;
         private readonly IEntityCRUD<SubCategory> _subCategoryDbService;
         private readonly IEntityCRUD<Colour> _colourDbService;
-        private readonly IEntityCRUD<Toy> _toyDbService;
+        private readonly ToyDbService _toyDbService;
         private readonly IEntityCRUD<AgeGroup> _ageGroupDbService;
         private Random random;
 
 
         public IcecatDataService(IHttpClientFactory httpClientFactory, IEntityCRUD<Brand> brandDbService, IEntityCRUD<Category> categoryDbService,
-            IEntityCRUD<SubCategory> subCategoryDbService, IEntityCRUD<Colour> colourDbService, IEntityCRUD<Toy> toyDbService, 
+            IEntityCRUD<SubCategory> subCategoryDbService, IEntityCRUD<Colour> colourDbService, ToyDbService toyDbService,
             IEntityCRUD<AgeGroup> ageGroupDbService)
         {
             _httpClientFactory = httpClientFactory;
@@ -52,7 +53,7 @@ namespace CrazyToys.Services
             return Convert.ToBase64String(byteArray);
         }
 
-     
+
         public async Task<Toy> GetSingleProduct(string brandId, string productId, string onMarket)
         {
             Toy toy = null;
@@ -105,7 +106,7 @@ namespace CrazyToys.Services
                     string subCategoryId = json["data"]["GeneralInfo"]["Category"]["CategoryID"];
                     string subCategoryName = json["data"]["GeneralInfo"]["Category"]["Name"]["Value"];
 
-                    toy.SubCategory =  await GetOrCreateSubCategory(subCategoryId, subCategoryName, categories);
+                    toy.SubCategory = await GetOrCreateSubCategory(subCategoryId, subCategoryName, categories);
 
                     string urlLow = json["data"]["Image"]["Pic500x500"];
                     string urlHigh = json["data"]["Image"]["HighPic"];
@@ -151,7 +152,7 @@ namespace CrazyToys.Services
                                 // for hver farve tilføj til toy-obj
                                 foreach (string colourName in colours)
                                 {
-                                   toy.Colours.Add(await GetOrCreateColour(colourName));
+                                    toy.Colours.Add(await GetOrCreateColour(colourName));
                                 }
 
 
@@ -213,24 +214,71 @@ namespace CrazyToys.Services
                 }
             }
             return toy;
-        
-        
+
+
         }
 
-        public async Task<Toy> AddToyToDb(Toy toy)
+        public async Task<Toy> AddToyToDb(Toy toy) // rød, grøn
         {
             Toy toyFromDb = await _toyDbService.GetById(toy.ID);
 
             if (toyFromDb != null)
             {
-
-                foreach (Colour colour in toy.Colours)
+                // hvis der er nogle colours på nyt toy-obj
+                // Efter denne if er kørt er der altså KUN nye farver på toy'et, som IKKE allerede er tilkoblet toyFromDb
+                if (toy.Colours.Count > 0)
                 {
-                    bool noget = _toyDbService.HasColour(toyFromDb.ID, colour.ID);
+                    // hent alle farver som toyFromDb har
+                    List<Colour> colours = await _toyDbService.GetColours(toyFromDb.ID); // gul, rød
 
+                    //sammenlign farver på nyt obj, med de farver som allerede er tilknyttet toyFromDb
+                    for (int i = 0; i < toy.Colours.Count; i++)
+                    {
+                        bool colourAlreadyAdded = false;
+                        // vi tjekker om farven allerede er tilkoblet
+                        foreach (Colour toyFromDbColour in colours)
+                        {
+                            if (toyFromDbColour.Name.Equals(toy.Colours[i].Name))
+                            {
+                                colourAlreadyAdded = true;
+                                break;
+                            }
+                        }
+                        // hvis den allerede er på: slet farven!!!
+                        if (colourAlreadyAdded)
+                        {
+                            toy.Colours.Remove(toy.Colours[i]);
+                        }
+                    }
                 }
 
+                // hvis der er nogle ageGroups på nyt toy-obj
+                // Efter denne if er kørt er der altså KUN nye alders grupper på toy'et, som IKKE allerede er tilkoblet toyFromDb
+                if (toy.AgeGroups.Count > 0)
+                {
+                    // hent alle ageGroups som toyFromDb har
+                    List<AgeGroup> ageGroups = await _toyDbService.GetAgeGroups(toyFromDb.ID); // gul, rød
 
+                    //sammenlign ageGroups på nyt obj, med de ageGroups som allerede er tilknyttet toyFromDb
+                    for (int i = 0; i < toy.AgeGroups.Count; i++)
+                    {
+                        bool ageGroupAlreadyAdded = false;
+                        // vi tjekker om ageGroup allerede er tilkoblet
+                        foreach (AgeGroup toyFromDbAgeGroup in ageGroups)
+                        {
+                            if (toyFromDbAgeGroup.ID.Equals(toy.AgeGroups[i].ID))
+                            {
+                                ageGroupAlreadyAdded = true;
+                                break;
+                            }
+                        }
+                        // hvis den allerede er på: slet alders gruppen!!!
+                        if (ageGroupAlreadyAdded)
+                        {
+                            toy.AgeGroups.Remove(toy.AgeGroups[i]);
+                        }
+                    }
+                }
 
                 toyFromDb.UpdateValuesToAnotherToysValues(toy);
 
@@ -241,8 +289,6 @@ namespace CrazyToys.Services
                 return await _toyDbService.Create(toy);
             }
         }
-
-
 
         public async Task<SubCategory> GetOrCreateSubCategory(string id, string name, List<Category> categories)
         {
@@ -279,13 +325,12 @@ namespace CrazyToys.Services
                 }
             }
             return subCategory;
-
         }
 
         public async Task<Colour> GetOrCreateColour(string name)
         {
             //tjek om den er i db
-            var colour =  await _colourDbService.GetByName(name);
+            var colour = await _colourDbService.GetByName(name);
 
             //var colour = Task.Run(async () => await _colourDbService.GetByName(name)).Result;
 
@@ -296,7 +341,5 @@ namespace CrazyToys.Services
             }
             return colour;
         }
-
-
     }
 }
