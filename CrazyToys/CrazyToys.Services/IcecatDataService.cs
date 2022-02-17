@@ -102,10 +102,6 @@ namespace CrazyToys.Services
                     toy.Brand = brand;
                     bool hasAgeGroup = false; // bruges til at sætte til "Ingens Aldersgruppe"-agegroupen, hvis ingen alder-presentationvalue fundet
 
-                    /*
-                    var ageGroups = await _ageGroupDbService.GetAll();
-                    var categories = await _categoryDbService.GetAll();
-                    */
 
                     string jsonContent =
                         await httpResponseMessage.Content.ReadAsStringAsync();
@@ -170,9 +166,6 @@ namespace CrazyToys.Services
                                     toy.Colours.Add(await GetOrCreateColour(colourName));
                                 }
 
-
-                                //Array.ForEach(colours, colourName => await toy.Colours.Add(GetOrCreateColour(colourName)));
-
                             }
                             else if (featureId.Equals(ageGroupYearsId) || featureId.Equals(ageGroupMonthsId))
                             {
@@ -181,13 +174,9 @@ namespace CrazyToys.Services
                                
                                 toy.AgeGroup = presentationValue;
                                 // uanset om det er måned eller år, så er det efter kommaet ligemeget, fordi udregningen bliver det samme
-                                Console.WriteLine("presentationValue før split: " + presentationValue);
 
                                 string age = presentationValue.Split(" ")[0].Replace(",", ".").Split(".")[0];
-                                Console.WriteLine("age efter split: " + age);
                                 int ageAsInt = Convert.ToInt32(age);
-                                Console.WriteLine("ageAsDouble: " + ageAsInt);
-
 
                                 // hvis det er i måneder, skal det konverteres til år
                                 if (featureId.Equals(ageGroupMonthsId))
@@ -230,15 +219,17 @@ namespace CrazyToys.Services
                         // sæt til alle aldersgrupper
                         toy.AgeGroups = ageGroups;
                     }
-                    return toy;
                 }
             }
             return toy;
-
-
         }
 
-        public async Task<Toy> AddToyToDb(Toy toy) // rød, grøn
+        public async Task<Toy> CreateToyInDb(Toy toy)
+        {
+            return await _toyDbService.Create(toy);
+        }
+
+        public async Task<Toy> CreateOrUpdateToyInDb(Toy toy)
         {
             Toy toyFromDb = await _toyDbService.GetById(toy.ID);
 
@@ -249,13 +240,8 @@ namespace CrazyToys.Services
                 if (toy.Colours.Count > 0)
                 {
                     // hent alle farver som toyFromDb har
-                    List<Colour> colours = await _toyDbService.GetColours(toyFromDb.ID); // gul, rød
+                    List<Colour> colours = await _toyDbService.GetColours(toyFromDb.ID);
 
-
-                    if (toy.Colours.Count > 1)
-                    {
-                        toy.Colours[1] = new Colour("NeonGrøn");
-                    }
                     //sammenlign farver på nyt obj, med de farver som allerede er tilknyttet toyFromDb
                     for (int i = toy.Colours.Count - 1; i >= 0; i--)
                     {
