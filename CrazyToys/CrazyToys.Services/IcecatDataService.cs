@@ -5,6 +5,7 @@ using CrazyToys.Services.EntityDbServices;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
@@ -24,6 +25,8 @@ namespace CrazyToys.Services
         private readonly ToyDbService _toyDbService;
         private readonly IEntityCRUD<AgeGroup> _ageGroupDbService;
         private Random random;
+        private IList<AgeGroup> ageGroups;
+        private IList<Category> categories;
 
 
         public IcecatDataService(IHttpClientFactory httpClientFactory, IEntityCRUD<Brand> brandDbService, IEntityCRUD<Category> categoryDbService,
@@ -38,7 +41,16 @@ namespace CrazyToys.Services
             _toyDbService = toyDbService;
             _ageGroupDbService = ageGroupDbService;
             random = new Random();
+
+            var ageGroupTask = _ageGroupDbService.GetAll();
+            ageGroupTask.Wait();
+            ageGroups = ageGroupTask.Result;
+
+            var categoryTask = _categoryDbService.GetAll();
+            categoryTask.Wait();
+            categories = categoryTask.Result;
         }
+
 
         /**
          * returns string[] - index 0 == username og index 1 er credentials
@@ -89,8 +101,11 @@ namespace CrazyToys.Services
                     toy.OnMarket = onMarket.Equals("0") ? false : true;
                     toy.Brand = brand;
                     bool hasAgeGroup = false; // bruges til at sætte til "Ingens Aldersgruppe"-agegroupen, hvis ingen alder-presentationvalue fundet
+
+                    /*
                     var ageGroups = await _ageGroupDbService.GetAll();
                     var categories = await _categoryDbService.GetAll();
+                    */
 
                     string jsonContent =
                         await httpResponseMessage.Content.ReadAsStringAsync();
@@ -295,7 +310,7 @@ namespace CrazyToys.Services
             }
         }
 
-        public async Task<SubCategory> GetOrCreateSubCategory(string id, string name, List<Category> categories)
+        public async Task<SubCategory> GetOrCreateSubCategory(string id, string name, IList<Category> categories)
         {
             // tjekker om subcat allerede findes ud fra id
             SubCategory subCategory = await _subCategoryDbService.GetById(id);

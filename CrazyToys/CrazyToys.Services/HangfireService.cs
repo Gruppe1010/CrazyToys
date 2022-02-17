@@ -73,9 +73,7 @@ namespace CrazyToys.Services
 
                     if (reader.Name == "file" && (reader.NodeType != XmlNodeType.EndElement))
                     {
-
                         string supplierId = reader.GetAttribute("Supplier_id");
-
 
                         Brand brand = await _brandDbService.GetById(supplierId);
                         if (brand != null)
