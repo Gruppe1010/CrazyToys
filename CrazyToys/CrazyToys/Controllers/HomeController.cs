@@ -44,26 +44,6 @@ namespace CrazyToys.Web.Controllers
         */
 
 
-        public async Task<IActionResult> Blog()
-        {
-            string test = "gruppe10";
-
-            ViewData["Test"] = test;//JsonConvert.SerializeObject(test);
-
-
-            await _hangfireService.GetIndex();
-            /*
-            _ = Task.Run(async () => await _icecatDataService.GetSingleProduct("23442", "0401050")).Result;
-            _ = Task.Run(async () => await _icecatDataService.GetSingleProduct("5669", "HASB9940EU60")).Result;
-            _ = Task.Run(async () => await _icecatDataService.GetSingleProduct("15111", "GXB29")).Result;
-            */
-
-
-
-            // return a 'model' to the selected template/view for this page.
-            return CurrentTemplate(CurrentPage);
-        }
-
         public override IActionResult Index()
         {
             string test = "gruppe10";
@@ -71,7 +51,11 @@ namespace CrazyToys.Web.Controllers
             ViewData["Test"] = test;//JsonConvert.SerializeObject(test);
 
             
-            var getIndexTask = _hangfireService.GetIndex();
+            string indexUrl = "https://data.Icecat.biz/export/freexml/EN/files.index.xml";
+            string dailyUrl = "https://data.Icecat.biz/export/freexml/EN/daily.index.xml";
+
+
+            var getIndexTask = _hangfireService.GetProductsFromIcecat(dailyUrl);
             getIndexTask.Wait();
             
 
@@ -99,11 +83,6 @@ namespace CrazyToys.Web.Controllers
             return CurrentTemplate(CurrentPage);
         }
 
-        public async Task Noget()
-        {
-            await _hangfireService.GetIndex();
-
-        }
     }
 }
 
