@@ -6,8 +6,6 @@ namespace CrazyToys.Entities.Entities
 {
     public class AgeGroup
     {
-
-        [Column("AgeGroupId")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         // Hvis man laver id-proppen om til int generer den fra 1 og op af
         public string ID { get; set; }

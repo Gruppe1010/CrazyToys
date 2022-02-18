@@ -4,8 +4,6 @@ namespace CrazyToys.Entities.Entities
 {
     public class Image
     {
-
-        [Column("ImageId")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string ID { get; set; }
         public string UrlLow { get; set; }

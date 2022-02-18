@@ -5,7 +5,6 @@ namespace CrazyToys.Entities.Entities
 {
     public class Category
     {
-        [Column("CategoryId")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string ID { get; set; }
         public string Name { get; set; }

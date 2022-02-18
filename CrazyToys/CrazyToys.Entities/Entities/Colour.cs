@@ -5,9 +5,8 @@ namespace CrazyToys.Entities.Entities
 {
     public class Colour
     {
-        [Column("ColourId")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ID { get; set; }
+        public string ID { get; set; }
         public string Name { get; set; }
         public ICollection<Toy> Toys { get; set; }
 
@@ -16,7 +15,7 @@ namespace CrazyToys.Entities.Entities
             Name = name;
         }
 
-        public Colour(int iD, string name)
+        public Colour(string iD, string name)
         {
             ID = iD;
             Name = name;

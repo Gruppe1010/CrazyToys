@@ -6,8 +6,9 @@ namespace CrazyToys.Entities.Entities
 {
     public class Toy
     {
-        [Column("ToyId")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string ID { get; set; }
+        public string ProductId { get; set; }
         public string Name { get; set; }
         public Brand Brand { get; set; }
         public string AgeGroup { get; set; }
@@ -28,11 +29,12 @@ namespace CrazyToys.Entities.Entities
             Images = new List<Image>();
         }
 
-        public Toy(string iD, string name, Brand brand, string ageGroup, string shortDescription,
+        public Toy(string iD, string productId, string name, Brand brand, string ageGroup, string shortDescription,
             string longDescription, List<Colour> colours, IList<AgeGroup> ageGroups,
             SubCategory subCategory, int price, int stock, IList<Image> images, bool onMarket)
         {
             ID = iD;
+            ProductId = productId;
             Name = name;
             Brand = brand;
             AgeGroup = ageGroup;
@@ -50,12 +52,12 @@ namespace CrazyToys.Entities.Entities
         public ToyDTO ConvertToDTO()
         {
             // TODO tag AgeGroups og SubCategories med - opret convertere til dem og find ud af hvordan man bruger Map - er det fordi det er en ICollection?
-            return new ToyDTO(ID, Name, Brand, AgeGroup, ShortDescription, LongDescription, Price, Stock, Images);
+            return new ToyDTO(ID, ProductId, Name, Brand, AgeGroup, ShortDescription, LongDescription, Price, Stock, Images);
         }
 
         public void UpdateValuesToAnotherToysValues(Toy toy)
         {
-            ID = toy.ID;
+            ProductId = toy.ProductId;
             Name = toy.Name;
             Brand = toy.Brand;
             AgeGroup = toy.AgeGroup;
