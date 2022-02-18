@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Threading.Tasks;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Web.Common.Controllers;
@@ -13,6 +14,7 @@ namespace CrazyToys.Web.Controllers
 
         //private readonly IProductDataService _icecatDataService;
         private readonly IHangfireService _hangfireService;
+
 
 
         public HomeController(ILogger<HomeController> logger, ICompositeViewEngine compositeViewEngine, 
@@ -54,9 +56,10 @@ namespace CrazyToys.Web.Controllers
             string indexUrl = "https://data.Icecat.biz/export/freexml/EN/files.index.xml";
             string dailyUrl = "https://data.Icecat.biz/export/freexml/EN/daily.index.xml";
 
-
-            var getindextask = _hangfireService.GetProductsFromIcecat(indexUrl);
+            
+            var getindextask = _hangfireService.GetProductsFromIcecat(dailyUrl);
             getindextask.Wait();
+            
 
 
             // hent alle PRODUKTER
@@ -82,6 +85,10 @@ namespace CrazyToys.Web.Controllers
             // return a 'model' to the selected template/view for this page.
             return CurrentTemplate(CurrentPage);
         }
+
+
+      
+
 
     }
 }
