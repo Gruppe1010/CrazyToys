@@ -1,12 +1,12 @@
-﻿using System;
+﻿using CrazyToys.Interfaces;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 
 namespace CrazyToys.Web.Logging
 {
-    public class LogGenerator
+    public class LogGenerator : ILog
     {
-
         public async Task WriteExceptionToLog(string className, string methodName,  Exception e)
         {
             DateTime timeOfError = DateTime.Now;
