@@ -1,0 +1,5 @@
+﻿Dato: 2/18/2022 2:18:26 PM
+Fil: IcecatDataService
+Metode: GetSingleProduct
+Exception: System.Exception: Hej øv ej
+ExceptionMessage: Hej øv ej
