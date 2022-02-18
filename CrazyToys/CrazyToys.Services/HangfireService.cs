@@ -77,7 +77,7 @@ namespace CrazyToys.Services
                             string onMarket = reader.GetAttribute("On_Market");
 
                             
-                            if (!productId.Contains("E+25") && productId.Equals("19022"))
+                            if (!productId.Contains("E+25"))
                             {
                                 Toy toy = await _icecatDataService.GetSingleProduct(supplierId, productId, onMarket);
 
