@@ -9,6 +9,8 @@ namespace CrazyToys.Interfaces.EntityDbInterfaces
 {
     public interface IToyDbService
     {
+        Task<Toy> GetByProductIdAndBrandId(string productId, string brandId);
+
         Task<List<Colour>> GetColours(string toyId);
 
         Task<List<AgeGroup>> GetAgeGroups(string toyId);

@@ -31,7 +31,7 @@ namespace CrazyToys.Services.EntityDbServices
         {
             Toy toyFromDb = await GetById(toy.ID);
 
-            if (toyFromDb != null)
+            if (toyFromDb != null) // TODO lav måske noget her
             {
                 return await Update(toy);
             }
@@ -98,6 +98,19 @@ namespace CrazyToys.Services.EntityDbServices
         {
             _context.Update(toy);
             await _context.SaveChangesAsync();
+
+            return toy;
+        }
+
+        public async Task<Toy> GetByProductIdAndBrandId(string productId, string brandId)
+        {
+            if (productId == null)
+            {
+                return null;
+            }
+
+            var toy = await _context.Toys
+                .FirstOrDefaultAsync(t => t.ProductId.Equals(productId) && t.Brand.ID.Equals(brandId));
 
             return toy;
         }
