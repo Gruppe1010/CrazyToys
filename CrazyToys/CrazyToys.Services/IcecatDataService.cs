@@ -2,6 +2,7 @@
 using CrazyToys.Interfaces;
 using CrazyToys.Interfaces.EntityDbInterfaces;
 using CrazyToys.Services.EntityDbServices;
+using CrazyToys.Web.Logging;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using System;
@@ -224,10 +225,13 @@ namespace CrazyToys.Services
                         }
                     }
                 }
-                catch (Exception ex)
+                catch (Exception e)
                 {
                     // TODO lav noget med at fejlen tilføjes til en log-fil eller noget - eller gør hangfire det for os? 
-                    Console.WriteLine("ERROR in GetSingleProduct() in IcecatDataService: " + ex + "\n" + ex.Message);
+                    Console.WriteLine("ERROR in GetSingleProduct() in IcecatDataService: " + e + "\n" + e.Message);
+                    
+                    LogGenerator logGenerator = new LogGenerator();
+                    await logGenerator.WriteExceptionToLog("IcecatDataService", "GetSingleProduct", e);
                 }
             }
             return toy;
@@ -363,5 +367,7 @@ namespace CrazyToys.Services
             }
             return colour;
         }
+
+        
     }
 }
