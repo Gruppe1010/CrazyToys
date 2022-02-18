@@ -55,8 +55,8 @@ namespace CrazyToys.Web.Controllers
             string dailyUrl = "https://data.Icecat.biz/export/freexml/EN/daily.index.xml";
 
 
-            //var getIndexTask = _hangfireService.GetProductsFromIcecat(dailyUrl);
-            //getIndexTask.Wait();
+            var getindextask = _hangfireService.GetProductsFromIcecat(indexUrl);
+            getindextask.Wait();
 
 
             // hent alle PRODUKTER
