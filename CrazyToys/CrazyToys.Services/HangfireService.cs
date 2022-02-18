@@ -16,10 +16,7 @@ namespace CrazyToys.Services
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IcecatDataService _icecatDataService;
-
-        //private readonly IProductDataService _icecatDataService;
         private readonly IEntityCRUD<Brand> _brandDbService;
-
 
 
         public HangfireService(IHttpClientFactory httpClientFactory, IcecatDataService icecatDataService,
@@ -68,6 +65,9 @@ namespace CrazyToys.Services
                     {
                         string supplierId = reader.GetAttribute("Supplier_id");
 
+                        // TODO på mandag!! Læg dette db-kald UD fra while - så det kun bliver kaldt én gang
+                        // dett bør det hurtigere
+                        // gem brands i dict, så vi hurtigt kan søge det igennem for om brand-id'et er der
                         Brand brand = await _brandDbService.GetById(supplierId);
                         if (brand != null)
                         {
