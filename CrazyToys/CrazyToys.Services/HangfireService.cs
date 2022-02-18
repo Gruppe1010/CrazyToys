@@ -90,5 +90,10 @@ namespace CrazyToys.Services
                 }
             }
         }
+
+        public void HelloHangfireWorld()
+        {
+            Console.WriteLine("Hej med dig verden");
+        }
     }
 }

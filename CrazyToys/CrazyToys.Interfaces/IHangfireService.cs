@@ -9,5 +9,7 @@ namespace CrazyToys.Interfaces
     public interface IHangfireService
     {
         Task GetProductsFromIcecat(string url);
+
+        void HelloHangfireWorld();
     }
 }
