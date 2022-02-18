@@ -108,8 +108,7 @@ namespace CrazyToys.Services
 
                     dynamic json = JsonConvert.DeserializeObject(jsonContent);
 
-                    string id = json["data"]["GeneralInfo"]["BrandPartCode"];
-                    toy.ID = json["data"]["GeneralInfo"]["BrandPartCode"];
+                    toy.ProductId = productId;
                     toy.Name = json["data"]["GeneralInfo"]["Title"];
                     toy.ShortDescription = json["data"]["GeneralInfo"]["SummaryDescription"]["ShortSummaryDescription"];
                     toy.LongDescription = json["data"]["GeneralInfo"]["SummaryDescription"]["LongSummaryDescription"];
@@ -231,7 +230,8 @@ namespace CrazyToys.Services
 
         public async Task<Toy> CreateOrUpdateToyInDb(Toy toy)
         {
-            Toy toyFromDb = await _toyDbService.GetById(toy.ID);
+            //Toy toyFromDb = await _toyDbService.GetById(toy.ID);
+            Toy toyFromDb = await _toyDbService.GetByProductIdAndBrandId(toy.ProductId, toy.Brand.ID);
 
             if (toyFromDb != null)
             {
@@ -292,6 +292,7 @@ namespace CrazyToys.Services
                 }
 
                 toyFromDb.UpdateValuesToAnotherToysValues(toy);
+                toyFromDb.Stock = 20;
 
                 return await _toyDbService.Update(toyFromDb);
             }
