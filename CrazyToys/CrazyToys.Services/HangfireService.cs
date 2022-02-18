@@ -45,7 +45,7 @@ namespace CrazyToys.Services
             };
 
             var httpClient = _httpClientFactory.CreateClient();
-            httpClient.Timeout = TimeSpan.FromMinutes(10);
+            httpClient.Timeout = TimeSpan.FromMinutes(1000);
             var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
 
             if (httpResponseMessage.IsSuccessStatusCode)
@@ -73,17 +73,22 @@ namespace CrazyToys.Services
                         {
                             string productId = reader.GetAttribute("Prod_ID");
                             Console.WriteLine("productId" + productId);
+                            Console.WriteLine("supplierId: " + supplierId);
                             string onMarket = reader.GetAttribute("On_Market");
 
-                            Toy toy = await _icecatDataService.GetSingleProduct(supplierId, productId, onMarket);
+                            
+                            if (!productId.Contains("E+25") && productId.Equals("19022"))
+                            {
+                                Toy toy = await _icecatDataService.GetSingleProduct(supplierId, productId, onMarket);
 
-                            if (url.Contains("daily"))
-                            {
-                                Toy addedToy = await _icecatDataService.CreateOrUpdateToyInDb(toy);
-                            } 
-                            else
-                            {
-                                Toy addedToy = await _icecatDataService.CreateToyInDb(toy);
+                                if (url.Contains("daily"))
+                                {
+                                    Toy addedToy = await _icecatDataService.CreateOrUpdateToyInDb(toy);
+                                }
+                                else
+                                {
+                                    Toy addedToy = await _icecatDataService.CreateToyInDb(toy);
+                                }
                             }
                         }
                     }
