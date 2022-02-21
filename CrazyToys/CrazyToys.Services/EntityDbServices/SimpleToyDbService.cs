@@ -36,10 +36,18 @@ namespace CrazyToys.Services.EntityDbServices
             throw new NotImplementedException();
         }
 
-        public HashSet<SimpleToy> GetAllInHashSet()
+        public HashSet<SimpleToy> GetAllAsHashSet()
         {
             return _context.SimpleToys.ToHashSet();
+        }
 
+        public HashSet<SimpleToy> GetAllByDate(string dateString)
+        {
+            if (!string.IsNullOrWhiteSpace(dateString))
+            {
+                return _context.SimpleToys.Where(s => s.DateString == dateString).ToHashSet();
+            }
+            return null;
         }
 
         public Task<SimpleToy> GetById(string id)
