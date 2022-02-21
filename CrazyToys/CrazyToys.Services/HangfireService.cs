@@ -47,6 +47,8 @@ namespace CrazyToys.Services
 
             if (httpResponseMessage.IsSuccessStatusCode)
             {
+                Dictionary<string, Brand> brandDict = await _icecatDataService.GetBrandDict();
+
                 var contentStream =
                     await httpResponseMessage.Content.ReadAsStreamAsync();
 
@@ -79,6 +81,12 @@ namespace CrazyToys.Services
                             
                             if (!productId.Contains("E+25"))
                             {
+
+                                // Læg ned i ny SimpleToy-tabel
+
+                                SimpleToy simpleToy = await _icecatDataService.CreateSimpleToyInDb(new SimpleToy(supplierId, productId, onMarket));
+
+                                /*
                                 Toy toy = await _icecatDataService.GetSingleProduct(supplierId, productId, onMarket);
 
                                 if (url.Contains("daily"))
@@ -89,6 +97,7 @@ namespace CrazyToys.Services
                                 {
                                     Toy addedToy = await _icecatDataService.CreateToyInDb(toy);
                                 }
+                                */
                             }
                         }
                     }
