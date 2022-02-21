@@ -1,0 +1,53 @@
+﻿using CrazyToys.Entities.Entities;
+using CrazyToys.Interfaces.EntityDbInterfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CrazyToys.Services.EntityDbServices
+{
+    public class SimpleToyDbService : IEntityCRUD<SimpleToy>
+    {
+        private readonly Context _context;
+
+        public ToyDbService(Context context)
+        {
+            _context = context;
+        }
+
+        public async Task<SimpleToy> Create(SimpleToy simpleToy)
+        {
+            _context.Toys.Add(simpleToy);
+            await _context.SaveChangesAsync();
+
+            return simpleToy;
+        }
+
+        public Task<SimpleToy> CreateOrUpdate(SimpleToy t)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<SimpleToy>> GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<SimpleToy> GetById(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<SimpleToy> GetByName(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<SimpleToy> Update(SimpleToy t)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}
