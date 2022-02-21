@@ -9,7 +9,7 @@ namespace CrazyToys.Interfaces.EntityDbInterfaces
 {
     public interface ISimpleToyDbService
     {
-        HashSet<SimpleToy> GetAllInHashSet();
+        HashSet<SimpleToy> GetAllAsHashSet();
 
 
     }

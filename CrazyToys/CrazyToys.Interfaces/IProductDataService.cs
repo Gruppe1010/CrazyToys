@@ -9,9 +9,11 @@ namespace CrazyToys.Interfaces
     {
         string GetIcecatCredentials();
 
-        Task<Toy> GetSingleProduct(string brandId, string productId, string onMarket);
+        Task<Toy> GetSingleProduct(SimpleToy simpleToy);
 
-        
+        //Task<Toy> GetSingleProduct(string brandId, string productId, string onMarket);
+
+
 
 
     }
