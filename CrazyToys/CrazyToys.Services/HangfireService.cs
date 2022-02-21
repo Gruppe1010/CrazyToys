@@ -62,30 +62,20 @@ namespace CrazyToys.Services
 
                 while (await reader.ReadAsync())
                 {
-
                     if (reader.Name == "file" && (reader.NodeType != XmlNodeType.EndElement))
                     {
                         string supplierId = reader.GetAttribute("Supplier_id");
+                        Console.WriteLine(supplierId);
 
-                        // TODO på mandag!! Læg dette db-kald UD fra while - så det kun bliver kaldt én gang
-                        // dett bør det hurtigere
-                        // gem brands i dict, så vi hurtigt kan søge det igennem for om brand-id'et er der
-                        Brand brand = await _brandDbService.GetById(supplierId);
-                        if (brand != null)
+                        if (brandDict.ContainsKey(supplierId))
                         {
                             string productId = reader.GetAttribute("Prod_ID");
-                            Console.WriteLine("productId" + productId);
-                            Console.WriteLine("supplierId: " + supplierId);
+                       
                             string onMarket = reader.GetAttribute("On_Market");
 
-                            SimpleToy simpleToy = await 
-
-                            
                             if (!productId.Contains("E+25"))
                             {
-
                                 // Læg ned i ny SimpleToy-tabel
-
                                 SimpleToy simpleToy = await _icecatDataService.CreateSimpleToyInDb(new SimpleToy(supplierId, productId, onMarket));
 
                                 /*
