@@ -15,10 +15,8 @@ namespace CrazyToys.Web.Controllers
         //private readonly IProductDataService _icecatDataService;
         private readonly IHangfireService _hangfireService;
 
-
-
         public HomeController(ILogger<HomeController> logger, ICompositeViewEngine compositeViewEngine, 
-            IUmbracoContextAccessor umbracoContextAccessor, IHangfireService hangfireService)// IProductDataService icecatDataService)
+            IUmbracoContextAccessor umbracoContextAccessor, IHangfireService hangfireService)
             : base(logger, compositeViewEngine, umbracoContextAccessor)
         {
             //_icecatDataService = icecatDataService;
@@ -29,23 +27,6 @@ namespace CrazyToys.Web.Controllers
         // Summary:
         //     Before the controller executes we will handle redirects and not founds
 
-        /*
-        public HomeController(ILogger<HomeController> logger, ICompositeViewEngine compositeViewEngine, 
-            IUmbracoContextAccessor umbracoContextAccessor, IHangfireService hangfireService)// IProductDataService icecatDataService)
-            //: base(logger, compositeViewEngine, umbracoContextAccessor)
-        {
-            _logger = logger;
-            _compositeViewEngine = compositeViewEngine;
-            _umbracoContextAccessor = umbracoContextAccessor;
-            _hangfireService = hangfireService;
-
-            //_icecatDataService = icecatDataService;
-            _hangfireService = hangfireService;
-
-        }
-        */
-
-
         public override IActionResult Index()
         {
             string test = "gruppe10";
@@ -54,11 +35,17 @@ namespace CrazyToys.Web.Controllers
 
             string indexUrl = "https://data.Icecat.biz/export/freexml/EN/files.index.xml";
             string dailyUrl = "https://data.Icecat.biz/export/freexml/EN/daily.index.xml";
+
             
             var getindextask = _hangfireService.GetProductsFromIcecat(indexUrl);
             getindextask.Wait();
-
-
+            
+            
+            /*
+           var entask = _hangfireService.CreateToysFromSimpleToys(true, "2/21/2022 4:09:43 PM");
+           entask.Wait();
+            */
+         
             // hent alle PRODUKTER
             /*
             var getAllProductsTask = _hangfireService.GetAllProducts();
