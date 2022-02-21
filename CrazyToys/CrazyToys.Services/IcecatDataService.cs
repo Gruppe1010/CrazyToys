@@ -68,7 +68,7 @@ namespace CrazyToys.Services
             return Convert.ToBase64String(byteArray);
         }
         
-        public async Task<Toy> CreateSimpleToyInDb(SimpleToy simpleToy)
+        public async Task<SimpleToy> CreateSimpleToyInDb(SimpleToy simpleToy)
         {
             return await _simpleToyDbService.Create(simpleToy);
         }
