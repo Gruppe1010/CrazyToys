@@ -22,7 +22,6 @@ namespace CrazyToys.Services.EntityDbServices
 
         public async Task<SubCategory> Create(SubCategory subCategory)
         {
-
             _context.SubCategories.Add(subCategory);
             await _context.SaveChangesAsync();
 
