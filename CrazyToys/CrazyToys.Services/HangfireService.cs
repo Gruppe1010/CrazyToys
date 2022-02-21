@@ -76,6 +76,8 @@ namespace CrazyToys.Services
                             Console.WriteLine("supplierId: " + supplierId);
                             string onMarket = reader.GetAttribute("On_Market");
 
+                            SimpleToy simpleToy = await 
+
                             
                             if (!productId.Contains("E+25"))
                             {
