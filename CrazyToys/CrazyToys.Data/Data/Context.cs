@@ -17,6 +17,7 @@ namespace CrazyToys.Data.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<AgeGroup> AgeGroups { get; set; }
         public DbSet<Toy> Toys { get; set; }
+        public DbSet<SimpleToy> SimpleToys { get; set; }
 
         public Context(DbContextOptions<Context> options) : base(options)
         {
