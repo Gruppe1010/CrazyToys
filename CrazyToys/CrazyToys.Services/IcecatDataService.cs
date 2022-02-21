@@ -9,6 +9,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +25,7 @@ namespace CrazyToys.Services
         private readonly IEntityCRUD<SubCategory> _subCategoryDbService;
         private readonly IEntityCRUD<Colour> _colourDbService;
         private readonly ToyDbService _toyDbService;
+        private readonly SimpleToyDbService _simpleToyDbService;
         private readonly IEntityCRUD<AgeGroup> _ageGroupDbService;
         private Random random;
         private IList<AgeGroup> ageGroups;
@@ -31,7 +33,7 @@ namespace CrazyToys.Services
 
 
         public IcecatDataService(IHttpClientFactory httpClientFactory, IEntityCRUD<Brand> brandDbService, IEntityCRUD<Category> categoryDbService,
-            IEntityCRUD<SubCategory> subCategoryDbService, IEntityCRUD<Colour> colourDbService, ToyDbService toyDbService,
+            IEntityCRUD<SubCategory> subCategoryDbService, IEntityCRUD<Colour> colourDbService, ToyDbService toyDbService, SimpleToyDbService simpleToyDbService,
             IEntityCRUD<AgeGroup> ageGroupDbService)
         {
             _httpClientFactory = httpClientFactory;
@@ -65,7 +67,19 @@ namespace CrazyToys.Services
             byte[] byteArray = Encoding.ASCII.GetBytes($"{username}:{password}");
             return Convert.ToBase64String(byteArray);
         }
+        
+        public async Task<Toy> CreateSimpleToyInDb(SimpleToy simpleToy)
+        {
+            return await _simpleToyDbService.Create(simpleToy);
+        }
+        
 
+        public async Task<Dictionary<string, Brand>> GetBrandDict()
+        {
+            List<Brand> brandList = await _brandDbService.GetAll();
+
+            return brandList.ToDictionary(keySelector: b => b.ID, elementSelector: b => b);
+        }
 
         public async Task<Toy> GetSingleProduct(string brandId, string productId, string onMarket)
         {
