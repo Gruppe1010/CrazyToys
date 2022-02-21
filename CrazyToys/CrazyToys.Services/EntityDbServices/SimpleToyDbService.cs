@@ -60,9 +60,11 @@ namespace CrazyToys.Services.EntityDbServices
             throw new NotImplementedException();
         }
 
-        public Task<SimpleToy> Update(SimpleToy t)
+        public async Task<SimpleToy> Update(SimpleToy simpleToy)
         {
-            throw new NotImplementedException();
+            _context.Update(simpleToy);
+            await _context.SaveChangesAsync();
+            return simpleToy;
         }
     }
 }
