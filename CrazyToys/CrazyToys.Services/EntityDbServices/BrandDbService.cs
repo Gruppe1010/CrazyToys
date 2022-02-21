@@ -29,9 +29,10 @@ namespace CrazyToys.Services.EntityDbServices
             throw new NotImplementedException();
         }
 
-        public Task<List<Brand>> GetAll()
+        public async Task<List<Brand>> GetAll()
         {
-            throw new NotImplementedException();
+            return await _context.Brands.ToListAsync();
+
         }
 
         public async Task<Brand> GetById(string id)
