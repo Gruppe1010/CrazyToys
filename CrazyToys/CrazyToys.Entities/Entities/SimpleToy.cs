@@ -13,11 +13,18 @@ namespace CrazyToys.Entities.Entities
         public string ID { get; set; }
         public string SupplierId { get; set; }
         public string ProductId { get; set; }
-        public bool OnMarket { get; set; }
+        public string OnMarket { get; set; }
 
-        public SimpleToy(string iD, string supplierId, string productId, bool onMarket)
+        public SimpleToy(string iD, string supplierId, string productId, string onMarket)
         {
             ID = iD;
+            SupplierId = supplierId;
+            ProductId = productId;
+            OnMarket = onMarket;
+        }
+
+        public SimpleToy(string supplierId, string productId, string onMarket)
+        {
             SupplierId = supplierId;
             ProductId = productId;
             OnMarket = onMarket;
