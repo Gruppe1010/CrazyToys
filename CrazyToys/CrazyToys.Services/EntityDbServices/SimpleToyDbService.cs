@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CrazyToys.Services.EntityDbServices
 {
-    public class SimpleToyDbService : IEntityCRUD<SimpleToy>
+    public class SimpleToyDbService : IEntityCRUD<SimpleToy>, ISimpleToyDbService
     {
         private readonly Context _context;
 
@@ -34,6 +34,12 @@ namespace CrazyToys.Services.EntityDbServices
         public Task<List<SimpleToy>> GetAll()
         {
             throw new NotImplementedException();
+        }
+
+        public HashSet<SimpleToy> GetAllInHashSet()
+        {
+            return _context.SimpleToys.ToHashSet();
+
         }
 
         public Task<SimpleToy> GetById(string id)
