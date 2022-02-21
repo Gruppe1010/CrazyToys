@@ -1,4 +1,5 @@
-﻿using CrazyToys.Entities.Entities;
+﻿using CrazyToys.Data.Data;
+using CrazyToys.Entities.Entities;
 using CrazyToys.Interfaces.EntityDbInterfaces;
 using System;
 using System.Collections.Generic;
@@ -12,14 +13,14 @@ namespace CrazyToys.Services.EntityDbServices
     {
         private readonly Context _context;
 
-        public ToyDbService(Context context)
+        public SimpleToyDbService(Context context)
         {
             _context = context;
         }
 
         public async Task<SimpleToy> Create(SimpleToy simpleToy)
         {
-            _context.Toys.Add(simpleToy);
+            _context.SimpleToys.Add(simpleToy);
             await _context.SaveChangesAsync();
 
             return simpleToy;
