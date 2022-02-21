@@ -10,16 +10,18 @@ namespace CrazyToys.Entities.Entities
         public string ID { get; set; }
         public string ProductId { get; set; }
         public string Name { get; set; }
-        public Brand Brand { get; set; }
-        public string BrandId { get; set; }
+        public Brand Brand { get; set; } // nav-prop
+        public string BrandId { get; set; } // foreign key
         public string AgeGroup { get; set; }
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
         public IList<Colour> Colours { get; set; }
         public IList<AgeGroup> AgeGroups { get; set; }
-        public SubCategory SubCategory { get; set; }
-        public string SubCategoryId { get; set; }
         public IList<Image> Images { get; set; }
+        public SubCategory SubCategory { get; set; } // nav-prop
+        public string SubCategoryId { get; set; }// foreign key
+        //public SimpleToy SimpleToy { get; set; } // nav-prop
+        //public string SimpleToyId { get; set; }// foreign key
         public int Price { get; set; }
         public int Stock { get; set; }
         public bool OnMarket { get; set; }
@@ -33,7 +35,7 @@ namespace CrazyToys.Entities.Entities
 
         public Toy(string iD, string productId, string name, string brandId, string ageGroup, string shortDescription,
             string longDescription, List<Colour> colours, IList<AgeGroup> ageGroups,
-            string subCategoryId, int price, int stock, IList<Image> images, bool onMarket)
+            string subCategoryId, /*string simpleToyId,*/ int price, int stock, IList<Image> images, bool onMarket)
         {
             ID = iD;
             ProductId = productId;
@@ -45,6 +47,7 @@ namespace CrazyToys.Entities.Entities
             Colours = colours;
             AgeGroups = ageGroups;
             SubCategoryId = subCategoryId;
+            //SimpleToyId = simpleToyId;
             Price = price;
             Stock = stock;
             Images = images;
@@ -66,6 +69,7 @@ namespace CrazyToys.Entities.Entities
             ShortDescription = toy.ShortDescription;
             LongDescription = toy.LongDescription;
             SubCategoryId = toy.SubCategoryId;
+            //SimpleToyId = toy.SimpleToyId;
             Price = toy.Price;
             Stock = toy.Stock;
             Images = toy.Images;
