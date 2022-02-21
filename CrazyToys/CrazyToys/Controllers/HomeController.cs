@@ -56,11 +56,11 @@ namespace CrazyToys.Web.Controllers
             string indexUrl = "https://data.Icecat.biz/export/freexml/EN/files.index.xml";
             string dailyUrl = "https://data.Icecat.biz/export/freexml/EN/daily.index.xml";
 
-            /*
             
-            var getindextask = _hangfireService.GetProductsFromIcecat(dailyUrl);
+            
+            var getindextask = _hangfireService.GetProductsFromIcecat(indexUrl);
             getindextask.Wait();
-            */
+            
             
 
 
