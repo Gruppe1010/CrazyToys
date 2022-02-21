@@ -43,6 +43,7 @@ namespace CrazyToys.Services
             _colourDbService = colourDbService;
             _toyDbService = toyDbService;
             _ageGroupDbService = ageGroupDbService;
+            _simpleToyDbService = simpleToyDbService;
             random = new Random();
 
             var ageGroupTask = _ageGroupDbService.GetAll();
@@ -80,7 +81,7 @@ namespace CrazyToys.Services
 
             return brandList.ToDictionary(keySelector: b => b.ID, elementSelector: b => b);
         }
-
+        /*
         public async Task<Toy> GetSingleProduct(string brandId, string productId, string onMarket)
         {
             Toy toy = null;
@@ -250,6 +251,174 @@ namespace CrazyToys.Services
             }
             return toy;
         }
+        */
+
+        public async Task<Toy> GetSingleProduct(SimpleToy simpleToy)
+        {
+            Toy toy = null;
+
+            // TODO tilføj sikkerhed ift. brugernavn
+            string username = "alphaslo";
+            string credentials = GetIcecatCredentials();
+
+            HttpRequestMessage httpRequestMessage = new HttpRequestMessage(
+                HttpMethod.Get,
+                $"https://live.icecat.biz/api/?UserName={username}&Language=dk&GTIN={simpleToy.Gtin13}")
+                //$"https://live.icecat.biz/api/?Username={username}&Language=dk&Brand={brandNameWithoutSpaces}&ProductCode={productId}")
+
+            {
+                Headers =
+                {
+                    { HeaderNames.Accept, "application/json" },
+                    { HeaderNames.Authorization, $"Basic {credentials} " }
+                }
+            };
+
+            HttpClient httpClient = _httpClientFactory.CreateClient();
+
+            try
+            {
+                HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
+
+
+
+                if (httpResponseMessage.IsSuccessStatusCode)
+                {
+                    toy = new Toy();
+                    toy.OnMarket = simpleToy.OnMarket.Equals("0") ? false : true;
+                    toy.BrandId = simpleToy.SupplierId;
+                    bool hasAgeGroup = false; // bruges til at sætte til "Ingens Aldersgruppe"-agegroupen, hvis ingen alder-presentationvalue fundet
+
+
+                    string jsonContent =
+                        await httpResponseMessage.Content.ReadAsStringAsync();
+
+                    dynamic json = JsonConvert.DeserializeObject(jsonContent);
+
+                    toy.ProductId = simpleToy.ProductId;
+                    toy.Name = json["data"]["GeneralInfo"]["Title"];
+                    toy.ShortDescription = json["data"]["GeneralInfo"]["SummaryDescription"]["ShortSummaryDescription"];
+                    toy.LongDescription = json["data"]["GeneralInfo"]["SummaryDescription"]["LongSummaryDescription"];
+
+                    string subCategoryId = json["data"]["GeneralInfo"]["Category"]["CategoryID"];
+                    string subCategoryName = json["data"]["GeneralInfo"]["Category"]["Name"]["Value"];
+
+                    toy.SubCategory = await GetOrCreateSubCategory(subCategoryId, subCategoryName, categories);
+
+                    string urlLow = json["data"]["Image"]["Pic500x500"];
+                    string urlHigh = json["data"]["Image"]["HighPic"];
+
+                    Image image = new Image(urlLow, urlHigh, 0);
+                    toy.Images.Add(image);
+
+                    // tilføj resten af billeder som ligger i Gallery-key
+                    foreach (dynamic img in json["data"]["Gallery"])
+                    {
+                        string galleryImageUrlLow = img["Pic500x500"];
+                        string galleryImageUrlHigh = img["Pic"];
+                        int galleryImageNo = img["No"];
+
+                        Image galleryImage = new Image(galleryImageUrlLow, galleryImageUrlHigh, galleryImageNo);
+                        toy.Images.Add(galleryImage);
+                    }
+
+                    // FeaturesGroups --> for hver på listen: ["Features"] for hver på listen: ["Feature"] if ["id"] = 1766 -->  item på ["Features"]["PresentationValue"]
+                    // stringen skal splittes op i strings og så tilføjes som seperate værdier i colour tabellen, som så skal tilføjes som refs til toy
+                    //string colourString = json["data"]["GeneralInfo"]["FeaturesGroups"]["Features"]["PresentationValue"];
+                    string colourId = "1766";
+                    string ageGroupYearsId = "24697";
+                    string ageGroupMonthsId = "24019";
+
+                    var featureGroups = json["data"]["FeaturesGroups"];
+
+                    foreach (dynamic featuresGroup in json["data"]["FeaturesGroups"])
+                    {
+                        dynamic features = featuresGroup["Features"];
+
+                        foreach (dynamic feature in features)
+                        {
+
+                            string featureId = feature["Feature"]["ID"];
+
+                            if (featureId.Equals(colourId))
+                            {
+                                string presentationValue = feature["PresentationValue"];
+
+                                string[] colours = presentationValue.Split(", ");
+
+                                // for hver farve tilføj til toy-obj
+                                foreach (string colourName in colours)
+                                {
+                                    toy.Colours.Add(await GetOrCreateColour(colourName));
+                                }
+
+                            }
+                            else if (featureId.Equals(ageGroupYearsId) || featureId.Equals(ageGroupMonthsId))
+                            {
+                                hasAgeGroup = true;
+                                string presentationValue = feature["PresentationValue"];
+
+                                toy.AgeGroup = presentationValue;
+                                // uanset om det er måned eller år, så er det efter kommaet ligemeget, fordi udregningen bliver det samme
+
+                                string age = presentationValue.Split(" ")[0].Replace(",", ".").Split(".")[0];
+                                int ageAsInt = Convert.ToInt32(age);
+
+                                // hvis det er i måneder, skal det konverteres til år
+                                if (featureId.Equals(ageGroupMonthsId))
+                                {
+                                    ageAsInt = ageAsInt / 12;
+                                    age = ageAsInt.ToString();
+                                }
+                                // hvis det er den sidste aldersgruppe-kategori skal den findes manuelt ud fra "9"
+                                if (ageAsInt > 8)
+                                {
+                                    foreach (AgeGroup ageGroup in ageGroups)
+                                    {
+                                        if (ageGroup.Interval.Contains("9"))
+                                        {
+                                            toy.AgeGroups.Add(ageGroup);
+                                            break;
+                                        }
+                                    };
+                                }
+                                else // skal den findes ud fra selve tallet
+                                {
+                                    foreach (AgeGroup ageGroup in ageGroups)
+                                    {
+                                        if (ageGroup.Interval.Contains(age))
+                                        {
+                                            toy.AgeGroups.Add(ageGroup);
+                                            break;
+                                        }
+                                    };
+                                }
+                            }
+                        }
+                    }
+                    // TODO få random ud fra Category - mindre vigtigt
+                    toy.Price = random.Next(49, 899);
+                    toy.Stock = random.Next(1, 25);
+
+                    if (!hasAgeGroup)
+                    {
+                        // sæt til alle aldersgrupper
+                        toy.AgeGroups = ageGroups;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                // TODO lav noget med at fejlen tilføjes til en log-fil eller noget - eller gør hangfire det for os? 
+                Console.WriteLine("ERROR in GetSingleProduct() in IcecatDataService: " + e + "\n" + e.Message);
+
+                LogGenerator logGenerator = new LogGenerator();
+                await logGenerator.WriteExceptionToLog("IcecatDataService", "GetSingleProduct", e);
+            }
+            return toy;
+        }
+
+
 
         public async Task<Toy> CreateToyInDb(Toy toy)
         {
@@ -382,6 +551,23 @@ namespace CrazyToys.Services
             return colour;
         }
 
+
+        public HashSet<SimpleToy> GetAllSimpleToysAsHashSet()
+        {
+            return _simpleToyDbService.GetAllAsHashSet();
+        }
+
+
+        public HashSet<SimpleToy> GetAllSimpleToysByDate(string dateStríng)
+        {
+            return _simpleToyDbService.GetAllByDate(dateStríng);
+        }
+
+
         
+
+
+
+
     }
 }

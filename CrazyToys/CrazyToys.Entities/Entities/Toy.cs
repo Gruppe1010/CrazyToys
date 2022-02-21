@@ -11,12 +11,14 @@ namespace CrazyToys.Entities.Entities
         public string ProductId { get; set; }
         public string Name { get; set; }
         public Brand Brand { get; set; }
+        public string BrandId { get; set; }
         public string AgeGroup { get; set; }
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
         public IList<Colour> Colours { get; set; }
         public IList<AgeGroup> AgeGroups { get; set; }
         public SubCategory SubCategory { get; set; }
+        public string SubCategoryId { get; set; }
         public IList<Image> Images { get; set; }
         public int Price { get; set; }
         public int Stock { get; set; }
@@ -29,20 +31,20 @@ namespace CrazyToys.Entities.Entities
             Images = new List<Image>();
         }
 
-        public Toy(string iD, string productId, string name, Brand brand, string ageGroup, string shortDescription,
+        public Toy(string iD, string productId, string name, string brandId, string ageGroup, string shortDescription,
             string longDescription, List<Colour> colours, IList<AgeGroup> ageGroups,
-            SubCategory subCategory, int price, int stock, IList<Image> images, bool onMarket)
+            string subCategoryId, int price, int stock, IList<Image> images, bool onMarket)
         {
             ID = iD;
             ProductId = productId;
             Name = name;
-            Brand = brand;
+            BrandId = brandId;
             AgeGroup = ageGroup;
             ShortDescription = shortDescription;
             LongDescription = longDescription;
             Colours = colours;
             AgeGroups = ageGroups;
-            SubCategory = subCategory;
+            SubCategoryId = subCategoryId;
             Price = price;
             Stock = stock;
             Images = images;
@@ -59,11 +61,11 @@ namespace CrazyToys.Entities.Entities
         {
             ProductId = toy.ProductId;
             Name = toy.Name;
-            Brand = toy.Brand;
+            BrandId = toy.BrandId;
             AgeGroup = toy.AgeGroup;
             ShortDescription = toy.ShortDescription;
             LongDescription = toy.LongDescription;
-            SubCategory = toy.SubCategory;
+            SubCategoryId = toy.SubCategoryId;
             Price = toy.Price;
             Stock = toy.Stock;
             Images = toy.Images;
