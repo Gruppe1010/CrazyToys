@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CrazyToys.Entities.Entities
 {
@@ -7,6 +8,7 @@ namespace CrazyToys.Entities.Entities
         public string ID { get; set; }
         public string Name { get; set; }
         public string LogoUrl { get; set; }
+        public IList<Toy> Toys { get; set; }
 
         public Brand(string iD, string name)
         {
