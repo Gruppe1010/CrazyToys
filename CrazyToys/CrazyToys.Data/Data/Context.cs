@@ -18,6 +18,8 @@ namespace CrazyToys.Data.Data
         public DbSet<AgeGroup> AgeGroups { get; set; }
         public DbSet<Toy> Toys { get; set; }
         public DbSet<SimpleToy> SimpleToys { get; set; }
+        public DbSet<Error> Errors { get; set; }
+
 
         public Context(DbContextOptions<Context> options) : base(options)
         {
