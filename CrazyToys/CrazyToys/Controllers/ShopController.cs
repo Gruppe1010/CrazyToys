@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Web.Common.Controllers;
@@ -58,7 +59,7 @@ namespace CrazyToys.Web.Controllers
 
             var getAllBrandsTask = _brandDbService.GetAllWithRelations();
             getAllBrandsTask.Wait();
-            List<Brand> brands = getAllBrandsTask.Result;
+            List<Brand> brands = getAllBrandsTask.Result.OrderBy(o => o.Name).ToList();
 
             var getAllColoursTask = _colourDbService.GetAll();
             getAllColoursTask.Wait();
