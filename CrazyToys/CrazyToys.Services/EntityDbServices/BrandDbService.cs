@@ -24,7 +24,7 @@ namespace CrazyToys.Services.EntityDbServices
             throw new NotImplementedException();
         }
 
-        public Task<Brand> CreateOrUpdate(Brand t)
+        public Task<Brand> CreateOrUpdate(Brand brand)
         {
             throw new NotImplementedException();
         }
@@ -32,7 +32,13 @@ namespace CrazyToys.Services.EntityDbServices
         public async Task<List<Brand>> GetAll()
         {
             return await _context.Brands.ToListAsync();
+        }
 
+        public async Task<List<Brand>> GetAllWithRelations()
+        {
+            return await _context.Brands
+                .Include(b => b.Toys.Where(t => t.SimpleToy.OnMarket.Equals("1") && t.Stock != 0))
+                .ToListAsync();
         }
 
         public async Task<Brand> GetById(string id)
@@ -51,7 +57,7 @@ namespace CrazyToys.Services.EntityDbServices
             throw new NotImplementedException();
         }
 
-        public Task<Brand> Update(Brand t)
+        public Task<Brand> Update(Brand brand)
         {
             throw new NotImplementedException();
         }

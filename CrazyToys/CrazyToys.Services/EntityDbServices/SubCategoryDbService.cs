@@ -38,6 +38,11 @@ namespace CrazyToys.Services.EntityDbServices
             throw new NotImplementedException();
         }
 
+        public Task<List<SubCategory>> GetAllWithRelations()
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<SubCategory> GetById(string id)
         {
             if (id == null)

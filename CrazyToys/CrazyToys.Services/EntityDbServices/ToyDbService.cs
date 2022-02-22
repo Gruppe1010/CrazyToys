@@ -114,5 +114,13 @@ namespace CrazyToys.Services.EntityDbServices
 
             return toy;
         }
+
+        public async Task<List<Toy>> GetAllWithRelations()
+        {
+            // TODO lav noget med relations
+            return await _context.Toys
+                .Where(t => t.SimpleToy.OnMarket.Equals("1") && t.Stock != 0)
+                .ToListAsync();
+        }
     }
 }

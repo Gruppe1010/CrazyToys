@@ -35,6 +35,11 @@ namespace CrazyToys.Services.EntityDbServices
             return await _context.AgeGroups.ToListAsync();
         }
 
+        public Task<List<AgeGroup>> GetAllWithRelations()
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<AgeGroup> GetById(string id)
         {
             throw new NotImplementedException();

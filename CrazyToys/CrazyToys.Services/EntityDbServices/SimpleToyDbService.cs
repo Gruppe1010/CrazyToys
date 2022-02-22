@@ -50,6 +50,11 @@ namespace CrazyToys.Services.EntityDbServices
             return null;
         }
 
+        public Task<List<SimpleToy>> GetAllWithRelations()
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<SimpleToy> GetById(string id)
         {
             throw new NotImplementedException();

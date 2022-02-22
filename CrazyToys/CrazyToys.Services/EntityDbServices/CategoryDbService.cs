@@ -32,7 +32,21 @@ namespace CrazyToys.Services.EntityDbServices
 
         public async Task<List<Category>> GetAll()
         {
-            return await _context.Categories.Include(c => c.SubCategories).ToListAsync();
+            return await _context.Categories.ToListAsync();
+        }
+
+        public async Task<List<Category>> GetAllWithRelations()
+        {
+            List<Category> categories = await _context.Categories.Include(c => c.SubCategories).ToListAsync();
+            // vi sletter Categories-listen på alle subcats for ikke at ende i uendelighedsloop
+            foreach (Category cat in categories)
+            {
+                foreach (SubCategory subCat in cat.SubCategories)
+                {
+                    subCat.Categories = null;
+                }
+            }
+            return categories;
         }
 
         public Task<Category> GetById(string id)

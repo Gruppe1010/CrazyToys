@@ -77,6 +77,11 @@ namespace CrazyToys.Services.EntityDbServices
         {
             throw new NotImplementedException();
         }
+
+        public Task<List<Colour>> GetAllWithRelations()
+        {
+            throw new NotImplementedException();
+        }
     }
 
 

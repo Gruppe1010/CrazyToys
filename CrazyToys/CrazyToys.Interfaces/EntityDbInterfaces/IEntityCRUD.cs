@@ -11,6 +11,8 @@ namespace CrazyToys.Interfaces.EntityDbInterfaces
     {
         Task<List<T>> GetAll();
 
+        Task<List<T>> GetAllWithRelations();
+
         Task<T> GetById(string id);
 
         Task<T> GetByName(string name);
