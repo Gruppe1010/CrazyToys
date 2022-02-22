@@ -11,29 +11,33 @@ namespace CrazyToys.Entities.Entities
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string ID { get; set; }
-        public string SupplierId { get; set; }
-        public string ProductId { get; set; }
+        public Brand Brand { get; set; } // nav prop
+        public string BrandId { get; set; } // foreign key
         public string OnMarket { get; set; }
         public string IcecatId { get; set; }
         public string DateString { get; set; }
+        public IList<Error> Errors { get; set; } // nav prop
+        public bool SuccessfullyRetrievedAsJson { get; set; }
 
-        public SimpleToy(string iD, string supplierId, string productId, string onMarket, string icecatId, string dateString)
+        public SimpleToy(string iD, string brandId, string onMarket, string icecatId, string dateString)
         {
             ID = iD;
-            SupplierId = supplierId;
-            ProductId = productId;
+            BrandId = brandId;
             OnMarket = onMarket;
             IcecatId = icecatId;
             DateString = dateString;
+            Errors = new List<Error>();
+            SuccessfullyRetrievedAsJson = true;
         }
 
-        public SimpleToy(string supplierId, string productId, string onMarket, string icecatId, string dateString)
+        public SimpleToy(string brandId, string onMarket, string icecatId, string dateString)
         {
-            SupplierId = supplierId;
-            ProductId = productId;
+            BrandId = brandId;
             OnMarket = onMarket;
             IcecatId = icecatId;
             DateString = dateString;
+            Errors = new List<Error>();
+            SuccessfullyRetrievedAsJson = true;
         }
     }
 }
