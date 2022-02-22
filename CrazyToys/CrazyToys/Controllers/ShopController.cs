@@ -5,6 +5,7 @@ using CrazyToys.Services.EntityDbServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -46,22 +47,38 @@ namespace CrazyToys.Web.Controllers
 
         public override IActionResult Index()
         {
-
-            
-            var getAllCategoriesTask = _categoryDbService.GetAll();
+            var getAllCategoriesTask = _categoryDbService.GetAllWithRelations();
             getAllCategoriesTask.Wait();
             List<Category> categories = getAllCategoriesTask.Result;
 
+            var getAllAgeGroupsTask = _ageGroupDbService.GetAll();
+            getAllAgeGroupsTask.Wait();
+            List<AgeGroup> ageGroups = getAllAgeGroupsTask.Result;
 
-            ViewData["Categories"] = categories;//JsonConvert.SerializeObject(test);
+            var getAllBrandsTask = _brandDbService.GetAllWithRelations();
+            getAllBrandsTask.Wait();
+            List<Brand> brands = getAllBrandsTask.Result;
 
+            brands[1].Toys.Count;
 
+            var getAllColoursTask = _colourDbService.GetAll();
+            getAllColoursTask.Wait();
+            List<Colour> colours = getAllColoursTask.Result;
 
             // hent alle PRODUKTER
-            /*
-            var getAllProductsTask = _hangfireService.GetAllProducts();
-            getIndexTask.Wait();
-            */
+
+            
+            var getAllToysTask = _toyDbService.GetAll();
+            getAllToysTask.Wait();
+            
+            List<Toy> toys = getAllToysTask.Result;
+
+            ViewData["Categories"] = categories;
+            ViewData["AgeGroups"] = ageGroups;
+            ViewData["Brands"] = brands;
+            ViewData["Colours"] = colours;
+            ViewData["Toys"] = toys;
+
 
             // return a 'model' to the selected template/view for this page.
             return CurrentTemplate(CurrentPage);
