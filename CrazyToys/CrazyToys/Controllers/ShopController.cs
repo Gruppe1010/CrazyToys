@@ -59,16 +59,12 @@ namespace CrazyToys.Web.Controllers
             getAllBrandsTask.Wait();
             List<Brand> brands = getAllBrandsTask.Result;
 
-            brands[1].Toys.Count;
-
             var getAllColoursTask = _colourDbService.GetAll();
             getAllColoursTask.Wait();
             List<Colour> colours = getAllColoursTask.Result;
 
-            // hent alle PRODUKTER
-
             
-            var getAllToysTask = _toyDbService.GetAll();
+            var getAllToysTask = _toyDbService.GetAllWithRelations();
             getAllToysTask.Wait();
             
             List<Toy> toys = getAllToysTask.Result;
