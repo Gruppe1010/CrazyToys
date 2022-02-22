@@ -33,27 +33,6 @@ namespace CrazyToys.Web.Controllers
 
             ViewData["Test"] = test;//JsonConvert.SerializeObject(test);
 
-            string indexUrl = "https://data.Icecat.biz/export/freexml/EN/files.index.xml";
-            string dailyUrl = "https://data.Icecat.biz/export/freexml/EN/daily.index.xml";
-
-            /*
-            var getindextask = _hangfireService.GetProductsFromIcecat(dailyUrl);
-            getindextask.Wait();
-            */
-            
-            
-            
-            /*
-           var entask = _hangfireService.CreateToysFromSimpleToys(true, "2/21/2022 4:09:43 PM");
-           entask.Wait();
-            */
-         
-            // hent alle PRODUKTER
-            /*
-            var getAllProductsTask = _hangfireService.GetAllProducts();
-            getIndexTask.Wait();
-            */
-
             // return a 'model' to the selected template/view for this page.
             return CurrentTemplate(CurrentPage);
         }
