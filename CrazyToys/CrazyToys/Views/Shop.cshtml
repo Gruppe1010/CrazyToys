@@ -72,7 +72,7 @@
                                                 @{
                                                     foreach (var brand in brands as List<Brand>)
                                                     {
-                                                        <li><a href="#">@brand.Name (@brand.Toys.Count())</a></li>
+                                                        <li><a href="#">@brand.Name (@brand.Toys.Count)</a></li>
                                                     }
                                                 }
                                             </ul>
@@ -106,6 +106,17 @@
                                 <div id="collapseFour" class="collapse show" data-parent="#accordionExample">
                                     <div class="card-body">
                                         <div class="shop__sidebar__size">
+
+                                             @{
+                                                foreach (var brand in brands as List<Brand>)
+                                                {
+                                                    <li><a href="#">@brand.Name (@brand.Toys.Count)</a></li>
+                                                }
+                                             }
+
+
+
+
                                             <label for="xs">0-11 mdr
                                                 <input type="radio" id="0-11mdr">
                                             </label>
