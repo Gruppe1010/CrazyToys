@@ -106,35 +106,14 @@
                                 <div id="collapseFour" class="collapse show" data-parent="#accordionExample">
                                     <div class="card-body">
                                         <div class="shop__sidebar__size">
-
                                              @{
-                                                foreach (var brand in brands as List<Brand>)
+                                                foreach (var ageGroup in ageGroups as List<AgeGroup>)
                                                 {
-                                                    <li><a href="#">@brand.Name (@brand.Toys.Count)</a></li>
+                                                    <label class="hover" for="@ageGroup.ID">@ageGroup.Interval
+                                                        <input type="radio" id="@ageGroup.ID">
+                                                    </label>
                                                 }
                                              }
-
-
-
-
-                                            <label for="xs">0-11 mdr
-                                                <input type="radio" id="0-11mdr">
-                                            </label>
-                                            <label for="sm">1-2 år
-                                                <input type="radio" id="1-2aar">
-                                            </label>
-                                            <label for="md">3-4 år
-                                                <input type="radio" id="3-4aar">
-                                            </label>
-                                            <label for="xl">5-6 år
-                                                <input type="radio" id="5-6aar">
-                                            </label>
-                                            <label for="2xl">7-8 år
-                                                <input type="radio" id="7-8aar">
-                                            </label>
-                                            <label for="xxl">9+ år
-                                                <input type="radio" id="9+aar">
-                                            </label>
                                         </div>
                                     </div>
                                 </div>
