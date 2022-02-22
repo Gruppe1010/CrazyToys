@@ -32,7 +32,7 @@ namespace CrazyToys.Services.EntityDbServices
 
         public async Task<List<Category>> GetAll()
         {
-            return await _context.Categories.ToListAsync();
+            return await _context.Categories.Include(c => c.SubCategories).ToListAsync();
         }
 
         public Task<Category> GetById(string id)
