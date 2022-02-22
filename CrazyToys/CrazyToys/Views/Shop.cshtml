@@ -1,7 +1,13 @@
-﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+﻿@using CrazyToys.Entities.Entities
+@using Umbraco.Cms.Web.Common.PublishedModels;
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Shop>
 @{
     Layout = "Master.cshtml";
+    var categories = ViewData["Categories"];
+    var brands = ViewData["Brands"];
+    var ageGroups = ViewData["AgeGroups"];
+    var colours = ViewData["Colours"];
+    var toys = ViewData["Toys"];
 }
 
 <!-- Breadcrumb Section Begin -->
@@ -44,15 +50,12 @@
                                     <div class="card-body">
                                         <div class="shop__sidebar__categories">
                                             <ul class="nice-scroll">
-                                                <li><a href="#">Men (20)</a></li>
-                                                <li><a href="#">Women (20)</a></li>
-                                                <li><a href="#">Bags (20)</a></li>
-                                                <li><a href="#">Clothing (20)</a></li>
-                                                <li><a href="#">Shoes (20)</a></li>
-                                                <li><a href="#">Accessories (20)</a></li>
-                                                <li><a href="#">Kids (20)</a></li>
-                                                <li><a href="#">Kids (20)</a></li>
-                                                <li><a href="#">Kids (20)</a></li>
+                                                @{
+                                                    foreach (var category in categories as List<Category>)
+                                                    {
+                                                        <li><a href="#">@category.Name</a></li>
+                                                    }
+                                                }
                                             </ul>
                                         </div>
                                     </div>
@@ -66,10 +69,12 @@
                                     <div class="card-body">
                                         <div class="shop__sidebar__brand">
                                             <ul>
-                                                <li><a href="#">Louis Vuitton</a></li>
-                                                <li><a href="#">Chanel</a></li>
-                                                <li><a href="#">Hermes</a></li>
-                                                <li><a href="#">Gucci</a></li>
+                                                @{
+                                                    foreach (var brand in brands as List<Brand>)
+                                                    {
+                                                        <li><a href="#">@brand.Name (@brand.Toys.Count())</a></li>
+                                                    }
+                                                }
                                             </ul>
                                         </div>
                                     </div>
