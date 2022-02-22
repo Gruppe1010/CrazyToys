@@ -29,6 +29,8 @@ namespace CrazyToys.Services
         private Random random;
         private IList<AgeGroup> ageGroups;
         private IList<Category> categories;
+        private Dictionary<string, Brand> brandDict;
+
 
 
         public IcecatDataService(IHttpClientFactory httpClientFactory, IEntityCRUD<Brand> brandDbService, IEntityCRUD<Category> categoryDbService,
@@ -52,6 +54,10 @@ namespace CrazyToys.Services
             var categoryTask = _categoryDbService.GetAll();
             categoryTask.Wait();
             categories = categoryTask.Result;
+
+            var brandTask = GetBrandDict();
+            brandTask.Wait();
+            brandDict = brandTask.Result;
         }
 
         public string GetIcecatCredentials()
@@ -118,13 +124,20 @@ namespace CrazyToys.Services
 
                     dynamic json = JsonConvert.DeserializeObject(jsonContent);
 
-                    toy.Name = json["data"]["GeneralInfo"]["Title"];
                     //toy.BrandId = simpleToy.SupplierId;
                     toy.BrandId = json["data"]["GeneralInfo"]["BrandID"];
                     //toy.ProductId = simpleToy.ProductId;
                     toy.ProductId = json["data"]["GeneralInfo"]["BrandPartCode"];
                     toy.ShortDescription = json["data"]["GeneralInfo"]["SummaryDescription"]["ShortSummaryDescription"];
                     toy.LongDescription = json["data"]["GeneralInfo"]["SummaryDescription"]["LongSummaryDescription"];
+                    string name = json["data"]["GeneralInfo"]["Title"];
+
+                    name = name
+                        .Replace(toy.ProductId, "")
+                        .Replace(brandDict[toy.BrandId].Name, "")
+                        .Trim();
+
+                    toy.Name = char.ToUpper(name[0]) + name.Substring(1);
 
                     string subCategoryId = json["data"]["GeneralInfo"]["Category"]["CategoryID"];
                     string subCategoryName = json["data"]["GeneralInfo"]["Category"]["Name"]["Value"];
