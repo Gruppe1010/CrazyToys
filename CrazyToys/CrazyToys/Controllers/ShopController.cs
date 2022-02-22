@@ -54,6 +54,7 @@ namespace CrazyToys.Web.Controllers
             var getAllAgeGroupsTask = _ageGroupDbService.GetAll();
             getAllAgeGroupsTask.Wait();
             List<AgeGroup> ageGroups = getAllAgeGroupsTask.Result;
+            ageGroups.Sort((x, y) => x.Interval[0].CompareTo(y.Interval[0]));
 
             var getAllBrandsTask = _brandDbService.GetAllWithRelations();
             getAllBrandsTask.Wait();
