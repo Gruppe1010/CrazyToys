@@ -22,7 +22,7 @@ namespace CrazyToys.Services
             _httpClientFactory = httpClientFactory;
             _icecatDataService = icecatDataService;
         }
-        
+
         /*
          * Henter enten index eller daily-fil fra icecat
          * Den tjekker alle produkter om brand-id passer på vores udvalgte brands
@@ -73,13 +73,13 @@ namespace CrazyToys.Services
 
                         if (brandDict.ContainsKey(supplierId))
                         {
-                            string productId = reader.GetAttribute("Prod_ID");
+                            //string productId = reader.GetAttribute("Prod_ID");
                             string onMarket = reader.GetAttribute("On_Market");
                             string icecatId = reader.GetAttribute("Product_ID");
 
-                            SimpleToy simpleToy = url.Contains("daily") ?
-                                await _icecatDataService.CreateOrUpdateSimpleToyInDb(new SimpleToy(supplierId, productId, onMarket, icecatId, dateString)) :
-                                await _icecatDataService.CreateSimpleToyInDb(new SimpleToy(supplierId, productId, onMarket, icecatId, dateString));
+                            SimpleToy simpleToy = url.Contains("daily")
+                                ? await _icecatDataService.CreateOrUpdateSimpleToyInDb(new SimpleToy(supplierId, onMarket, icecatId, dateString))
+                                : await _icecatDataService.CreateSimpleToyInDb(new SimpleToy(supplierId, onMarket, icecatId, dateString));
                         }
                     }
                 }
@@ -97,32 +97,19 @@ namespace CrazyToys.Services
          ***/
         public async Task CreateToysFromSimpleToys(bool isDaily, string dateString)
         {
-            if (isDaily) // hvis det er daily
-            {
-                // hent alle simpleToys ud fra dato
-                HashSet<SimpleToy> simpleToys = _icecatDataService.GetAllSimpleToysByDate(dateString);
+            HashSet<SimpleToy> simpleToys = isDaily
+                ? _icecatDataService.GetAllSimpleToysByDate(dateString)
+                : _icecatDataService.GetAllSimpleToysAsHashSet();
 
-                foreach (SimpleToy simpleToy in simpleToys)
-                {
-                    if (!simpleToy.ProductId.Contains("E+25"))
-                    {
-                       Toy toy = await _icecatDataService.GetSingleProduct(simpleToy);
-                        Toy addedToy = await _icecatDataService.CreateOrUpdateToyInDb(toy);
-                    }
-                }
-            }
-            else // hvis det er index, så ligger der kun ting i SimpleToys-tabellen som er fra index
+            foreach (SimpleToy simpleToy in simpleToys)
             {
-                // derfor henter vi alle
-                HashSet<SimpleToy> simpleToys = _icecatDataService.GetAllSimpleToysAsHashSet();
-
-                foreach (SimpleToy simpleToy in simpleToys)
+                //if (!simpleToy.ProductId.Contains("E+25"))
+                Toy toy = await _icecatDataService.GetSingleProduct(simpleToy);
+                if (toy != null)
                 {
-                    if (!simpleToy.ProductId.Contains("E+25"))
-                    {
-                        Toy toy = await _icecatDataService.GetSingleProduct(simpleToy);
-                        Toy addedToy = await _icecatDataService.CreateToyInDb(toy);
-                    }
+                    Toy addedToy = isDaily
+                                  ? await _icecatDataService.CreateOrUpdateToyInDb(toy)
+                                  : await _icecatDataService.CreateToyInDb(toy);
                 }
             }
         }
