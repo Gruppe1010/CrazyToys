@@ -20,11 +20,10 @@ namespace CrazyToys.Entities.Entities
         public IList<Image> Images { get; set; }
         public SubCategory SubCategory { get; set; } // nav-prop
         public string SubCategoryId { get; set; }// foreign key
-        //public SimpleToy SimpleToy { get; set; } // nav-prop
-        //public string SimpleToyId { get; set; }// foreign key
+        public SimpleToy SimpleToy { get; set; } // nav-prop
+        public string SimpleToyId { get; set; }// foreign key
         public int Price { get; set; }
         public int Stock { get; set; }
-        public bool OnMarket { get; set; }
 
         public Toy()
         {
@@ -35,7 +34,7 @@ namespace CrazyToys.Entities.Entities
 
         public Toy(string iD, string productId, string name, string brandId, string ageGroup, string shortDescription,
             string longDescription, List<Colour> colours, IList<AgeGroup> ageGroups,
-            string subCategoryId, /*string simpleToyId,*/ int price, int stock, IList<Image> images, bool onMarket)
+            string subCategoryId, string simpleToyId, int price, int stock, IList<Image> images)
         {
             ID = iD;
             ProductId = productId;
@@ -47,11 +46,10 @@ namespace CrazyToys.Entities.Entities
             Colours = colours;
             AgeGroups = ageGroups;
             SubCategoryId = subCategoryId;
-            //SimpleToyId = simpleToyId;
+            SimpleToyId = simpleToyId;
             Price = price;
             Stock = stock;
             Images = images;
-            OnMarket = onMarket;
         }
 
         public ToyDTO ConvertToDTO()
@@ -69,11 +67,10 @@ namespace CrazyToys.Entities.Entities
             ShortDescription = toy.ShortDescription;
             LongDescription = toy.LongDescription;
             SubCategoryId = toy.SubCategoryId;
-            //SimpleToyId = toy.SimpleToyId;
+            SimpleToyId = toy.SimpleToyId;
             Price = toy.Price;
             Stock = toy.Stock;
             Images = toy.Images;
-            OnMarket = toy.OnMarket;
             Colours = toy.Colours;
             AgeGroups = toy.AgeGroups;
         }
