@@ -245,7 +245,7 @@ namespace CrazyToys.Services
 
                 // gem fejl i db
                 simpleToy.SuccessfullyRetrievedAsJson = false;
-                simpleToy.Errors.Add(new Error(e.ToString(), simpleToy.DateString));
+                simpleToy.Errors.Add(new Error(e.ToString(), DateTime.Now.ToString()));
                 simpleToy = await _simpleToyDbService.Update(simpleToy);
 
                 return null;
@@ -344,7 +344,7 @@ namespace CrazyToys.Services
                 {
                     foreach (string sortingKeyword in category.SortingKeywords)
                     {
-                        if (name.Contains(sortingKeyword))
+                        if (name.ToLower().Contains(sortingKeyword))
                         {
                             // og tilføjet categorier til dens liste, så de får en relation
                             subCategory.Categories.Add(category);
