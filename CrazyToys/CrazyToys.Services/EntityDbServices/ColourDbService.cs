@@ -27,9 +27,9 @@ namespace CrazyToys.Services.EntityDbServices
             return colour;
         }
 
-        public Task<List<Colour>> GetAll()
+        public async Task<List<Colour>> GetAll()
         {
-            throw new NotImplementedException();
+            return await _context.Colours.ToListAsync(); 
         }
 
         public Task<Colour> GetById(string id)
