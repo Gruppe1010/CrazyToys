@@ -102,14 +102,15 @@ namespace CrazyToys.Services
 
             HttpClient httpClient = _httpClientFactory.CreateClient();
 
-            //try // TODO kommenter ind igen
-            //{
+            try
+            {
                 HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
 
                 if (httpResponseMessage.IsSuccessStatusCode)
                 {
                     toy = new Toy();
-                    toy.OnMarket = simpleToy.OnMarket.Equals("0") ? false : true;
+                    toy.SimpleToyId = simpleToy.ID;
+                    //toy.OnMarket = simpleToy.OnMarket.Equals("0") ? false : true;
                     bool hasAgeGroup = false; // bruges til at sætte til "Ingens Aldersgruppe"-agegroupen, hvis ingen alder-presentationvalue fundet
 
                     string jsonContent =
@@ -117,11 +118,11 @@ namespace CrazyToys.Services
 
                     dynamic json = JsonConvert.DeserializeObject(jsonContent);
 
-                    toy.ProductId = simpleToy.ProductId;
                     toy.Name = json["data"]["GeneralInfo"]["Title"];
                     //toy.BrandId = simpleToy.SupplierId;
-                    toy.BrandId = json["data"]["GeneralInfo"]["SummaryDescription"]["ShortSummaryDescription"];
-
+                    toy.BrandId = json["data"]["GeneralInfo"]["BrandID"];
+                    //toy.ProductId = simpleToy.ProductId;
+                    toy.ProductId = json["data"]["GeneralInfo"]["BrandPartCode"];
                     toy.ShortDescription = json["data"]["GeneralInfo"]["SummaryDescription"]["ShortSummaryDescription"];
                     toy.LongDescription = json["data"]["GeneralInfo"]["SummaryDescription"]["LongSummaryDescription"];
 
@@ -231,7 +232,7 @@ namespace CrazyToys.Services
                         toy.AgeGroups = ageGroups;
                     }
                 }
-                /*
+                
             }
 
             catch (Exception e)
@@ -241,9 +242,14 @@ namespace CrazyToys.Services
 
                 LogGenerator logGenerator = new LogGenerator();
                 await logGenerator.WriteExceptionToLog("IcecatDataService", "GetSingleProduct", e);
+
+                // gem fejl i db
+                simpleToy.SuccessfullyRetrievedAsJson = false;
+                simpleToy.Errors.Add(new Error(e.ToString(), simpleToy.DateString));
+                simpleToy = await _simpleToyDbService.Update(simpleToy);
+
                 return null;
             }
-                */
             return toy;
         }
 
@@ -385,5 +391,12 @@ namespace CrazyToys.Services
         {
             return _simpleToyDbService.GetAllByDate(dateStríng);
         }
+
+        public async Task<SimpleToy> UpdateSimpleToyInDb(SimpleToy simpleToy)
+        {
+            return await _simpleToyDbService.Update(simpleToy);
+        }
+
+        
     }
 }
