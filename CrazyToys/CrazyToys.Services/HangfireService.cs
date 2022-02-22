@@ -16,17 +16,21 @@ namespace CrazyToys.Services
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IcecatDataService _icecatDataService;
-        private readonly IEntityCRUD<Brand> _brandDbService;
 
-
-        public HangfireService(IHttpClientFactory httpClientFactory, IcecatDataService icecatDataService,
-            IEntityCRUD<Brand> brandDbService)
+        public HangfireService(IHttpClientFactory httpClientFactory, IcecatDataService icecatDataService)
         {
             _httpClientFactory = httpClientFactory;
             _icecatDataService = icecatDataService;
-            _brandDbService = brandDbService;
         }
-
+        
+        /*
+         * Henter enten index eller daily-fil fra icecat
+         * Den tjekker alle produkter om brand-id passer på vores udvalgte brands
+         *      hvis ja --> henter den værdier til at lave SimpleToy-obj, som lægges ned i db
+         * Efter ALLE produkter i fil er løbet igennem og lagt i db, hentes de op og oprettes som Toy-obj
+         * 
+         * De lægges FØRST ned i SimpleToy-tabel for at undgå at processen af at hente alt fra filen afbrydes, hvis der sker en fejl i hentningen af et enkelt produkt
+         * **/
         public async Task GetProductsFromIcecat(string url)
         {
             string credentials = _icecatDataService.GetIcecatCredentials();
@@ -66,81 +70,50 @@ namespace CrazyToys.Services
                     if (reader.Name == "file" && (reader.NodeType != XmlNodeType.EndElement))
                     {
                         string supplierId = reader.GetAttribute("Supplier_id");
-                        Console.WriteLine(supplierId);
 
                         if (brandDict.ContainsKey(supplierId))
                         {
                             string productId = reader.GetAttribute("Prod_ID");
                             string onMarket = reader.GetAttribute("On_Market");
-                            string GTIN13 = null;
+                            string icecatId = reader.GetAttribute("Product_ID");
 
-                            if (reader.ReadToDescendant("EAN_UPCS"))
-                            {
-                                bool GTIN13Found = false;
-                                while (!GTIN13Found)
-                                {
-                                    reader.Read(); //this moves reader to next node which is text 
-
-                                    if (reader.GetAttribute("Format").Equals("GTIN-13"))
-                                    {
-                                        GTIN13 = reader.GetAttribute("Value"); //this might give value than 
-                                        GTIN13Found = true;
-                                    }
-                                }
-                            }
-                      
-                            SimpleToy simpleToy = await _icecatDataService.CreateSimpleToyInDb(new SimpleToy(supplierId, productId, onMarket, GTIN13, dateString));
-                            /*
-                            if (!productId.Contains("E+25"))
-                            {
-                                // Læg ned i ny SimpleToy-tabel
-                                SimpleToy simpleToy = await _icecatDataService.CreateSimpleToyInDb(new SimpleToy(supplierId, productId, onMarket));
-                                Toy toy = await _icecatDataService.GetSingleProduct(supplierId, productId, onMarket);
-                                if (url.Contains("daily"))
-                                {
-                                    Toy addedToy = await _icecatDataService.CreateOrUpdateToyInDb(toy);
-                                }
-                                else
-                                {
-                                    Toy addedToy = await _icecatDataService.CreateToyInDb(toy);
-                                }
-                            }
-                            */
-
+                            SimpleToy simpleToy = url.Contains("daily") ?
+                                await _icecatDataService.CreateOrUpdateSimpleToyInDb(new SimpleToy(supplierId, productId, onMarket, icecatId, dateString)) :
+                                await _icecatDataService.CreateSimpleToyInDb(new SimpleToy(supplierId, productId, onMarket, icecatId, dateString));
                         }
                     }
                 }
-                CreateToysFromSimpleToys(url.Contains("daily"), dateString);
+                // nu har vi lagt alle toys fra enten index eller daily successfuldt - nu skal de hentes op og lægges ned som Toy-objs
+                var createAllToysTask = CreateToysFromSimpleToys(url.Contains("daily"), dateString);
+                createAllToysTask.Wait();
             }
         }
 
         /*
-         * Denne metoder henter alle SimpleToys op, som lige er blevet lagt i db ud fra index eller daily
-         * Derefter henter den den fulde produktinfo i json, laver et nyt toy-obj og tilføjet til db 
-         * hvis det er daily laver den CreateOrUpdateToyInDb - hvis det er index findes der ikke nogen toy-obj i db, og derfor laver den bare create
-         * 
-         * **/
-        public async void CreateToysFromSimpleToys(bool isDaily, string dateString)
+         * Denne metode henter alle SimpleToys op, som lige er blevet lagt i db ud fra index eller daily
+         * Derefter henter den den fulde produktinfo i json, laver et nyt toy-obj og tilføjer til db 
+         * - hvis det er daily laver den CreateOrUpdate 
+         * - hvis det er index findes der ikke nogen toy-obj i db, og derfor laver den bare Create()
+         ***/
+        public async Task CreateToysFromSimpleToys(bool isDaily, string dateString)
         {
-
-            if (isDaily)
+            if (isDaily) // hvis det er daily
             {
+                // hent alle simpleToys ud fra dato
                 HashSet<SimpleToy> simpleToys = _icecatDataService.GetAllSimpleToysByDate(dateString);
 
                 foreach (SimpleToy simpleToy in simpleToys)
                 {
-
                     if (!simpleToy.ProductId.Contains("E+25"))
                     {
-                        Toy toy = await _icecatDataService.GetSingleProduct(simpleToy);
+                       Toy toy = await _icecatDataService.GetSingleProduct(simpleToy);
                         Toy addedToy = await _icecatDataService.CreateOrUpdateToyInDb(toy);
                     }
-
                 }
-
             }
-            else
+            else // hvis det er index, så ligger der kun ting i SimpleToys-tabellen som er fra index
             {
+                // derfor henter vi alle
                 HashSet<SimpleToy> simpleToys = _icecatDataService.GetAllSimpleToysAsHashSet();
 
                 foreach (SimpleToy simpleToy in simpleToys)
