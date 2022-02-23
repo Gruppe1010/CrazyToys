@@ -1836,8 +1836,9 @@ ol {
 	margin: 0 auto;
 }
 
+
 .product__details__last__option ul {
-	padding-top: 40px;
+	padding-top: 0px;
 }
 
 .product__details__last__option ul li {
