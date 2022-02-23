@@ -15,7 +15,7 @@ using Umbraco.Cms.Web.Common.Controllers;
 
 namespace CrazyToys.Web.Controllers
 {
-    public class ShopDetailsController : RenderController
+    public class ShopDetailsController : Microsoft.AspNetCore.Mvc.Controller
     {
         private readonly IHangfireService _hangfireService;
 
@@ -25,14 +25,10 @@ namespace CrazyToys.Web.Controllers
         private readonly IEntityCRUD<Colour> _colourDbService;
         private readonly ToyDbService _toyDbService;
         private readonly IEntityCRUD<AgeGroup> _ageGroupDbService;
-       
 
-        public ShopDetailsController(ILogger<HomeController> logger, ICompositeViewEngine compositeViewEngine, 
-            IUmbracoContextAccessor umbracoContextAccessor, IHangfireService hangfireService,
-            IEntityCRUD<Brand> brandDbService, IEntityCRUD<Category> categoryDbService,
-            IEntityCRUD<Colour> colourDbService, ToyDbService toyDbService,
-            IEntityCRUD<AgeGroup> ageGroupDbService)
-            : base(logger, compositeViewEngine, umbracoContextAccessor)
+       
+        public ShopDetailsController(IHangfireService hangfireService, IEntityCRUD<Brand> brandDbService, IEntityCRUD<Category> categoryDbService, 
+            IEntityCRUD<Colour> colourDbService, ToyDbService toyDbService, IEntityCRUD<AgeGroup> ageGroupDbService)
         {
             _hangfireService = hangfireService;
             _brandDbService = brandDbService;
@@ -42,48 +38,22 @@ namespace CrazyToys.Web.Controllers
             _ageGroupDbService = ageGroupDbService;
         }
 
-        //
-        // Summary:
-        //     Before the controller executes we will handle redirects and not founds
-
-        public override IActionResult Index()
+        public IActionResult Index(string? id)
         {
-            var noget = 1;
-            /*
-            var getAllCategoriesTask = _categoryDbService.GetAllWithRelations();
-            getAllCategoriesTask.Wait();
-            List<Category> categories = getAllCategoriesTask.Result;
-
-            var getAllAgeGroupsTask = _ageGroupDbService.GetAll();
-            getAllAgeGroupsTask.Wait();
-            List<AgeGroup> ageGroups = getAllAgeGroupsTask.Result;
-            ageGroups.Sort((x, y) => x.Interval[0].CompareTo(y.Interval[0]));
-
-            var getAllBrandsTask = _brandDbService.GetAllWithRelations();
-            getAllBrandsTask.Wait();
-            List<Brand> brands = getAllBrandsTask.Result.OrderBy(o => o.Name).ToList();
-
-            var getAllColoursTask = _colourDbService.GetAll();
-            getAllColoursTask.Wait();
-            List<Colour> colours = getAllColoursTask.Result;
-
-            
-            var getAllToysTask = _toyDbService.GetAllWithRelations();
-            getAllToysTask.Wait();
-            
-            List<Toy> toys = getAllToysTask.Result;
-
-            ViewData["Categories"] = categories;
-            ViewData["AgeGroups"] = ageGroups;
-            ViewData["Brands"] = brands;
-            ViewData["Colours"] = colours;
-            ViewData["Toys"] = toys;
-            */
-
-
-            // return a 'model' to the selected template/view for this page.
-            return CurrentTemplate(CurrentPage);
+            Console.WriteLine("INDEEEEEX");
+            return View("~/Views/ShopDetails.cshtml");
         }
+        /*
+        //shop-details/product/id
+        public IActionResult Product(string? id)
+        {
+            
+            Console.WriteLine("DEEEETAILS med id: " + id);
+
+            return View("~/Views/ShopDetails.cshtml");
+        }
+        */
+
     }
 }
 
