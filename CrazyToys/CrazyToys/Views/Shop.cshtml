@@ -72,7 +72,7 @@
                                                 @{
                                                     foreach (var brand in brands)
                                                     {
-                                                        <li><a href="#">@brand.Name (@brand.Toys.Count)</a></li>
+                                                        <li class="chosen-brand"><a href="#">@brand.Name (@brand.Toys.Count)</a></li>
                                                     }
                                                 }
                                             </ul>
@@ -181,7 +181,8 @@
                             <div class="col-lg-4 col-md-6 col-sm-6">
                                 <div class="product__item">
                                     <div class="product__item__pic set-bg" data-setbg="@toys[i].Images[0].UrlHigh">
-                                        <a class="item-link" href="/shop-details/@toys[i].ID"></a>
+                                        <a class="item-link" href="/Shop-Details"></a> 
+                                        <!--/@toys[i].ID-->
                                         <ul class="product__hover">
                                             <li><a href="#"><img src="img/icon/search.png" alt=""></a></li>
                                             <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
