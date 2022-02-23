@@ -126,6 +126,11 @@ namespace CrazyToys.Web
                 })
                 .WithEndpoints(u =>
                 {
+                    u.EndpointRouteBuilder.MapControllerRoute(
+                          "shop-details-route",
+                          "/shop-details/{id?}",
+                          new { Controller = "ShopDetails", Action = "Index" });
+
                     u.UseInstallerEndpoints();
                     u.UseBackOfficeEndpoints();
                     u.UseWebsiteEndpoints();
