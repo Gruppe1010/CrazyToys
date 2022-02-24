@@ -55,7 +55,8 @@ namespace CrazyToys.Services.EntityDbServices
             }
 
             var toy = await _context.Toys
-                .FirstOrDefaultAsync(b => b.ID.Equals(id));
+                .Include(t => t.Images) 
+                .FirstOrDefaultAsync(t => t.ID.Equals(id));
 
 
             //var images = await _context.Images.Where(x => x.ToyID.Equals(id)).ToListAsync();
