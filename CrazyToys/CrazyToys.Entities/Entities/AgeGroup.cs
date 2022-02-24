@@ -1,5 +1,4 @@
-﻿using CrazyToys.Entities.DTOs;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CrazyToys.Entities.Entities
@@ -16,11 +15,5 @@ namespace CrazyToys.Entities.Entities
         {
             Interval = interval;
         }
-
-        public AgeGroupDTO convertToDTO()
-        {
-            return new AgeGroupDTO(ID, Interval);
-        }
-
     }
 }

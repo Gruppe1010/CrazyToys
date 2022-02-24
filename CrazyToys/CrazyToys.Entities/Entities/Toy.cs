@@ -1,5 +1,4 @@
-﻿using CrazyToys.Entities.DTOs;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CrazyToys.Entities.Entities
@@ -50,12 +49,6 @@ namespace CrazyToys.Entities.Entities
             Price = price;
             Stock = stock;
             Images = images;
-        }
-
-        public ToyDTO ConvertToDTO()
-        {
-            // TODO tag AgeGroups og SubCategories med - opret convertere til dem og find ud af hvordan man bruger Map - er det fordi det er en ICollection?
-            return new ToyDTO(ID, ProductId, Name, Brand, AgeGroup, ShortDescription, LongDescription, Price, Stock, Images);
         }
 
         public void UpdateValuesToAnotherToysValues(Toy toy)
