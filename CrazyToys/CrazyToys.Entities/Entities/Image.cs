@@ -6,13 +6,11 @@ namespace CrazyToys.Entities.Entities
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string ID { get; set; }
-        public string UrlLow { get; set; }
         public string UrlHigh { get; set; }
         public int OrderNumber { get; set; }
 
-        public Image(string urlLow, string urlHigh, int orderNumber)
+        public Image(string urlHigh, int orderNumber)
         {
-            UrlLow = urlLow;
             UrlHigh = urlHigh;
             OrderNumber = orderNumber;
         }
