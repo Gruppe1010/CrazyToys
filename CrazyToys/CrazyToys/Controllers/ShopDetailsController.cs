@@ -17,24 +17,21 @@ namespace CrazyToys.Web.Controllers
 {
     public class ShopDetailsController : RenderController
     {
-        private readonly IHangfireService _hangfireService;
-
-        
-        private readonly IEntityCRUD<Brand> _brandDbService;
-        private readonly IEntityCRUD<Category> _categoryDbService;
-        private readonly IEntityCRUD<Colour> _colourDbService;
         private readonly ToyDbService _toyDbService;
-        private readonly IEntityCRUD<AgeGroup> _ageGroupDbService;
-
-        public ShopDetailsController(ILogger<RenderController> logger, ICompositeViewEngine compositeViewEngine, IUmbracoContextAccessor umbracoContextAccessor) 
+ 
+        public ShopDetailsController(ILogger<RenderController> logger, ICompositeViewEngine compositeViewEngine, IUmbracoContextAccessor umbracoContextAccessor, ToyDbService toyDbService) 
             : base(logger, compositeViewEngine, umbracoContextAccessor)
         {
+            _toyDbService = toyDbService;
         }
 
         [HttpGet]
-        public IActionResult Index([FromQuery(Name = "id")] string id)
+        public async Task<IActionResult> Index([FromQuery(Name = "id")] string id)
         {
             Console.WriteLine("INDEEEEEX: " + id);
+            var toy = await _toyDbService.GetById(id);
+
+            ViewData["Toy"] = toy;
             return CurrentTemplate(CurrentPage);
         }
 
