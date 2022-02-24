@@ -56,6 +56,8 @@ namespace CrazyToys.Services.EntityDbServices
 
             var toy = await _context.Toys
                 .Include(t => t.Images) 
+                .Include(t => t.Brand)
+                .Include(t => t.SubCategory)
                 .FirstOrDefaultAsync(t => t.ID.Equals(id));
 
 
