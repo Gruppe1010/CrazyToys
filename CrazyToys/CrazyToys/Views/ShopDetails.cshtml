@@ -1,7 +1,10 @@
 ﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@using CrazyToys.Entities.Entities
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
 @{
     Layout = "Master.cshtml";
+    Toy toy = ViewData["Toy"] as Toy;
+
 }
 
 <!-- Shop Details Section Begin -->
@@ -80,7 +83,7 @@
             <div class="row d-flex justify-content-center">
                 <div class="col-lg-8">
                     <div class="product__details__text">
-                        <h4>Hooded thermal anorak</h4>
+                        <h4>@toy.Name</h4>
                         <h3>$270.00 <span>70.00</span></h3>
                         <p>Coat with quilted lining and an adjustable hood. Featuring long sleeves with adjustable
                             cuff tabs, adjustable asymmetric hem with elastic side tabs and a front zip fastening
