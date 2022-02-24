@@ -55,7 +55,10 @@ namespace CrazyToys.Services.EntityDbServices
             }
 
             var toy = await _context.Toys
-                .FirstOrDefaultAsync(b => b.ID.Equals(id));
+                // TODO denne her laver MÅSKE et problem for os med at lægge dobbeltbilleder ned når vi henter den op,
+                // for at tjekke om den eksisterer og så lægger den ned i igen/opdaterer den
+                .Include(t => t.Images) 
+                .FirstOrDefaultAsync(t => t.ID.Equals(id));
 
 
             //var images = await _context.Images.Where(x => x.ToyID.Equals(id)).ToListAsync();
