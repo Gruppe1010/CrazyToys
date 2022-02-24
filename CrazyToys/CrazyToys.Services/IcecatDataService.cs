@@ -77,7 +77,14 @@ namespace CrazyToys.Services
 
         public async Task<SimpleToy> CreateOrUpdateSimpleToyInDb(SimpleToy simpleToy)
         {
-            return await _simpleToyDbService.Update(simpleToy);
+            SimpleToy simpleToyFromDb = await _simpleToyDbService.GetByProductIcecatId(simpleToy.IcecatId);
+
+            if(simpleToyFromDb != null)
+            {
+                simpleToyFromDb.UpdateValuesToAnotherToysValues(simpleToy);
+                return await _simpleToyDbService.Update(simpleToyFromDb);
+            }
+            return await _simpleToyDbService.Create(simpleToy);
         }
 
         public async Task<Dictionary<string, Brand>> GetBrandDict()
