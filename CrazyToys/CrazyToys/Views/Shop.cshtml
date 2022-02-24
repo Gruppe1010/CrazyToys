@@ -72,7 +72,10 @@
                                                 @{
                                                     foreach (var brand in brands)
                                                     {
-                                                        <li class="chosen-brand"><a href="#">@brand.Name (@brand.Toys.Count)</a></li>
+                                                        if(@brand.Toys.Count > 0)
+                                                        {
+                                                            <li class="chosen-brand"><a href="#">@brand.Name (@brand.Toys.Count)</a></li>
+                                                        }
                                                     }
                                                 }
                                             </ul>
