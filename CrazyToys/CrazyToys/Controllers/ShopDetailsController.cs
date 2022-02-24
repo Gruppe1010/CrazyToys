@@ -26,6 +26,7 @@ namespace CrazyToys.Web.Controllers
         }
 
         [HttpGet]
+        //[FromQuery bruges til at tage imod query parameter fra url]
         public async Task<IActionResult> Index([FromQuery(Name = "id")] string id)
         {
             Console.WriteLine("INDEEEEEX: " + id);
