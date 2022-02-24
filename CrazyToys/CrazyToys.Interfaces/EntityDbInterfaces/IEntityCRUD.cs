@@ -23,6 +23,8 @@ namespace CrazyToys.Interfaces.EntityDbInterfaces
 
         Task<T> CreateOrUpdate(T t);
 
+        Task DeleteRange(IList<T> tList);
+
         //Task<Object> Delete(string id);
 
 
