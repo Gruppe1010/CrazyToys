@@ -79,5 +79,9 @@ namespace CrazyToys.Services.EntityDbServices
                     .FirstOrDefaultAsync(s => s.IcecatId.Equals(icecatId));
         }
 
+        public Task DeleteRange(IList<SimpleToy> tList)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

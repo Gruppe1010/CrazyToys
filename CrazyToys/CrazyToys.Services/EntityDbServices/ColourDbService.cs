@@ -82,6 +82,11 @@ namespace CrazyToys.Services.EntityDbServices
         {
             throw new NotImplementedException();
         }
+
+        public Task DeleteRange(IList<Colour> tList)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 

@@ -127,5 +127,10 @@ namespace CrazyToys.Services.EntityDbServices
                 .Where(t => t.SimpleToy.OnMarket.Equals("1") && t.Stock != 0)
                 .ToListAsync();
         }
+
+        public Task DeleteRange(IList<Toy> tList)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

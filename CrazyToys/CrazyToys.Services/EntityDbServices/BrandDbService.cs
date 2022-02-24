@@ -29,6 +29,11 @@ namespace CrazyToys.Services.EntityDbServices
             throw new NotImplementedException();
         }
 
+        public Task DeleteRange(IList<Brand> tList)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<List<Brand>> GetAll()
         {
             return await _context.Brands.ToListAsync();

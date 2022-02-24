@@ -33,6 +33,11 @@ namespace CrazyToys.Services.EntityDbServices
             throw new NotImplementedException();
         }
 
+        public Task DeleteRange(IList<SubCategory> tList)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<List<SubCategory>> GetAll()
         {
             throw new NotImplementedException();

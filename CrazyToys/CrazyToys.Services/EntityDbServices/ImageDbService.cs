@@ -1,7 +1,6 @@
 ﻿using CrazyToys.Data.Data;
 using CrazyToys.Entities.Entities;
 using CrazyToys.Interfaces.EntityDbInterfaces;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,54 +9,57 @@ using System.Threading.Tasks;
 
 namespace CrazyToys.Services.EntityDbServices
 {
-    public class AgeGroupDbService : IEntityCRUD<AgeGroup>
+    public class ImageDbService : IEntityCRUD<Image>
     {
 
         private readonly Context _context;
 
-        public AgeGroupDbService(Context context)
+        public ImageDbService(Context context)
         {
             _context = context;
         }
 
-        public Task<AgeGroup> Create(AgeGroup t)
+        public Task<Image> Create(Image t)
         {
             throw new NotImplementedException();
         }
 
-        public Task<AgeGroup> CreateOrUpdate(AgeGroup t)
+        public Task<Image> CreateOrUpdate(Image t)
         {
             throw new NotImplementedException();
         }
 
-        public Task DeleteRange(IList<AgeGroup> tList)
+        public Task<List<Image>> GetAll()
         {
             throw new NotImplementedException();
         }
 
-        public async Task<List<AgeGroup>> GetAll()
-        {
-            return await _context.AgeGroups.ToListAsync();
-        }
-
-        public Task<List<AgeGroup>> GetAllWithRelations()
+        public Task<List<Image>> GetAllWithRelations()
         {
             throw new NotImplementedException();
         }
 
-        public Task<AgeGroup> GetById(string id)
+        public Task<Image> GetById(string id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<AgeGroup> GetByName(string name)
+        public Task<Image> GetByName(string name)
         {
             throw new NotImplementedException();
         }
 
-        public Task<AgeGroup> Update(AgeGroup t)
+        public Task<Image> Update(Image t)
         {
             throw new NotImplementedException();
         }
+
+        public async Task DeleteRange(IList<Image> images)
+        {
+
+            _context.Images.RemoveRange(images);
+            await _context.SaveChangesAsync();
+        }
+
     }
 }
