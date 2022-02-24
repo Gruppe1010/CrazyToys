@@ -26,6 +26,8 @@ namespace CrazyToys.Services
         private readonly ToyDbService _toyDbService;
         private readonly SimpleToyDbService _simpleToyDbService;
         private readonly IEntityCRUD<AgeGroup> _ageGroupDbService;
+        private readonly ImageDbService _imageDbService;
+
         private Random random;
         private IList<AgeGroup> ageGroups;
         private IList<Category> categories;
@@ -35,7 +37,7 @@ namespace CrazyToys.Services
 
         public IcecatDataService(IHttpClientFactory httpClientFactory, IEntityCRUD<Brand> brandDbService, IEntityCRUD<Category> categoryDbService,
             IEntityCRUD<SubCategory> subCategoryDbService, IEntityCRUD<Colour> colourDbService, ToyDbService toyDbService, SimpleToyDbService simpleToyDbService,
-            IEntityCRUD<AgeGroup> ageGroupDbService)
+            IEntityCRUD<AgeGroup> ageGroupDbService, ImageDbService imageDbService)
         {
             _httpClientFactory = httpClientFactory;
             _brandDbService = brandDbService;
@@ -45,6 +47,7 @@ namespace CrazyToys.Services
             _toyDbService = toyDbService;
             _ageGroupDbService = ageGroupDbService;
             _simpleToyDbService = simpleToyDbService;
+            _imageDbService = imageDbService;
             random = new Random();
 
             var ageGroupTask = _ageGroupDbService.GetAll();
@@ -285,6 +288,7 @@ namespace CrazyToys.Services
                 if(toyFromDb.Images.Count > 0)
                 {
                     // slet fra db
+                    await _imageDbService.DeleteRange(toyFromDb.Images);
                 }
 
                 
