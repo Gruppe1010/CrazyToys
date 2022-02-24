@@ -15,7 +15,7 @@ using Umbraco.Cms.Web.Common.Controllers;
 
 namespace CrazyToys.Web.Controllers
 {
-    public class ShopDetailsController : Microsoft.AspNetCore.Mvc.Controller
+    public class ShopDetailsController : RenderController
     {
         private readonly IHangfireService _hangfireService;
 
@@ -26,23 +26,26 @@ namespace CrazyToys.Web.Controllers
         private readonly ToyDbService _toyDbService;
         private readonly IEntityCRUD<AgeGroup> _ageGroupDbService;
 
-       
-        public ShopDetailsController(IHangfireService hangfireService, IEntityCRUD<Brand> brandDbService, IEntityCRUD<Category> categoryDbService, 
-            IEntityCRUD<Colour> colourDbService, ToyDbService toyDbService, IEntityCRUD<AgeGroup> ageGroupDbService)
+        public ShopDetailsController(ILogger<RenderController> logger, ICompositeViewEngine compositeViewEngine, IUmbracoContextAccessor umbracoContextAccessor) 
+            : base(logger, compositeViewEngine, umbracoContextAccessor)
         {
-            _hangfireService = hangfireService;
-            _brandDbService = brandDbService;
-            _categoryDbService = categoryDbService;
-            _colourDbService = colourDbService;
-            _toyDbService = toyDbService;
-            _ageGroupDbService = ageGroupDbService;
         }
 
-        public IActionResult Index(string? id)
+        [HttpGet]
+        public IActionResult Index([FromQuery(Name = "id")] string id)
         {
-            Console.WriteLine("INDEEEEEX");
-            return View("~/Views/ShopDetails.cshtml");
+            Console.WriteLine("INDEEEEEX: " + id);
+            return CurrentTemplate(CurrentPage);
         }
+
+        /*
+        public override IActionResult Index()
+        {
+            Console.WriteLine("hej");
+            return CurrentTemplate(CurrentPage);    
+        }
+        */
+
         /*
         //shop-details/product/id
         public IActionResult Product(string? id)
@@ -53,6 +56,7 @@ namespace CrazyToys.Web.Controllers
             return View("~/Views/ShopDetails.cshtml");
         }
         */
+
 
     }
 }
