@@ -39,5 +39,13 @@ namespace CrazyToys.Entities.Entities
             Errors = new List<Error>();
             SuccessfullyRetrievedAsJson = true;
         }
+
+        public void UpdateValuesToAnotherToysValues(SimpleToy simpleToy)
+        {
+            BrandId = simpleToy.BrandId;
+            OnMarket = simpleToy.OnMarket;
+            IcecatId = simpleToy.IcecatId;
+            DateString = simpleToy.DateString;
+        }
     }
 }
