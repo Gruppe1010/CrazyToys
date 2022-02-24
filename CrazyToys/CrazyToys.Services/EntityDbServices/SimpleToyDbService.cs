@@ -1,6 +1,7 @@
 ﻿using CrazyToys.Data.Data;
 using CrazyToys.Entities.Entities;
 using CrazyToys.Interfaces.EntityDbInterfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -71,5 +72,12 @@ namespace CrazyToys.Services.EntityDbServices
             await _context.SaveChangesAsync();
             return simpleToy;
         }
+
+        public async Task<SimpleToy> GetByProductIcecatId(string icecatId)
+        {
+            return await _context.SimpleToys
+                    .FirstOrDefaultAsync(s => s.IcecatId.Equals(icecatId));
+        }
+
     }
 }
