@@ -69,7 +69,7 @@ namespace CrazyToys.Services
             byte[] byteArray = Encoding.ASCII.GetBytes($"{username}:{password}");
             return Convert.ToBase64String(byteArray);
         }
-        
+
         public async Task<SimpleToy> CreateSimpleToyInDb(SimpleToy simpleToy)
         {
             return await _simpleToyDbService.Create(simpleToy);
@@ -79,7 +79,7 @@ namespace CrazyToys.Services
         {
             SimpleToy simpleToyFromDb = await _simpleToyDbService.GetByProductIcecatId(simpleToy.IcecatId);
 
-            if(simpleToyFromDb != null)
+            if (simpleToyFromDb != null)
             {
                 simpleToyFromDb.UpdateValuesToAnotherToysValues(simpleToy);
                 return await _simpleToyDbService.Update(simpleToyFromDb);
@@ -93,7 +93,7 @@ namespace CrazyToys.Services
 
             return brandList.ToDictionary(keySelector: b => b.ID, elementSelector: b => b);
         }
-       
+
         public async Task<Toy> GetSingleProduct(SimpleToy simpleToy)
         {
             Toy toy = null;
@@ -152,20 +152,18 @@ namespace CrazyToys.Services
                     toy.SubCategoryId = subCategoryId;
                     SubCategory subCat = await GetOrCreateSubCategory(subCategoryId, subCategoryName, categories);
 
-                    string urlLow = json["data"]["Image"]["Pic500x500"];
                     string urlHigh = json["data"]["Image"]["HighPic"];
 
-                    Image image = new Image(urlLow, urlHigh, 0);
+                    Image image = new Image(urlHigh, 0);
                     toy.Images.Add(image);
 
                     // tilføj resten af billeder som ligger i Gallery-key
                     foreach (dynamic img in json["data"]["Gallery"])
                     {
-                        string galleryImageUrlLow = img["Pic500x500"];
                         string galleryImageUrlHigh = img["Pic"];
                         int galleryImageNo = img["No"];
 
-                        Image galleryImage = new Image(galleryImageUrlLow, galleryImageUrlHigh, galleryImageNo);
+                        Image galleryImage = new Image(galleryImageUrlHigh, galleryImageNo);
                         toy.Images.Add(galleryImage);
                     }
 
@@ -252,7 +250,7 @@ namespace CrazyToys.Services
                         toy.AgeGroups = ageGroups;
                     }
                 }
-                
+
             }
 
             catch (Exception e)
@@ -284,6 +282,47 @@ namespace CrazyToys.Services
 
             if (toyFromDb != null)
             {
+                if(toyFromDb.Images.Count > 0)
+                {
+                    // slet fra db
+                }
+
+                
+
+                /*
+                if (toyFromDb.ID.Equals("bdc82548-848c-4f2f-884f-9544448d3f2a"))
+                {
+                    var noget = 1;
+                }
+                if (toy.Images.Count > 0)
+                {
+                    // vi tjekker om imaget allerede er tilkoblet
+                    for (int i = toy.Images.Count - 1; i >= 0; i--)
+                    {
+                        bool imageAlreadyAdded = false;
+
+                        foreach (Image toyFromDbImage in toyFromDb.Images)
+                        {
+                            if (toyFromDbImage.UrlHigh.Equals(toy.Images[i].UrlHigh))
+                            {
+                                //toy.Images[i].ID = toyFromDbImage.ID;
+                                imageAlreadyAdded = true;
+                                break;
+                            }
+                        }
+                        // hvis den allerede er på: slet imaget fra toy der lægges ned, så den ikke prøver at oprette imaget igen
+                        if (!imageAlreadyAdded)
+                        {
+                            //toyFromDb.Images.Add(toy.Images[i]);
+
+                            //toy.Images[i].ID = toyFromDbImage.ID;
+                            toy.Images.Remove(toy.Images[i]);
+                        }
+                    }
+                }
+                */
+
+
                 // hvis der er nogle colours på nyt toy-obj
                 // Efter denne if er kørt er der altså KUN nye farver på toy'et, som IKKE allerede er tilkoblet toyFromDb
                 if (toy.Colours.Count > 0)
@@ -384,7 +423,7 @@ namespace CrazyToys.Services
                     }
                 }
                 // Tilføj til db
-                subCategory =  await _subCategoryDbService.Create(subCategory);
+                subCategory = await _subCategoryDbService.Create(subCategory);
             }
             return subCategory;
         }
@@ -417,6 +456,6 @@ namespace CrazyToys.Services
             return await _simpleToyDbService.Update(simpleToy);
         }
 
-        
+
     }
 }

@@ -113,6 +113,7 @@ namespace CrazyToys.Services.EntityDbServices
             }
 
             var toy = await _context.Toys
+                .Include(t => t.Images)
                 .FirstOrDefaultAsync(t => t.ProductId.Equals(productId) && t.Brand.ID.Equals(brandId));
 
             return toy;
