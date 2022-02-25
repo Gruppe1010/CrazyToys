@@ -1,7 +1,11 @@
-﻿using CrazyToys.Interfaces;
+﻿using CrazyToys.Entities.DTOs;
+using CrazyToys.Entities.Entities;
+using CrazyToys.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 using Umbraco.Cms.Core.Web;
@@ -11,16 +15,15 @@ namespace CrazyToys.Web.Controllers
 {
     public class HomeController : RenderController
     {
-
-        //private readonly IProductDataService _icecatDataService;
+        private readonly ISessionService _sessionService;
         private readonly IHangfireService _hangfireService;
 
         public HomeController(ILogger<HomeController> logger, ICompositeViewEngine compositeViewEngine, 
-            IUmbracoContextAccessor umbracoContextAccessor, IHangfireService hangfireService)
+            IUmbracoContextAccessor umbracoContextAccessor, IHangfireService hangfireService, ISessionService sessionsService)
             : base(logger, compositeViewEngine, umbracoContextAccessor)
         {
-            //_icecatDataService = icecatDataService;
             _hangfireService = hangfireService;
+            _sessionService = sessionsService;
         }
 
         //
@@ -29,6 +32,12 @@ namespace CrazyToys.Web.Controllers
 
         public override IActionResult Index()
         {
+            // Session
+            SessionUser sessionUser = _sessionService.GetNewOrExistingSessionUser(HttpContext);
+
+            sessionUser.Cart.Add(new SelectedToy());
+
+            ViewData["CartQuantity"] = 13;//sessionUser.Cart.Count;
             string test = "gruppe10";
 
             ViewData["Test"] = test;//JsonConvert.SerializeObject(test);
