@@ -47,8 +47,13 @@ namespace CrazyToys.Web
         /// </remarks>
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<Context>(options =>
-            {
+            // session
+            services.AddSession(options => {
+                options.IdleTimeout = TimeSpan.FromSeconds(3600);
+            });
+
+            // db
+            services.AddDbContext<Context>(options => {
                 options.UseSqlServer(
                _config.GetConnectionString("context"));
                 options.EnableSensitiveDataLogging();
@@ -70,25 +75,23 @@ namespace CrazyToys.Web
 
             // Add the processing server as IHostedService
             services.AddHangfireServer();
+            services.AddScoped<IHangfireService, HangfireService>();
 
-            /*
-            services.AddDbContext<Context>(options =>
-            options.UseSqlServer(_config.GetConnectionString("context")),
-            ServiceLifetime.Transient);
-            */
+            // DbServices
             services.AddScoped<IEntityCRUD<Brand>, BrandDbService>();
             services.AddScoped<IEntityCRUD<Category>, CategoryDbService>();
             services.AddScoped<IEntityCRUD<SubCategory>, SubCategoryDbService>();
             services.AddScoped<IEntityCRUD<Colour>, ColourDbService>();
             services.AddScoped<ToyDbService>();
             services.AddScoped<ImageDbService>();
-
             services.AddScoped<SimpleToyDbService>();
             services.AddScoped<IEntityCRUD<AgeGroup>, AgeGroupDbService>();
-            services.AddScoped<IcecatDataService>();
-            //services.AddScoped<IProductDataService, IcecatDataService>();
-            services.AddScoped<IHangfireService, HangfireService>();
+
             
+            services.AddScoped<IcecatDataService>();
+            services.AddScoped<ISessionService, SessionService>();
+
+
             //Umbraco
             //pragma warning disable IDE0022 // Use expression body for methods
             services.AddUmbraco(_env, _config)
@@ -111,6 +114,9 @@ namespace CrazyToys.Web
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            // session
+            app.UseSession();
 
             //Hangfire
             app.UseHangfireDashboard();
