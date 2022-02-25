@@ -515,6 +515,7 @@ ol {
 }
 
 .header__nav__option a span {
+	padding-top: 15%; /*VORES*/
 	color: #0d0d0d;
 	font-size: 11px;
 	position: absolute;

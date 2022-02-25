@@ -14,3 +14,16 @@
     top: 0;
     left: 0;
 }
+
+.header-icons {
+    width: 150%;
+    max-width: 150% !important;
+}
+
+.bold700 {
+    font-weight: 700;
+}
+
+.size13px {
+    font-size: 13px !important;
+}
