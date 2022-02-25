@@ -51,7 +51,7 @@
                                         <div class="shop__sidebar__categories">
                                             <ul class="nice-scroll">
                                                 @{
-                                                    foreach (var category in categories)
+                                                    foreach (Category category in categories)
                                                     {
                                                         <li><a href="#">@category.Name</a></li>
                                                     }
@@ -70,7 +70,7 @@
                                         <div class="shop__sidebar__brand">
                                             <ul>
                                                 @{
-                                                    foreach (var brand in brands)
+                                                    foreach (Brand brand in brands)
                                                     {
                                                         if(@brand.Toys.Count > 0)
                                                         {
@@ -110,7 +110,7 @@
                                     <div class="card-body">
                                         <div class="shop__sidebar__size">
                                              @{
-                                                foreach (var ageGroup in ageGroups)
+                                                foreach (AgeGroup ageGroup in ageGroups)
                                                 {
                                                     <label class="hover" for="@ageGroup.ID">@ageGroup.Interval
                                                         <input type="radio" id="@ageGroup.ID">
@@ -129,7 +129,7 @@
                                     <div class="card-body">
                                         <div class="shop__sidebar__size">
                                             @{
-                                                foreach (var colour in colours)
+                                                foreach (Colour colour in colours)
                                                 {
                                                    <label class="hover" for="@colour.ID">@colour.Name
                                                         <input type="radio" id="@colour.ID">
@@ -179,11 +179,11 @@
                 <div class="row">
                     @{
                         //foreach (var toy in toys)
-                        for (int i = 0; i < (@toys.Count > 29 ? 30 : toys.Count); i++)
+                        for (int i = 0; i < 30; i++)
                         {
                             <div class="col-lg-4 col-md-6 col-sm-6">
                                 <div class="product__item">
-                                    <div class="product__item__pic set-bg" data-setbg="@(!string.IsNullOrWhiteSpace(toys[i].Images[0].UrlHigh) ? toys[i].Images[0].UrlHigh : toys[i].Brand.LogoUrl)">
+                                    <div class="product__item__pic set-bg" data-setbg="@toys[i].Images[0].UrlHigh">
                                         <a class="item-link" href="/shop-details?id=@toys[i].ID"></a> 
                                         <ul class="product__hover">
                                             <li><a href="#"><img src="img/icon/search.png" alt=""></a></li>
@@ -199,8 +199,6 @@
                             </div>
                         }
                     }
-
-
                 </div>
                 <div class="row">
                     <div class="col-lg-12">
