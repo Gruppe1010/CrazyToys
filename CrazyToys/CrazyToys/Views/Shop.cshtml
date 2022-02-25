@@ -179,7 +179,7 @@
                 <div class="row">
                     @{
                         //foreach (var toy in toys)
-                        for (int i = 0; i < 30; i++)
+                        for (int i = 0; i < (toys[i].Images.Count > 29 ? 30 : toys[i].Images.Count); i++)
                         {
                             <div class="col-lg-4 col-md-6 col-sm-6">
                                 <div class="product__item">
