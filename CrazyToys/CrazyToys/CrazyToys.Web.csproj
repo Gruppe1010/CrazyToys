@@ -12,6 +12,15 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Content Include="wwwroot\media\d0ldkvjk\toys2.png" />
+      <Content Include="wwwroot\media\fkhfmpp3\about1.jpg" />
+      <Content Include="wwwroot\media\if5lxk5v\toys1.png" />
+      <Content Include="wwwroot\media\kv0plesh\toys2.png" />
+      <Content Include="wwwroot\media\x53henfv\skateboard.jpg" />
+      <Content Include="wwwroot\media\y33dnahv\bente.jpg" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="Hangfire.AspNetCore" Version="1.7.28" />
         <PackageReference Include="Hangfire.Console" Version="1.4.2" />
         <PackageReference Include="Hangfire.Core" Version="1.7.28" />
