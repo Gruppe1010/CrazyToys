@@ -276,6 +276,12 @@ namespace CrazyToys.Services
 
         public async Task<Toy> CreateToyInDb(Toy toy)
         {
+            Toy toyFromDb = await _toyDbService.GetByProductIdAndBrandId(toy.ProductId, toy.BrandId);
+
+            if (toyFromDb != null)
+            {
+                return toy;
+            }
             return await _toyDbService.Create(toy);
         }
 
@@ -290,42 +296,6 @@ namespace CrazyToys.Services
                     // slet fra db
                     await _imageDbService.DeleteRange(toyFromDb.Images);
                 }
-
-                
-
-                /*
-                if (toyFromDb.ID.Equals("bdc82548-848c-4f2f-884f-9544448d3f2a"))
-                {
-                    var noget = 1;
-                }
-                if (toy.Images.Count > 0)
-                {
-                    // vi tjekker om imaget allerede er tilkoblet
-                    for (int i = toy.Images.Count - 1; i >= 0; i--)
-                    {
-                        bool imageAlreadyAdded = false;
-
-                        foreach (Image toyFromDbImage in toyFromDb.Images)
-                        {
-                            if (toyFromDbImage.UrlHigh.Equals(toy.Images[i].UrlHigh))
-                            {
-                                //toy.Images[i].ID = toyFromDbImage.ID;
-                                imageAlreadyAdded = true;
-                                break;
-                            }
-                        }
-                        // hvis den allerede er på: slet imaget fra toy der lægges ned, så den ikke prøver at oprette imaget igen
-                        if (!imageAlreadyAdded)
-                        {
-                            //toyFromDb.Images.Add(toy.Images[i]);
-
-                            //toy.Images[i].ID = toyFromDbImage.ID;
-                            toy.Images.Remove(toy.Images[i]);
-                        }
-                    }
-                }
-                */
-
 
                 // hvis der er nogle colours på nyt toy-obj
                 // Efter denne if er kørt er der altså KUN nye farver på toy'et, som IKKE allerede er tilkoblet toyFromDb
