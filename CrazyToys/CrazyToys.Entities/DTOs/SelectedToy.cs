@@ -11,8 +11,13 @@ namespace CrazyToys.Entities.DTOs
     {
         public Toy Toy { get; set; }
         public int Quantity { get; set; }
-
-
-
+        public double TotalPrice
+        {
+            get
+            {
+                return Toy.Price * Quantity;
+            }
+            set { }
+        }
     }
 }
