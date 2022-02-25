@@ -179,11 +179,11 @@
                 <div class="row">
                     @{
                         //foreach (var toy in toys)
-                        for (int i = 0; i < 30; i++)
+                        for (int i = 0; i < (@toys.Count > 29 ? 30 : toys.Count); i++)
                         {
                             <div class="col-lg-4 col-md-6 col-sm-6">
                                 <div class="product__item">
-                                    <div class="product__item__pic set-bg" data-setbg="@toys[i].Images[0].UrlHigh">
+                                    <div class="product__item__pic set-bg" data-setbg="@(!string.IsNullOrWhiteSpace(toys[i].Images[0].UrlHigh) ? toys[i].Images[0].UrlHigh : toys[i].Brand.LogoUrl)">
                                         <a class="item-link" href="/shop-details?id=@toys[i].ID"></a> 
                                         <ul class="product__hover">
                                             <li><a href="#"><img src="img/icon/search.png" alt=""></a></li>
