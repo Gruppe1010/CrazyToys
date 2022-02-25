@@ -12,6 +12,13 @@ namespace CrazyToys.Web.Logging
             DateTime timeOfError = DateTime.Now;
             string dateString = timeOfError.ToString();
 
+            string createDir = @"ErrorLogs";
+            // If directory does not exist, create it
+            if (!Directory.Exists(createDir))
+            {
+                Directory.CreateDirectory(createDir);
+            }
+
             string lines =
                 $"Dato: {dateString}\n" +
                 $"Fil: {className}\n" +
@@ -19,7 +26,7 @@ namespace CrazyToys.Web.Logging
                 $"Exception: {e}\n" +
                 $"ExceptionMessage: {e.Message}\n\n\n";
 
-            using StreamWriter file = new("../CrazyToys/OurLogs/Log.txt", append: true);
+            using StreamWriter file = new(createDir + "/Log.txt", append: true);
             await file.WriteLineAsync(lines);
         }
     }
