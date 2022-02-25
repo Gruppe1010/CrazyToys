@@ -75,7 +75,9 @@ namespace CrazyToys.Services
 
         public async Task<SimpleToy> CreateSimpleToyInDb(SimpleToy simpleToy)
         {
-            return await _simpleToyDbService.Create(simpleToy);
+            return await _simpleToyDbService.GetByProductIcecatId(simpleToy.IcecatId) == null
+                ? await _simpleToyDbService.Create(simpleToy)
+                : simpleToy;
         }
 
         public async Task<SimpleToy> CreateOrUpdateSimpleToyInDb(SimpleToy simpleToy)
@@ -276,13 +278,9 @@ namespace CrazyToys.Services
 
         public async Task<Toy> CreateToyInDb(Toy toy)
         {
-            Toy toyFromDb = await _toyDbService.GetByProductIdAndBrandId(toy.ProductId, toy.BrandId);
-
-            if (toyFromDb != null)
-            {
-                return toy;
-            }
-            return await _toyDbService.Create(toy);
+            return await _toyDbService.GetByProductIdAndBrandId(toy.ProductId, toy.BrandId) == null
+                ? await _toyDbService.Create(toy)
+                : toy;
         }
 
         public async Task<Toy> CreateOrUpdateToyInDb(Toy toy)
