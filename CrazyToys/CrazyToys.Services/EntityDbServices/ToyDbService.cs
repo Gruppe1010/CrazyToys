@@ -27,6 +27,8 @@ namespace CrazyToys.Services.EntityDbServices
             _context.Toys.Add(toy);
             await _context.SaveChangesAsync();
 
+            _solrToyService.CreateOrUpdate(new SolrToy(toy));
+
             return toy;
         }
 
@@ -108,6 +110,7 @@ namespace CrazyToys.Services.EntityDbServices
         {
             _context.Update(toy);
             await _context.SaveChangesAsync();
+            _solrToyService.CreateOrUpdate(new SolrToy(toy));
 
             return toy;
         }
