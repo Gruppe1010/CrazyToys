@@ -1,5 +1,6 @@
 using CrazyToys.Data.Data;
 using CrazyToys.Entities.Entities;
+using CrazyToys.Entities.SolrModels;
 using CrazyToys.Interfaces;
 using CrazyToys.Interfaces.EntityDbInterfaces;
 using CrazyToys.Services;
@@ -12,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SolrNet;
 using System;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Extensions;
@@ -100,6 +102,9 @@ namespace CrazyToys.Web
                 .AddComposers()
                 .Build();
             //pragma warning restore IDE0022 // Use expression body for methods
+
+            services.AddSolrNet<SolrToy>("https://localhost:8983/solr/solrtoys");
+            services.AddScoped<ISearchService<SolrToy>, SolrService<SolrToy, ISolrOperations<SolrToy>>>();
         }
 
         /// <summary>

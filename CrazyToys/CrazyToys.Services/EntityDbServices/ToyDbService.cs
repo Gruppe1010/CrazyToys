@@ -1,11 +1,12 @@
 ﻿using CrazyToys.Data.Data;
 using CrazyToys.Entities.Entities;
+using CrazyToys.Entities.SolrModels;
+using CrazyToys.Interfaces;
 using CrazyToys.Interfaces.EntityDbInterfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CrazyToys.Services.EntityDbServices
@@ -13,10 +14,12 @@ namespace CrazyToys.Services.EntityDbServices
     public class ToyDbService : IEntityCRUD<Toy>, IToyDbService
     {
         private readonly Context _context;
+        private readonly ISearchService<SolrToy> _solrToyService;
 
-        public ToyDbService(Context context)
+        public ToyDbService(Context context, ISearchService<SolrToy> solrToyService)
         {
             _context = context;
+            _solrToyService = solrToyService;
         }
 
         public async Task<Toy> Create(Toy toy)
@@ -33,13 +36,17 @@ namespace CrazyToys.Services.EntityDbServices
 
             if (toyFromDb != null) // TODO lav måske noget her
             {
-                return await Update(toy);
+                toy = await Update(toy);
+                _solrToyService.CreateOrUpdate(new SolrToy(toy));
+                return toy;
             }
             else
             {
-                return await Create(toy);
+                toy = await Create(toy);
+                _solrToyService.CreateOrUpdate(new SolrToy(toy));
+                return toy;
             }
-
+            
         }
 
         public async Task<List<Toy>> GetAll()

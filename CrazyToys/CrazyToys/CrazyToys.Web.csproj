@@ -25,6 +25,8 @@
         <PackageReference Include="Hangfire.Console" Version="1.4.2" />
         <PackageReference Include="Hangfire.Core" Version="1.7.28" />
         <PackageReference Include="Hangfire.SqlServer" Version="1.7.28" />
+        <PackageReference Include="SolrNet.Core" Version="1.0.19" />
+        <PackageReference Include="SolrNet.Microsoft.DependencyInjection" Version="1.0.19" />
         <PackageReference Include="Umbraco.Cms" Version="9.2.0" />
     </ItemGroup>
 
