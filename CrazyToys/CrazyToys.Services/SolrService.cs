@@ -9,10 +9,14 @@ namespace CrazyToys.Services
         where TSolrOperations : ISolrOperations<T>
     {
         private readonly TSolrOperations _solr;
-        public SolrService(ISearchService<T> solr)
+
+
+        
+        public SolrService(ISolrOperations<T> solr)
         {
             _solr = (TSolrOperations)solr;
         }
+        
 
         public bool CreateOrUpdate(T document)
         {
