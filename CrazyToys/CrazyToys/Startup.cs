@@ -89,10 +89,8 @@ namespace CrazyToys.Web
             services.AddScoped<SimpleToyDbService>();
             services.AddScoped<IEntityCRUD<AgeGroup>, AgeGroupDbService>();
 
-            
             services.AddScoped<IcecatDataService>();
             services.AddScoped<ISessionService, SessionService>();
-
 
             //Umbraco
             //pragma warning disable IDE0022 // Use expression body for methods
@@ -103,6 +101,7 @@ namespace CrazyToys.Web
                 .Build();
             //pragma warning restore IDE0022 // Use expression body for methods
 
+            // Solr
             services.AddSolrNet<SolrToy>("https://localhost:8983/solr/solrtoys");
             services.AddScoped<ISearchService<SolrToy>, SolrService<SolrToy, ISolrOperations<SolrToy>>>();
         }
