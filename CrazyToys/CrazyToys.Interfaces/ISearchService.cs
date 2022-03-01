@@ -1,9 +1,11 @@
 ﻿
+using System.Threading.Tasks;
+
 namespace CrazyToys.Interfaces
 {
     public interface ISearchService<T>
     {
-        bool CreateOrUpdate(T document);
+        Task<bool> CreateOrUpdate(T document);
         //bool Delete(T document);
     }
 }
