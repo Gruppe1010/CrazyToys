@@ -47,12 +47,18 @@ namespace CrazyToys.Services
                 */
 
                 JObject payLoad = new JObject(
-                new JProperty("id", "noget"),
+                new JProperty("id", "noget1"),
                 new JProperty("name", "xxxxxx"));
            
                 var httpContent = new StringContent(payLoad.ToString(), Encoding.UTF8, "application/json");
 
-                var httpClient = _httpClientFactory.CreateClient();
+                HttpClientHandler clientHandler = new HttpClientHandler();
+                clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+
+                // Pass the handler to httpclient(from you are calling api)
+                HttpClient httpClient = new HttpClient(clientHandler);
+
+                //var httpClient = _httpClientFactory.CreateClient();
                 //httpClient.Timeout = TimeSpan.FromMinutes(1000);
                 var httpResponseMessage = await httpClient.PostAsync(url, httpContent);
                 string noget = "hej";
@@ -72,7 +78,7 @@ namespace CrazyToys.Services
                 _solr.Commit();
                 return true;
             }
-            catch (SolrNetException ex)
+            catch (Exception ex)
             {
                 //Log exception
                 Console.WriteLine("Solr ex: " + ex);
