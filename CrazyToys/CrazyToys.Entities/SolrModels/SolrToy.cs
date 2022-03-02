@@ -1,6 +1,6 @@
 ﻿using CrazyToys.Entities.Entities;
 using SolrNet.Attributes;
-
+using System.Collections.Generic;
 
 namespace CrazyToys.Entities.SolrModels
 {
@@ -20,12 +20,12 @@ namespace CrazyToys.Entities.SolrModels
         public string ShortDescription { get; set; }
         [SolrField("longDescription")]
         public string LongDescription { get; set; }
-        //[SolrField("colours")]
-        //public IList<Colour> Colours { get; set; }
+        [SolrField("colours")]
+        public IList<Colour> Colours { get; set; }
         //[SolrField("ageGroups")]
         //public IList<AgeGroup> AgeGroups { get; set; }
-        //[SolrField("images")]
-        //public IList<Image> Images { get; set; }
+        [SolrField("images")]
+        public IList<string> Images { get; set; }
         //[SolrField("subCategory")]
         //public SubCategory SubCategory { get; set; } // nav-prop
         [SolrField("subCategoryId")]
@@ -43,9 +43,25 @@ namespace CrazyToys.Entities.SolrModels
             BrandId = toy.BrandId;
             ShortDescription = toy.ShortDescription;
             LongDescription = toy.LongDescription;
+            Colours = toy.Colours;
+            Images = test(toy);
             SubCategoryId = toy.SubCategoryId;
             Price = toy.Price;
             Stock = toy.Stock;
+        }
+        //TODODODODODODO HEHEHEHEHRHRHHEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEER
+        public IList<string> test(Toy toy)
+        {
+         
+            IList<string> list = new List<string>();
+            
+            foreach(var item in toy.Images)
+            {
+                list.Add(item.UrlHigh);
+            }
+
+
+            return list;
         }
     }
 }
