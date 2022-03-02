@@ -1,6 +1,7 @@
 ﻿using CrazyToys.Entities.Entities;
 using SolrNet.Attributes;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CrazyToys.Entities.SolrModels
 {
