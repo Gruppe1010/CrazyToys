@@ -102,7 +102,7 @@ namespace CrazyToys.Web
             //pragma warning restore IDE0022 // Use expression body for methods
 
             // Solr
-            services.AddSolrNet<SolrToy>("https://localhost:8983/solr/solrtoys");
+            services.AddSolrNet<SolrToy>("http://localhost:8983/solr/test");
             services.AddScoped<ISearchService<SolrToy>, SolrService<SolrToy, ISolrOperations<SolrToy>>>();
         }
 
@@ -147,7 +147,7 @@ namespace CrazyToys.Web
             string dailyUrl = "https://data.Icecat.biz/export/freexml/EN/daily.index.xml";
 
             recurringJobManager.AddOrUpdate<HangfireService>("IndexIcecat", r => r.GetProductsFromIcecat(indexUrl), Cron.Never);
-            recurringJobManager.AddOrUpdate<HangfireService>("DailyIcecat", r => r.GetProductsFromIcecat(dailyUrl), "00 02 * * *");
+            recurringJobManager.AddOrUpdate<HangfireService>("DailyIcecat", r => r.GetProductsFromIcecat(dailyUrl), "00 01 * * *");
         }
     }
 }

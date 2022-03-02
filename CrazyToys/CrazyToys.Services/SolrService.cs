@@ -33,47 +33,46 @@ namespace CrazyToys.Services
             try
             {
 
-                string url = "https://127.0.0.1:8983/solr/test/update/json/docs?commit=true";
-                /*
-                var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, url)
-                {
-                    Headers =
-                    {
-                        { HeaderNames.Accept, "application/json" },
-                    }
-                };
+                //string url = "http://127.0.0.1:8983/solr/test/update/json/docs?commit=true";
 
-                httpRequestMessage.Content = JsonContent.Create(new { id = "testId", name = "Vores test toy"});
-                */
+                ////var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, url)
+                ////{
+                ////    Headers =
+                ////    {
+                ////        { HeaderNames.Accept, "application/json" },
+                ////    }
+                ////};
 
-                JObject payLoad = new JObject(
-                new JProperty("id", "noget1"),
-                new JProperty("name", "xxxxxx"));
+                ////httpRequestMessage.Content = JsonContent.Create(new { id = "testId", name = "Vores test toy"});
+
+                //JObject payLoad = new JObject(
+                //new JProperty("id", "noget1"),
+                //new JProperty("name", "xxxxxx"));
            
-                var httpContent = new StringContent(payLoad.ToString(), Encoding.UTF8, "application/json");
+                //var httpContent = new StringContent(payLoad.ToString(), Encoding.UTF8, "application/json");
 
-                HttpClientHandler clientHandler = new HttpClientHandler();
-                clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+                ////HttpClientHandler clientHandler = new HttpClientHandler();
+                ////clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
 
-                // Pass the handler to httpclient(from you are calling api)
-                HttpClient httpClient = new HttpClient(clientHandler);
+                ////// Pass the handler to httpclient(from you are calling api)
+                ////HttpClient httpClient = new HttpClient(clientHandler);
 
                 //var httpClient = _httpClientFactory.CreateClient();
                 //httpClient.Timeout = TimeSpan.FromMinutes(1000);
-                var httpResponseMessage = await httpClient.PostAsync(url, httpContent);
-                string noget = "hej";
+                //var httpResponseMessage = await httpClient.PostAsync(url, httpContent);
+                //string noget = "hej";
 
-                if (httpResponseMessage.IsSuccessStatusCode)
-                {
+                ////if (httpResponseMessage.IsSuccessStatusCode)
+                ////{
 
-                    return true;
-
-
-                }
+                ////    return true;
 
 
+                ////}
 
-                    // If the id already exists, the record is updated, otherwise added   
+
+
+                // If the id already exists, the record is updated, otherwise added   
                 _solr.Add(document);
                 _solr.Commit();
                 return true;
