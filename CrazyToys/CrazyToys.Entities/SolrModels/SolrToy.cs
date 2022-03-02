@@ -12,8 +12,8 @@ namespace CrazyToys.Entities.SolrModels
         public string ProductId { get; set; }
         [SolrField("name")]
         public string Name { get; set; }
-        //[SolrField("brand")]
-        //public Brand Brand { get; set; }
+        [SolrField("brand")]
+        public string Brand { get; set; }
         [SolrField("brandId")]
         public string BrandId { get; set; } // foreign key
         [SolrField("shortDescription")]
@@ -21,13 +21,13 @@ namespace CrazyToys.Entities.SolrModels
         [SolrField("longDescription")]
         public string LongDescription { get; set; }
         [SolrField("colours")]
-        public IList<Colour> Colours { get; set; }
-        //[SolrField("ageGroups")]
-        //public IList<AgeGroup> AgeGroups { get; set; }
+        public IList<string> Colours { get; set; }
+        [SolrField("ageGroups")]
+        public IList<string> AgeGroups { get; set; }
         [SolrField("images")]
         public IList<string> Images { get; set; }
-        //[SolrField("subCategory")]
-        //public SubCategory SubCategory { get; set; } // nav-prop
+        [SolrField("subCategory")]
+        public string SubCategory { get; set; } // nav-prop
         [SolrField("subCategoryId")]
         public string SubCategoryId { get; set; }// foreign key
         [SolrField("price")]
@@ -43,25 +43,14 @@ namespace CrazyToys.Entities.SolrModels
             BrandId = toy.BrandId;
             ShortDescription = toy.ShortDescription;
             LongDescription = toy.LongDescription;
-            Colours = toy.Colours;
-            Images = test(toy);
             SubCategoryId = toy.SubCategoryId;
             Price = toy.Price;
             Stock = toy.Stock;
-        }
-        //TODODODODODODO HEHEHEHEHRHRHHEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEER
-        public IList<string> test(Toy toy)
-        {
-         
-            IList<string> list = new List<string>();
-            
-            foreach(var item in toy.Images)
-            {
-                list.Add(item.UrlHigh);
-            }
-
-
-            return list;
+            Brand = toy.Brand.Name;
+            Colours = toy.Colours.Select(c => c.Name).ToList();
+            AgeGroups = toy.AgeGroups.Select(a => a.Interval).ToList();
+            Images = toy.Images.Select(i => i.UrlHigh).ToList();
+            SubCategory = toy.SubCategory.Name;
         }
     }
 }
