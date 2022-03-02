@@ -1,4 +1,5 @@
-﻿using CrazyToys.Interfaces;
+﻿using CrazyToys.Entities.SolrModels;
+using CrazyToys.Interfaces;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -32,7 +33,7 @@ namespace CrazyToys.Services
         {
             try
             {
-
+                //SolrToy solrToy = (SolrToy)Convert.ChangeType(document, typeof(SolrToy));
                 //string url = "http://127.0.0.1:8983/solr/test/update/json/docs?commit=true";
 
                 ////var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, url)
@@ -48,7 +49,7 @@ namespace CrazyToys.Services
                 //JObject payLoad = new JObject(
                 //new JProperty("id", "noget1"),
                 //new JProperty("name", "xxxxxx"));
-           
+
                 //var httpContent = new StringContent(payLoad.ToString(), Encoding.UTF8, "application/json");
 
                 ////HttpClientHandler clientHandler = new HttpClientHandler();
@@ -69,8 +70,6 @@ namespace CrazyToys.Services
 
 
                 ////}
-
-
 
                 // If the id already exists, the record is updated, otherwise added   
                 _solr.Add(document);
