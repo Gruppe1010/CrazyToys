@@ -8,7 +8,7 @@ namespace CrazyToys.Entities.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string ID { get; set; }
         public string Name { get; set; }
-        public ICollection<SubCategory> SubCategories { get; set; }
+        public IList<SubCategory> SubCategories { get; set; }
 
         [Column("SortingKeywords")]
         public string _sortingKeywords { get; set; }

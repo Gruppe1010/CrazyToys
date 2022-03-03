@@ -10,7 +10,7 @@ namespace CrazyToys.Entities.Entities
     {
         public string ID { get; set; }
         public string Name { get; set; }
-        public ICollection<Category> Categories { get; set; }
+        public IList<Category> Categories { get; set; }
 
         public SubCategory(string iD, string name)
         {
