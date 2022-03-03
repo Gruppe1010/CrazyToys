@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hangfire.Server;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace CrazyToys.Interfaces
 {
     public interface IHangfireService
     {
-        Task GetProductsFromIcecat(string url);
+        Task GetProductsFromIcecat(string url, PerformContext context);
 
         Task CreateToysFromSimpleToys(bool isDaily, string dateString);
 

@@ -4,6 +4,7 @@ using CrazyToys.Interfaces;
 using CrazyToys.Interfaces.EntityDbInterfaces;
 using CrazyToys.Services.EntityDbServices;
 using Hangfire;
+using Hangfire.Server;
 using Microsoft.Net.Http.Headers;
 using System;
 using System.Collections.Generic;
@@ -41,7 +42,7 @@ namespace CrazyToys.Services
          * 
          * De lægges FØRST ned i SimpleToy-tabel for at undgå at processen af at hente alt fra filen afbrydes, hvis der sker en fejl i hentningen af et enkelt produkt
          * **/
-        public async Task GetProductsFromIcecat(string url)
+        public async Task GetProductsFromIcecat(string url, PerformContext context)
         {
             string credentials = _icecatDataService.GetIcecatCredentials();
 
@@ -97,7 +98,11 @@ namespace CrazyToys.Services
                 var createAllToysTask = CreateToysFromSimpleToys(url.Contains("daily"), dateString);
                 createAllToysTask.Wait();
 
-                BackgroundJob.Enqueue(() => UpdateSolrDb());
+                BackgroundJob.ContinueJobWith(context.BackgroundJob.Id, () => UpdateSolrDb());
+                /*
+                context
+                BackgroundJob.ContinueWith(() => UpdateSolrDb());
+                */
             }
         }
 
