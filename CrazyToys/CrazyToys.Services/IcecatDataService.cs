@@ -156,6 +156,7 @@ namespace CrazyToys.Services
 
                     toy.SubCategoryId = subCategoryId;
                     SubCategory subCat = await GetOrCreateSubCategory(subCategoryId, subCategoryName, categories);
+                    toy.SubCategory = subCat;
 
                     string urlHigh = json["data"]["Image"]["HighPic"];
 
@@ -394,8 +395,6 @@ namespace CrazyToys.Services
                         }
                     }
                 }
-                // Tilføj til db
-                subCategory = await _subCategoryDbService.Create(subCategory);
             }
             return subCategory;
         }
