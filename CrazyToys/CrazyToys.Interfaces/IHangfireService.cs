@@ -10,6 +10,9 @@ namespace CrazyToys.Interfaces
     {
         Task GetProductsFromIcecat(string url);
 
-        Task CreateToysFromSimpleToys(bool isDaily, string dateString); // TODO SLET DENNE IGEN
+        Task CreateToysFromSimpleToys(bool isDaily, string dateString);
+
+        Task UpdateSolrDb();
+
     }
 }

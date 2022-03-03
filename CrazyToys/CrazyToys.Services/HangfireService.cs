@@ -1,6 +1,9 @@
 ﻿using CrazyToys.Entities.Entities;
+using CrazyToys.Entities.SolrModels;
 using CrazyToys.Interfaces;
 using CrazyToys.Interfaces.EntityDbInterfaces;
+using CrazyToys.Services.EntityDbServices;
+using Hangfire;
 using Microsoft.Net.Http.Headers;
 using System;
 using System.Collections.Generic;
@@ -16,11 +19,18 @@ namespace CrazyToys.Services
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IcecatDataService _icecatDataService;
+        private readonly ISearchService<SolrToy> _solrService;
+        private readonly ToyDbService _toyDbService;
 
-        public HangfireService(IHttpClientFactory httpClientFactory, IcecatDataService icecatDataService)
+
+        public HangfireService(IHttpClientFactory httpClientFactory, IcecatDataService icecatDataService, 
+            ISearchService<SolrToy> solrService, ToyDbService toyDbService)
         {
             _httpClientFactory = httpClientFactory;
             _icecatDataService = icecatDataService;
+            _solrService = solrService;
+            _toyDbService = toyDbService;
+
         }
 
         /*
@@ -86,6 +96,8 @@ namespace CrazyToys.Services
                 // nu har vi lagt alle toys fra enten index eller daily successfuldt - nu skal de hentes op og lægges ned som Toy-objs
                 var createAllToysTask = CreateToysFromSimpleToys(url.Contains("daily"), dateString);
                 createAllToysTask.Wait();
+
+                BackgroundJob.Enqueue(() => UpdateSolrDb());
             }
         }
 
@@ -112,6 +124,27 @@ namespace CrazyToys.Services
                                   : await _icecatDataService.CreateToyInDb(toy);
                 }
             }
+        }
+
+        /*
+         * 
+         * 
+         * 
+         * **/
+        public async Task UpdateSolrDb()
+        {
+            // hent alle Toys op fra db
+            List<Toy> toys = await _toyDbService.GetAllWithRelations();
+
+            // convert to SolrToy
+            List<SolrToy> solrToys = new List<SolrToy>();
+            
+            toys.ForEach(toy => {
+                solrToys.Add(new SolrToy(toy));
+            });
+
+            // for each update den i solr
+            solrToys.ForEach(async solrToy => await _solrService.CreateOrUpdate(solrToy));
         }
     }
 }
