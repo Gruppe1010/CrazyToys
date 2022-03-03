@@ -150,8 +150,10 @@ namespace CrazyToys.Web
             recurringJobManager.AddOrUpdate<HangfireService>("DailyIcecat", hangfireService => hangfireService.GetProductsFromIcecat(dailyUrl, null), "00 01 * * *");
             // TODO denne er bare for convenience 
             recurringJobManager.AddOrUpdate<HangfireService>("UpdateSolrDb", hangfireService => hangfireService.UpdateSolrDb(), Cron.Never);
+            recurringJobManager.AddOrUpdate<HangfireService>("DeleteSolrDb", hangfireService => hangfireService.DeleteSolrDb(), Cron.Never);
 
-            
+
+
 
         }
     }

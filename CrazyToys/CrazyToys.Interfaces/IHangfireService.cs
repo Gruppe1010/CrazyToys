@@ -15,5 +15,7 @@ namespace CrazyToys.Interfaces
 
         Task UpdateSolrDb();
 
+        void DeleteSolrDb();
+
     }
 }

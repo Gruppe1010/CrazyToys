@@ -151,5 +151,10 @@ namespace CrazyToys.Services
             // for each update den i solr
             solrToys.ForEach(async solrToy => await _solrService.CreateOrUpdate(solrToy));
         }
+
+        public void DeleteSolrDb()
+        {
+            _solrService.DeleteAll();
+        }
     }
 }

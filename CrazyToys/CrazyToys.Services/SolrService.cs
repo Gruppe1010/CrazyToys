@@ -49,23 +49,29 @@ namespace CrazyToys.Services
                 return false;
             }
         }
-        /*
-        public bool Delete(T document)
+
+        public void DeleteAll()
         {
-            try
-            {
-                //Can also delete by id                
-                _solr.Delete(document);
-                _solr.Commit();
-                return true;
-            }
-            catch (SolrNetException ex)
-            {
-                //Log exception
-                Console.WriteLine("Solr ex: " + ex);
-                return false;
-            }
+            _solr.Delete(new SolrHasValueQuery("id"));
+            _solr.Commit();
         }
-        */
+        /*
+public bool Delete(T document)
+{
+   try
+   {
+       //Can also delete by id                
+       _solr.Delete(document);
+       _solr.Commit();
+       return true;
+   }
+   catch (SolrNetException ex)
+   {
+       //Log exception
+       Console.WriteLine("Solr ex: " + ex);
+       return false;
+   }
+}
+*/
     }
 }
