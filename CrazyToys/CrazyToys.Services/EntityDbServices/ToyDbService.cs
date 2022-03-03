@@ -14,12 +14,12 @@ namespace CrazyToys.Services.EntityDbServices
     public class ToyDbService : IEntityCRUD<Toy>, IToyDbService
     {
         private readonly Context _context;
-        private readonly ISearchService<SolrToy> _solrToyService;
+        private readonly ISearchService<SolrToy> _solrService;
 
-        public ToyDbService(Context context, ISearchService<SolrToy> solrToyService)
+        public ToyDbService(Context context, ISearchService<SolrToy> solrService)
         {
             _context = context;
-            _solrToyService = solrToyService;
+            _solrService = solrService;
         }
 
         public async Task<Toy> Create(Toy toy)
@@ -27,28 +27,22 @@ namespace CrazyToys.Services.EntityDbServices
             _context.Toys.Add(toy);
             await _context.SaveChangesAsync();
 
-            await _solrToyService.CreateOrUpdate(new SolrToy(toy));
-
             return toy;
         }
 
+        // TODO slet hvis ikke bruges
         public async Task<Toy> CreateOrUpdate(Toy toy)
         {
             Toy toyFromDb = await GetById(toy.ID);
 
             if (toyFromDb != null) // TODO lav måske noget her
             {
-                toy = await Update(toy);
-                _solrToyService.CreateOrUpdate(new SolrToy(toy));
-                return toy;
+                return await Update(toy);
             }
             else
             {
-                toy = await Create(toy);
-                _solrToyService.CreateOrUpdate(new SolrToy(toy));
-                return toy;
+                return await Create(toy);
             }
-            
         }
 
         public async Task<List<Toy>> GetAll()
@@ -68,13 +62,6 @@ namespace CrazyToys.Services.EntityDbServices
                 .Include(t => t.Brand)
                 .Include(t => t.SubCategory)
                 .FirstOrDefaultAsync(t => t.ID.Equals(id));
-
-
-            //var images = await _context.Images.Where(x => x.ToyID.Equals(id)).ToListAsync();
-            //var colours = await _context.ColourToy.Where(x => x.ColourToy == id).ToListAsync();
-            //var ageGroups = await _context.AgeGroups.Where(x => x.ID == id).ToListAsync();
-
-            //_context.ChangeTracker.Clear(); // TODO er vi sikre på at vi skal have denne?
 
             return toy;
         }
@@ -110,7 +97,6 @@ namespace CrazyToys.Services.EntityDbServices
         {
             _context.Update(toy);
             await _context.SaveChangesAsync();
-            await _solrToyService.CreateOrUpdate(new SolrToy(toy));
 
             return toy;
         }
@@ -134,6 +120,7 @@ namespace CrazyToys.Services.EntityDbServices
             var toys = await _context.Toys
                 .Include(t => t.Images)
                 .Include(t => t.SubCategory)
+                //.Include(t => t.SimpleToy)
                 .Where(t => t.SimpleToy.OnMarket.Equals("1") && t.Stock != 0)
                 .ToListAsync();
 
