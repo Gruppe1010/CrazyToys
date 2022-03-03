@@ -146,8 +146,11 @@ namespace CrazyToys.Web
             string indexUrl = "https://data.Icecat.biz/export/freexml/EN/files.index.xml";
             string dailyUrl = "https://data.Icecat.biz/export/freexml/EN/daily.index.xml";
 
-            recurringJobManager.AddOrUpdate<HangfireService>("IndexIcecat", r => r.GetProductsFromIcecat(indexUrl), Cron.Never);
-            recurringJobManager.AddOrUpdate<HangfireService>("DailyIcecat", r => r.GetProductsFromIcecat(dailyUrl), "00 01 * * *");
+            recurringJobManager.AddOrUpdate<HangfireService>("IndexIcecat", hangfireService => hangfireService.GetProductsFromIcecat(indexUrl), Cron.Never);
+            recurringJobManager.AddOrUpdate<HangfireService>("DailyIcecat", hangfireService => hangfireService.GetProductsFromIcecat(dailyUrl), "00 01 * * *");
+            // TODO denne er bare for convenience 
+            recurringJobManager.AddOrUpdate<HangfireService>("UpdateSolrDb", hangfireService => hangfireService.UpdateSolrDb(), Cron.Never);
+
         }
     }
 }
