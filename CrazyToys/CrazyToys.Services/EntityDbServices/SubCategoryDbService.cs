@@ -43,9 +43,11 @@ namespace CrazyToys.Services.EntityDbServices
             throw new NotImplementedException();
         }
 
-        public Task<List<SubCategory>> GetAllWithRelations()
+        public async Task<List<SubCategory>> GetAllWithRelations()
         {
-            throw new NotImplementedException();
+            return await _context.SubCategories
+                .Include(s => s.Categories)
+                .ToListAsync();
         }
 
         public async Task<SubCategory> GetById(string id)
