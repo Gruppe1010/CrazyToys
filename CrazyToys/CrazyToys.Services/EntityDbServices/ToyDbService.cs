@@ -131,11 +131,21 @@ namespace CrazyToys.Services.EntityDbServices
 
         public async Task<List<Toy>> GetAllWithRelations()
         {
-            // TODO lav noget med relations
-            return await _context.Toys
+            var toys = await _context.Toys
                 .Include(t => t.Images)
+                .Include(t => t.SubCategory)
                 .Where(t => t.SimpleToy.OnMarket.Equals("1") && t.Stock != 0)
                 .ToListAsync();
+
+            foreach (var toy in toys)
+            {
+                toy.SubCategory.Categories = await _context.Categories
+                    .Include(s => s.SubCategories)
+                    .Where(s => s.SubCategories.Contains(toy.SubCategory))
+                    .ToListAsync();
+                toy.SubCategory.Categories.ToList().ForEach(c => c.SubCategories = null);
+            }
+            return toys;
         }
 
         public Task DeleteRange(IList<Toy> tList)
