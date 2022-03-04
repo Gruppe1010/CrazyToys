@@ -93,7 +93,7 @@ namespace CrazyToys.Services
             // For at få result fra FacetFieldQuery skal FacetFields[] kaldes
             foreach (var facet in facets.FacetFields["categories"])
             {
-                categoryDict.Add(facet.Key, facet.Value);
+                categoryDict.Add(char.ToUpper(facet.Key[0]) + facet.Key.Substring(1), facet.Value);
             }
 
             return categoryDict;
