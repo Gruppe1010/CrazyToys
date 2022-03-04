@@ -3,8 +3,8 @@
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Shop>
 @{
     Layout = "Master.cshtml";
-    var categories = ViewData["Categories"] as List<Category>;
-    var brands = ViewData["Brands"] as List<Brand>;
+    var categories = ViewData["Categories"] as Dictionary<string, int>;
+    var brands = ViewData["Brands"] as Dictionary<string, int>;
     var ageGroups = ViewData["AgeGroups"] as List<AgeGroup>;
     var colours = ViewData["Colours"] as List<Colour>;
     var toys = ViewData["Toys"] as List<Toy>;
@@ -51,9 +51,9 @@
                                         <div class="shop__sidebar__categories">
                                             <ul class="nice-scroll">
                                                 @{
-                                                    foreach (Category category in categories)
+                                                    foreach (KeyValuePair<string, int> category in categories)
                                                     {
-                                                        <li><a href="#">@category.Name</a></li>
+                                                        <li><a href="#">char.ToUpper(@category.Key[0]) + @category.Key.Substring(1) (@category.Value)</a></li>
                                                     }
                                                 }
                                             </ul>
@@ -68,14 +68,11 @@
                                 <div id="collapseTwo" class="collapse show" data-parent="#accordionExample">
                                     <div class="card-body">
                                         <div class="shop__sidebar__brand">
-                                            <ul>
+                                            <ul id="ulBrand">
                                                 @{
-                                                    foreach (Brand brand in brands)
+                                                    foreach (KeyValuePair<string, int> brand in brands)
                                                     {
-                                                        if(@brand.Toys.Count > 0)
-                                                        {
-                                                            <li class="chosen-brand"><a href="#">@brand.Name (@brand.Toys.Count)</a></li>
-                                                        }
+                                                        <li class="chosen-brand"><a href="#">@brand.Key (@brand.Value)</a></li>
                                                     }
                                                 }
                                             </ul>
@@ -216,3 +213,6 @@
     </div>
 </section>
 <!-- Shop Section End -->
+
+
+    <script src="~/scripts/shop.js"></script>
