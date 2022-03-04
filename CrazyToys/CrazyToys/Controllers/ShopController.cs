@@ -49,29 +49,32 @@ namespace CrazyToys.Web.Controllers
         // Summary:
         //     Before the controller executes we will handle redirects and not founds
 
-        public override IActionResult Index()
+
+        [HttpGet]
+        public async Task<IActionResult> Index(
+            [FromQuery(Name = "category")] string category, // én
+            [FromQuery(Name = "subCategory")] string subCategory, // én
+            [FromQuery(Name = "brands")] string brands,
+            [FromQuery(Name = "price")] string price,
+            [FromQuery(Name = "ageGroups")] string ageGroups,
+            [FromQuery(Name = "colours")] string colours)
         {
+
+            Console.WriteLine(String.IsNullOrWhiteSpace(category));
 
             Dictionary<string, int> brandDict = _solrService.GetBrandFacets();
             Dictionary<string, int> categoryDict = _solrService.GetCategoryFacets();
+            List<String> ageGroups = _solrService.GetAgeGroupsFacets();
 
 
+            // lav om til dict
+            var ageGroupsDict = await _ageGroupDbService.GetAll();
+            ageGroupsDict.Sort((x, y) => x.Interval[0].CompareTo(y.Interval[0]));
 
-
-            var getAllAgeGroupsTask = _ageGroupDbService.GetAll();
-            getAllAgeGroupsTask.Wait();
-            List<AgeGroup> ageGroups = getAllAgeGroupsTask.Result;
-            ageGroups.Sort((x, y) => x.Interval[0].CompareTo(y.Interval[0]));
-
-            var getAllColoursTask = _colourDbService.GetAll();
-            getAllColoursTask.Wait();
-            List<Colour> colours = getAllColoursTask.Result;
-
+            var coloursDict = await _colourDbService.GetAll();
             
-            var getAllToysTask = _toyDbService.GetAllWithRelations();
-            getAllToysTask.Wait();
-            
-            List<Toy> toys = getAllToysTask.Result;
+            var toys = await _toyDbService.GetAllWithRelations();
+         
 
             ViewData["Categories"] = categoryDict;
             ViewData["AgeGroups"] = ageGroups;
