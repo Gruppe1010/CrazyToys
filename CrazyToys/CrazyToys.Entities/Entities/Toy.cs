@@ -15,7 +15,7 @@ namespace CrazyToys.Entities.Entities
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
         public IList<Colour> Colours { get; set; }
-        public IList<AgeGroup> AgeGroups { get; set; }
+        public IList<AgeGroup> AgeGroups { get; set; } // TODO mandag : lav om til enkelt obj
         public IList<Image> Images { get; set; }
         public SubCategory SubCategory { get; set; } // nav-prop
         public string SubCategoryId { get; set; }// foreign key
