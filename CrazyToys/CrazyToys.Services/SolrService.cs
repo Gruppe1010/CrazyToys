@@ -99,5 +99,29 @@ namespace CrazyToys.Services
             return categoryDict;
         }
 
+        public List<string> GetAgeGroupsFacets()
+        {
+
+            List<string> ageGroups = new List<string>();
+
+            var facets = _solr.Query(SolrQuery.All, new QueryOptions
+            {
+                Rows = 0,
+                Facet = new FacetParameters
+                {
+                    Queries = new[] { new SolrFacetFieldQuery("ageGroup") }
+                }
+            });
+            // For at få result fra FacetFieldQuery skal FacetFields[] kaldes
+            foreach (var facet in facets.FacetFields["ageGroup"])
+            {
+                ageGroups.Add(facet.Key);
+            }
+
+            return ageGroups;
+
+        }
+       
+
     }
 }
