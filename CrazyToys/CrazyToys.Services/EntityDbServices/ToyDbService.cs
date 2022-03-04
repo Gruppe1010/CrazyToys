@@ -120,7 +120,7 @@ namespace CrazyToys.Services.EntityDbServices
             var toys = await _context.Toys
                 .Include(t => t.Images)
                 .Include(t => t.SubCategory)
-                //.Include(t => t.SimpleToy)
+                .Include(t => t.Colours)
                 .Where(t => t.SimpleToy.OnMarket.Equals("1") && t.Stock != 0)
                 .ToListAsync();
 
