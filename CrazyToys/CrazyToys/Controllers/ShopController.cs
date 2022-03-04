@@ -1,4 +1,5 @@
 ﻿using CrazyToys.Entities.Entities;
+using CrazyToys.Entities.SolrModels;
 using CrazyToys.Interfaces;
 using CrazyToys.Interfaces.EntityDbInterfaces;
 using CrazyToys.Services.EntityDbServices;
@@ -18,8 +19,9 @@ namespace CrazyToys.Web.Controllers
     public class ShopController : RenderController
     {
         private readonly IHangfireService _hangfireService;
+        private readonly ISearchService<SolrToy> _solrService;
 
-        
+
         private readonly IEntityCRUD<Brand> _brandDbService;
         private readonly IEntityCRUD<Category> _categoryDbService;
         private readonly IEntityCRUD<Colour> _colourDbService;
@@ -31,7 +33,7 @@ namespace CrazyToys.Web.Controllers
             IUmbracoContextAccessor umbracoContextAccessor, IHangfireService hangfireService,
             IEntityCRUD<Brand> brandDbService, IEntityCRUD<Category> categoryDbService,
             IEntityCRUD<Colour> colourDbService, ToyDbService toyDbService,
-            IEntityCRUD<AgeGroup> ageGroupDbService)
+            IEntityCRUD<AgeGroup> ageGroupDbService, ISearchService<SolrToy> solrService)
             : base(logger, compositeViewEngine, umbracoContextAccessor)
         {
             _hangfireService = hangfireService;
@@ -40,6 +42,7 @@ namespace CrazyToys.Web.Controllers
             _colourDbService = colourDbService;
             _toyDbService = toyDbService;
             _ageGroupDbService = ageGroupDbService;
+            _solrService = solrService;
         }
 
         //
@@ -48,18 +51,17 @@ namespace CrazyToys.Web.Controllers
 
         public override IActionResult Index()
         {
-            var getAllCategoriesTask = _categoryDbService.GetAllWithRelations();
-            getAllCategoriesTask.Wait();
-            List<Category> categories = getAllCategoriesTask.Result;
+
+            Dictionary<string, int> brandDict = _solrService.GetBrandFacets();
+            Dictionary<string, int> categoryDict = _solrService.GetCategoryFacets();
+
+
+
 
             var getAllAgeGroupsTask = _ageGroupDbService.GetAll();
             getAllAgeGroupsTask.Wait();
             List<AgeGroup> ageGroups = getAllAgeGroupsTask.Result;
             ageGroups.Sort((x, y) => x.Interval[0].CompareTo(y.Interval[0]));
-
-            var getAllBrandsTask = _brandDbService.GetAllWithRelations();
-            getAllBrandsTask.Wait();
-            List<Brand> brands = getAllBrandsTask.Result.OrderBy(o => o.Name).ToList();
 
             var getAllColoursTask = _colourDbService.GetAll();
             getAllColoursTask.Wait();
@@ -71,9 +73,9 @@ namespace CrazyToys.Web.Controllers
             
             List<Toy> toys = getAllToysTask.Result;
 
-            ViewData["Categories"] = categories;
+            ViewData["Categories"] = categoryDict;
             ViewData["AgeGroups"] = ageGroups;
-            ViewData["Brands"] = brands;
+            ViewData["Brands"] = brandDict;
             ViewData["Colours"] = colours;
             ViewData["Toys"] = toys;
 
