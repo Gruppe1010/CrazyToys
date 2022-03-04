@@ -53,7 +53,7 @@
                                                 @{
                                                     foreach (KeyValuePair<string, int> category in categories)
                                                     {
-                                                        <li><a href="#">char.ToUpper(@category.Key[0]) + @category.Key.Substring(1) (@category.Value)</a></li>
+                                                        <li><a href="#">@category.Key (@category.Value)</a></li>
                                                     }
                                                 }
                                             </ul>
