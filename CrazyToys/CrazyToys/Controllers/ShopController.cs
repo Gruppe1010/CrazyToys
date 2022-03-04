@@ -64,7 +64,7 @@ namespace CrazyToys.Web.Controllers
 
             Dictionary<string, int> brandDict = _solrService.GetBrandFacets();
             Dictionary<string, int> categoryDict = _solrService.GetCategoryFacets();
-            List<String> ageGroups = _solrService.GetAgeGroupsFacets();
+            List<string> ageGroupsList= _solrService.GetAgeGroupsFacets();
 
 
             // lav om til dict
@@ -77,7 +77,7 @@ namespace CrazyToys.Web.Controllers
          
 
             ViewData["Categories"] = categoryDict;
-            ViewData["AgeGroups"] = ageGroups;
+            ViewData["AgeGroups"] = ageGroupsList;
             ViewData["Brands"] = brandDict;
             ViewData["Colours"] = colours;
             ViewData["Toys"] = toys;

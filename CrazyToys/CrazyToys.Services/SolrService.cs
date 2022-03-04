@@ -101,7 +101,6 @@ namespace CrazyToys.Services
 
         public List<string> GetAgeGroupsFacets()
         {
-
             List<string> ageGroups = new List<string>();
 
             var facets = _solr.Query(SolrQuery.All, new QueryOptions
@@ -119,7 +118,6 @@ namespace CrazyToys.Services
             }
 
             return ageGroups;
-
         }
        
 
