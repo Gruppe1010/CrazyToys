@@ -15,5 +15,8 @@ namespace CrazyToys.Interfaces
         Dictionary<string, int> GetCategoryFacets();
 
         List<string> GetAgeGroupsFacets();
+
+        List<string> GetColourFacets();
+
     }
 }

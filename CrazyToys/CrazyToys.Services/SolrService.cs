@@ -116,8 +116,12 @@ namespace CrazyToys.Services
             {
                 ageGroupIntervals.Add(facet.Key);
             }
-
-            return ageGroupIntervals;
+            return ageGroups;
         }
+
+            return ageGroups;
+        }
+       
+
     }
 }
