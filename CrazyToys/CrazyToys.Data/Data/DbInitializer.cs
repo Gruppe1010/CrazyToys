@@ -66,7 +66,10 @@ namespace CrazyToys.Data.Data
                     new PriceGroup(200, 300),
                     new PriceGroup(300, 400),
                     new PriceGroup(400, 500),
-                    new PriceGroup(500, 0)
+                    new PriceGroup(500, 600),
+                    new PriceGroup(600, 700),
+                    new PriceGroup(700, 800),
+                    new PriceGroup(800, 0)
                 };
                 foreach (PriceGroup priceGroup in priceGroups)
                 {
