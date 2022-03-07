@@ -153,8 +153,6 @@ namespace CrazyToys.Services
         {
             await UpdateSolrToys();
             await UpdateSolrPriceGroups();
-
-
         }
 
         public async Task UpdateSolrToys()
@@ -176,7 +174,7 @@ namespace CrazyToys.Services
         public async Task UpdateSolrPriceGroups()
         {
             // hent alle Toys op fra db
-            List<PriceGroup> priceGroups = await _priceGroupDbService.GetAllWithRelations();
+            List<PriceGroup> priceGroups = await _priceGroupDbService.GetAll();
 
             // convert to SolrToy
             List<SolrPriceGroup> solrPriceGroups = new List<SolrPriceGroup>();
