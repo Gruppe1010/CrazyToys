@@ -10,13 +10,13 @@ namespace CrazyToys.Interfaces
         bool CreateOrUpdate(T document);
         void DeleteAll();
 
-        Dictionary<string, int> GetBrandFacets();
+        Dictionary<string, int> GetBrandFacet();
 
-        Dictionary<string, int> GetCategoryFacets();
+        Dictionary<string, int> GetCategoryFacet();
 
-        List<string> GetAgeGroupsFacets();
+        List<string> GetAgeGroupsFacet();
 
-        List<string> GetColourFacets();
+        List<string> GetColourFacet();
 
     }
 }

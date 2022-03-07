@@ -57,7 +57,7 @@ namespace CrazyToys.Services
             _solr.Commit();
         }
 
-        public Dictionary<string, int> GetBrandFacets()
+        public Dictionary<string, int> GetBrandFacet()
         {
             Dictionary<string, int> brandsDict = new Dictionary<string, int>();
 
@@ -78,7 +78,7 @@ namespace CrazyToys.Services
             return brandsDict;
         }
 
-        public Dictionary<string, int> GetCategoryFacets()
+        public Dictionary<string, int> GetCategoryFacet()
         {
             Dictionary<string, int> categoryDict = new Dictionary<string, int>();
 
@@ -99,7 +99,7 @@ namespace CrazyToys.Services
             return categoryDict;
         }
 
-        public List<string> GetAgeGroupsFacets()
+        public List<string> GetAgeGroupsFacet()
         {
             List<string> ageGroupIntervals = new List<string>();
 
@@ -122,7 +122,7 @@ namespace CrazyToys.Services
            
 
       
-        public List<string> GetColourFacets()
+        public List<string> GetColourFacet()
         {
             List<string> colours = new List<string>();
 
