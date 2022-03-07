@@ -23,6 +23,8 @@ namespace CrazyToys.Entities.SolrModels
         public IList<string> Colours { get; set; }
         [SolrField("ageGroup")]
         public string AgeGroup { get; set; }
+        [SolrField("priceGroup")]
+        public string PriceGroup { get; set; }
         [SolrField("ageGroupIntervals")]
         public IList<string> AgeGroupIntevals { get; set; }
         [SolrField("images")]

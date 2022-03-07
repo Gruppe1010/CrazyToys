@@ -106,9 +106,6 @@ namespace CrazyToys.Web
             // Solr
             services.AddSolrNet<SolrToy>("http://localhost:8983/solr/toys");
             services.AddScoped<ISearchService<SolrToy>, SolrService<SolrToy, ISolrOperations<SolrToy>>>();
-
-            services.AddSolrNet<SolrPriceGroup>("http://localhost:8983/solr/price_groups");
-            services.AddScoped<ISearchService<SolrPriceGroup>, SolrService<SolrPriceGroup, ISolrOperations<SolrPriceGroup>>>();
         }
 
         /// <summary>
