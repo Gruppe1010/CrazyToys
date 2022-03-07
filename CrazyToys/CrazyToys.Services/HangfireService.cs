@@ -21,8 +21,6 @@ namespace CrazyToys.Services
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IcecatDataService _icecatDataService;
         private readonly ISearchService<SolrToy> _solrToyService;
-        private readonly ISearchService<SolrPriceGroup> _solrPriceGroupService;
-
         private readonly ToyDbService _toyDbService;
         private readonly IEntityCRUD<PriceGroup> _priceGroupDbService;
 
@@ -34,7 +32,6 @@ namespace CrazyToys.Services
             IHttpClientFactory httpClientFactory, 
             IcecatDataService icecatDataService, 
             ISearchService<SolrToy> solrToyService, 
-            ISearchService<SolrPriceGroup> solrPriceGroupService, 
             ToyDbService toyDbService,
             IEntityCRUD<PriceGroup> priceGroupDbService)
         {
@@ -42,7 +39,6 @@ namespace CrazyToys.Services
             _icecatDataService = icecatDataService;
             _solrToyService = solrToyService;
             _toyDbService = toyDbService;
-            _solrPriceGroupService = solrPriceGroupService;
             _priceGroupDbService = priceGroupDbService;
 
         }
@@ -152,7 +148,6 @@ namespace CrazyToys.Services
         public async Task UpdateSolrDb()
         {
             await UpdateSolrToys();
-            await UpdateSolrPriceGroups();
         }
 
         public async Task UpdateSolrToys()
@@ -164,7 +159,7 @@ namespace CrazyToys.Services
             _solrToyService.CreateOrUpdate(new SolrToy(toy));
             });
         }
-
+        /*
         public async Task UpdateSolrPriceGroups()
         {
             // hent alle Toys op fra db
@@ -174,6 +169,7 @@ namespace CrazyToys.Services
                 _solrPriceGroupService.CreateOrUpdate(new SolrPriceGroup(priceGroup));
             });
         }
+        */
 
 
 
