@@ -27,17 +27,29 @@ namespace CrazyToys.Services
         private readonly SimpleToyDbService _simpleToyDbService;
         private readonly IEntityCRUD<AgeGroup> _ageGroupDbService;
         private readonly ImageDbService _imageDbService;
+        private readonly IEntityCRUD<PriceGroup> _priceGroupDbService;
+
+
 
         private Random random;
         private IList<AgeGroup> ageGroups;
+        private IList<PriceGroup> priceGroups;
         private IList<Category> categories;
         private Dictionary<string, Brand> brandDict;
 
 
 
-        public IcecatDataService(IHttpClientFactory httpClientFactory, IEntityCRUD<Brand> brandDbService, IEntityCRUD<Category> categoryDbService,
-            IEntityCRUD<SubCategory> subCategoryDbService, IEntityCRUD<Colour> colourDbService, ToyDbService toyDbService, SimpleToyDbService simpleToyDbService,
-            IEntityCRUD<AgeGroup> ageGroupDbService, ImageDbService imageDbService)
+        public IcecatDataService(
+            IHttpClientFactory httpClientFactory, 
+            IEntityCRUD<Brand> brandDbService, 
+            IEntityCRUD<Category> categoryDbService,
+            IEntityCRUD<SubCategory> subCategoryDbService, 
+            IEntityCRUD<Colour> colourDbService, 
+            ToyDbService toyDbService, 
+            SimpleToyDbService simpleToyDbService,
+            IEntityCRUD<AgeGroup> ageGroupDbService, 
+            ImageDbService imageDbService,
+            IEntityCRUD<PriceGroup> priceGroupDbService)
         {
             _httpClientFactory = httpClientFactory;
             _brandDbService = brandDbService;
@@ -48,11 +60,16 @@ namespace CrazyToys.Services
             _ageGroupDbService = ageGroupDbService;
             _simpleToyDbService = simpleToyDbService;
             _imageDbService = imageDbService;
+            _priceGroupDbService = priceGroupDbService;
             random = new Random();
 
             var ageGroupTask = _ageGroupDbService.GetAll();
             ageGroupTask.Wait();
             ageGroups = ageGroupTask.Result;
+
+            var priceGroupTask = _priceGroupDbService.GetAll();
+            priceGroupTask.Wait();
+            priceGroups = priceGroupTask.Result;
 
             var categoryTask = _categoryDbService.GetAll();
             categoryTask.Wait();
@@ -247,7 +264,16 @@ namespace CrazyToys.Services
                         }
                     }
                     // TODO få random ud fra Category - mindre vigtigt
-                    int price = random.Next(49, 899);
+                    
+                    int priceGroupIndex = random.Next(0, priceGroups.Count - 1);
+                    int priceGroupMin = priceGroups[priceGroupIndex].Minimum;
+                    int priceGroupMax = priceGroups[priceGroupIndex].Maximum;
+
+                    toy.PriceGroup = priceGroups[priceGroupIndex];
+
+                    int price = random.Next(
+                        priceGroupMin != 0 ? priceGroupMin : 49,
+                        priceGroupMax != 0 ? priceGroupMax : 900);
                     // % 10 for at få den sidste digit
                     // for at gøre sidste digit 9
                     toy.Price = price + (9 - (price % 10));
@@ -365,6 +391,7 @@ namespace CrazyToys.Services
             }
         }
 
+
         public async Task<SubCategory> GetOrCreateSubCategory(string id, string name, IList<Category> categories)
         {
             // tjekker om subcat allerede findes ud fra id
@@ -430,6 +457,7 @@ namespace CrazyToys.Services
             return await _simpleToyDbService.Update(simpleToy);
         }
 
+        
 
     }
 }

@@ -122,6 +122,7 @@ namespace CrazyToys.Services.EntityDbServices
                 .Include(t => t.SubCategory)
                 .Include(t => t.Colours)
                 .Include(t => t.AgeGroups)
+                .Include(t => t.PriceGroups)
                 .Where(t => t.SimpleToy.OnMarket.Equals("1") && t.Stock != 0)
                 .ToListAsync();
 

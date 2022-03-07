@@ -41,7 +41,32 @@ namespace CrazyToys.Services
             //    RequestHandler = new RequestHandlerParameters("/get"),
             //});
 
-            var priceGroups = _solr.Query(SolrQuery.All);
+            /*
+            var priceGroups = _solr.Query("*:*", new QueryOptions
+            {
+                Start = 0,
+                Rows = 30
+            });
+
+
+            */
+
+            List<string> priceGroups = new List<string>();
+
+            var facets = _solr.Query(SolrQuery.All, new QueryOptions
+            {
+                Rows = 0/*,
+                Facet = new FacetParameters
+                {
+                    Queries = new[] { new SolrFacetFieldQuery("interval") }
+                }*/
+            });
+
+
+            foreach (var facet in facets.FacetFields["interval"])
+            {
+                priceGroups.Add(facet.Key);
+            }
             //_solr.Commit();
 
             return true;
