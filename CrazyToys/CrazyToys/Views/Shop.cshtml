@@ -6,7 +6,7 @@
     var categories = ViewData["Categories"] as Dictionary<string, int>;
     var brands = ViewData["Brands"] as Dictionary<string, int>;
     var ageGroups = ViewData["AgeGroups"] as List<string>;
-    var colours = ViewData["Colours"] as List<Colour>;
+    var colours = ViewData["Colours"] as List<string>;
     var toys = ViewData["Toys"] as List<Toy>;
     var i = 0;
 }
@@ -130,12 +130,14 @@
                                     <div class="card-body">
                                         <div class="shop__sidebar__size">
                                             @{
-                                                foreach (Colour colour in colours)
+                                                @i = 1;
+                                                foreach (string colour in colours)
                                                 {
-                                                   <label class="hover" for="@colour.ID">@colour.Name
-                                                        <input type="radio" id="@colour.ID">
+                                                   <label class="hover" for="@i">@colour
+                                                        <input type="radio" id="@i">
                                                     </label>
                                                 }
+                                                @i = i + 1;
                                              }
                                         </div>
                                         <!--
