@@ -247,7 +247,10 @@ namespace CrazyToys.Services
                         }
                     }
                     // TODO få random ud fra Category - mindre vigtigt
-                    toy.Price = random.Next(49, 899);
+                    int price = random.Next(49, 899);
+                    // % 10 for at få den sidste digit
+                    // for at gøre sidste digit 9
+                    toy.Price = price + (9 - (price % 10));
                     toy.Stock = random.Next(1, 25);
 
                     if (!hasAgeGroup)
