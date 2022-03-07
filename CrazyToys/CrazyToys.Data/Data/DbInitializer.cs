@@ -48,7 +48,7 @@ namespace CrazyToys.Data.Data
                     new AgeGroup("3-4 år"),
                     new AgeGroup("5-6 år"),
                     new AgeGroup("7-8 år"),
-                    new AgeGroup("9+"),
+                    new AgeGroup("9+ år"),
 
                 };
                 foreach (AgeGroup ageGroup in ageGroups)
