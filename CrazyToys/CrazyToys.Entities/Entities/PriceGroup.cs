@@ -19,7 +19,7 @@ namespace CrazyToys.Entities.Entities
             // hvis vi ikke giver en max-værdi med skal der stå fx 800+ og ikke 700-800
             Interval = Maximum != 0 
                 ? Minimum + " - " + Maximum 
-                : Maximum + "+";
+                : Minimum + "+";
         }
     }
 }
