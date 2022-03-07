@@ -21,19 +21,29 @@ namespace CrazyToys.Services
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IcecatDataService _icecatDataService;
         private readonly ISearchService<SolrToy> _solrToyService;
-        private readonly ISearchService<PriceGroup> _solrPriceGroupService;
+        private readonly ISearchService<SolrPriceGroup> _solrPriceGroupService;
 
         private readonly ToyDbService _toyDbService;
+        private readonly IEntityCRUD<PriceGroup> _priceGroupDbService;
 
 
-        public HangfireService(IHttpClientFactory httpClientFactory, IcecatDataService icecatDataService, 
-            ISearchService<SolrToy> solrToyService, ISearchService<PriceGroup> solrPriceGroupService, ToyDbService toyDbService)
+        
+
+
+        public HangfireService(
+            IHttpClientFactory httpClientFactory, 
+            IcecatDataService icecatDataService, 
+            ISearchService<SolrToy> solrToyService, 
+            ISearchService<SolrPriceGroup> solrPriceGroupService, 
+            ToyDbService toyDbService,
+            IEntityCRUD<PriceGroup> priceGroupDbService)
         {
             _httpClientFactory = httpClientFactory;
             _icecatDataService = icecatDataService;
             _solrToyService = solrToyService;
             _toyDbService = toyDbService;
             _solrPriceGroupService = solrPriceGroupService;
+            _priceGroupDbService = priceGroupDbService;
 
         }
 
@@ -141,12 +151,20 @@ namespace CrazyToys.Services
          * **/
         public async Task UpdateSolrDb()
         {
+            await UpdateSolrToys();
+            await UpdateSolrPriceGroups();
+
+
+        }
+
+        public async Task UpdateSolrToys()
+        {
             // hent alle Toys op fra db
             List<Toy> toys = await _toyDbService.GetAllWithRelations();
 
             // convert to SolrToy
             List<SolrToy> solrToys = new List<SolrToy>();
-            
+
             toys.ForEach(toy => {
                 solrToys.Add(new SolrToy(toy));
             });
@@ -154,6 +172,25 @@ namespace CrazyToys.Services
             // for each update den i solr
             solrToys.ForEach(solrToy => _solrToyService.CreateOrUpdate(solrToy));
         }
+
+        public async Task UpdateSolrPriceGroups()
+        {
+            // hent alle Toys op fra db
+            List<PriceGroup> priceGroups = await _priceGroupDbService.GetAllWithRelations();
+
+            // convert to SolrToy
+            List<SolrPriceGroup> solrPriceGroups = new List<SolrPriceGroup>();
+
+            priceGroups.ForEach(priceGroup => {
+                solrPriceGroups.Add(new SolrPriceGroup(priceGroup));
+            });
+
+            // for each update den i solr
+            solrPriceGroups.ForEach(solrPriceGroup => _solrPriceGroupService.CreateOrUpdate(solrPriceGroup));
+        }
+
+
+
 
         public void DeleteSolrDb()
         {

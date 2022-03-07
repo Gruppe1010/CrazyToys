@@ -88,6 +88,10 @@ namespace CrazyToys.Web
             services.AddScoped<ImageDbService>();
             services.AddScoped<SimpleToyDbService>();
             services.AddScoped<IEntityCRUD<AgeGroup>, AgeGroupDbService>();
+            services.AddScoped< IEntityCRUD<PriceGroup>, PriceGroupDbService > ();
+
+
+            
 
             services.AddScoped<IcecatDataService>();
             services.AddScoped<ISessionService, SessionService>();
@@ -105,8 +109,8 @@ namespace CrazyToys.Web
             services.AddSolrNet<SolrToy>("http://localhost:8983/solr/toys");
             services.AddScoped<ISearchService<SolrToy>, SolrService<SolrToy, ISolrOperations<SolrToy>>>();
 
-            services.AddSolrNet<PriceGroup>("http://localhost:8983/solr/price_groups");
-            services.AddScoped<ISearchService<PriceGroup>, SolrService<PriceGroup, ISolrOperations<PriceGroup>>>();
+            services.AddSolrNet<SolrPriceGroup>("http://localhost:8983/solr/price_groups");
+            services.AddScoped<ISearchService<SolrPriceGroup>, SolrService<SolrPriceGroup, ISolrOperations<SolrPriceGroup>>>();
         }
 
         /// <summary>
