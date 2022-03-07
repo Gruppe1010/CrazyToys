@@ -146,7 +146,7 @@ namespace CrazyToys.Services
 
                     name = name
                         .Replace(toy.ProductId, "")
-                        .Replace(brandDict[toy.BrandId].Name, "")
+                        //.Replace(brandDict[toy.BrandId].Name, "")
                         .Trim();
 
                     toy.Name = char.ToUpper(name[0]) + name.Substring(1);
