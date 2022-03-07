@@ -48,7 +48,7 @@ namespace CrazyToys.Data.Data
                     new AgeGroup("3-4 år"),
                     new AgeGroup("5-6 år"),
                     new AgeGroup("7-8 år"),
-                    new AgeGroup("9+"),
+                    new AgeGroup("9+ år"),
 
                 };
                 foreach (AgeGroup ageGroup in ageGroups)
@@ -57,7 +57,27 @@ namespace CrazyToys.Data.Data
                 }
             }
 
-            if(!context.Categories.Any())
+            if (!context.PriceGroups.Any())
+            {
+                var priceGroups = new PriceGroup[]
+                {
+                    new PriceGroup(0, 100),
+                    new PriceGroup(100, 200),
+                    new PriceGroup(200, 300),
+                    new PriceGroup(300, 400),
+                    new PriceGroup(400, 500),
+                    new PriceGroup(500, 600),
+                    new PriceGroup(600, 700),
+                    new PriceGroup(700, 800),
+                    new PriceGroup(800, 0)
+                };
+                foreach (PriceGroup priceGroup in priceGroups)
+                {
+                    context.PriceGroups.Add(priceGroup);
+                }
+            }
+
+            if (!context.Categories.Any())
             {
                 var categories = new Category[]
                 { 

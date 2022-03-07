@@ -16,6 +16,7 @@ namespace CrazyToys.Data.Data
         public DbSet<SubCategory> SubCategories { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<AgeGroup> AgeGroups { get; set; }
+        public DbSet<PriceGroup> PriceGroups { get; set; }
         public DbSet<Toy> Toys { get; set; }
         public DbSet<SimpleToy> SimpleToys { get; set; }
         public DbSet<Error> Errors { get; set; }

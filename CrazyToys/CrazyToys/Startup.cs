@@ -102,8 +102,11 @@ namespace CrazyToys.Web
             //pragma warning restore IDE0022 // Use expression body for methods
 
             // Solr
-            services.AddSolrNet<SolrToy>("http://localhost:8983/solr/test");
+            services.AddSolrNet<SolrToy>("http://localhost:8983/solr/toys");
             services.AddScoped<ISearchService<SolrToy>, SolrService<SolrToy, ISolrOperations<SolrToy>>>();
+
+            services.AddSolrNet<PriceGroup>("http://localhost:8983/solr/price_groups");
+            services.AddScoped<ISearchService<PriceGroup>, SolrService<PriceGroup, ISolrOperations<PriceGroup>>>();
         }
 
         /// <summary>

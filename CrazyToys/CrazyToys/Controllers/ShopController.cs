@@ -59,30 +59,17 @@ namespace CrazyToys.Web.Controllers
             [FromQuery(Name = "ageGroups")] string ageGroups,
             [FromQuery(Name = "colours")] string colours)
         {
-
-            Console.WriteLine(String.IsNullOrWhiteSpace(category));
-
-            Dictionary<string, int> brandDict = _solrService.GetBrandFacet();
-            Dictionary<string, int> categoryDict = _solrService.GetCategoryFacet();
+            SortedDictionary<string, int> brandDict = _solrService.GetBrandFacet();
+            SortedDictionary<string, int> categoryDict = _solrService.GetCategoryFacet();
             List<string> ageGroupsList= _solrService.GetAgeGroupsFacet();
             List<string> coloursList = _solrService.GetColourFacet();
-
-
-
-
-            // lav om til dict
-            // var ageGroupsDict = await _ageGroupDbService.GetAll();
-            // ageGroupsDict.Sort((x, y) => x.Interval[0].CompareTo(y.Interval[0]));
-
-            var coloursDict = await _colourDbService.GetAll();
             
             var toys = await _toyDbService.GetAllWithRelations();
-         
 
             ViewData["Categories"] = categoryDict;
-            ViewData["AgeGroups"] = ageGroupsList;
+            ViewData["AgeGroups"] = ageGroupsList.OrderBy(a => a).ToList();
             ViewData["Brands"] = brandDict;
-            ViewData["Colours"] = coloursList;
+            ViewData["Colours"] = coloursList.OrderBy(a => a).ToList();
             ViewData["Toys"] = toys;
 
 

@@ -20,17 +20,20 @@ namespace CrazyToys.Services
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IcecatDataService _icecatDataService;
-        private readonly ISearchService<SolrToy> _solrService;
+        private readonly ISearchService<SolrToy> _solrToyService;
+        private readonly ISearchService<PriceGroup> _solrPriceGroupService;
+
         private readonly ToyDbService _toyDbService;
 
 
         public HangfireService(IHttpClientFactory httpClientFactory, IcecatDataService icecatDataService, 
-            ISearchService<SolrToy> solrService, ToyDbService toyDbService)
+            ISearchService<SolrToy> solrToyService, ISearchService<PriceGroup> solrPriceGroupService, ToyDbService toyDbService)
         {
             _httpClientFactory = httpClientFactory;
             _icecatDataService = icecatDataService;
-            _solrService = solrService;
+            _solrToyService = solrToyService;
             _toyDbService = toyDbService;
+            _solrPriceGroupService = solrPriceGroupService;
 
         }
 
@@ -149,12 +152,12 @@ namespace CrazyToys.Services
             });
 
             // for each update den i solr
-            solrToys.ForEach(solrToy => _solrService.CreateOrUpdate(solrToy));
+            solrToys.ForEach(solrToy => _solrToyService.CreateOrUpdate(solrToy));
         }
 
         public void DeleteSolrDb()
         {
-            _solrService.DeleteAll();
+            _solrToyService.DeleteAll();
         }
     }
 }

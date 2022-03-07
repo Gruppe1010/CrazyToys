@@ -10,9 +10,9 @@ namespace CrazyToys.Interfaces
         bool CreateOrUpdate(T document);
         void DeleteAll();
 
-        Dictionary<string, int> GetBrandFacet();
+        SortedDictionary<string, int> GetBrandFacet();
 
-        Dictionary<string, int> GetCategoryFacet();
+        SortedDictionary<string, int> GetCategoryFacet();
 
         List<string> GetAgeGroupsFacet();
 
