@@ -22,55 +22,11 @@ namespace CrazyToys.Services
     {
         private readonly TSolrOperations _solr;
 
-
-
-
-
         public SolrService(ISolrOperations<T> solr)
         {
             _solr = (TSolrOperations)solr;
         }
 
-        public bool GetAll()
-        {
-            // var noget1 = _solr.GetSchema("price_groups");
-
-            //var noget = _solr.Query(SolrQuery.All,
-            //new QueryOptions
-            //{
-            //    RequestHandler = new RequestHandlerParameters("/get"),
-            //});
-
-            /*
-            var priceGroups = _solr.Query("*:*", new QueryOptions
-            {
-                Start = 0,
-                Rows = 30
-            });
-
-
-            */
-
-            List<string> priceGroups = new List<string>();
-
-            var facets = _solr.Query(SolrQuery.All, new QueryOptions
-            {
-                Rows = 0/*,
-                Facet = new FacetParameters
-                {
-                    Queries = new[] { new SolrFacetFieldQuery("interval") }
-                }*/
-            });
-
-
-            foreach (var facet in facets.FacetFields["interval"])
-            {
-                priceGroups.Add(facet.Key);
-            }
-            //_solr.Commit();
-
-            return true;
-        }
 
 
         public bool CreateOrUpdate(T document)
