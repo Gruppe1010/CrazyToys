@@ -116,10 +116,30 @@ namespace CrazyToys.Services
             {
                 ageGroups.Add(facet.Key);
             }
-
             return ageGroups;
         }
-       
+
+      
+        public List<string> GetColourFacets()
+        {
+            List<string> colours = new List<string>();
+
+            var facets = _solr.Query(SolrQuery.All, new QueryOptions
+            {
+                Rows = 0,
+                Facet = new FacetParameters
+                {
+                    Queries = new[] { new SolrFacetFieldQuery("colours") }
+                }
+            });
+            // For at få result fra FacetFieldQuery skal FacetFields[] kaldes
+            foreach (var facet in facets.FacetFields["colours"])
+            {
+                colours.Add(facet.Key);
+            }
+            return colours;
+        }
+
 
     }
 }
