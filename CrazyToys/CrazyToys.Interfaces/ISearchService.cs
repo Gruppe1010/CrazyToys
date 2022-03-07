@@ -18,5 +18,7 @@ namespace CrazyToys.Interfaces
 
         List<string> GetColourFacet();
 
+        bool GetAll();
+
     }
 }

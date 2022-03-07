@@ -88,13 +88,11 @@ namespace CrazyToys.Web
             services.AddScoped<ImageDbService>();
             services.AddScoped<SimpleToyDbService>();
             services.AddScoped<IEntityCRUD<AgeGroup>, AgeGroupDbService>();
-            services.AddScoped< IEntityCRUD<PriceGroup>, PriceGroupDbService > ();
-
-
-            
+            services.AddScoped< IEntityCRUD<PriceGroup>, PriceGroupDbService> ();
 
             services.AddScoped<IcecatDataService>();
             services.AddScoped<ISessionService, SessionService>();
+
 
             //Umbraco
             //pragma warning disable IDE0022 // Use expression body for methods

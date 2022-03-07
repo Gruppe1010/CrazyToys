@@ -15,6 +15,10 @@ namespace CrazyToys.Entities.SolrModels
         [SolrField("interval")]
         public string Interval { get; set; }
 
+        public SolrPriceGroup()
+        {
+        }
+
         public SolrPriceGroup(PriceGroup priceGroup)
         {
             Id = priceGroup.ID;

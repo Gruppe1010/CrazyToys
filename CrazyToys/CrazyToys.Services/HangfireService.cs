@@ -160,15 +160,9 @@ namespace CrazyToys.Services
             // hent alle Toys op fra db
             List<Toy> toys = await _toyDbService.GetAllWithRelations();
 
-            // convert to SolrToy
-            List<SolrToy> solrToys = new List<SolrToy>();
-
             toys.ForEach(toy => {
-                solrToys.Add(new SolrToy(toy));
+            _solrToyService.CreateOrUpdate(new SolrToy(toy));
             });
-
-            // for each update den i solr
-            solrToys.ForEach(solrToy => _solrToyService.CreateOrUpdate(solrToy));
         }
 
         public async Task UpdateSolrPriceGroups()
@@ -176,15 +170,9 @@ namespace CrazyToys.Services
             // hent alle Toys op fra db
             List<PriceGroup> priceGroups = await _priceGroupDbService.GetAll();
 
-            // convert to SolrToy
-            List<SolrPriceGroup> solrPriceGroups = new List<SolrPriceGroup>();
-
             priceGroups.ForEach(priceGroup => {
-                solrPriceGroups.Add(new SolrPriceGroup(priceGroup));
+                _solrPriceGroupService.CreateOrUpdate(new SolrPriceGroup(priceGroup));
             });
-
-            // for each update den i solr
-            solrPriceGroups.ForEach(solrPriceGroup => _solrPriceGroupService.CreateOrUpdate(solrPriceGroup));
         }
 
 

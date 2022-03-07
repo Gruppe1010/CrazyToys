@@ -30,7 +30,23 @@ namespace CrazyToys.Services
         {
             _solr = (TSolrOperations)solr;
         }
-        
+
+        public bool GetAll()
+        {
+            // var noget1 = _solr.GetSchema("price_groups");
+
+            //var noget = _solr.Query(SolrQuery.All,
+            //new QueryOptions
+            //{
+            //    RequestHandler = new RequestHandlerParameters("/get"),
+            //});
+
+            var priceGroups = _solr.Query(SolrQuery.All);
+            //_solr.Commit();
+
+            return true;
+        }
+
 
         public bool CreateOrUpdate(T document)
         {
@@ -119,9 +135,9 @@ namespace CrazyToys.Services
 
             return ageGroupIntervals;
         }
-           
 
-      
+
+
         public List<string> GetColourFacet()
         {
             List<string> colours = new List<string>();

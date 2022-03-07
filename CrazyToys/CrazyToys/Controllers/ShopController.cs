@@ -19,7 +19,9 @@ namespace CrazyToys.Web.Controllers
     public class ShopController : RenderController
     {
         private readonly IHangfireService _hangfireService;
-        private readonly ISearchService<SolrToy> _solrService;
+        private readonly ISearchService<SolrToy> _solrToyService;
+        private readonly ISearchService<SolrPriceGroup> _solrPriceGroupService;
+
 
 
         private readonly IEntityCRUD<Brand> _brandDbService;
@@ -29,11 +31,19 @@ namespace CrazyToys.Web.Controllers
         private readonly IEntityCRUD<AgeGroup> _ageGroupDbService;
        
 
-        public ShopController(ILogger<HomeController> logger, ICompositeViewEngine compositeViewEngine, 
-            IUmbracoContextAccessor umbracoContextAccessor, IHangfireService hangfireService,
-            IEntityCRUD<Brand> brandDbService, IEntityCRUD<Category> categoryDbService,
-            IEntityCRUD<Colour> colourDbService, ToyDbService toyDbService,
-            IEntityCRUD<AgeGroup> ageGroupDbService, ISearchService<SolrToy> solrService)
+        public ShopController(
+            ILogger<HomeController> logger, 
+            ICompositeViewEngine compositeViewEngine, 
+            IUmbracoContextAccessor umbracoContextAccessor, 
+            IHangfireService hangfireService,
+            ISearchService<SolrToy> solrToyService,
+            ISearchService<SolrPriceGroup> solrPriceGroupService,
+            IEntityCRUD<Brand> brandDbService, 
+            IEntityCRUD<Category> categoryDbService,
+            IEntityCRUD<Colour> colourDbService, 
+            ToyDbService toyDbService,
+            IEntityCRUD<AgeGroup> ageGroupDbService
+          )
             : base(logger, compositeViewEngine, umbracoContextAccessor)
         {
             _hangfireService = hangfireService;
@@ -42,7 +52,9 @@ namespace CrazyToys.Web.Controllers
             _colourDbService = colourDbService;
             _toyDbService = toyDbService;
             _ageGroupDbService = ageGroupDbService;
-            _solrService = solrService;
+            _solrToyService = solrToyService;
+            _solrPriceGroupService = solrPriceGroupService;
+
         }
 
         //
@@ -59,11 +71,13 @@ namespace CrazyToys.Web.Controllers
             [FromQuery(Name = "ageGroups")] string ageGroups,
             [FromQuery(Name = "colours")] string colours)
         {
-            SortedDictionary<string, int> brandDict = _solrService.GetBrandFacet();
-            SortedDictionary<string, int> categoryDict = _solrService.GetCategoryFacet();
-            List<string> ageGroupsList= _solrService.GetAgeGroupsFacet();
-            List<string> coloursList = _solrService.GetColourFacet();
-            
+            SortedDictionary<string, int> brandDict = _solrToyService.GetBrandFacet();
+            SortedDictionary<string, int> categoryDict = _solrToyService.GetCategoryFacet();
+            List<string> ageGroupsList= _solrToyService.GetAgeGroupsFacet();
+            List<string> coloursList = _solrToyService.GetColourFacet();
+            var priceGroups = _solrPriceGroupService.GetAll();
+
+
             var toys = await _toyDbService.GetAllWithRelations();
 
             ViewData["Categories"] = categoryDict;

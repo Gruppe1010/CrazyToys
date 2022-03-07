@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CrazyToys.Services.EntityDbServices
 {
-    internal class PriceGroupDbService : IEntityCRUD<PriceGroup>
+    public class PriceGroupDbService : IEntityCRUD<PriceGroup>
     {
         private readonly Context _context;
 
