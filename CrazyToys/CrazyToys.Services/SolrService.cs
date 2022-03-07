@@ -32,7 +32,7 @@ namespace CrazyToys.Services
         }
         
 
-        public async Task<bool> CreateOrUpdate(T document)
+        public bool CreateOrUpdate(T document)
         {
             try
             {

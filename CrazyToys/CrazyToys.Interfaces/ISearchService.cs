@@ -7,7 +7,7 @@ namespace CrazyToys.Interfaces
 {
     public interface ISearchService<T>
     {
-        Task<bool> CreateOrUpdate(T document);
+        bool CreateOrUpdate(T document);
         void DeleteAll();
 
         Dictionary<string, int> GetBrandFacets();
