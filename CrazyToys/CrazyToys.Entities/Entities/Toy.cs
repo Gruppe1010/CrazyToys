@@ -12,7 +12,7 @@ namespace CrazyToys.Entities.Entities
         public Brand Brand { get; set; } // nav-prop
         public string BrandId { get; set; } // foreign key
         public string AgeGroup { get; set; }
-        public string PriceGroup { get; set; }
+        public PriceGroup PriceGroup { get; set; }
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
         public IList<Colour> Colours { get; set; }
