@@ -57,9 +57,9 @@ namespace CrazyToys.Services
             _solr.Commit();
         }
 
-        public Dictionary<string, int> GetBrandFacet()
+        public SortedDictionary<string, int> GetBrandFacet()
         {
-            Dictionary<string, int> brandsDict = new Dictionary<string, int>();
+            SortedDictionary<string, int> brandsDict = new SortedDictionary<string, int>();
 
             var facets = _solr.Query(SolrQuery.All, new QueryOptions
             {
@@ -78,9 +78,9 @@ namespace CrazyToys.Services
             return brandsDict;
         }
 
-        public Dictionary<string, int> GetCategoryFacet()
+        public SortedDictionary<string, int> GetCategoryFacet()
         {
-            Dictionary<string, int> categoryDict = new Dictionary<string, int>();
+            SortedDictionary<string, int> categoryDict = new SortedDictionary<string, int>();
 
             var facets = _solr.Query(SolrQuery.All, new QueryOptions
             {

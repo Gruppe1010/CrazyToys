@@ -3,8 +3,8 @@
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Shop>
 @{
     Layout = "Master.cshtml";
-    var categories = ViewData["Categories"] as Dictionary<string, int>;
-    var brands = ViewData["Brands"] as Dictionary<string, int>;
+    var categories = ViewData["Categories"] as SortedDictionary<string, int>;
+    var brands = ViewData["Brands"] as SortedDictionary<string, int>;
     var ageGroups = ViewData["AgeGroups"] as List<string>;
     var colours = ViewData["Colours"] as List<string>;
     var toys = ViewData["Toys"] as List<Toy>;
@@ -108,14 +108,14 @@
                                     <div class="card-body">
                                         <div class="shop__sidebar__size">
                                             @{
-                                                @i = 1;
+                                                i = 1;
                                                 foreach (string ageGroup in ageGroups)
                                                 {
                                                     <label class="hover" for="@i">@ageGroup
                                                         <input type="radio" id="@i">
                                                     </label>
 
-                                                    @i = i + 1;
+                                                    i = i + 1;
                                                 }
                                              }
                                         </div>
@@ -130,14 +130,15 @@
                                     <div class="card-body">
                                         <div class="shop__sidebar__size">
                                             @{
-                                                @i = 1;
+                                                i = 1;
                                                 foreach (string colour in colours)
                                                 {
                                                    <label class="hover" for="@i">@colour
                                                         <input type="radio" id="@i">
                                                     </label>
+
+                                                    i = i + 1;
                                                 }
-                                                @i = i + 1;
                                              }
                                         </div>
                                         <!--
@@ -182,21 +183,21 @@
                 <div class="row">
                     @{
                         //foreach (var toy in toys)
-                        for (int i = 0; i < (toys.Count > 29 ? 30 : toys.Count); i++)
+                        for (int j = 0; j < (toys.Count > 29 ? 30 : toys.Count); j++)
                         {
                             <div class="col-lg-4 col-md-6 col-sm-6">
                                 <div class="product__item">
-                                    <div class="product__item__pic set-bg" data-setbg="@(!string.IsNullOrWhiteSpace(toys[i].Images[0].UrlHigh) ? toys[i].Images[0].UrlHigh : toys[i].Brand.LogoUrl)">
-                                        <a class="item-link" href="/shop-details?id=@toys[i].ID"></a> 
+                                    <div class="product__item__pic set-bg" data-setbg="@(!string.IsNullOrWhiteSpace(toys[j].Images[0].UrlHigh) ? toys[j].Images[0].UrlHigh : toys[j].Brand.LogoUrl)">
+                                        <a class="item-link" href="/shop-details?id=@toys[j].ID"></a> 
                                         <ul class="product__hover">
                                             <li><a href="#"><img src="img/icon/search.png" alt=""></a></li>
                                             <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
                                         </ul>
                                     </div>
                                     <div class="product__item__text">
-                                        <h6>@toys[i].Name</h6>
+                                        <h6>@toys[j].Name</h6>
                                         <a href="#" class="add-cart">+ Add To Cart</a>
-                                        <h5>@toys[i].Price DKK</h5>
+                                        <h5>@toys[j].Price DKK</h5>
                                     </div>
                                 </div>
                             </div>
