@@ -345,10 +345,6 @@ namespace CrazyToys.Services
                 // Alt dette er slet ikke nødvendigt - det virker uden!
                 await RemoveDuplicateAgeGroups(toyFromDb, toy);
 
-                toy.Images.RemoveAt(0);
-                toy.Images.RemoveAt(0);
-                toy.Images.RemoveAt(0);
-
                 toyFromDb.UpdateValuesToAnotherToysValues(toy);
                 return await _toyDbService.Update(toyFromDb);
             }
@@ -418,6 +414,7 @@ namespace CrazyToys.Services
                         {
                             // og tilføjet categorier til dens liste, så de får en relation
                             subCategory.Categories.Add(category);
+                            break;
                             break;
                         }
                     }
