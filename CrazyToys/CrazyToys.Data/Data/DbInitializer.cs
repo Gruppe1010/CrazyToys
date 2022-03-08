@@ -81,15 +81,15 @@ namespace CrazyToys.Data.Data
             {
                 var colourGroups = new ColourGroup[]
                 {
-                    new ColourGroup("Grøn",  new string[] {"grøn"}),
-                    new ColourGroup("Gul", new string[] {"gul"}),
-                    new ColourGroup("Rød",  new string[] {"rød"}),
-                    new ColourGroup("Lyserød", new string[] {"lyserød", "pink"}),
-                    new ColourGroup("Blå", new string[] {"blå", "aqua"}),
-                    new ColourGroup("Multifarvet", new string[] {"mange", "fler", "forskellig", "multi"}),
-                    new ColourGroup("Sort",  new string[] {"sort"}),
-                    new ColourGroup("Grå",  new string[] {"grå"}),
-                    new ColourGroup("Gennemsigtig",  new string[] {"gennemsigtig", "klar"}) // TODO flere
+                    new ColourGroup("Grøn",  new string[] {"grøn"}, "#0ed145"),
+                    new ColourGroup("Gul", new string[] {"gul"}, "#fff200"),
+                    new ColourGroup("Rød",  new string[] {"rød"}, "#ec1c24"),
+                    new ColourGroup("Lyserød", new string[] {"lyserød", "pink"}, "#ffaec8"),
+                    new ColourGroup("Blå", new string[] {"blå", "aqua"}, "#00a8f3"),
+                    new ColourGroup("Multifarvet", new string[] {"mange", "fler", "forskellig", "multi"}, "linear-gradient(-90deg, #fa7c30 50%, rgba(50, 250, 19, 20) 10%)"),
+                    new ColourGroup("Sort",  new string[] {"sort"}, "black"),
+                    new ColourGroup("Hvid",  new string[] {"hvid", "gennemsigtig", "klar"}, "white"), // TODO flere
+                    new ColourGroup("Grå",  new string[] {"grå"}, "#c3c3c3")
 
                 };
                 foreach (ColourGroup colourGroup in colourGroups)

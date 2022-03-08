@@ -1316,6 +1316,7 @@ ol {
 	cursor: pointer;
 }
 
+/*
 .shop__sidebar__color label.c-1 {
 	background: #0b090c;
 }
@@ -1351,6 +1352,7 @@ ol {
 .shop__sidebar__color label.c-9 {
 	background: #ffffff;
 }
+	*/
 
 .shop__sidebar__color label:after {
 	position: absolute;

@@ -16,7 +16,7 @@ namespace CrazyToys.Interfaces
 
         List<string> GetAgeGroupsFacet();
 
-        List<string> GetColourGroupsFacet();
+        //List<string> GetColourFacet();
 
     }
 }

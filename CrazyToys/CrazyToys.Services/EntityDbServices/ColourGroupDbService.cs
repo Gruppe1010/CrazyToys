@@ -29,7 +29,7 @@ namespace CrazyToys.Services.EntityDbServices
 
         public async Task<List<ColourGroup>> GetAll()
         {
-            return await _context.Colours.ToListAsync(); 
+            return await _context.ColourGroups.ToListAsync();
         }
 
         public Task<ColourGroup> GetById(string id)
