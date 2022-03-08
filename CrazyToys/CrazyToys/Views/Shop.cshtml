@@ -6,7 +6,8 @@
     var categories = ViewData["Categories"] as SortedDictionary<string, int>;
     var brands = ViewData["Brands"] as SortedDictionary<string, int>;
     var ageGroups = ViewData["AgeGroups"] as List<string>;
-    var colours = ViewData["Colours"] as List<string>;
+    var priceGroups = ViewData["PriceGroups"] as List<string>;
+    //var colours = ViewData["Colours"] as List<string>;
     var toys = ViewData["Toys"] as List<Toy>;
     var i = 0;
 }
@@ -89,12 +90,12 @@
                                     <div class="card-body">
                                         <div class="shop__sidebar__price">
                                             <ul>
-                                                <li><a href="#">0.00 - 50.00 DKK</a></li>
-                                                <li><a href="#">50.00 - 100.00 DKK</a></li>
-                                                <li><a href="#">100.00 - 150.00 DKK</a></li>
-                                                <li><a href="#">150.00 - 200.00 DKK</a></li>
-                                                <li><a href="#">200.00 - 250.00 DKK</a></li>
-                                                <li><a href="#">250.00+ DKK</a></li>
+                                                @{
+                                                    foreach (string priceGroup in priceGroups)
+                                                    {
+                                                        <li><a href="#">@priceGroup</a></li>
+                                                    }
+                                                }
                                             </ul>
                                         </div>
                                     </div>
@@ -129,7 +130,7 @@
                                 <div id="collapseFive" class="collapse show" data-parent="#accordionExample">
                                     <div class="card-body">
                                         <div class="shop__sidebar__size">
-                                            @{
+@*                                            @{
                                                 i = 1;
                                                 foreach (string colour in colours)
                                                 {
@@ -139,7 +140,8 @@
 
                                                     i = i + 1;
                                                 }
-                                             }
+                                             }*@
+
                                         </div>
                                         <!--
                                         <div class="shop__sidebar__color">

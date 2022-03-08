@@ -18,5 +18,6 @@ namespace CrazyToys.Interfaces
 
         List<string> GetColourGroupsFacet();
 
+        List<string> GetPriceGroupFacet();
     }
 }
