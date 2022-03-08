@@ -21,8 +21,6 @@ namespace CrazyToys.Web.Controllers
         private readonly IHangfireService _hangfireService;
         private readonly ISearchService<SolrToy> _solrToyService;
 
-
-
         private readonly IEntityCRUD<Brand> _brandDbService;
         private readonly IEntityCRUD<Category> _categoryDbService;
         private readonly IEntityCRUD<Colour> _colourDbService;
@@ -51,7 +49,6 @@ namespace CrazyToys.Web.Controllers
             _toyDbService = toyDbService;
             _ageGroupDbService = ageGroupDbService;
             _solrToyService = solrToyService;
-
         }
 
         //
@@ -73,7 +70,6 @@ namespace CrazyToys.Web.Controllers
             List<string> ageGroupsList= _solrToyService.GetAgeGroupsFacet();
             List<string> coloursList = _solrToyService.GetColourFacet();
 
-
             var toys = await _toyDbService.GetAllWithRelations();
 
             ViewData["Categories"] = categoryDict;
@@ -81,7 +77,6 @@ namespace CrazyToys.Web.Controllers
             ViewData["Brands"] = brandDict;
             ViewData["Colours"] = coloursList.OrderBy(a => a).ToList();
             ViewData["Toys"] = toys;
-
 
             // return a 'model' to the selected template/view for this page.
             return CurrentTemplate(CurrentPage);
