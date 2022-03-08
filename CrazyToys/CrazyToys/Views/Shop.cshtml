@@ -135,12 +135,9 @@
                                                 i = 1;
                                                 foreach (ColourGroup colourGroup in colourGroups)
                                                 {
-
-                                                    <label class="c-@i" for="sp-@i" style="background: @colourGroup.ColourCode">
+                                                    <label title="@colourGroup.Name" class="c-@i" for="sp-@i" style="background: @colourGroup.ColourCode">
                                                         <input type="radio" id="sp-@i">
                                                     </label>
-
-                                                 
 
                                                     i = i + 1;
                                                 }
