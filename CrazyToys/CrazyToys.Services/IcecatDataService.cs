@@ -357,14 +357,12 @@ namespace CrazyToys.Services
         // TODO slet!
         public async Task RemoveDuplicateAgeGroups(Toy toyFromDb, Toy toy)
         {
-            // Det virker uden denne!!!
-            /*
+          
             if(toyFromDb.Images.Count > 0)
             {
                 // slet fra db
                 await _imageDbService.DeleteRange(toyFromDb.Images);
             }
-            */
 
             // hvis der er nogle ageGroups på nyt toy-obj
             // Efter denne if er kørt er der altså KUN nye alders grupper på toy'et, som IKKE allerede er tilkoblet toyFromDb
