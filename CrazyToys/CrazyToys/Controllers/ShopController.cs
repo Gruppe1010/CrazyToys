@@ -21,11 +21,8 @@ namespace CrazyToys.Web.Controllers
         private readonly IHangfireService _hangfireService;
         private readonly ISearchService<SolrToy> _solrToyService;
 
-        private readonly IEntityCRUD<Brand> _brandDbService;
-        private readonly IEntityCRUD<Category> _categoryDbService;
-        private readonly IEntityCRUD<ColourGroup> _colourDbService;
+        private readonly IEntityCRUD<ColourGroup> _colourGroupDbService;
         private readonly ToyDbService _toyDbService;
-        private readonly IEntityCRUD<AgeGroup> _ageGroupDbService;
        
 
         public ShopController(
@@ -34,20 +31,14 @@ namespace CrazyToys.Web.Controllers
             IUmbracoContextAccessor umbracoContextAccessor, 
             IHangfireService hangfireService,
             ISearchService<SolrToy> solrToyService,
-            IEntityCRUD<Brand> brandDbService, 
-            IEntityCRUD<Category> categoryDbService,
-            IEntityCRUD<ColourGroup> colourDbService, 
-            ToyDbService toyDbService,
-            IEntityCRUD<AgeGroup> ageGroupDbService
+            IEntityCRUD<ColourGroup> colourGroupDbService, 
+            ToyDbService toyDbService
           )
             : base(logger, compositeViewEngine, umbracoContextAccessor)
         {
             _hangfireService = hangfireService;
-            _brandDbService = brandDbService;
-            _categoryDbService = categoryDbService;
-            _colourDbService = colourDbService;
+            _colourGroupDbService = colourGroupDbService;
             _toyDbService = toyDbService;
-            _ageGroupDbService = ageGroupDbService;
             _solrToyService = solrToyService;
         }
 
@@ -68,14 +59,16 @@ namespace CrazyToys.Web.Controllers
             SortedDictionary<string, int> brandDict = _solrToyService.GetBrandFacet();
             SortedDictionary<string, int> categoryDict = _solrToyService.GetCategoryFacet();
             List<string> ageGroupsList= _solrToyService.GetAgeGroupsFacet();
-            List<string> coloursList = _solrToyService.GetColourFacet();
+            var colourGroupTask = _colourGroupDbService.GetAll();
+            colourGroupTask.Wait();
+            List<ColourGroup> colourGroups = colourGroupTask.Result;
 
             var toys = await _toyDbService.GetAllWithRelations();
 
             ViewData["Categories"] = categoryDict;
             ViewData["AgeGroups"] = ageGroupsList.OrderBy(a => a).ToList();
             ViewData["Brands"] = brandDict;
-            ViewData["Colours"] = coloursList.OrderBy(a => a).ToList();
+            ViewData["ColourGroups"] = colourGroups.OrderBy(a => a.Name).ToList();
             ViewData["Toys"] = toys;
 
             // return a 'model' to the selected template/view for this page.
