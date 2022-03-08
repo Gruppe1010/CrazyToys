@@ -78,7 +78,7 @@ namespace CrazyToys.Services
         public SortedDictionary<string, int> GetCategoryFacet()
         {
             SortedDictionary<string, int> categoryDict = new SortedDictionary<string, int>();
-
+            
             var facets = _solr.Query(SolrQuery.All, new QueryOptions
             {
                 Rows = 0,
@@ -118,7 +118,7 @@ namespace CrazyToys.Services
         }
 
 
-
+        /*
         public List<string> GetColourFacet()
         {
             List<string> colours = new List<string>();
@@ -138,5 +138,6 @@ namespace CrazyToys.Services
             }
             return colours;
         }
+        */
     }
 }
