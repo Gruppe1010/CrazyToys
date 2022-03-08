@@ -32,25 +32,6 @@ namespace CrazyToys.Entities.Entities
             Images = new List<Image>();
         }
 
-        public Toy(string iD, string productId, string name, string brandId, string ageGroup, string shortDescription,
-            string longDescription, List<Colour> colours, IList<AgeGroup> ageGroups,
-            string subCategoryId, string simpleToyId, int price, int stock, IList<Image> images)
-        {
-            ID = iD;
-            ProductId = productId;
-            Name = name;
-            BrandId = brandId;
-            AgeGroup = ageGroup;
-            ShortDescription = shortDescription;
-            LongDescription = longDescription;
-            Colours = colours;
-            AgeGroups = ageGroups;
-            SubCategoryId = subCategoryId;
-            SimpleToyId = simpleToyId;
-            Price = price;
-            Stock = stock;
-            Images = images;
-        }
 
         public void UpdateValuesToAnotherToysValues(Toy toy)
         {
@@ -58,6 +39,7 @@ namespace CrazyToys.Entities.Entities
             Name = toy.Name;
             BrandId = toy.BrandId;
             AgeGroup = toy.AgeGroup;
+            PriceGroup = toy.PriceGroup;
             ShortDescription = toy.ShortDescription;
             LongDescription = toy.LongDescription;
             SubCategoryId = toy.SubCategoryId;
