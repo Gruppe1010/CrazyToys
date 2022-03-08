@@ -343,8 +343,12 @@ namespace CrazyToys.Services
             if (toyFromDb != null)
             {
                 // Alt dette er slet ikke nødvendigt - det virker uden!
-                UbrugeligMetode(toyFromDb, toy);
-              
+                await RemoveDuplicateAgeGroups(toyFromDb, toy);
+
+                toy.Images.RemoveAt(0);
+                toy.Images.RemoveAt(0);
+                toy.Images.RemoveAt(0);
+
                 toyFromDb.UpdateValuesToAnotherToysValues(toy);
                 return await _toyDbService.Update(toyFromDb);
             }
@@ -355,14 +359,16 @@ namespace CrazyToys.Services
         }
 
         // TODO slet!
-        public void UbrugeligMetode(Toy toyFromDb, Toy toy)
+        public async Task RemoveDuplicateAgeGroups(Toy toyFromDb, Toy toy)
         {
+            // Det virker uden denne!!!
             /*
             if(toyFromDb.Images.Count > 0)
             {
                 // slet fra db
                 await _imageDbService.DeleteRange(toyFromDb.Images);
             }
+            */
 
             // hvis der er nogle ageGroups på nyt toy-obj
             // Efter denne if er kørt er der altså KUN nye alders grupper på toy'et, som IKKE allerede er tilkoblet toyFromDb
@@ -391,8 +397,6 @@ namespace CrazyToys.Services
                     }
                 }
             }
-            */
-
         }
 
 
