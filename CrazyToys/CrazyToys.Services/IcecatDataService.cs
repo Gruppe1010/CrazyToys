@@ -22,7 +22,7 @@ namespace CrazyToys.Services
         private readonly IEntityCRUD<Brand> _brandDbService;
         private readonly IEntityCRUD<Category> _categoryDbService;
         private readonly IEntityCRUD<SubCategory> _subCategoryDbService;
-        private readonly IEntityCRUD<Colour> _colourDbService;
+        private readonly IEntityCRUD<ColourGroup> _colourGroupDbService;
         private readonly ToyDbService _toyDbService;
         private readonly SimpleToyDbService _simpleToyDbService;
         private readonly IEntityCRUD<AgeGroup> _ageGroupDbService;
@@ -34,6 +34,7 @@ namespace CrazyToys.Services
         private Random random;
         private IList<AgeGroup> ageGroups;
         private IList<PriceGroup> priceGroups;
+        private IList<ColourGroup> colourGroups;
         private IList<Category> categories;
         private Dictionary<string, Brand> brandDict;
 
@@ -44,7 +45,7 @@ namespace CrazyToys.Services
             IEntityCRUD<Brand> brandDbService, 
             IEntityCRUD<Category> categoryDbService,
             IEntityCRUD<SubCategory> subCategoryDbService, 
-            IEntityCRUD<Colour> colourDbService, 
+            IEntityCRUD<ColourGroup> colourGroupDbService, 
             ToyDbService toyDbService, 
             SimpleToyDbService simpleToyDbService,
             IEntityCRUD<AgeGroup> ageGroupDbService, 
@@ -55,7 +56,7 @@ namespace CrazyToys.Services
             _brandDbService = brandDbService;
             _categoryDbService = categoryDbService;
             _subCategoryDbService = subCategoryDbService;
-            _colourDbService = colourDbService;
+            _colourGroupDbService = colourGroupDbService;
             _toyDbService = toyDbService;
             _ageGroupDbService = ageGroupDbService;
             _simpleToyDbService = simpleToyDbService;
@@ -70,6 +71,10 @@ namespace CrazyToys.Services
             var priceGroupTask = _priceGroupDbService.GetAll();
             priceGroupTask.Wait();
             priceGroups = priceGroupTask.Result;
+
+            var colourGroupTask = _colourGroupDbService.GetAll();
+            colourGroupTask.Wait();
+            colourGroups = colourGroupTask.Result;
 
             var categoryTask = _categoryDbService.GetAll();
             categoryTask.Wait();
@@ -116,6 +121,10 @@ namespace CrazyToys.Services
             return brandList.ToDictionary(keySelector: b => b.ID, elementSelector: b => b);
         }
 
+        /*
+         TODO overvej om vi skal omstrukturere metoden, så den først bare henter dataen ud som vi får og gemmer et toy 
+        - og så bagefter kan vi tjekke på fx subcat og colour om der er ændringer - for hvis der ikke er behøver man jo ikke køre hele baduljen af koden igennem
+         */
         public async Task<Toy> GetSingleProduct(SimpleToy simpleToy)
         {
             Toy toy = null;
@@ -145,7 +154,6 @@ namespace CrazyToys.Services
                 {
                     toy = new Toy();
                     toy.SimpleToyId = simpleToy.ID;
-                    //toy.OnMarket = simpleToy.OnMarket.Equals("0") ? false : true;
                     bool hasAgeGroup = false; // bruges til at sætte til "Ingens Aldersgruppe"-agegroupen, hvis ingen alder-presentationvalue fundet
 
                     string jsonContent =
@@ -153,9 +161,7 @@ namespace CrazyToys.Services
 
                     dynamic json = JsonConvert.DeserializeObject(jsonContent);
 
-                    //toy.BrandId = simpleToy.SupplierId;
                     toy.BrandId = json["data"]["GeneralInfo"]["BrandID"];
-                    //toy.ProductId = simpleToy.ProductId;
                     toy.ProductId = json["data"]["GeneralInfo"]["BrandPartCode"];
                     toy.ShortDescription = json["data"]["GeneralInfo"]["SummaryDescription"]["ShortSummaryDescription"];
                     toy.LongDescription = json["data"]["GeneralInfo"]["SummaryDescription"]["LongSummaryDescription"];
@@ -163,7 +169,7 @@ namespace CrazyToys.Services
 
                     name = name
                         .Replace(toy.ProductId, "")
-                        //.Replace(brandDict[toy.BrandId].Name, "")
+                        //.Replace(brandDict[toy.BrandId].Name, "") // fjernet så den ikke fjerner barbie i fx Barbie dukke
                         .Trim();
 
                     toy.Name = char.ToUpper(name[0]) + name.Substring(1);
@@ -193,9 +199,9 @@ namespace CrazyToys.Services
                     // FeaturesGroups --> for hver på listen: ["Features"] for hver på listen: ["Feature"] if ["id"] = 1766 -->  item på ["Features"]["PresentationValue"]
                     // stringen skal splittes op i strings og så tilføjes som seperate værdier i colour tabellen, som så skal tilføjes som refs til toy
                     //string colourString = json["data"]["GeneralInfo"]["FeaturesGroups"]["Features"]["PresentationValue"];
-                    string colourId = "1766";
-                    string ageGroupYearsId = "24697";
-                    string ageGroupMonthsId = "24019";
+                    string colourPresentationValueId = "1766"; // 
+                    string ageGroupYearsPresentationValueId = "24697";
+                    string ageGroupMonthsPresentationValueId = "24019";
 
                     var featureGroups = json["data"]["FeaturesGroups"];
 
@@ -208,20 +214,19 @@ namespace CrazyToys.Services
 
                             string featureId = feature["Feature"]["ID"];
 
-                            if (featureId.Equals(colourId))
+                            if (featureId.Equals(colourPresentationValueId))
                             {
                                 string presentationValue = feature["PresentationValue"];
 
-                                string[] colours = presentationValue.Split(", ");
+                                toy.Colour = presentationValue;
 
-                                // for hver farve tilføj til toy-obj
-                                foreach (string colourName in colours)
+                                if (!string.IsNullOrWhiteSpace(toy.Colour))
                                 {
-                                    toy.Colours.Add(await GetOrCreateColour(colourName));
+                                    AddColourGroupsFromColour(toy);
                                 }
 
                             }
-                            else if (featureId.Equals(ageGroupYearsId) || featureId.Equals(ageGroupMonthsId))
+                            else if (featureId.Equals(ageGroupYearsPresentationValueId) || featureId.Equals(ageGroupMonthsPresentationValueId))
                             {
                                 hasAgeGroup = true;
                                 string presentationValue = feature["PresentationValue"];
@@ -232,7 +237,7 @@ namespace CrazyToys.Services
                                 int ageAsInt = Convert.ToInt32(age);
 
                                 // hvis det er i måneder, skal det konverteres til år
-                                if (featureId.Equals(ageGroupMonthsId))
+                                if (featureId.Equals(ageGroupMonthsPresentationValueId))
                                 {
                                     ageAsInt = ageAsInt / 12;
                                     age = ageAsInt.ToString();
@@ -281,7 +286,8 @@ namespace CrazyToys.Services
 
                     if (!hasAgeGroup)
                     {
-                        // sæt til alle aldersgrupper
+                        // hvis der ikke er blevet tildelt nogen aldersgruppe, så sæt til alle aldersgrupper
+                        // (fordi så er det fordi de ikke har sat nogen alder på toy'et vi får ind)
                         toy.AgeGroups = ageGroups;
                     }
                 }
@@ -306,6 +312,22 @@ namespace CrazyToys.Services
             return toy;
         }
 
+        public void AddColourGroupsFromColour(Toy toy)
+        {
+            string toyColour = toy.Colour.ToLower();
+            foreach(ColourGroup colourGroup in colourGroups)
+            {
+                foreach(string sortingKeyWord in colourGroup.SortingKeywords)
+                {
+                    if (toyColour.Contains(sortingKeyWord))
+                    {
+                        toy.ColourGroups.Add(colourGroup);
+                        break; // så går den videre til at tjekke næste colourGroup
+                    }
+                }
+            }
+        }
+
         public async Task<Toy> CreateToyInDb(Toy toy)
         {
             return await _toyDbService.GetByProductIdAndBrandId(toy.ProductId, toy.BrandId) == null
@@ -315,78 +337,59 @@ namespace CrazyToys.Services
 
         public async Task<Toy> CreateOrUpdateToyInDb(Toy toy)
         {
+            // TODO tilføj at den også henter Colour
             Toy toyFromDb = await _toyDbService.GetByProductIdAndBrandId(toy.ProductId, toy.BrandId);
 
             if (toyFromDb != null)
             {
-                if(toyFromDb.Images.Count > 0)
-                {
-                    // slet fra db
-                    await _imageDbService.DeleteRange(toyFromDb.Images);
-                }
+                // Alt dette er slet ikke nødvendigt - det virker uden!
+                await RemoveDuplicateAgeGroups(toyFromDb, toy);
 
-                // hvis der er nogle colours på nyt toy-obj
-                // Efter denne if er kørt er der altså KUN nye farver på toy'et, som IKKE allerede er tilkoblet toyFromDb
-                if (toy.Colours.Count > 0)
-                {
-                    // hent alle farver som toyFromDb har
-                    List<Colour> colours = await _toyDbService.GetColours(toyFromDb.ID);
-
-                    //sammenlign farver på nyt obj, med de farver som allerede er tilknyttet toyFromDb
-                    for (int i = toy.Colours.Count - 1; i >= 0; i--)
-                    {
-                        bool colourAlreadyAdded = false;
-                        // vi tjekker om farven allerede er tilkoblet
-                        foreach (Colour toyFromDbColour in colours)
-                        {
-                            if (toyFromDbColour.Name.Equals(toy.Colours[i].Name))
-                            {
-                                colourAlreadyAdded = true;
-                                break;
-                            }
-                        }
-                        // hvis den allerede er på: slet farven fra toy der lægges ned, så den ikke prøver at oprette farven igen
-                        if (colourAlreadyAdded)
-                        {
-                            toy.Colours.Remove(toy.Colours[i]);
-                        }
-                    }
-                }
-
-                // hvis der er nogle ageGroups på nyt toy-obj
-                // Efter denne if er kørt er der altså KUN nye alders grupper på toy'et, som IKKE allerede er tilkoblet toyFromDb
-                if (toy.AgeGroups.Count > 0)
-                {
-                    // hent alle ageGroups som toyFromDb har
-                    List<AgeGroup> ageGroups = await _toyDbService.GetAgeGroups(toyFromDb.ID);
-
-                    //sammenlign ageGroups på nyt obj, med de ageGroups som allerede er tilknyttet toyFromDb
-                    for (int i = toy.AgeGroups.Count - 1; i >= 0; i--)
-                    {
-                        bool ageGroupAlreadyAdded = false;
-                        // vi tjekker om ageGroup allerede er tilkoblet
-                        foreach (AgeGroup toyFromDbAgeGroup in ageGroups)
-                        {
-                            if (toyFromDbAgeGroup.ID.Equals(toy.AgeGroups[i].ID))
-                            {
-                                ageGroupAlreadyAdded = true;
-                                break;
-                            }
-                        }
-                        // hvis den allerede er på: slet alders gruppen
-                        if (ageGroupAlreadyAdded)
-                        {
-                            toy.AgeGroups.Remove(toy.AgeGroups[i]);
-                        }
-                    }
-                }
                 toyFromDb.UpdateValuesToAnotherToysValues(toy);
-
                 return await _toyDbService.Update(toyFromDb);
             }
             else
             {
                 return await _toyDbService.Create(toy);
+            }
+        }
+
+        // TODO slet!
+        public async Task RemoveDuplicateAgeGroups(Toy toyFromDb, Toy toy)
+        {
+          
+            if(toyFromDb.Images.Count > 0)
+            {
+                // slet fra db
+                await _imageDbService.DeleteRange(toyFromDb.Images);
+            }
+
+            // hvis der er nogle ageGroups på nyt toy-obj
+            // Efter denne if er kørt er der altså KUN nye alders grupper på toy'et, som IKKE allerede er tilkoblet toyFromDb
+            if (toy.AgeGroups.Count > 0)
+            {
+                // hent alle ageGroups som toyFromDb har
+                List<AgeGroup> ageGroups = await _toyDbService.GetAgeGroups(toyFromDb.ID);
+
+                //sammenlign ageGroups på nyt obj, med de ageGroups som allerede er tilknyttet toyFromDb
+                for (int i = toy.AgeGroups.Count - 1; i >= 0; i--)
+                {
+                    bool ageGroupAlreadyAdded = false;
+                    // vi tjekker om ageGroup allerede er tilkoblet
+                    foreach (AgeGroup toyFromDbAgeGroup in ageGroups)
+                    {
+                        if (toyFromDbAgeGroup.ID.Equals(toy.AgeGroups[i].ID))
+                        {
+                            ageGroupAlreadyAdded = true;
+                            break;
+                        }
+                    }
+                    // hvis den allerede er på: slet alders gruppen
+                    if (ageGroupAlreadyAdded)
+                    {
+                        toy.AgeGroups.Remove(toy.AgeGroups[i]);
+                    }
+                }
             }
         }
 
@@ -410,6 +413,7 @@ namespace CrazyToys.Services
                             // og tilføjet categorier til dens liste, så de får en relation
                             subCategory.Categories.Add(category);
                             break;
+                            break;
                         }
                     }
                 }
@@ -428,15 +432,15 @@ namespace CrazyToys.Services
             return subCategory;
         }
 
-        public async Task<Colour> GetOrCreateColour(string name)
+        public async Task<ColourGroup> GetOrCreateColour(string name)
         {
             //tjek om den er i db
-            var colour = await _colourDbService.GetByName(name);
+            var colour = await _colourGroupDbService.GetByName(name);
 
             if (colour == null)
             {
                 // opret nyt colour-obj
-                colour = new Colour(name);
+                colour = new ColourGroup(name);
             }
             return colour;
         }
@@ -455,8 +459,5 @@ namespace CrazyToys.Services
         {
             return await _simpleToyDbService.Update(simpleToy);
         }
-
-        
-
     }
 }

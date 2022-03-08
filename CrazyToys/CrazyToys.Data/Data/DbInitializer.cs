@@ -77,6 +77,27 @@ namespace CrazyToys.Data.Data
                 }
             }
 
+            if (!context.ColourGroups.Any())
+            {
+                var colourGroups = new ColourGroup[]
+                {
+                    new ColourGroup("Grøn",  new string[] {"grøn"}),
+                    new ColourGroup("Gul", new string[] {"gul"}),
+                    new ColourGroup("Rød",  new string[] {"rød"}),
+                    new ColourGroup("Lyserød", new string[] {"lyserød", "pink"}),
+                    new ColourGroup("Blå", new string[] {"blå", "aqua"}),
+                    new ColourGroup("Multifarvet", new string[] {"mange", "fler", "forskellig", "multi"}),
+                    new ColourGroup("Sort",  new string[] {"sort"}),
+                    new ColourGroup("Grå",  new string[] {"grå"}),
+                    new ColourGroup("Gennemsigtig",  new string[] {"gennemsigtig", "klar"}) // TODO flere
+
+                };
+                foreach (ColourGroup colourGroup in colourGroups)
+                {
+                    context.ColourGroups.Add(colourGroup);
+                }
+            }
+
             if (!context.Categories.Any())
             {
                 var categories = new Category[]
