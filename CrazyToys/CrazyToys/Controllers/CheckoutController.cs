@@ -30,6 +30,8 @@ namespace CrazyToys.Web.Controllers
             }
 
             // Work with form data here
+            //TODO Lav en Order entity Og få hangfire til at kalde en metode der sender email til kunde med en ordre bekfræftelse
+            
             var noget = model.Firstname;
 
             return Redirect("https://localhost:44325/order-confirmation");
