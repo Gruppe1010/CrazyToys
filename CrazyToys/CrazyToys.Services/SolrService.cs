@@ -96,30 +96,6 @@ namespace CrazyToys.Services
             return categoryDict;
         }
 
-        public List<string> GetAgeGroupsFacet()
-        {
-            List<string> ageGroupIntervals = new List<string>();
-
-            var facets = _solr.Query(SolrQuery.All, new QueryOptions
-            {
-                Rows = 0,
-                Facet = new FacetParameters
-                {
-                    Queries = new[] { new SolrFacetFieldQuery("ageGroupIntervals") }
-                }
-            });
-            // For at få result fra FacetFieldQuery skal FacetFields[] kaldes
-            foreach (var facet in facets.FacetFields["ageGroupIntervals"])
-            {
-                ageGroupIntervals.Add(facet.Key);
-            }
-
-            return ageGroupIntervals;
-        }
-
-
-
-        
 
         public List<string> GetPriceGroupFacet()
         {

@@ -5,7 +5,7 @@
     Layout = "Master.cshtml";
     var categories = ViewData["Categories"] as SortedDictionary<string, int>;
     var brands = ViewData["Brands"] as SortedDictionary<string, int>;
-    var ageGroups = ViewData["AgeGroups"] as List<string>;
+    var ageGroups = ViewData["AgeGroups"] as List<AgeGroup>;
     var colourGroups = ViewData["ColourGroups"] as List<ColourGroup>;
     var priceGroups = ViewData["PriceGroups"] as List<string>;
 
@@ -110,10 +110,10 @@
                                         <div class="shop__sidebar__size">
                                             @{
                                                 i = 1;
-                                                foreach (string ageGroup in ageGroups)
+                                                foreach (AgeGroup ageGroup in ageGroups)
                                                 {
                                                     <label class="hover" for="@i">
-                                                        @ageGroup
+                                                        @ageGroup.Interval
                                                         <input type="radio" id="@i">
                                                     </label>
 

@@ -14,10 +14,6 @@ namespace CrazyToys.Interfaces
 
         SortedDictionary<string, int> GetCategoryFacet();
 
-        List<string> GetAgeGroupsFacet();
-
-        //List<string> GetColourFacet();
-
         List<string> GetPriceGroupFacet();
     }
 }
