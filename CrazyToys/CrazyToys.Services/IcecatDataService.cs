@@ -381,7 +381,6 @@ namespace CrazyToys.Services
                     }
                 }
                 toyFromDb.UpdateValuesToAnotherToysValues(toy);
-                toyFromDb.Stock = 20;
 
                 return await _toyDbService.Update(toyFromDb);
             }
