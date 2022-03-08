@@ -23,8 +23,6 @@ namespace CrazyToys.Entities.SolrModels
         public IList<string> Colours { get; set; }
         [SolrField("ageGroup")]
         public string AgeGroup { get; set; }
-        [SolrField("priceGroup")]
-        public string PriceGroup { get; set; }
         [SolrField("ageGroupIntervals")]
         public IList<string> AgeGroupIntevals { get; set; }
         [SolrField("images")]
@@ -35,6 +33,8 @@ namespace CrazyToys.Entities.SolrModels
         public string SubCategory { get; set; }
         [SolrField("price")]
         public int Price { get; set; }
+        [SolrField("priceGroup")]
+        public string PriceGroup { get; set; }
         [SolrField("stock")]
         public int Stock { get; set; }
 
@@ -47,6 +47,7 @@ namespace CrazyToys.Entities.SolrModels
             LongDescription = toy.LongDescription;
             Categories = toy.SubCategory.Categories.Select(c => c.Name).ToList();
             Price = toy.Price;
+            PriceGroup = toy.PriceGroup.Interval;
             Stock = toy.Stock;
             Brand = toy.Brand.Name;
             Colours = toy.Colours.Select(c => c.Name).ToList();
