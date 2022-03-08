@@ -147,29 +147,16 @@ namespace CrazyToys.Services
          * **/
         public async Task UpdateSolrDb()
         {
-            await UpdateSolrToys();
-        }
-
-        public async Task UpdateSolrToys()
-        {
             // hent alle Toys op fra db
             List<Toy> toys = await _toyDbService.GetAllWithRelations();
 
             toys.ForEach(toy => {
-            _solrToyService.CreateOrUpdate(new SolrToy(toy));
+                _solrToyService.CreateOrUpdate(new SolrToy(toy));
             });
+            
         }
-        /*
-        public async Task UpdateSolrPriceGroups()
-        {
-            // hent alle Toys op fra db
-            List<PriceGroup> priceGroups = await _priceGroupDbService.GetAll();
 
-            priceGroups.ForEach(priceGroup => {
-                _solrPriceGroupService.CreateOrUpdate(new SolrPriceGroup(priceGroup));
-            });
-        }
-        */
+       
 
 
 
