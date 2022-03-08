@@ -23,7 +23,7 @@ namespace CrazyToys.Web.Controllers
 
         private readonly IEntityCRUD<Brand> _brandDbService;
         private readonly IEntityCRUD<Category> _categoryDbService;
-        private readonly IEntityCRUD<Colour> _colourDbService;
+        private readonly IEntityCRUD<ColourGroup> _colourDbService;
         private readonly ToyDbService _toyDbService;
         private readonly IEntityCRUD<AgeGroup> _ageGroupDbService;
        
@@ -36,7 +36,7 @@ namespace CrazyToys.Web.Controllers
             ISearchService<SolrToy> solrToyService,
             IEntityCRUD<Brand> brandDbService, 
             IEntityCRUD<Category> categoryDbService,
-            IEntityCRUD<Colour> colourDbService, 
+            IEntityCRUD<ColourGroup> colourDbService, 
             ToyDbService toyDbService,
             IEntityCRUD<AgeGroup> ageGroupDbService
           )

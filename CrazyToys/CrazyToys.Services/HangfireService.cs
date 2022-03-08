@@ -135,7 +135,7 @@ namespace CrazyToys.Services
                 {
                     Toy addedToy = isDaily
                                   ? await _icecatDataService.CreateOrUpdateToyInDb(toy)
-                                  : await _icecatDataService.CreateToyInDb(toy);
+                                  : await _icecatDataService.CreateToyInDb(toy); // TODO det ville så være her at man så skulle tilføje ting som fx forbindelse til colourgroups og pricegroups osv.
                 }
             }
         }

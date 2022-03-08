@@ -71,7 +71,7 @@ namespace CrazyToys.Services.EntityDbServices
             throw new NotImplementedException();
         }
 
-        public async Task<List<Colour>> GetColours(string toyId)
+        public async Task<List<ColourGroup>> GetColours(string toyId)
         {
             var query = from colour in _context.Colours
                         where colour.Toys.Any(t => t.ID.Equals(toyId))
@@ -110,6 +110,7 @@ namespace CrazyToys.Services.EntityDbServices
 
             var toy = await _context.Toys
                 .Include(t => t.Images)
+                .Include(t => t.ColourGroups) // vibe har tilføjet denne lige
                 .FirstOrDefaultAsync(t => t.ProductId.Equals(productId) && t.Brand.ID.Equals(brandId));
 
             return toy;
@@ -120,7 +121,7 @@ namespace CrazyToys.Services.EntityDbServices
             var toys = await _context.Toys
                 .Include(t => t.Images)
                 .Include(t => t.SubCategory)
-                .Include(t => t.Colours)
+                .Include(t => t.ColourGroups)
                 .Include(t => t.AgeGroups)
                 .Include(t => t.PriceGroup)
                 .Where(t => t.SimpleToy.OnMarket.Equals("1") && t.Stock != 0)

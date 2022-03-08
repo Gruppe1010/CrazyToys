@@ -10,16 +10,16 @@ using System.Threading.Tasks;
 
 namespace CrazyToys.Services.EntityDbServices
 {
-    public class ColourDbService : IEntityCRUD<Colour>
+    public class ColourGroupDbService : IEntityCRUD<ColourGroup>
     {
         private readonly Context _context;
 
-        public ColourDbService(Context context)
+        public ColourGroupDbService(Context context)
         {
             _context = context;
         }
 
-        public async Task<Colour> Create(Colour colour)
+        public async Task<ColourGroup> Create(ColourGroup colour)
         {
             _context.Colours.Add(colour);
             await _context.SaveChangesAsync();
@@ -27,12 +27,12 @@ namespace CrazyToys.Services.EntityDbServices
             return colour;
         }
 
-        public async Task<List<Colour>> GetAll()
+        public async Task<List<ColourGroup>> GetAll()
         {
             return await _context.Colours.ToListAsync(); 
         }
 
-        public Task<Colour> GetById(string id)
+        public Task<ColourGroup> GetById(string id)
         {
             /*
             if (id != 0)
@@ -55,12 +55,12 @@ namespace CrazyToys.Services.EntityDbServices
         }
         */
 
-        public Task<Colour> Update(Colour colour)
+        public Task<ColourGroup> Update(ColourGroup colour)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Colour> GetByName(string name)
+        public async Task<ColourGroup> GetByName(string name)
         {
             if (!string.IsNullOrWhiteSpace(name))
             {
@@ -73,17 +73,17 @@ namespace CrazyToys.Services.EntityDbServices
 
         }
 
-        public Task<Colour> CreateOrUpdate(Colour t)
+        public Task<ColourGroup> CreateOrUpdate(ColourGroup t)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<Colour>> GetAllWithRelations()
+        public Task<List<ColourGroup>> GetAllWithRelations()
         {
             throw new NotImplementedException();
         }
 
-        public Task DeleteRange(IList<Colour> tList)
+        public Task DeleteRange(IList<ColourGroup> tList)
         {
             throw new NotImplementedException();
         }

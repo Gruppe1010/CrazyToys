@@ -11,7 +11,7 @@ namespace CrazyToys.Interfaces.EntityDbInterfaces
     {
         Task<Toy> GetByProductIdAndBrandId(string productId, string brandId);
 
-        Task<List<Colour>> GetColours(string toyId);
+        Task<List<ColourGroup>> GetColours(string toyId);
 
         Task<List<AgeGroup>> GetAgeGroups(string toyId);
     }

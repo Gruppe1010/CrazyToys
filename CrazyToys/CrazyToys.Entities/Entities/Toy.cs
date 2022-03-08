@@ -15,7 +15,8 @@ namespace CrazyToys.Entities.Entities
         public PriceGroup PriceGroup { get; set; }
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
-        public IList<Colour> Colours { get; set; }
+        public string Colour { get; set; }
+        public IList<ColourGroup> ColourGroups { get; set; }
         public IList<AgeGroup> AgeGroups { get; set; }
         public IList<Image> Images { get; set; }
         public SubCategory SubCategory { get; set; } // nav-prop
@@ -27,7 +28,7 @@ namespace CrazyToys.Entities.Entities
 
         public Toy()
         {
-            Colours = new List<Colour>();
+            ColourGroups = new List<ColourGroup>();
             AgeGroups = new List<AgeGroup>();
             Images = new List<Image>();
         }
@@ -47,7 +48,8 @@ namespace CrazyToys.Entities.Entities
             Price = toy.Price;
             Stock = toy.Stock;
             Images = toy.Images;
-            Colours = toy.Colours;
+            Colour = toy.Colour;
+            ColourGroups = toy.ColourGroups;
             AgeGroups = toy.AgeGroups;
         }
     }
