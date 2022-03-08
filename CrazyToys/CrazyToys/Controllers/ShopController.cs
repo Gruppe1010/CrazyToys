@@ -62,11 +62,14 @@ namespace CrazyToys.Web.Controllers
             var colourGroupTask = _colourGroupDbService.GetAll();
             colourGroupTask.Wait();
             List<ColourGroup> colourGroups = colourGroupTask.Result;
+            //List<string> coloursList = _solrToyService.GetColourFacet();
+            List<string> priceGroupsList = _solrToyService.GetPriceGroupFacet();
 
             var toys = await _toyDbService.GetAllWithRelations();
 
             ViewData["Categories"] = categoryDict;
             ViewData["AgeGroups"] = ageGroupsList.OrderBy(a => a).ToList();
+            ViewData["PriceGroups"] = priceGroupsList.OrderBy(a => a).ToList();
             ViewData["Brands"] = brandDict;
             ViewData["ColourGroups"] = colourGroups.OrderBy(a => a.Name).ToList();
             ViewData["Toys"] = toys;

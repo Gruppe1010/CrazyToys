@@ -7,6 +7,8 @@
     var brands = ViewData["Brands"] as SortedDictionary<string, int>;
     var ageGroups = ViewData["AgeGroups"] as List<string>;
     var colourGroups = ViewData["ColourGroups"] as List<ColourGroup>;
+    var priceGroups = ViewData["PriceGroups"] as List<string>;
+
     var toys = ViewData["Toys"] as List<Toy>;
     var i = 0;
 }
@@ -88,12 +90,12 @@
                                     <div class="card-body">
                                         <div class="shop__sidebar__price">
                                             <ul>
-                                                <li><a href="#">0.00 - 50.00 DKK</a></li>
-                                                <li><a href="#">50.00 - 100.00 DKK</a></li>
-                                                <li><a href="#">100.00 - 150.00 DKK</a></li>
-                                                <li><a href="#">150.00 - 200.00 DKK</a></li>
-                                                <li><a href="#">200.00 - 250.00 DKK</a></li>
-                                                <li><a href="#">250.00+ DKK</a></li>
+                                                @{
+                                                    foreach (string priceGroup in priceGroups)
+                                                    {
+                                                        <li><a href="#">@priceGroup</a></li>
+                                                    }
+                                                }
                                             </ul>
                                         </div>
                                     </div>
@@ -138,11 +140,7 @@
                                                         <input type="radio" id="sp-@i">
                                                     </label>
 
-                                                    /*
-                                                    <label class="hover" for="@i">@colour
-                                                        <input type="radio" id="@i">
-                                                    </label>
-                                                    */
+                                                 
 
                                                     i = i + 1;
                                                 }
