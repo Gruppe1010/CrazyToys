@@ -8,6 +8,7 @@ namespace CrazyToys.Entities.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string ID { get; set; }
         public string Name { get; set; }
+        public string ColourCode { get; set; }
         public ICollection<Toy> Toys { get; set; }
         [Column("SortingKeywords")]
         public string _sortingKeywords { get; set; }
@@ -37,10 +38,11 @@ namespace CrazyToys.Entities.Entities
             Name = name;
         }
 
-        public ColourGroup(string name, string[] sortingKeyWords)
+        public ColourGroup(string name, string[] sortingKeyWords, string colourCode)
         {
             Name = name;
             SortingKeywords = sortingKeyWords;
+            ColourCode = colourCode;
         }
 
         public ColourGroup(string iD, string name)
