@@ -342,55 +342,57 @@ namespace CrazyToys.Services
 
             if (toyFromDb != null)
             {
-
-                /*
-                if(toyFromDb.Images.Count > 0)
-                {
-                    // slet fra db
-                    await _imageDbService.DeleteRange(toyFromDb.Images);
-                }
-             
-
-                // TODO tjek om dette er nødvendigt!!!
-
-
-               
-                // hvis der er nogle ageGroups på nyt toy-obj
-                // Efter denne if er kørt er der altså KUN nye alders grupper på toy'et, som IKKE allerede er tilkoblet toyFromDb
-                if (toy.AgeGroups.Count > 0)
-                {
-                    // hent alle ageGroups som toyFromDb har
-                    List<AgeGroup> ageGroups = await _toyDbService.GetAgeGroups(toyFromDb.ID);
-
-                    //sammenlign ageGroups på nyt obj, med de ageGroups som allerede er tilknyttet toyFromDb
-                    for (int i = toy.AgeGroups.Count - 1; i >= 0; i--)
-                    {
-                        bool ageGroupAlreadyAdded = false;
-                        // vi tjekker om ageGroup allerede er tilkoblet
-                        foreach (AgeGroup toyFromDbAgeGroup in ageGroups)
-                        {
-                            if (toyFromDbAgeGroup.ID.Equals(toy.AgeGroups[i].ID))
-                            {
-                                ageGroupAlreadyAdded = true;
-                                break;
-                            }
-                        }
-                        // hvis den allerede er på: slet alders gruppen
-                        if (ageGroupAlreadyAdded)
-                        {
-                            toy.AgeGroups.Remove(toy.AgeGroups[i]);
-                        }
-                    }
-                }
-                */
+                // Alt dette er slet ikke nødvendigt - det virker uden!
+                UbrugeligMetode(toyFromDb, toy);
+              
                 toyFromDb.UpdateValuesToAnotherToysValues(toy);
-
                 return await _toyDbService.Update(toyFromDb);
             }
             else
             {
                 return await _toyDbService.Create(toy);
             }
+        }
+
+        // TODO slet!
+        public void UbrugeligMetode(Toy toyFromDb, Toy toy)
+        {
+            /*
+            if(toyFromDb.Images.Count > 0)
+            {
+                // slet fra db
+                await _imageDbService.DeleteRange(toyFromDb.Images);
+            }
+
+            // hvis der er nogle ageGroups på nyt toy-obj
+            // Efter denne if er kørt er der altså KUN nye alders grupper på toy'et, som IKKE allerede er tilkoblet toyFromDb
+            if (toy.AgeGroups.Count > 0)
+            {
+                // hent alle ageGroups som toyFromDb har
+                List<AgeGroup> ageGroups = await _toyDbService.GetAgeGroups(toyFromDb.ID);
+
+                //sammenlign ageGroups på nyt obj, med de ageGroups som allerede er tilknyttet toyFromDb
+                for (int i = toy.AgeGroups.Count - 1; i >= 0; i--)
+                {
+                    bool ageGroupAlreadyAdded = false;
+                    // vi tjekker om ageGroup allerede er tilkoblet
+                    foreach (AgeGroup toyFromDbAgeGroup in ageGroups)
+                    {
+                        if (toyFromDbAgeGroup.ID.Equals(toy.AgeGroups[i].ID))
+                        {
+                            ageGroupAlreadyAdded = true;
+                            break;
+                        }
+                    }
+                    // hvis den allerede er på: slet alders gruppen
+                    if (ageGroupAlreadyAdded)
+                    {
+                        toy.AgeGroups.Remove(toy.AgeGroups[i]);
+                    }
+                }
+            }
+            */
+
         }
 
 
@@ -458,8 +460,5 @@ namespace CrazyToys.Services
         {
             return await _simpleToyDbService.Update(simpleToy);
         }
-
-        
-
     }
 }
