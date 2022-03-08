@@ -15,44 +15,45 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="checkout__input">
-                        <p>Fist Name<span>*</span></p>
-                        @Html.TextBoxFor(m => m.Firstname)
+                        <p>Fornavn<span>*</span></p>
+                        @Html.TextBoxFor(m => m.Firstname, new { @placeholder = "Fx. Ole", @required  = "required"})
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="checkout__input">
-                        <p>Last Name<span>*</span></p>
-                        @Html.TextBoxFor(m => m.Lastname)
+                        <p>Efternavn<span>*</span></p>
+                        @Html.TextBoxFor(m => m.Lastname, new { @placeholder = "Fx. Olesen", @required  = "required"})
                     </div>
                 </div>
             </div>
             <div class="checkout__input">
-                <p>Country<span>*</span></p>
-                @Html.TextBoxFor(m => m.Country)
+                <p>Land<span>*</span></p>
+                @Html.TextBoxFor(m => m.Country, new { @placeholder = "Fx. Danmark", @required  = "required"})
             </div>
             <div class="checkout__input">
-                <p>Address<span>*</span></p>
-                @Html.TextBoxFor(m => m.Address)
+                <p>By<span>*</span></p>
+                @Html.TextBoxFor(m => m.City, new { @placeholder = "Fx. København", @required  = "required"})
             </div>
             <div class="checkout__input">
-                <p>City<span>*</span></p>
-                @Html.TextBoxFor(m => m.City)
+                <p>Adresse<span>*</span></p>
+                @Html.TextBoxFor(m => m.Address, new { @placeholder = "Fx. Gothersgade 14", @required  = "required"})
             </div>
             <div class="checkout__input">
-                <p>Postcode<span>*</span></p>
-                @Html.TextBoxFor(m => m.Postcode)
+                <p>Postnummer<span>*</span></p>
+                @Html.TextBoxFor(m => m.Postcode, new { @placeholder = "Fx. 1123", @required  = "required"})
             </div>
             <div class="row">
                 <div class="col-lg-6">
                     <div class="checkout__input">
-                        <p>Phone<span>*</span></p>
-                        @Html.TextBoxFor(m => m.Phone)
+                        <p>Tlf. nr.<span>*</span></p>
+                        @Html.TextBoxFor(m => m.Phone, new { @placeholder = "Fx. 70206538", @required  = "required"})
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="checkout__input">
                         <p>Email<span>*</span></p>
-                        @Html.TextBoxFor(m => m.Email)
+                        @Html.TextBoxFor(m => m.Email, new { @placeholder = "Fx. Ole@hotmail.dk", @required  = "required"})
+
                     </div>
                 </div>
             </div>

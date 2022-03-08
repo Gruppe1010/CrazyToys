@@ -32,7 +32,7 @@ namespace CrazyToys.Web.Controllers
             // Work with form data here
             var noget = model.Firstname;
 
-            return RedirectToCurrentUmbracoPage();
+            return Redirect("https://localhost:44325/order-confirmation");
         }
     }
 }
