@@ -119,24 +119,24 @@ namespace CrazyToys.Services
 
 
 
-        public List<string> GetColourFacet()
+        public List<string> GetColourGroupsFacet()
         {
-            List<string> colours = new List<string>();
+            List<string> colourGroups = new List<string>();
 
             var facets = _solr.Query(SolrQuery.All, new QueryOptions
             {
                 Rows = 0,
                 Facet = new FacetParameters
                 {
-                    Queries = new[] { new SolrFacetFieldQuery("colours") }
+                    Queries = new[] { new SolrFacetFieldQuery("colourGroups") }
                 }
             });
             // For at få result fra FacetFieldQuery skal FacetFields[] kaldes
-            foreach (var facet in facets.FacetFields["colours"])
+            foreach (var facet in facets.FacetFields["colourGroups"])
             {
-                colours.Add(facet.Key);
+                colourGroups.Add(facet.Key);
             }
-            return colours;
+            return colourGroups;
         }
     }
 }
