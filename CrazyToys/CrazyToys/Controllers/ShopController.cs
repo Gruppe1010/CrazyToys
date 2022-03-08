@@ -68,14 +68,16 @@ namespace CrazyToys.Web.Controllers
             SortedDictionary<string, int> brandDict = _solrToyService.GetBrandFacet();
             SortedDictionary<string, int> categoryDict = _solrToyService.GetCategoryFacet();
             List<string> ageGroupsList= _solrToyService.GetAgeGroupsFacet();
-            List<string> coloursList = _solrToyService.GetColourFacet();
+            //List<string> coloursList = _solrToyService.GetColourFacet();
+            List<string> priceGroupsList = _solrToyService.GetPriceGroupFacet();
 
             var toys = await _toyDbService.GetAllWithRelations();
 
             ViewData["Categories"] = categoryDict;
             ViewData["AgeGroups"] = ageGroupsList.OrderBy(a => a).ToList();
+            ViewData["PriceGroups"] = priceGroupsList.OrderBy(a => a).ToList();
             ViewData["Brands"] = brandDict;
-            ViewData["Colours"] = coloursList.OrderBy(a => a).ToList();
+            //ViewData["Colours"] = coloursList.OrderBy(a => a).ToList();
             ViewData["Toys"] = toys;
 
             // return a 'model' to the selected template/view for this page.

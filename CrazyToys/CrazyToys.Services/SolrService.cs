@@ -138,5 +138,26 @@ namespace CrazyToys.Services
             }
             return colourGroups;
         }
+
+        public List<string> GetPriceGroupFacet()
+        {
+            List<string> priceGroup = new List<string>();
+
+            var facets = _solr.Query(SolrQuery.All, new QueryOptions
+            {
+                Rows = 0,
+                Facet = new FacetParameters
+                {
+                    Queries = new[] { new SolrFacetFieldQuery("priceGroup") }
+                }
+            });
+            // For at få result fra FacetFieldQuery skal FacetFields[] kaldes
+            foreach (var facet in facets.FacetFields["priceGroup"])
+            {
+                priceGroup.Add(facet.Key);
+            }
+
+            return priceGroup;
+        }
     }
 }
