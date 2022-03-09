@@ -37,7 +37,7 @@ namespace CrazyToys.Data.Data
                     context.Brands.Add(brand);
                 }
             }
- 
+
 
             if (!context.AgeGroups.Any())
             {
@@ -88,9 +88,13 @@ namespace CrazyToys.Data.Data
                     new ColourGroup("Blå", new string[] {"blå", "aqua"}, "#00a8f3"),
                     new ColourGroup("Multifarvet", new string[] {"mange", "fler", "forskellig", "multi"}, "linear-gradient(90deg, #fff810  33%, rgba(0,0,0,0) 33%), linear-gradient(90deg, #63e89e 66%, #ff7ee3 66%);"),
                     new ColourGroup("Sort",  new string[] {"sort"}, "black"),
-                    new ColourGroup("Hvid",  new string[] {"hvid", "gennemsigtig", "klar"}, "white"), // TODO flere
-                    new ColourGroup("Grå",  new string[] {"grå"}, "#c3c3c3")
-
+                    new ColourGroup("Hvid",  new string[] {"hvid", "gennemsigtig", "klar"}, "white"), 
+                    new ColourGroup("Grå",  new string[] {"grå"}, "#c3c3c3"),
+                    new ColourGroup("Lilla",  new string[] {"lilla"}, "#800080"),
+                    new ColourGroup("Orange",  new string[] {"orange"}, "#ffa500"),
+                    new ColourGroup("Brun",  new string[] {"brun"}, "#8b4513"),
+                    new ColourGroup("Guld",  new string[] {"guld"}, "#FFD700"),
+                    new ColourGroup("Sølv",  new string[] {"sølv"}, "#D3D3D3") // TODO flere
                 };
                 foreach (ColourGroup colourGroup in colourGroups)
                 {
@@ -101,7 +105,7 @@ namespace CrazyToys.Data.Data
             if (!context.Categories.Any())
             {
                 var categories = new Category[]
-                { 
+                {
                     new Category("Dukker", new string[] {"dukke"}),
                     new Category("Figurer", new string[] {"figur"}),
                     new Category("Bamser", new string[] {"bamse", "tøjdyr"}),
