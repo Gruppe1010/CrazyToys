@@ -96,7 +96,8 @@ namespace CrazyToys.Services
             return categoryDict;
         }
 
-
+        //TODO Fjern det her nå vi får hentet fra SQL i stedet
+        /*
         public List<string> GetPriceGroupFacet()
         {
             List<string> priceGroup = new List<string>();
@@ -117,5 +118,6 @@ namespace CrazyToys.Services
 
             return priceGroup;
         }
+        */
     }
 }

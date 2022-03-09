@@ -14,6 +14,9 @@ namespace CrazyToys.Interfaces
 
         SortedDictionary<string, int> GetCategoryFacet();
 
+        //TODO Fjern det her nå vi får hentet fra SQL i stedet
+        /*
         List<string> GetPriceGroupFacet();
+        */
     }
 }
