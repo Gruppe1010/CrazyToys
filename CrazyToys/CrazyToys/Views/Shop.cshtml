@@ -7,7 +7,7 @@
     var brands = ViewData["Brands"] as SortedDictionary<string, int>;
     var ageGroups = ViewData["AgeGroups"] as List<AgeGroup>;
     var colourGroups = ViewData["ColourGroups"] as List<ColourGroup>;
-    var priceGroups = ViewData["PriceGroups"] as List<string>;
+    var priceGroups = ViewData["PriceGroups"] as List<PriceGroup>;
 
     var toys = ViewData["Toys"] as List<Toy>;
     var i = 0;
@@ -91,9 +91,9 @@
                                         <div class="shop__sidebar__price">
                                             <ul>
                                                 @{
-                                                    foreach (string priceGroup in priceGroups)
+                                                    foreach (PriceGroup priceGroup in priceGroups)
                                                     {
-                                                        <li><a href="#">@priceGroup</a></li>
+                                                        <li><a href="#">@priceGroup.Interval DKK</a></li>
                                                     }
                                                 }
                                             </ul>

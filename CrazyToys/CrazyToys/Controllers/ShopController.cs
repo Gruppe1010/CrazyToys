@@ -24,6 +24,7 @@ namespace CrazyToys.Web.Controllers
         private readonly ToyDbService _toyDbService;
         private readonly IEntityCRUD<ColourGroup> _colourGroupDbService;
         private readonly IEntityCRUD<AgeGroup> _ageGroupDbService;
+        private readonly IEntityCRUD<PriceGroup> _priceGroupDbService;
 
 
 
@@ -36,7 +37,8 @@ namespace CrazyToys.Web.Controllers
             ISearchService<SolrToy> solrToyService,
             ToyDbService toyDbService,
             IEntityCRUD<ColourGroup> colourGroupDbService, 
-            IEntityCRUD<AgeGroup> ageGroupDbService
+            IEntityCRUD<AgeGroup> ageGroupDbService,
+            IEntityCRUD<PriceGroup> priceGroupDbService
           )
             : base(logger, compositeViewEngine, umbracoContextAccessor)
         {
@@ -46,6 +48,7 @@ namespace CrazyToys.Web.Controllers
             _toyDbService = toyDbService;
             _colourGroupDbService = colourGroupDbService;
             _ageGroupDbService = ageGroupDbService;
+            _priceGroupDbService = priceGroupDbService;
         }
 
         //
@@ -64,7 +67,11 @@ namespace CrazyToys.Web.Controllers
         {
             SortedDictionary<string, int> brandDict = _solrToyService.GetBrandFacet();
             SortedDictionary<string, int> categoryDict = _solrToyService.GetCategoryFacet();
-            List<string> priceGroups = _solrToyService.GetPriceGroupFacet();
+            //List<string> priceGroups = _solrToyService.GetPriceGroupFacet();
+
+            var priceGroupTask = _priceGroupDbService.GetAll();
+            priceGroupTask.Wait();
+            List<PriceGroup> priceGroups = priceGroupTask.Result;
 
             var colourGroupTask = _colourGroupDbService.GetAll();
             colourGroupTask.Wait();
@@ -78,7 +85,7 @@ namespace CrazyToys.Web.Controllers
 
             ViewData["Categories"] = categoryDict;
             ViewData["AgeGroups"] = ageGroupList.OrderBy(a => a.Interval).ToList();
-            ViewData["PriceGroups"] = priceGroups.OrderBy(a => a).ToList();
+            ViewData["PriceGroups"] = priceGroups.OrderBy(a => a.Interval).ToList();
             ViewData["Brands"] = brandDict;
             ViewData["ColourGroups"] = colourGroups.OrderBy(a => a.Name).ToList();
             ViewData["Toys"] = toys;
