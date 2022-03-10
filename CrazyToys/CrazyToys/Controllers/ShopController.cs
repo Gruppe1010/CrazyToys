@@ -63,8 +63,15 @@ namespace CrazyToys.Web.Controllers
             [FromQuery(Name = "brands")] string brands,
             [FromQuery(Name = "price")] string price,
             [FromQuery(Name = "ageGroups")] string ageGroups,
-            [FromQuery(Name = "colours")] string colours)
+            [FromQuery(Name = "colours")] string colours,
+            [FromQuery(Name = "p")] int page,
+            [FromQuery(Name = "q")] string search)
         {
+
+
+
+
+
             SortedDictionary<string, int> brandDict = _solrToyService.GetBrandFacet();
             SortedDictionary<string, int> categoryDict = _solrToyService.GetCategoryFacet();
             //List<string> priceGroups = _solrToyService.GetPriceGroupFacet();
