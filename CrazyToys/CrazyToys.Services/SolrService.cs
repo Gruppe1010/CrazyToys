@@ -21,10 +21,13 @@ namespace CrazyToys.Services
         where TSolrOperations : ISolrOperations<T>
     {
         private readonly TSolrOperations _solr;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public SolrService(ISolrOperations<T> solr)
+
+        public SolrService(ISolrOperations<T> solr, IHttpClientFactory httpClientFactory)
         {
             _solr = (TSolrOperations)solr;
+            _httpClientFactory = httpClientFactory;
         }
 
 
@@ -95,7 +98,51 @@ namespace CrazyToys.Services
 
             return categoryDict;
         }
+        
+        public List<T> GetToysForSinglePage(
+            string category, 
+            string subCategory, 
+            string brands, 
+            string price, 
+            string ageGroups, 
+            string colours, 
+            int page, 
+            string search)
+        {
+            List <Toy> toys = new List<Toy>();
 
+            string url = $"https://live.icecat.biz/api/?UserName={username}&Language=dk&icecat_id={simpleToy.IcecatId}";
+
+
+
+            var httpRequestMessage = new HttpRequestMessage(
+                HttpMethod.Get, url)
+            {
+                Headers =
+                    {
+                        { HeaderNames.Accept, "application/xml" },
+                    }
+            };
+
+            var httpClient = _httpClientFactory.CreateClient();
+            httpClient.Timeout = TimeSpan.FromMinutes(1000);
+            var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
+
+            if (httpResponseMessage.IsSuccessStatusCode)
+            {
+
+
+
+
+
+            }
+
+
+
+
+                return toys;
+        }
+        
         //TODO Fjern det her nå vi får hentet fra SQL i stedet
         /*
         public List<string> GetPriceGroupFacet()
