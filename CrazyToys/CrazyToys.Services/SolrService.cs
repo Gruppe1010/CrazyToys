@@ -119,5 +119,39 @@ namespace CrazyToys.Services
             return priceGroup;
         }
         */
+
+        /*
+        // TODO slet hvis det er
+        public List<SolrToy> GetAll()
+        {
+            var searchResults = _solr.Query(SolrQuery.All, new QueryOptions
+            {
+                Rows = 10,
+                StartOrCursor = StartOrCursor.Cursor.Start,
+                OrderBy = new[] {
+                    new SortOrder("id", Order.DESC)
+                }
+            });
+
+            var pagedResults = _solr.Query(SolrQuery.All, new QueryOptions
+            {
+                Rows = 100,
+                StartOrCursor = searchResults.NextCursorMark,
+                OrderBy = new[] {
+                    new SortOrder("id", Order.DESC)
+                }
+            });
+
+            List<SolrToy> solrToys = new List<SolrToy>();
+
+            foreach (var document in searchResults)
+            {
+                object solrToyObj = (object) document;
+                solrToys.Add((SolrToy) solrToyObj);
+            }
+
+            return solrToys;
+        }
+        */
     }
 }

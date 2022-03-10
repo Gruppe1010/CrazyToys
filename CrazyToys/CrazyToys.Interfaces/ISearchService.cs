@@ -1,5 +1,6 @@
 ﻿
 using CrazyToys.Entities.Entities;
+using CrazyToys.Entities.SolrModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -17,6 +18,11 @@ namespace CrazyToys.Interfaces
         //TODO Fjern det her nå vi får hentet fra SQL i stedet
         /*
         List<string> GetPriceGroupFacet();
+        */
+
+        /*
+        // TODO slet hvis det er
+        List<SolrToy> GetAll();
         */
     }
 }
