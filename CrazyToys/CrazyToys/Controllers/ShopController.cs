@@ -69,7 +69,7 @@ namespace CrazyToys.Web.Controllers
             [FromQuery(Name = "search")] string search)
         {
 
-            Dictionary<int, List<ShopToyDTO>> dict = await _solrToyService.GetToysForSinglePage(category, subCategory, "_brand.Barbie", price, ageGroups, colours, page, search);
+            Dictionary<int, List<ShopToyDTO>> dict = await _solrToyService.GetToysForSinglePage(category, subCategory, brands, price, ageGroups, colours, page, search);
 
             int numFound = dict.ElementAt(0).Key;
             List<ShopToyDTO> shopToyDTOs = dict.ElementAt(0).Value;
