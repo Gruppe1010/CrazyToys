@@ -16,13 +16,14 @@ namespace CrazyToys.Interfaces
 
         SortedDictionary<string, int> GetCategoryFacet();
 
-        Task<Dictionary<int, List<ShopToyDTO>>> GetToysForSinglePage(string category,
+        Task<Dictionary<int, List<ShopToyDTO>>> GetToysForSinglePage(
+            string category,
             string subCategory,
             string brands,
             string price,
             string ageGroups,
             string colours,
-            int page,
+            string page,
             string search);
 
         //TODO Fjern det her nå vi får hentet fra SQL i stedet

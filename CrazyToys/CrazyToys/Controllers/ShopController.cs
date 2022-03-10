@@ -59,17 +59,17 @@ namespace CrazyToys.Web.Controllers
 
         [HttpGet]
         public async Task<IActionResult> Index(
-            [FromQuery(Name = "category")] string category, // én
+            [FromQuery(Name = "categories")] string category, // én
             [FromQuery(Name = "subCategory")] string subCategory, // én
-            [FromQuery(Name = "brands")] string brands,
+            [FromQuery(Name = "brands")] string brand,
             [FromQuery(Name = "price")] string price,
-            [FromQuery(Name = "ageGroups")] string ageGroups,
-            [FromQuery(Name = "colours")] string colours,
-            [FromQuery(Name = "p")] int page,
+            [FromQuery(Name = "ageGroups")] string ageGroup,
+            [FromQuery(Name = "colours")] string colour,
+            [FromQuery(Name = "p")] string page,
             [FromQuery(Name = "search")] string search)
         {
 
-            Dictionary<int, List<ShopToyDTO>> dict = await _solrToyService.GetToysForSinglePage(category, subCategory, brands, price, ageGroups, colours, page, search);
+            Dictionary<int, List<ShopToyDTO>> dict = await _solrToyService.GetToysForSinglePage(category, subCategory, brand, price, ageGroup, colour, page, search);
 
             int numFound = dict.ElementAt(0).Key;
             List<ShopToyDTO> shopToyDTOs = dict.ElementAt(0).Value;
@@ -90,9 +90,60 @@ namespace CrazyToys.Web.Controllers
             ViewData["ColourGroups"] = colourGroups.OrderBy(a => a.Name).ToList();
             ViewData["ShopToyDTOs"] = shopToyDTOs;
 
+            var noget = CreateDictFromParams(category, subCategory, brand, price, ageGroup, colour, page, search);
+
+            ViewData["ParamsDict"] = noget;//CreateDictFromParams(category, subCategory, brand, price, ageGroup, colour, page, search);
+
+
             // return a 'model' to the selected template/view for this page.
             return CurrentTemplate(CurrentPage);
         }
+
+
+        public Dictionary<string, HashSet<string>> CreateDictFromParams(
+            string category, // category.Spil
+            string subCategory,
+            string brand,
+            string price,
+            string ageGroup,
+            string colour,
+            string page,
+            string search)
+        {
+
+            var dict = new Dictionary<string, HashSet<string>>();
+
+            AddParamToDict(dict, category);
+            AddParamToDict(dict, subCategory);
+            AddParamToDict(dict, brand);
+            AddParamToDict(dict, price);
+            AddParamToDict(dict, ageGroup);
+            AddParamToDict(dict, colour);
+            AddParamToDict(dict, page);
+            AddParamToDict(dict, search);
+
+            return dict;
+        }
+
+        // param == category.Spil
+        public void AddParamToDict(Dictionary<string, HashSet<string>> dict, string param)
+        {
+            if (param != null)
+            {
+                string[] values = param.Split('.'); // ["category", "Spil"]
+
+                string type = values[0]; // category
+
+                dict.Add(type, new HashSet<string>());
+
+                for (int i = 1; i < values.Length; i++)
+                {
+                    dict[type].Add(values[i]);
+                }
+            }
+        }
+
+
     }
 }
 
