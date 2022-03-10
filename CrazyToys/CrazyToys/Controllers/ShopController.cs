@@ -65,10 +65,10 @@ namespace CrazyToys.Web.Controllers
             [FromQuery(Name = "ageGroups")] string ageGroups,
             [FromQuery(Name = "colours")] string colours,
             [FromQuery(Name = "p")] int page,
-            [FromQuery(Name = "q")] string search)
+            [FromQuery(Name = "search")] string search)
         {
 
-
+            var noget = _solrToyService.GetToysForSinglePage(category, subCategory, brands, price, ageGroups, "_colour.rød.blå.grøn", 1, search);
 
 
 
