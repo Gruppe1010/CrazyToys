@@ -112,7 +112,7 @@ namespace CrazyToys.Services
 
             for(int i = 1; i < values.Length; i++)
             {
-                s = s + values[i] + " OR ";
+                s = s + "\"" + values[i] + "\"" + " OR ";
             }
 
             s = s.Substring(0, s.Length - 4) + ")"; // vi sletter det sidste OR
@@ -150,11 +150,11 @@ namespace CrazyToys.Services
 
             // Hvis der er nogle urlParams så sletter vi den sidste AND via urlParams.Substring(0, urlParams.Length - 3)
             urlParams = !String.IsNullOrWhiteSpace(urlParams) 
-                ? urlParams.Substring(0, urlParams.Length - 3) 
+                ? urlParams.Substring(0, urlParams.Length - 3)
                 : "*:*";
 
-            string url = "http://solr:8983/solr/toys/select?indent=true&q.op=OR&q=" + HttpUtility.UrlEncode(urlParams) + paging;
-
+            string url = "http://solr:8983/solr/toys/select?indent=true&q.op=OR&q=" + HttpUtility.UrlEncode(urlParams).Replace("+", "%20") + paging;
+            
 
             var httpRequestMessage = new HttpRequestMessage(
                 HttpMethod.Get, url)
