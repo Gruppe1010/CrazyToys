@@ -1,4 +1,5 @@
-﻿using CrazyToys.Entities.Entities;
+﻿using CrazyToys.Entities.DTOs;
+using CrazyToys.Entities.Entities;
 using CrazyToys.Entities.SolrModels;
 using CrazyToys.Interfaces;
 using CrazyToys.Interfaces.EntityDbInterfaces;
@@ -68,9 +69,10 @@ namespace CrazyToys.Web.Controllers
             [FromQuery(Name = "search")] string search)
         {
 
-            var noget = _solrToyService.GetToysForSinglePage(category, subCategory, brands, price, ageGroups, "_colour.rød.blå.grøn", 1, search);
+            Dictionary<int, List<ShopToyDTO>> dict = await _solrToyService.GetToysForSinglePage(category, subCategory, "_brand.Barbie", price, ageGroups, colours, page, search);
 
-
+            int numFound = dict.ElementAt(0).Key;
+            List<ShopToyDTO> shopToyDTOs = dict.ElementAt(0).Value;
 
             SortedDictionary<string, int> brandDict = _solrToyService.GetBrandFacet();
             SortedDictionary<string, int> categoryDict = _solrToyService.GetCategoryFacet();
@@ -98,7 +100,7 @@ namespace CrazyToys.Web.Controllers
             ViewData["PriceGroups"] = priceGroups.OrderBy(a => a.Interval).ToList();
             ViewData["Brands"] = brandDict;
             ViewData["ColourGroups"] = colourGroups.OrderBy(a => a.Name).ToList();
-            ViewData["Toys"] = toys;
+            ViewData["ShopToyDTOs"] = shopToyDTOs;
 
             // return a 'model' to the selected template/view for this page.
             return CurrentTemplate(CurrentPage);

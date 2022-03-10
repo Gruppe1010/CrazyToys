@@ -1,4 +1,5 @@
 ﻿
+using CrazyToys.Entities.DTOs;
 using CrazyToys.Entities.Entities;
 using CrazyToys.Entities.SolrModels;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace CrazyToys.Interfaces
 
         SortedDictionary<string, int> GetCategoryFacet();
 
-        Task<List<Toy>> GetToysForSinglePage(string category,
+        Task<Dictionary<int, List<ShopToyDTO>>> GetToysForSinglePage(string category,
             string subCategory,
             string brands,
             string price,

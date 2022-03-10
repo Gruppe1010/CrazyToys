@@ -1,7 +1,9 @@
-﻿using CrazyToys.Entities.Entities;
+﻿using CrazyToys.Entities.DTOs;
+using CrazyToys.Entities.Entities;
 using CrazyToys.Interfaces;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SolrNet;
 using SolrNet.Commands.Parameters;
 using System;
@@ -118,7 +120,7 @@ namespace CrazyToys.Services
             return s;
         }
         
-        public async Task<List<Toy>> GetToysForSinglePage(
+        public async Task<Dictionary<int, List<ShopToyDTO>>> GetToysForSinglePage(
             string category, 
             string subCategory, 
             string brands, 
@@ -128,7 +130,10 @@ namespace CrazyToys.Services
             int page, 
             string search)
         {
-            List <Toy> toys = new List<Toy>();
+
+            page = page == 0 ? 1 : page;
+
+            var dict = new Dictionary<int, List<ShopToyDTO>>();
 
             // laver hver param om til fx "(color:rød OR grøn) AND"
             string categoryParam = category != null ? CreateFilterParam(category) + "AND" : null;
@@ -139,15 +144,16 @@ namespace CrazyToys.Services
             string coloursParam = colours != null ? CreateFilterParam(colours) + "AND" : null;
 
             int start = page * 30 - 30; //det sted hvor den skal starte (fordi page 2 starter på 30: 2 * 30 == 60 --> 60 - 30 --> 30)
-            string paging = $"rows=30&start={start}";
+            string paging = $"&rows=30&start={start}";
 
-            string urlParams = (categoryParam + subCategoryParam + brandsParam + priceParam + ageGroupsParam + coloursParam); // ?? "*:*";
-            // TODO slet and
-            urlParams = urlParams != null 
-                ? urlParams.Substring(0, urlParams.Length - 3) + paging 
-                : "*:*" + paging;
+            string urlParams = (categoryParam + subCategoryParam + brandsParam + priceParam + ageGroupsParam + coloursParam);
 
-            string url = "http://solr:8983/solr/toys/select?indent=true&q.op=OR&q=" + HttpUtility.UrlEncode(urlParams);
+            // Hvis der er nogle urlParams så sletter vi den sidste AND via urlParams.Substring(0, urlParams.Length - 3)
+            urlParams = !String.IsNullOrWhiteSpace(urlParams) 
+                ? urlParams.Substring(0, urlParams.Length - 3) 
+                : "*:*";
+
+            string url = "http://solr:8983/solr/toys/select?indent=true&q.op=OR&q=" + HttpUtility.UrlEncode(urlParams) + paging;
 
 
             var httpRequestMessage = new HttpRequestMessage(
@@ -165,37 +171,35 @@ namespace CrazyToys.Services
 
             if (httpResponseMessage.IsSuccessStatusCode)
             {
+                List<ShopToyDTO> shopToyDTOs = new List<ShopToyDTO>();
+
                 var jsonString = await httpResponseMessage.Content.ReadAsStringAsync();
+                dynamic content = JObject.Parse(jsonString);
 
-                dynamic json = JsonConvert.DeserializeObject(jsonString);
+                var response = content.response;
 
-                var responseHeader = json["responseHeader"];
+                int numFound = response.numFound;
 
-                var content = json["response"];
+                foreach (var toy in response.docs)
+                {
 
+                    string id = toy.id;
+                    string name = toy.name[0];
+                    int price1 = toy.price;
+                    string imageUrl = toy.image[0];
 
-                /*
-                 
-                 
-                 */
-
-
-
-
-
-
-
-
+                    shopToyDTOs.Add(new ShopToyDTO(id, name, price1, imageUrl));
+                }
+                dict.Add(numFound, shopToyDTOs);
             }
-            
-
-
-
-
-            return toys;
+            else
+            {
+                dict.Add(0, null);
+            }
+            return dict;
         }
 
-      
+
 
         //TODO Fjern det her nå vi får hentet fra SQL i stedet
         /*

@@ -1,4 +1,5 @@
-﻿@using CrazyToys.Entities.Entities
+﻿@using CrazyToys.Entities.DTOs
+@using CrazyToys.Entities.Entities
 @using CrazyToys.Entities.SolrModels
 @using Umbraco.Cms.Web.Common.PublishedModels;
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Shop>
@@ -10,7 +11,7 @@
     var colourGroups = ViewData["ColourGroups"] as List<ColourGroup>;
     var priceGroups = ViewData["PriceGroups"] as List<PriceGroup>;
 
-    var toys = ViewData["Toys"] as List<Toy>;
+    var shopToyDTOs = ViewData["ShopToyDTOs"] as List<ShopToyDTO>;
     var i = 0;
 }
 
@@ -172,22 +173,22 @@
                 </div>
                 <div class="row">
                     @{
-                        //foreach (var toy in toys)
-                        for (int j = 0; j < (toys.Count > 29 ? 30 : toys.Count); j++)
+                        for (int j = 0; j < shopToyDTOs.Count; j++)//shopToyDTOs.Count > 29 ? 30 : shopToyDTOs.Count); j++)
                         {
                             <div class="col-lg-4 col-md-6 col-sm-6">
                                 <div class="product__item">
-                                    <div class="product__item__pic set-bg" data-setbg="@(!string.IsNullOrWhiteSpace(toys[j].Images[0].UrlHigh) ? toys[j].Images[0].UrlHigh : toys[j].Brand.LogoUrl)">
-                                        <a class="item-link" href="/shop-details?id=@toys[j].ID"></a>
+                                   <div class="product__item__pic set-bg" data-setbg="@(shopToyDTOs[j].ImageUrl ?? shopToyDTOs[j].Name)">
+                                        <a class="item-link" href="/shop-details?id=@shopToyDTOs[j].Id"></a>
+                                
                                         <ul class="product__hover">
                                             <li><a href="#"><img src="img/icon/search.png" alt=""></a></li>
                                             <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
                                         </ul>
                                     </div>
                                     <div class="product__item__text">
-                                        <h6>@toys[j].Name</h6>
+                                        <h6>@shopToyDTOs[j].Name</h6>
                                         <a href="#" class="add-cart">+ Add To Cart</a>
-                                        <h5>@toys[j].Price DKK</h5>
+                                        <h5>@shopToyDTOs[j].Price DKK</h5>
                                     </div>
                                 </div>
                             </div>
