@@ -166,35 +166,34 @@ namespace CrazyToys.Services
 
 
                     toy.BrandId = json.data.GeneralInfo.BrandID;//["data"]["GeneralInfo"]["BrandID"];
-                    toy.ProductId = json.data.GeneralInfo.BrandPartCode;//["data"]["GeneralInfo"]["BrandPartCode"];
-                    toy.ShortDescription = json.data.GeneralInfo.SummaryDescription.ShortSummaryDescription;//["data"]["GeneralInfo"]["SummaryDescription"]["ShortSummaryDescription"];
-                    toy.LongDescription = json.data.GeneralInfo.SummaryDescription.LongSummaryDescription;//["data"]["GeneralInfo"]["SummaryDescription"]["LongSummaryDescription"];
-                    string name = json.data.GeneralInfo.Title;//["data"]["GeneralInfo"]["Title"];
+                    toy.ProductId = json.data.GeneralInfo.BrandPartCode;
+                    toy.ShortDescription = json.data.GeneralInfo.SummaryDescription.ShortSummaryDescription;
+                    toy.LongDescription = json.data.GeneralInfo.SummaryDescription.LongSummaryDescription;
+                    string name = json.data.GeneralInfo.Title;
 
                     name = name
                         .Replace(toy.ProductId, "")
-                        //.Replace(brandDict[toy.BrandId].Name, "") // fjernet så den ikke fjerner barbie i fx Barbie dukke
                         .Trim();
 
                     toy.Name = char.ToUpper(name[0]) + name.Substring(1);
 
-                    string subCategoryId = json.data.GeneralInfo.Category.CategoryID;//["data"]["GeneralInfo"]["Category"]["CategoryID"];
-                    string subCategoryName = json.data.GeneralInfo.Category.Name.Value;//["data"]["GeneralInfo"]["Category"]["Name"]["Value"];
+                    string subCategoryId = json.data.GeneralInfo.Category.CategoryID;
+                    string subCategoryName = json.data.GeneralInfo.Category.Name.Value;
 
                     toy.SubCategoryId = subCategoryId;
                     SubCategory subCat = await GetOrCreateSubCategory(subCategoryId, subCategoryName, categories);
                     toy.SubCategory = subCat;
 
-                    string urlHigh = json.data.Image.HighPic;//["data"]["Image"]["HighPic"];
+                    string urlHigh = json.data.Image.HighPic;
 
                     Image image = new Image(urlHigh, 0);
                     toy.Images.Add(image);
 
                     // tilføj resten af billeder som ligger i Gallery-key
-                    foreach (dynamic img in json.data.Gallery)//["data"]["Gallery"])
+                    foreach (dynamic img in json.data.Gallery)
                     {
-                        string galleryImageUrlHigh = img.Pic;//["Pic"];
-                        int galleryImageNo = img.No;//["No"];
+                        string galleryImageUrlHigh = img.Pic;
+                        int galleryImageNo = img.No;
 
                         Image galleryImage = new Image(galleryImageUrlHigh, galleryImageNo);
                         toy.Images.Add(galleryImage);
@@ -203,24 +202,23 @@ namespace CrazyToys.Services
                     // FeaturesGroups --> for hver på listen: ["Features"] for hver på listen: ["Feature"] if ["id"] = 1766 -->  item på ["Features"]["PresentationValue"]
                     // stringen skal splittes op i strings og så tilføjes som seperate værdier i colour tabellen, som så skal tilføjes som refs til toy
                     //string colourString = json["data"]["GeneralInfo"]["FeaturesGroups"]["Features"]["PresentationValue"];
-                    string colourPresentationValueId = "1766"; // 
+                    string colourPresentationValueId = "1766"; 
                     string ageGroupYearsPresentationValueId = "24697";
                     string ageGroupMonthsPresentationValueId = "24019";
 
-                    var featureGroups = json.data.FeaturesGroups;//["data"]["FeaturesGroups"];
-
-                    foreach (dynamic featuresGroup in json.data.FeaturesGroups)//["data"]["FeaturesGroups"])
+                    var featureGroups = json.data.FeaturesGroups;
+                    foreach (dynamic featuresGroup in json.data.FeaturesGroups)
                     {
-                        dynamic features = featuresGroup.Features;//["Features"];
+                        dynamic features = featuresGroup.Features;
 
                         foreach (dynamic feature in features)
                         {
 
-                            string featureId = feature.Feature.ID;//["Feature"]["ID"];
+                            string featureId = feature.Feature.ID;
 
                             if (featureId.Equals(colourPresentationValueId))
                             {
-                                string presentationValue = feature.PresentationValue;//["PresentationValue"];
+                                string presentationValue = feature.PresentationValue;
 
                                 toy.Colour = presentationValue;
 
@@ -233,7 +231,7 @@ namespace CrazyToys.Services
                             else if (featureId.Equals(ageGroupYearsPresentationValueId) || featureId.Equals(ageGroupMonthsPresentationValueId))
                             {
                                 hasAgeGroup = true;
-                                string presentationValue = feature.PresentationValue;//["PresentationValue"];
+                                string presentationValue = feature.PresentationValue;
                                 toy.AgeGroup = presentationValue;
 
                                 // uanset om det er måned eller år, så er det efter kommaet ligemeget, fordi udregningen bliver det samme
