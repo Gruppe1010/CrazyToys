@@ -25,9 +25,6 @@ namespace CrazyToys.Services
         private readonly IEntityCRUD<PriceGroup> _priceGroupDbService;
 
 
-        
-
-
         public HangfireService(
             IHttpClientFactory httpClientFactory, 
             IcecatDataService icecatDataService, 
