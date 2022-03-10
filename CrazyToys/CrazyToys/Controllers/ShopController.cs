@@ -76,24 +76,12 @@ namespace CrazyToys.Web.Controllers
 
             SortedDictionary<string, int> brandDict = _solrToyService.GetBrandFacet();
             SortedDictionary<string, int> categoryDict = _solrToyService.GetCategoryFacet();
-            //List<string> priceGroups = _solrToyService.GetPriceGroupFacet();
 
-            var priceGroupTask = _priceGroupDbService.GetAll();
-            priceGroupTask.Wait();
-            List<PriceGroup> priceGroups = priceGroupTask.Result;
-
-            var colourGroupTask = _colourGroupDbService.GetAll();
-            colourGroupTask.Wait();
-            List<ColourGroup> colourGroups = colourGroupTask.Result;
-
-            var ageGroupTask = _ageGroupDbService.GetAll();
-            ageGroupTask.Wait();
-            List<AgeGroup> ageGroupList = ageGroupTask.Result;
+            List<PriceGroup> priceGroups = await _priceGroupDbService.GetAll();
+            List<ColourGroup> colourGroups = await _colourGroupDbService.GetAll();
+            List<AgeGroup> ageGroupList = await _ageGroupDbService.GetAll();
 
             var toys = await _toyDbService.GetAllWithRelations();
-
-            // TODO slet hvis det er
-            // List<SolrToy> solrToys = _solrToyService.GetAll();
 
             ViewData["Categories"] = categoryDict;
             ViewData["AgeGroups"] = ageGroupList.OrderBy(a => a.Interval).ToList();
