@@ -1,19 +1,14 @@
 ﻿using CrazyToys.Entities.Entities;
-using CrazyToys.Entities.SolrModels;
 using CrazyToys.Interfaces;
-using CrazyToys.Services.EntityDbServices;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using SolrNet;
 using SolrNet.Commands.Parameters;
-using SolrNet.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Net.Http.Json;
-using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace CrazyToys.Services
 {
@@ -98,21 +93,61 @@ namespace CrazyToys.Services
 
             return categoryDict;
         }
+
+        // _colour.rød.blå.grøn ---> (colour: rød OR blå OR grøn)
+        public string CreateFilterParam(string param)
+        {
+            if(param == null)
+            {
+                return null;
+            }
+            string s = "(";
+
+            string[] values = param.Split('.');
+
+            // "(colour:"
+            s = s + values[0].Replace("_", "") + ":";
+
+            for(int i = 1; i < values.Length; i++)
+            {
+                s = s + values[i] + " OR ";
+            }
+
+            s = s.Substring(0, s.Length - 4) + ")"; // vi sletter det sidste OR
+
+            return s;
+        }
         
-        public List<T> GetToysForSinglePage(
+        public async Task<List<Toy>> GetToysForSinglePage(
             string category, 
             string subCategory, 
             string brands, 
             string price, 
             string ageGroups, 
-            string colours, 
+            string colours, // rød.blå.grøn
             int page, 
             string search)
         {
             List <Toy> toys = new List<Toy>();
 
-            string url = $"https://live.icecat.biz/api/?UserName={username}&Language=dk&icecat_id={simpleToy.IcecatId}";
+            // laver hver param om til fx "(color:rød OR grøn) AND"
+            string categoryParam = category != null ? CreateFilterParam(category) + "AND" : null;
+            string subCategoryParam = subCategory != null ? CreateFilterParam(subCategory) + "AND" : null;
+            string brandsParam = brands != null ? CreateFilterParam(brands) + "AND" : null;
+            string priceParam = price != null ? CreateFilterParam(price) + "AND" : null;
+            string ageGroupsParam = ageGroups != null ? CreateFilterParam(ageGroups) + "AND" : null;
+            string coloursParam = colours != null ? CreateFilterParam(colours) + "AND" : null;
 
+            int start = page * 30 - 30; //det sted hvor den skal starte (fordi page 2 starter på 30: 2 * 30 == 60 --> 60 - 30 --> 30)
+            string paging = $"rows=30&start={start}";
+
+            string urlParams = (categoryParam + subCategoryParam + brandsParam + priceParam + ageGroupsParam + coloursParam); // ?? "*:*";
+            // TODO slet and
+            urlParams = urlParams != null 
+                ? urlParams.Substring(0, urlParams.Length - 3) + paging 
+                : "*:*" + paging;
+
+            string url = "http://solr:8983/solr/toys/select?indent=true&q.op=OR&q=" + HttpUtility.UrlEncode(urlParams);
 
 
             var httpRequestMessage = new HttpRequestMessage(
@@ -120,7 +155,7 @@ namespace CrazyToys.Services
             {
                 Headers =
                     {
-                        { HeaderNames.Accept, "application/xml" },
+                        { HeaderNames.Accept, "application/json" },
                     }
             };
 
@@ -130,19 +165,38 @@ namespace CrazyToys.Services
 
             if (httpResponseMessage.IsSuccessStatusCode)
             {
+                var jsonString = await httpResponseMessage.Content.ReadAsStringAsync();
+
+                dynamic json = JsonConvert.DeserializeObject(jsonString);
+
+                var responseHeader = json["responseHeader"];
+
+                var content = json["response"];
+
+
+                /*
+                 
+                 
+                 */
+
+
+
 
 
 
 
 
             }
+            
 
 
 
 
-                return toys;
+            return toys;
         }
-        
+
+      
+
         //TODO Fjern det her nå vi får hentet fra SQL i stedet
         /*
         public List<string> GetPriceGroupFacet()
