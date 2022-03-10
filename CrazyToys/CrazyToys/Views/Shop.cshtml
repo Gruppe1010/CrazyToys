@@ -76,7 +76,7 @@
                                                 @{
                                                     foreach (KeyValuePair<string, int> brand in brands)
                                                     {
-                                                        <li class="chosen-brand"><a href="#">@brand.Key (@brand.Value)</a></li>
+                                                        <li class="chosen-brand"><a href="/shop?brands=_brand.@brand.Key">@brand.Key (@brand.Value)</a></li>
                                                     }
                                                 }
                                             </ul>
