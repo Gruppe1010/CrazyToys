@@ -62,7 +62,7 @@ namespace CrazyToys.Web.Controllers
             [FromQuery(Name = "categories")] string category, // én
             [FromQuery(Name = "subCategory")] string subCategory, // én
             [FromQuery(Name = "brand")] string brand,
-            [FromQuery(Name = "price")] string price,
+            [FromQuery(Name = "priceGroup")] string priceGroup,
             [FromQuery(Name = "ageGroups")] string ageGroup,
             [FromQuery(Name = "colours")] string colour,
             [FromQuery(Name = "p")] string page,
@@ -70,7 +70,7 @@ namespace CrazyToys.Web.Controllers
             [FromQuery(Name = "sort")] string sort)
         {
 
-            Dictionary<int, List<ShopToyDTO>> dict = await _solrToyService.GetToysForSinglePage(category, subCategory, brand, price, ageGroup, colour, page, search, sort);
+            Dictionary<int, List<ShopToyDTO>> dict = await _solrToyService.GetToysForSinglePage(category, subCategory, brand, priceGroup, ageGroup, colour, page, search, sort);
 
             int numFound = dict.ElementAt(0).Key;
             List<ShopToyDTO> shopToyDTOs = dict.ElementAt(0).Value;
@@ -90,7 +90,7 @@ namespace CrazyToys.Web.Controllers
             ViewData["Brands"] = brandDict;
             ViewData["ColourGroups"] = colourGroups.OrderBy(a => a.Name).ToList();
             ViewData["ShopToyDTOs"] = shopToyDTOs;
-            ViewData["ParamsDict"] = JsonConvert.SerializeObject(CreateDictFromParams(category, subCategory, brand, price, ageGroup, colour, page, search));
+            ViewData["ParamsDict"] = JsonConvert.SerializeObject(CreateDictFromParams(category, subCategory, brand, priceGroup, ageGroup, colour, page, search));
 
             // return a 'model' to the selected template/view for this page.
             return CurrentTemplate(CurrentPage);

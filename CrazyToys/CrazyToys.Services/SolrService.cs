@@ -124,7 +124,7 @@ namespace CrazyToys.Services
             string category, 
             string subCategory, 
             string brands, 
-            string price, 
+            string priceGroup, 
             string ageGroups, 
             string colours, // rød.blå.grøn
             string page, 
@@ -144,7 +144,7 @@ namespace CrazyToys.Services
             string categoryParam = category != null ? CreateFilterParam(category) + "AND" : null;
             string subCategoryParam = subCategory != null ? CreateFilterParam(subCategory) + "AND" : null;
             string brandsParam = brands != null ? CreateFilterParam(brands) + "AND" : null;
-            string priceParam = price != null ? CreateFilterParam(price) + "AND" : null;
+            string priceParam = priceGroup != null ? CreateFilterParam(priceGroup) + "AND" : null;
             string ageGroupsParam = ageGroups != null ? CreateFilterParam(ageGroups) + "AND" : null;
             string coloursParam = colours != null ? CreateFilterParam(colours) + "AND" : null;
 
