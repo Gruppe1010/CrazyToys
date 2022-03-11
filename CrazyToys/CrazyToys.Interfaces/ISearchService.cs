@@ -24,7 +24,8 @@ namespace CrazyToys.Interfaces
             string ageGroups,
             string colours,
             string page,
-            string search);
+            string search,
+            string sort);
 
         //TODO Fjern det her nå vi får hentet fra SQL i stedet
         /*

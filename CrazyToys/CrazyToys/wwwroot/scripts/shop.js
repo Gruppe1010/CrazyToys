@@ -1,17 +1,15 @@
 ﻿
-function addSortToUrl(paramsDict) {
+var sortOption = document.getElementById("sorter").value;
+console.log(sortOption);
 
-}
 
-
-function updateDictAndCreateUrl(paramsDict, type, param, sorting) {
+function updateDictAndCreateUrl(paramsDict, type, param) {
     updateParamsDict(paramsDict, type, param);
-    createUrlFromParams(paramsDict, type, param, sorting);
+    createUrlFromParams(paramsDict, type, param);
 }
 
 
-function createUrlFromParams(paramsDict, sorting) {
-    //updateParamsDict(paramsDict, type, param);
+function createUrlFromParams(paramsDict) {
 
     let url = "https://localhost:44325/shop?";
 
@@ -27,11 +25,12 @@ function createUrlFromParams(paramsDict, sorting) {
         url = url + paramUnit + "&";
     }
 
-    url = url.charAt(url.length - 1) == "&"
-            ? url.substring(0, url.length - 1)
-        : url;
+    // Finder værdien fra select (f.eks. sort=price_asc)
+    var sortOption = document.getElementById("sorter").value;
 
     // tilføj sorting til url
+    url = url + sortOption;
+    
     window.location.replace(url);
 }
 
