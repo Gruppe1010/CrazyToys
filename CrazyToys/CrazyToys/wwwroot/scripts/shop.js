@@ -5,23 +5,30 @@
 function createUrlFromParams(paramsDict, type, param) {
     updateParamsDict(paramsDict, type, param);
 
-    let url = "https://localhost:44325/shop";
+    let url = "https://localhost:44325/shop?";
 
-    //?brand=_brand.Barbie
+    //&brand=_brand.Barbie
+    // tilføj 
     for (const property in paramsDict) {
-        let paramUnit = "?" + property + "=" + property; //?brand=_brand
+        let paramUnit = property + "=" + property; //?brand=_brand
 
         paramsDict[property].forEach(valueOnArray => {
             paramUnit = paramUnit + "." + valueOnArray;
         });
 
-        url = url + paramUnit;
+        url = url + paramUnit + "&";
     }
+
+    url = url.charAt(url.length - 1) == "&"
+            ? url.substring(0, url.length - 1)
+            : url;
     window.location.replace(url);
 }
 
 function updateParamsDict(paramsDict, type, param) // type == colour, param == rød
 {
+
+
     // hvis den allerede har den TYPE param
     if (paramsDict.hasOwnProperty(type)) {
         // tjek om param'en IKKE allerede står der
