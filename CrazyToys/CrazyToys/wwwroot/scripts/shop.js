@@ -1,9 +1,17 @@
 ﻿
+function addSortToUrl(paramsDict) {
+
+}
 
 
-
-function createUrlFromParams(paramsDict, type, param) {
+function updateDictAndCreateUrl(paramsDict, type, param, sorting) {
     updateParamsDict(paramsDict, type, param);
+    createUrlFromParams(paramsDict, type, param, sorting);
+}
+
+
+function createUrlFromParams(paramsDict, sorting) {
+    //updateParamsDict(paramsDict, type, param);
 
     let url = "https://localhost:44325/shop?";
 
@@ -21,7 +29,9 @@ function createUrlFromParams(paramsDict, type, param) {
 
     url = url.charAt(url.length - 1) == "&"
             ? url.substring(0, url.length - 1)
-            : url;
+        : url;
+
+    // tilføj sorting til url
     window.location.replace(url);
 }
 
