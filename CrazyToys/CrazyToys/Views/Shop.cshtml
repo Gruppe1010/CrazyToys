@@ -11,59 +11,14 @@
     var colourGroups = ViewData["ColourGroups"] as List<ColourGroup>;
     var priceGroups = ViewData["PriceGroups"] as List<PriceGroup>;
     var shopToyDTOs = ViewData["ShopToyDTOs"] as List<ShopToyDTO>;
-    var paramsDict = ViewData["ParamsDict"] as Dictionary<string, HashSet<string>>; // http://localhost:44325/shop?brands=_brand.Barbie"
+    var paramsDict = @Html.Raw(ViewData["ParamsDict"]); // http://localhost:44325/shop?brands=_brand.Barbie"
     var i = 0;
+
+    // as Dictionary<string, HashSet<string>>
+
+    Console.WriteLine("paramsDict" + paramsDict);
 }
 
-@functions {
-
-    public string CreateUrlFromParams(Dictionary<string, HashSet<string>> paramsDict, string type, string param)
-    {
-        UpdateParamsDict(paramsDict, type, param);
-
-        string url = "https://localhost:44325/shop";
-
-        //?brand=_brand.Barbie
-        foreach(KeyValuePair<string, HashSet<string>> paramEntry in paramsDict)
-        {
-            // do something with entry.Value or entry.Key
-            string paramUnit = "?" + paramEntry.Key + "=" + paramEntry.Key; //?brand=_brand
-
-            foreach (string paramValue in paramEntry.Value)
-            {
-                paramUnit = paramUnit + "." + paramValue;
-            }
-            url = url + paramUnit;
-        }
-        return url;
-    }
-
-    public void UpdateParamsDict(Dictionary<string, HashSet<string>> paramsDict, string type, string param) // type == colour, param == rød
-    {
-        // hvis den allerede har den TYPE param
-        if (paramsDict.ContainsKey(type))
-        {
-            // tjek om param'en allerede står der
-            if (!paramsDict[type].Contains(param))
-            {
-                // hvis den IKKE allerde står der: tilføj
-                paramsDict[type].Add(param);
-            }
-            else // ellers: fjern
-            {
-                paramsDict[type].Remove(param);
-
-            }
-
-        }
-        else // tilføj nyt key-value pair
-        {
-            paramsDict.Add(type, new HashSet<string>{param});
-        }
-
-    }
-
-}
 
 
 
@@ -109,15 +64,7 @@
                                                 @{
                                                     foreach (KeyValuePair<string, int> category in categories)
                                                     {
-
-
-                                                       /*
-                                                        * Den er 
-                                                        * createUrlFromParams
-                                                        * href="@CreateUrlFromParams(paramsDict, "categories", @category.Key)"
-                                                        */
-
-                                                        <li><button onclick="createUrlFromParams('categories', @category.Key)">@category.Key (@category.Value)</button></li>
+                                                        <li><a href ="javascript:void(0);" onclick='createUrlFromParams(@paramsDict, "categories", "@category.Key")'>@category.Key (@category.Value)</a></li>
                                                     }
                                                 }
                                             </ul>
@@ -136,7 +83,7 @@
                                                 @{
                                                     foreach (KeyValuePair<string, int> brand in brands)
                                                     {
-                                                        <li class="chosen-brand"><a href="/shop?brands=_brand.@brand.Key">@brand.Key (@brand.Value)</a></li>
+                                                        <li class="chosen-brand"><a href ="javascript:void(0);" onclick='createUrlFromParams(@paramsDict, "brands", "@brand.Key")'>@brand.Key (@brand.Value)</a></li>
                                                     }
                                                 }
                                             </ul>
@@ -155,7 +102,7 @@
                                                 @{
                                                     foreach (PriceGroup priceGroup in priceGroups)
                                                     {
-                                                        <li><a href="#">@priceGroup.Interval DKK</a></li>
+                                                        <li><a href ="javascript:void(0);" onclick='createUrlFromParams(@paramsDict, "brands", "@priceGroup.Interval")'>@priceGroup.Interval DKK</a></li>
                                                     }
                                                 }
                                             </ul>

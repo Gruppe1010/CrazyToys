@@ -89,11 +89,7 @@ namespace CrazyToys.Web.Controllers
             ViewData["Brands"] = brandDict;
             ViewData["ColourGroups"] = colourGroups.OrderBy(a => a.Name).ToList();
             ViewData["ShopToyDTOs"] = shopToyDTOs;
-
-            var noget = CreateDictFromParams(category, subCategory, brand, price, ageGroup, colour, page, search);
-
-            ViewData["ParamsDict"] = noget;//CreateDictFromParams(category, subCategory, brand, price, ageGroup, colour, page, search);
-
+            ViewData["ParamsDict"] = JsonConvert.SerializeObject(CreateDictFromParams(category, subCategory, brand, price, ageGroup, colour, page, search));
 
             // return a 'model' to the selected template/view for this page.
             return CurrentTemplate(CurrentPage);

@@ -2,72 +2,52 @@
 
 
 
-function createUrlFromParams(type, param)
-{
-
-    let paramsDict = "";
-    debugger;
-    console.log(paramsDict);
-
+function createUrlFromParams(paramsDict, type, param) {
     updateParamsDict(paramsDict, type, param);
 
     let url = "https://localhost:44325/shop";
 
     //?brand=_brand.Barbie
-    paramsDict.forEach(paramEntry => {
-        
-        // do something with entry.Value or entry.Key
-        let paramUnit = "?" + paramEntry.Key + "=" + paramEntry.Key; //?brand=_brand
+    for (const property in paramsDict) {
+        let paramUnit = "?" + property + "=" + property; //?brand=_brand
 
-        paramEntry.Value.forEach(paramValue => {
-            paramUnit = paramUnit + "." + paramValue;
-        })
+        paramsDict[property].forEach(valueOnArray => {
+            paramUnit = paramUnit + "." + valueOnArray;
+        });
+
         url = url + paramUnit;
-    })
-
-    return url;
+    }
+    window.location.replace(url);
 }
 
 function updateParamsDict(paramsDict, type, param) // type == colour, param == rød
 {
     // hvis den allerede har den TYPE param
-    if (paramsDict.ContainsKey(type)) {
-        // tjek om param'en allerede står der
-        if (!paramsDict[type].Contains(param)) {
+    if (paramsDict.hasOwnProperty(type)) {
+        // tjek om param'en IKKE allerede står der
+
+        if (!paramsDict[type].includes(param)) {
             // hvis den IKKE allerde står der: tilføj
-            paramsDict[type].Add(param);
+            paramsDict[type].push(param);
         }
         else // ellers: fjern
         {
-            paramsDict[type].Remove(param);
+            // hvis der er flere end den ene param tilbage på arrayet
+            if (paramsDict[type].length > 1) {
+                // fjern den enkelte param fra arrayet
+                paramsDict[type] = paramsDict[type].filter(n => n != param);
+            }
+            else {
+                // ellers fjern hele propertien == dvs. type
+                delete paramsDict[type];
+            }
 
         }
 
     }
     else // tilføj nyt key-value pair
     {
-        paramsDict.Add(type, new HashSet < string > { param });
+        paramsDict[type] = [param];
     }
 
 }
-
-/*
-// http://solr:8983/solr/test/select?indent=true&q.op=OR&q=brand%3A%22Barbie%22
-
-
-var ulBrand = $('#ulBrand');
-
-fetch("http://localhost:8983/solr/test/select?facet.field=brand&facet=true&indent=true&q.op=OR&q=*%3A*&rows=0")
-    .then(reponse => reponse.json())
-    .then(data => console.log(data));
-
-
-
-
-var chosenBrand = $('.chosen-brand');
-chosenBrand.on('click', function () {
-    console.log("HEEEEEEJEJEJEJEJEJEj")
-    // lav funktion der viser produkter ud fra hvilke brand der er trykket på
-});
-
-*/
