@@ -112,10 +112,10 @@ namespace CrazyToys.Services
 
             for(int i = 1; i < values.Length; i++)
             {
-                s = s + "\"" + values[i] + "\"" + " OR ";
+                s = s + values[i] + ",";
             }
 
-            s = s.Substring(0, s.Length - 4) + ")"; // vi sletter det sidste OR
+            s = s.Substring(0, s.Length - 1) + ")"; // vi sletter det sidste OR
 
             return s;
         }

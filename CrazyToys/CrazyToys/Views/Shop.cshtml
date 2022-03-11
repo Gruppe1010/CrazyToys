@@ -83,7 +83,7 @@
                                                 @{
                                                     foreach (KeyValuePair<string, int> brand in brands)
                                                     {
-                                                        <li class="chosen-brand"><a href ="javascript:void(0);" onclick='createUrlFromParams(@paramsDict, "brands", "@brand.Key")'>@brand.Key (@brand.Value)</a></li>
+                                                        <li class="chosen-brand"><a href ="javascript:void(0);" onclick='createUrlFromParams(@paramsDict, "brand", "\"@brand.Key\"")'>@brand.Key (@brand.Value)</a></li>
                                                     }
                                                 }
                                             </ul>

@@ -61,7 +61,7 @@ namespace CrazyToys.Web.Controllers
         public async Task<IActionResult> Index(
             [FromQuery(Name = "categories")] string category, // én
             [FromQuery(Name = "subCategory")] string subCategory, // én
-            [FromQuery(Name = "brands")] string brand,
+            [FromQuery(Name = "brand")] string brand,
             [FromQuery(Name = "price")] string price,
             [FromQuery(Name = "ageGroups")] string ageGroup,
             [FromQuery(Name = "colours")] string colour,
