@@ -128,9 +128,14 @@ namespace CrazyToys.Services
             string ageGroups, 
             string colours, // rød.blå.grøn
             string page, 
-            string search)
+            string search,
+            string sort)
         {
 
+            // sort == price_asc
+
+            // sort=price asc
+            sort = "&sort=" + sort.Replace("_", "%20");
             page = page ?? "1";
 
             var dict = new Dictionary<int, List<ShopToyDTO>>();
@@ -146,14 +151,15 @@ namespace CrazyToys.Services
             int start = (Int32.Parse(page)) * 30 - 30; //det sted hvor den skal starte (fordi page 2 starter på 30: 2 * 30 == 60 --> 60 - 30 --> 30)
             string paging = $"&rows=30&start={start}";
 
-            string urlParams = (categoryParam + subCategoryParam + brandsParam + priceParam + ageGroupsParam + coloursParam);
+            string urlParams = categoryParam + subCategoryParam + brandsParam + priceParam + ageGroupsParam + coloursParam;
 
+            // 
             // Hvis der er nogle urlParams så sletter vi den sidste AND via urlParams.Substring(0, urlParams.Length - 3)
             urlParams = !String.IsNullOrWhiteSpace(urlParams) 
                 ? urlParams.Substring(0, urlParams.Length - 3)
                 : "*:*";
-
-            string url = "http://solr:8983/solr/toys/select?indent=true&q.op=OR&q=" + HttpUtility.UrlEncode(urlParams).Replace("+", "%20") + paging;
+            
+            string url = "http://solr:8983/solr/toys/select?indent=true&q.op=OR&q=" + HttpUtility.UrlEncode(urlParams).Replace("+", "%20") + paging + sort;
             
 
             var httpRequestMessage = new HttpRequestMessage(
