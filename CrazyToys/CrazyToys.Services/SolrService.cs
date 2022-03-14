@@ -126,17 +126,15 @@ namespace CrazyToys.Services
             string brands, 
             string priceGroup, 
             string ageGroups, 
-            string colours, // rød.blå.grøn
-            string page, 
+            string colours, // fx: rød.blå.grøn
+            int page, 
             string search,
-            string sort)
+            string sort // fx: price_asc
+            )
         {
-
-            // sort == price_asc
-
             // sort=price asc
             sort = "&sort=" + sort.Replace("_", "%20");
-            page = page ?? "1";
+            page = page == 0 ? 1 : page;
 
             var dict = new Dictionary<int, List<ShopToyDTO>>();
 
@@ -148,7 +146,7 @@ namespace CrazyToys.Services
             string ageGroupsParam = ageGroups != null ? CreateFilterParam(ageGroups) + "AND" : null;
             string coloursParam = colours != null ? CreateFilterParam(colours) + "AND" : null;
 
-            int start = (Int32.Parse(page)) * 30 - 30; //det sted hvor den skal starte (fordi page 2 starter på 30: 2 * 30 == 60 --> 60 - 30 --> 30)
+            int start = page * 30 - 30; //det sted hvor den skal starte (fordi page 2 starter på 30: 2 * 30 == 60 --> 60 - 30 --> 30)
             string paging = $"&rows=30&start={start}";
 
             string urlParams = categoryParam + subCategoryParam + brandsParam + priceParam + ageGroupsParam + coloursParam;
