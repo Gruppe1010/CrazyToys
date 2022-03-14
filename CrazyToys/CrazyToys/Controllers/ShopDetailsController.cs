@@ -29,33 +29,11 @@ namespace CrazyToys.Web.Controllers
         //[FromQuery bruges til at tage imod query parameter fra url]
         public async Task<IActionResult> Index([FromQuery(Name = "id")] string id)
         {
-            Console.WriteLine("INDEEEEEX: " + id);
             var toy = await _toyDbService.GetById(id);
 
             ViewData["Toy"] = toy;
             return CurrentTemplate(CurrentPage);
         }
-
-        /*
-        public override IActionResult Index()
-        {
-            Console.WriteLine("hej");
-            return CurrentTemplate(CurrentPage);    
-        }
-        */
-
-        /*
-        //shop-details/product/id
-        public IActionResult Product(string? id)
-        {
-            
-            Console.WriteLine("DEEEETAILS med id: " + id);
-
-            return View("~/Views/ShopDetails.cshtml");
-        }
-        */
-
-
     }
 }
 
