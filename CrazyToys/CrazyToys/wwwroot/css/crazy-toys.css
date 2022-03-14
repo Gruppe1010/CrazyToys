@@ -23,6 +23,10 @@
 .bold700 {
     font-weight: 700;
 }
+.active-filter {
+    font-weight: bold;
+    color:black !important;
+}
 
 .size13px {
     font-size: 13px !important;
@@ -42,10 +46,10 @@
     cursor: pointer;
 }
 
-.age-group.active {
-    background: #111111;
+.age-group-active {
+    background-color: palevioletred;
     color: #ffffff;
-    border-color: #111111;
+    border-color: palevioletred;
 }
 
 
