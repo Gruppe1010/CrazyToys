@@ -220,9 +220,9 @@ namespace CrazyToys.Services
                             {
                                 string presentationValue = feature.PresentationValue;
 
-                                toy.Colour = presentationValue;
+                                toy.Colours = presentationValue;
 
-                                if (!string.IsNullOrWhiteSpace(toy.Colour))
+                                if (!string.IsNullOrWhiteSpace(toy.Colours))
                                 {
                                     AddColourGroupsFromColour(toy);
                                 }
@@ -316,7 +316,7 @@ namespace CrazyToys.Services
 
         public void AddColourGroupsFromColour(Toy toy)
         {
-            string toyColour = toy.Colour.ToLower();
+            string toyColour = toy.Colours.ToLower();
             foreach(ColourGroup colourGroup in colourGroups)
             {
                 foreach(string sortingKeyWord in colourGroup.SortingKeywords)

@@ -15,14 +15,14 @@ namespace CrazyToys.Entities.SolrModels
         public string Name { get; set; }
         [SolrField("brand")]
         public string Brand { get; set; }
-        [SolrField("colour")]
-        public string Colour { get; set; }
+        [SolrField("colours")]
+        public string Colours { get; set; }
         [SolrField("colourGroups")]
         public List<string> ColourGroups { get; set; }
         [SolrField("ageGroup")]
         public string AgeGroup { get; set; }
-        [SolrField("ageGroupIntervals")]
-        public IList<string> AgeGroupIntevals { get; set; }
+        [SolrField("ageGroupInterval")]
+        public IList<string> AgeGroupInteval { get; set; }
         [SolrField("image")]
         public string Image { get; set; }
         [SolrField("categories")]
@@ -42,10 +42,10 @@ namespace CrazyToys.Entities.SolrModels
             Categories = toy.SubCategory.Categories.Select(c => c.Name).ToList();
             Price = toy.Price;
             Brand = toy.Brand.Name;
-            Colour = toy.Colour;
+            Colours = toy.Colours;
             ColourGroups = toy.ColourGroups.Select(c => c.Name).ToList();
             AgeGroup = toy.AgeGroup;
-            AgeGroupIntevals = toy.AgeGroups.Select(a => a.Interval).ToList();
+            AgeGroupInteval = toy.AgeGroups.Select(a => a.Interval).ToList();
             // TODO ændr på imag
             Image = toy.Images[0].UrlHigh;
             SubCategory = toy.SubCategory.Name;
