@@ -90,6 +90,7 @@ namespace CrazyToys.Web.Controllers
             ViewData["ColourGroups"] = colourGroups.OrderBy(a => a.Name).ToList();
             ViewData["ShopToyDTOs"] = shopToyDTOs;
             ViewData["ParamsDict"] = JsonConvert.SerializeObject(CreateDictFromParams(category, subCategory, brand, priceGroup, ageGroupIntervals, colours, page, search));
+            ViewData["TempDict"] = CreateDictFromParams(category, subCategory, brand, priceGroup, ageGroupIntervals, colours, page, search);
 
             // return a 'model' to the selected template/view for this page.
             return CurrentTemplate(CurrentPage);
@@ -138,8 +139,6 @@ namespace CrazyToys.Web.Controllers
                 }
             }
         }
-
-
     }
 }
 
