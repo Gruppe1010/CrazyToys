@@ -65,6 +65,11 @@
                                                 @{
                                                     foreach (KeyValuePair<string, int> category in categories)
                                                     {
+
+                                                        // lav tjek på om paramsDict indeholder category.name på settet til tilsvarende key "categories"
+                                                        // hvis ja - tilføj klasse som gør fed
+                                                        // hvis nej tilføj ikke klasse
+
                                                         <li><a href ="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "categories", "@category.Key", )'>@category.Key (@category.Value)</a></li>
                                                     }
                                                 }
