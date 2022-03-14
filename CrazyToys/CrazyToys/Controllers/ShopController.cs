@@ -84,6 +84,7 @@ namespace CrazyToys.Web.Controllers
 
             var toys = await _toyDbService.GetAllWithRelations();
 
+            ViewData["NumFound"] = numFound;
             ViewData["Categories"] = categoryDict;
             ViewData["AgeGroups"] = ageGroupList.OrderBy(a => a.Interval).ToList();
             ViewData["PriceGroups"] = priceGroups.OrderBy(a => a.Interval).ToList();
