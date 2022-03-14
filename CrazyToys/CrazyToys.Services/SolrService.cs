@@ -108,14 +108,14 @@ namespace CrazyToys.Services
             string[] values = param.Split('.');
 
             // "(colour:"
-            s = s + values[0] + ":";
+            s = s + values[0] + ":(";
 
             for(int i = 1; i < values.Length; i++)
             {
-                s = s + values[i] + ",";
+                s = s + "\"" + values[i] + "\",";
             }
 
-            s = s.Substring(0, s.Length - 1) + ")"; // vi sletter det sidste OR
+            s = s.Substring(0, s.Length - 1) + "))"; // vi sletter det sidste OR
 
             return s;
         }
