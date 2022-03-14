@@ -59,7 +59,7 @@ namespace CrazyToys.Web.Controllers
 
         [HttpGet]
         public async Task<IActionResult> Index(
-            [FromQuery(Name = "categories")] string category,
+            [FromQuery(Name = "categories")] string categories,
             [FromQuery(Name = "subCategory")] string subCategory,
             [FromQuery(Name = "brand")] string brand,
             [FromQuery(Name = "priceGroup")] string priceGroup,
@@ -70,7 +70,7 @@ namespace CrazyToys.Web.Controllers
             [FromQuery(Name = "sort")] string sort)
         {
 
-            Dictionary<int, List<ShopToyDTO>> dict = await _solrToyService.GetToysForSinglePage(category, subCategory, brand, priceGroup, ageGroupIntervals, colours, page, search, sort);
+            Dictionary<int, List<ShopToyDTO>> dict = await _solrToyService.GetToysForSinglePage(categories, subCategory, brand, priceGroup, ageGroupIntervals, colours, page, search, sort);
 
             int numFound = dict.ElementAt(0).Key;
             List<ShopToyDTO> shopToyDTOs = dict.ElementAt(0).Value;
@@ -89,7 +89,7 @@ namespace CrazyToys.Web.Controllers
             ViewData["Brands"] = brandDict;
             ViewData["ColourGroups"] = colourGroups.OrderBy(a => a.Name).ToList();
             ViewData["ShopToyDTOs"] = shopToyDTOs;
-            ViewData["ParamsDict"] = JsonConvert.SerializeObject(CreateDictFromParams(category, subCategory, brand, priceGroup, ageGroupIntervals, colours, page, search));
+            ViewData["ParamsDict"] = JsonConvert.SerializeObject(CreateDictFromParams(categories, subCategory, brand, priceGroup, ageGroupIntervals, colours, page, search));
 
             // return a 'model' to the selected template/view for this page.
             return CurrentTemplate(CurrentPage);
