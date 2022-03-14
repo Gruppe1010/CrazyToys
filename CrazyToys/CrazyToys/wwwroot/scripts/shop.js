@@ -1,4 +1,7 @@
 ﻿
+
+
+
 /** 
  *  Hvis man har trykket på én af filtreringsmulighederne ude til venstre på shop-siden, kaldes denne metode
  *  Opdaterer dictionary<string, set<string>>, som indeholder de forskellige typer af parametre og selve parameter-værdierne
@@ -10,14 +13,15 @@
  *          
  *  Først opdateres paramsDictet og derefter dannes urlen (ud fra paramsDictet) til at ramme vores shop-controller med de rette parans
  */
-function updateDictAndCreateUrl(pageNumber, paramsDict, type, param) {
+function updateDictAndCreateUrl(paramsDict, type, param) {
     updateParamsDict(paramsDict, type, param);
-    createUrlFromParams(pageNumber, paramsDict, type, param);
+    // pageNumber-paramet som vi giver med er hardcodet til 1 fordi hver gang man tilføjer en filtrering, 
+    //får vi jo vist nogle andre produkter, og så vil vi hen til forsiden igen
+    createUrlFromParams(1, paramsDict, type, param);
 }
 
 
 function createUrlFromParams(pageNumber, paramsDict) {
-    debugger;
     let url = "https://localhost:44325/shop?";
 
     //&brand=_brand.Barbie
