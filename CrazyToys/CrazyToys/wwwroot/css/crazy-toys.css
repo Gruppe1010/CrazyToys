@@ -27,3 +27,26 @@
 .size13px {
     font-size: 13px !important;
 }
+
+
+.age-group {
+    color: #111111;
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    display: inline-block;
+    border: 1px solid #e5e5e5;
+    padding: 6px 25px;
+    margin-bottom: 10px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.age-group.active {
+    background: #111111;
+    color: #ffffff;
+    border-color: #111111;
+}
+
+
+
