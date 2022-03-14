@@ -121,10 +121,16 @@
                                                 i = 1;
                                                 foreach (AgeGroup ageGroup in ageGroups)
                                                 {
+
+                                                    <a class="age-group hover" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "ageGroupIntervals", "@ageGroup.Interval")'> @ageGroup.Interval </a>
+
+                                                    /*
                                                     <label class="hover" for="@i">
                                                         @ageGroup.Interval
                                                         <input type="radio" id="@i">
                                                     </label>
+
+                                                    */
 
                                                     i = i + 1;
                                                 }
