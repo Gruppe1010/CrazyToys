@@ -30,10 +30,9 @@ function createUrlFromParams(paramsDict) {
 
     // tilføj sorting til url
     url = url + sortOption;
-    debugger;
+   
     url = url.replace("+", "%2b")
-    console.log(url)
-    
+ 
     
     window.location.replace(url);
 }
