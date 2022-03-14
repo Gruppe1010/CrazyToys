@@ -59,24 +59,26 @@ namespace CrazyToys.Web.Controllers
 
         [HttpGet]
         public async Task<IActionResult> Index(
-            [FromQuery(Name = "categories")] string category,
+            [FromQuery(Name = "categories")] string categories,
             [FromQuery(Name = "subCategory")] string subCategory,
             [FromQuery(Name = "brand")] string brand,
             [FromQuery(Name = "priceGroup")] string priceGroup,
             [FromQuery(Name = "ageGroupIntervals")] string ageGroupIntervals,
             [FromQuery(Name = "colours")] string colours,
-            [FromQuery(Name = "p")] string page,
+            [FromQuery(Name = "p")] int pageNumber,
             [FromQuery(Name = "search")] string search,
             [FromQuery(Name = "sort")] string sort)
         {
 
-            Dictionary<int, List<ShopToyDTO>> dict = await _solrToyService.GetToysForSinglePage(category, subCategory, brand, priceGroup, ageGroupIntervals, colours, page, search, sort);
+            Dictionary<int, List<ShopToyDTO>> dict = await _solrToyService.GetToysForSinglePage(categories, subCategory, brand, priceGroup, ageGroupIntervals, colours, pageNumber, search, sort);
 
             int numFound = dict.ElementAt(0).Key;
             List<ShopToyDTO> shopToyDTOs = dict.ElementAt(0).Value;
 
             SortedDictionary<string, int> brandDict = _solrToyService.GetBrandFacet();
             SortedDictionary<string, int> categoryDict = _solrToyService.GetCategoryFacet();
+
+
 
             List<PriceGroup> priceGroups = await _priceGroupDbService.GetAll();
             List<ColourGroup> colourGroups = await _colourGroupDbService.GetAll();
@@ -89,7 +91,8 @@ namespace CrazyToys.Web.Controllers
             ViewData["Brands"] = brandDict;
             ViewData["ColourGroups"] = colourGroups.OrderBy(a => a.Name).ToList();
             ViewData["ShopToyDTOs"] = shopToyDTOs;
-            ViewData["ParamsDict"] = JsonConvert.SerializeObject(CreateDictFromParams(category, subCategory, brand, priceGroup, ageGroupIntervals, colours, page, search));
+            ViewData["ParamsDict"] = JsonConvert.SerializeObject(CreateDictFromParams(categories, subCategory, brand, priceGroup, ageGroupIntervals, colours, search));
+            ViewData["PageNumber"] = pageNumber == 0 ? 1 : pageNumber;
 
             // return a 'model' to the selected template/view for this page.
             return CurrentTemplate(CurrentPage);
@@ -103,7 +106,6 @@ namespace CrazyToys.Web.Controllers
             string price,
             string ageGroup,
             string colour,
-            string page,
             string search)
         {
 
@@ -115,7 +117,6 @@ namespace CrazyToys.Web.Controllers
             AddParamToDict(dict, price);
             AddParamToDict(dict, ageGroup);
             AddParamToDict(dict, colour);
-            AddParamToDict(dict, page);
             AddParamToDict(dict, search);
 
             return dict;
