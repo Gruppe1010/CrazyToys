@@ -82,8 +82,6 @@ namespace CrazyToys.Web.Controllers
             List<ColourGroup> colourGroups = await _colourGroupDbService.GetAll();
             List<AgeGroup> ageGroupList = await _ageGroupDbService.GetAll();
 
-            var toys = await _toyDbService.GetAllWithRelations();
-
             ViewData["NumFound"] = numFound;
             ViewData["Categories"] = categoryDict;
             ViewData["AgeGroups"] = ageGroupList.OrderBy(a => a.Interval).ToList();
