@@ -1,6 +1,7 @@
 ﻿@using CrazyToys.Entities.DTOs
 @using CrazyToys.Entities.Entities
 @using CrazyToys.Entities.SolrModels
+@using CrazyToys.Web;
 @using Umbraco.Cms.Web.Common.PublishedModels;
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Shop>
 @{
@@ -12,12 +13,15 @@
     var priceGroups = ViewData["PriceGroups"] as List<PriceGroup>;
     var shopToyDTOs = ViewData["ShopToyDTOs"] as List<ShopToyDTO>;
     var numFound = ViewData["NumFound"];
-    var paramsDict = @Html.Raw(ViewData["ParamsDict"]); // http://localhost:44325/shop?brands=_brand.Barbie"
+    var tempDict = ViewData["TempDict"] as Dictionary<string, HashSet<string>>;
+
+
+    var paramsDict = @Html.Raw(ViewData["ParamsDict"]); // http://localhost:44325/shop?brands=_brand.Barbie" @Html.Raw()
     var i = 0;
 
     // as Dictionary<string, HashSet<string>>
 
-    Console.WriteLine("paramsDict" + paramsDict);
+    //Console.WriteLine("paramsDict" + paramsDict);
 }
 
 
@@ -70,7 +74,29 @@
                                                         // hvis ja - tilføj klasse som gør fed
                                                         // hvis nej tilføj ikke klasse
 
-                                                        <li><a href ="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "categories", "@category.Key", )'>@category.Key (@category.Value)</a></li>
+
+                                                        if (tempDict.Count > 0)
+                                                        {
+                                                            if (tempDict.ContainsKey("categories"))
+                                                            {
+                                                                if (tempDict["categories"].Contains(category.Key))
+                                                                {
+                                                                    <li><a class="active-filter" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "categories", "@category.Key")'>@category.Key (@category.Value)</a></li>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <li><a href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "categories", "@category.Key", )'>@category.Key (@category.Value)</a></li>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <li><a href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "categories", "@category.Key", )'>@category.Key (@category.Value)</a></li>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <li><a href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "categories", "@category.Key", )'>@category.Key (@category.Value)</a></li>
+                                                        }
                                                     }
                                                 }
                                             </ul>
@@ -89,7 +115,30 @@
                                                 @{
                                                     foreach (KeyValuePair<string, int> brand in brands)
                                                     {
-                                                        <li class="chosen-brand"><a href ="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "brand", "@brand.Key")'>@brand.Key (@brand.Value)</a></li>
+                                                        if (tempDict.Count > 0)
+                                                        {
+                                                            if (tempDict.ContainsKey("brand"))
+                                                            {
+                                                                if (tempDict["brand"].Contains(brand.Key))
+                                                                {
+                                                                    <li><a class="active-filter" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "brand", "@brand.Key")'>@brand.Key (@brand.Value)</a></li>
+                                                                }
+                                                                
+                                                                else
+                                                                {
+                                                                    <li><a href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "brand", "@brand.Key")'>@brand.Key (@brand.Value)</a></li>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <li><a href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "brand", "@brand.Key")'>@brand.Key (@brand.Value)</a></li>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <li><a href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "brand", "@brand.Key")'>@brand.Key (@brand.Value)</a></li>
+                                                        }
+                                                        //<li class="chosen-brand"><a href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "brand", "@brand.Key")'>@brand.Key (@brand.Value)</a></li>
                                                     }
                                                 }
                                             </ul>
@@ -108,7 +157,34 @@
                                                 @{
                                                     foreach (PriceGroup priceGroup in priceGroups)
                                                     {
-                                                        <li><a href ="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "priceGroup", "@priceGroup.Interval")'>@priceGroup.Interval DKK</a></li>
+
+                                                        if (tempDict.Count > 0)
+                                                        {
+                                                            if (tempDict.ContainsKey("priceGroup"))
+                                                            {
+                                                                if (tempDict["priceGroup"].Contains(priceGroup.Interval))
+                                                                {
+                                                                    <li><a class="active-filter" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "priceGroup", "@priceGroup.Interval")'>@priceGroup.Interval DKK</a></li>
+                                                                }
+                                                                
+                                                                else
+                                                                {
+                                                                    <li><a href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "priceGroup", "@priceGroup.Interval")'>@priceGroup.Interval DKK</a></li>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <li><a href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "priceGroup", "@priceGroup.Interval")'>@priceGroup.Interval DKK</a></li>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <li><a href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "priceGroup", "@priceGroup.Interval")'>@priceGroup.Interval DKK</a></li>
+                                                        }
+
+
+
+                                                        //<li><a href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "priceGroup", "@priceGroup.Interval")'>@priceGroup.Interval DKK</a></li>
                                                     }
                                                 }
                                             </ul>
@@ -128,17 +204,34 @@
                                                 foreach (AgeGroup ageGroup in ageGroups)
                                                 {
 
-                                                    <a class="age-group hover" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "ageGroupIntervals", "@ageGroup.Interval")'> @ageGroup.Interval </a>
 
-                                                    /*
-                                                    <label class="hover" for="@i">
-                                                        @ageGroup.Interval
-                                                        <input type="radio" id="@i">
-                                                    </label>
+                                                    if (tempDict.Count > 0)
+                                                        {
+                                                            if (tempDict.ContainsKey("ageGroupIntervals"))
+                                                            {
+                                                                if (tempDict["ageGroupIntervals"].Contains(ageGroup.Interval))
+                                                                {
+                                                                    <a class="age-group-active age-group hover" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "ageGroupIntervals", "@ageGroup.Interval")'> @ageGroup.Interval </a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a class="age-group hover" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "ageGroupIntervals", "@ageGroup.Interval")'> @ageGroup.Interval </a>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <a class="age-group hover" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "ageGroupIntervals", "@ageGroup.Interval")'> @ageGroup.Interval </a>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <a class="age-group hover" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "ageGroupIntervals", "@ageGroup.Interval")'> @ageGroup.Interval </a>
+                                                        }
 
-                                                    */
+                                                    //<a class="age-group hover" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "ageGroupIntervals", "@ageGroup.Interval")'> @ageGroup.Interval </a>
 
-                                                    i = i + 1;
+
+                                                    //i = i + 1;
                                                 }
                                             }
                                         </div>
@@ -196,9 +289,9 @@
                         {
                             <div class="col-lg-4 col-md-6 col-sm-6">
                                 <div class="product__item">
-                                   <div class="product__item__pic set-bg" data-setbg="@(shopToyDTOs[j].ImageUrl ?? shopToyDTOs[j].Name)">
+                                    <div class="product__item__pic set-bg" data-setbg="@(shopToyDTOs[j].ImageUrl ?? shopToyDTOs[j].Name)">
                                         <a class="item-link" href="/shop-details?id=@shopToyDTOs[j].Id"></a>
-                                
+
                                         <ul class="product__hover">
                                             <li><a href="#"><img src="img/icon/search.png" alt=""></a></li>
                                             <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
