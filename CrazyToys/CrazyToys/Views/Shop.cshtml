@@ -83,7 +83,7 @@
                                                 @{
                                                     foreach (KeyValuePair<string, int> brand in brands)
                                                     {
-                                                        <li class="chosen-brand"><a href ="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "brand", "\"@brand.Key\"")'>@brand.Key (@brand.Value)</a></li>
+                                                        <li class="chosen-brand"><a href ="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "brand", "@brand.Key")'>@brand.Key (@brand.Value)</a></li>
                                                     }
                                                 }
                                             </ul>
@@ -102,7 +102,7 @@
                                                 @{
                                                     foreach (PriceGroup priceGroup in priceGroups)
                                                     {
-                                                        <li><a href ="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "priceGroup",  "\"@priceGroup.Interval\"")'>@priceGroup.Interval DKK</a></li>
+                                                        <li><a href ="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "priceGroup", "@priceGroup.Interval")'>@priceGroup.Interval DKK</a></li>
                                                     }
                                                 }
                                             </ul>
