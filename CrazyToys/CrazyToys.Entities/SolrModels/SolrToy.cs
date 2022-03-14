@@ -21,8 +21,8 @@ namespace CrazyToys.Entities.SolrModels
         public List<string> ColourGroups { get; set; }
         [SolrField("ageGroup")]
         public string AgeGroup { get; set; }
-        [SolrField("ageGroupInterval")]
-        public IList<string> AgeGroupInteval { get; set; }
+        [SolrField("ageGroupIntervals")]
+        public IList<string> AgeGroupIntevals { get; set; }
         [SolrField("image")]
         public string Image { get; set; }
         [SolrField("categories")]
@@ -45,7 +45,7 @@ namespace CrazyToys.Entities.SolrModels
             Colours = toy.Colours;
             ColourGroups = toy.ColourGroups.Select(c => c.Name).ToList();
             AgeGroup = toy.AgeGroup;
-            AgeGroupInteval = toy.AgeGroups.Select(a => a.Interval).ToList();
+            AgeGroupIntevals = toy.AgeGroups.Select(a => a.Interval).ToList();
             // TODO ændr på imag
             Image = toy.Images[0].UrlHigh;
             SubCategory = toy.SubCategory.Name;
