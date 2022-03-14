@@ -15,7 +15,7 @@ namespace CrazyToys.Entities.Entities
         public PriceGroup PriceGroup { get; set; }
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
-        public string Colour { get; set; }
+        public string Colours { get; set; }
         public IList<ColourGroup> ColourGroups { get; set; }
         public IList<AgeGroup> AgeGroups { get; set; }
         public IList<Image> Images { get; set; }
@@ -48,7 +48,7 @@ namespace CrazyToys.Entities.Entities
             Price = toy.Price;
             Stock = toy.Stock;
             Images = toy.Images;
-            Colour = toy.Colour;
+            Colours = toy.Colours;
             ColourGroups = toy.ColourGroups;
             AgeGroups = toy.AgeGroups;
         }
