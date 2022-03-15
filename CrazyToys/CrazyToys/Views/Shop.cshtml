@@ -71,7 +71,7 @@
                                                                 {
                                                                     <li>
                                                                         <a class="active-filter" aria-expanded="true" data-toggle="collapse" data-target="#@category.Name" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "categories", "@category.Name", )'>@category.Name</a>
-                                                                        <div class="nice-scroll" id="@category.Name">
+                                                                        <div id="@category.Name">
                                                                             <ul class="list-height">
                                                                                 @foreach (var subCategory in category.SubCategories)
                                                                                 {
@@ -106,8 +106,8 @@
                                                                 {
                                                                     <li>
                                                                         <a data-toggle="collapse" data-target="#@category.Name" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "categories", "@category.Name", )'>@category.Name</a>
-                                                                        <div class="nice-scroll collapse" id="@category.Name" aria-expanded="false">
-                                                                            <ul>
+                                                                        <div class="collapse" id="@category.Name" aria-expanded="false">
+                                                                            <ul >
                                                                                 @foreach (var subCategory in category.SubCategories)
                                                                                 {
                                                                                     <li><a class="nav-link py-0" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "subCategory", "@subCategory.Name", )'>@subCategory.Name</a></li>
@@ -121,7 +121,7 @@
                                                             {
                                                                 <li>
                                                                     <a data-toggle="collapse" data-target="#@category.Name" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "categories", "@category.Name", )'>@category.Name</a>
-                                                                    <div class="nice-scroll collapse" id="@category.Name" aria-expanded="false">
+                                                                    <div class="collapse" id="@category.Name" aria-expanded="false">
                                                                         <ul>
                                                                             @foreach (var subCategory in category.SubCategories)
                                                                             {
@@ -136,7 +136,7 @@
                                                         {
                                                             <li>
                                                                 <a data-toggle="collapse" data-target="#@category.Name" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "categories", "@category.Name", )'>@category.Name</a>
-                                                                <div class="nice-scroll collapse" id="@category.Name" aria-expanded="false">
+                                                                <div class="collapse" id="@category.Name" aria-expanded="false">
                                                                     <ul>
                                                                         @foreach (var subCategory in category.SubCategories)
                                                                         {
