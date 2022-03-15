@@ -53,4 +53,43 @@
 }
 
 
+.colour-group-filter {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    position: relative;
+    margin-right: 10px;
+    margin-left: 3px;
+    display: inline-block;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.colour-group-filter:after {
+    position: absolute;
+    left: -3px;
+    top: -3px;
+    height: 36px;
+    width: 36px;
+    border: 1px solid #e5e5e5;
+    content: "";
+    border-radius: 50%;
+}
+
+.colour-group-filter input {
+    position: absolute;
+    visibility: hidden;
+}
+.colour-group-filter-active:after {
+    position: absolute;
+    left: -3px;
+    top: -3px;
+    height: 36px;
+    width: 36px;
+    content: "";
+    border-radius: 50%;
+    border: 1px solid black !important;
+}
+
+
 
