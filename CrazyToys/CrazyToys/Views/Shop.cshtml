@@ -14,10 +14,11 @@
     var shopToyDTOs = ViewData["ShopToyDTOs"] as List<ShopToyDTO>;
     var numFound = (int)ViewData["NumFound"];
     var pageNumber = (int)ViewData["PageNumber"];
+    var tempDict = ViewData["TempDict"] as Dictionary<string, HashSet<string>>;
+
     var paramsDict = @Html.Raw(ViewData["ParamsDict"]); // http://localhost:44325/shop?brands=_brand.Barbie"
     var k = 0;
 
-    var tempDict = ViewData["TempDict"] as Dictionary<string, HashSet<string>>;
 
 
   
