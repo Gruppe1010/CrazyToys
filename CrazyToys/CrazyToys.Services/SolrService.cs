@@ -26,7 +26,7 @@ namespace CrazyToys.Services
             _httpClientFactory = httpClientFactory;
         }
 
-
+        // TODO overvej at lav ISearhcService og SolrService om så den ikke bruger solrNet men kun HttpClient og http-kald
 
         public bool CreateOrUpdate(T document)
         {
@@ -39,7 +39,7 @@ namespace CrazyToys.Services
             }
             catch (Exception ex)
             {
-                // TODO noget med fejl/manglende på required fileds
+                // TODO noget med fejl/manglende på required fields
 
                 //Log exception
                 Console.WriteLine("Solr ex: " + ex);
