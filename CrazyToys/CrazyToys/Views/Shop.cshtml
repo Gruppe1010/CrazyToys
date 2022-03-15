@@ -21,7 +21,7 @@
 
 
 
-  
+
 
     // as Dictionary<string, HashSet<string>>
     int numberOfPages = (numFound + 30 - 1) / 30;
@@ -125,7 +125,7 @@
                                                                 {
                                                                     <li><a class="active-filter" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "brand", "@brand.Key")'>@brand.Key (@brand.Value)</a></li>
                                                                 }
-                                                                
+
                                                                 else
                                                                 {
                                                                     <li><a href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "brand", "@brand.Key")'>@brand.Key (@brand.Value)</a></li>
@@ -168,7 +168,7 @@
                                                                 {
                                                                     <li><a class="active-filter" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "priceGroup", "@priceGroup.Interval")'>@priceGroup.Interval DKK</a></li>
                                                                 }
-                                                                
+
                                                                 else
                                                                 {
                                                                     <li><a href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "priceGroup", "@priceGroup.Interval")'>@priceGroup.Interval DKK</a></li>
@@ -226,6 +226,20 @@
                                                     {
                                                         <a class="age-group hover" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "ageGroupIntervals", "@ageGroup.Interval")'> @ageGroup.Interval </a>
                                                     }
+
+
+
+                                                    /*
+                                                    *  <a class="age-group hover" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "ageGroupIntervals", "@ageGroup.Interval")'> @ageGroup.Interval </a>
+                                                    *
+                                                    /*
+                                                    <label class="hover" for="@i">
+                                                    @ageGroup.Interval
+                                                    <input type="radio" id="@i">
+                                                    </label>
+                                                    */
+
+
                                                 }
                                             }
                                         </div>
@@ -240,14 +254,30 @@
                                     <div class="card-body">
                                         <div class="shop__sidebar__color">
                                             @{
-                                                k = 1;
                                                 foreach (ColourGroup colourGroup in colourGroups)
                                                 {
-                                                    <label title="@colourGroup.Name" class="c-@k" for="sp-@k" style="background: @colourGroup.ColourCode">
-                                                        <input type="radio" id="sp-@k">
-                                                    </label>
-
-                                                    k = k + 1;
+                                                    if (tempDict.Count > 0)
+                                                    {
+                                                        if (tempDict.ContainsKey("colours"))
+                                                        {
+                                                            if (tempDict["colours"].Contains(colourGroup.Name))
+                                                            {
+                                                                <a class="colour-group-filter colour-group-filter-active" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "colours", "@colourGroup.Name")' style="background: @colourGroup.ColourCode"></a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a class="colour-group-filter" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "colours", "@colourGroup.Name")' style="background: @colourGroup.ColourCode"></a>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <a class="colour-group-filter" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "colours", "@colourGroup.Name")' style="background: @colourGroup.ColourCode"></a>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <a class="colour-group-filter" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "colours", "@colourGroup.Name")' style="background: @colourGroup.ColourCode"></a>
+                                                    }
                                                 }
                                             }
                                         </div>
@@ -328,12 +358,12 @@
                                     pagesToShow.Add(pageNumber - 1);
                                     pagesToShow.Add(pageNumber - 2);
 
-                                    if(pageNumber - 3 == 2)
+                                    if (pageNumber - 3 == 2)
                                     {
                                         pagesToShow.Add(2);
                                     }
 
-                                    if(numberOfPages - 4 == pageNumber)
+                                    if (numberOfPages - 4 == pageNumber)
                                     {
                                         pagesToShow.Add(numberOfPages - 1);
                                     }
@@ -346,10 +376,10 @@
                                     bool dotsAddedBefore = false;
                                     bool addDotsAfter = numberOfPages - 2 > surroundingNumbersEnd; // hvis vi vil have at den ikke viser et enkelt tal som ... >=
                                     bool dotsAddedAfter = false;
-                                    
+
                                     for (int i = 1; i <= numberOfPages; i++)
                                     {
-                                        // hvis vi står på denne side: tilføj class="active", så man kan se det 
+                                        // hvis vi står på denne side: tilføj class="active", så man kan se det
                                         if (pageNumber == i)
                                         {
                                             <a id="activePage" class="active" href="javascript:void(0);" onclick='createUrlFromParams(@i, @paramsDict)'>@i</a>
@@ -367,7 +397,7 @@
                                             }
                                             else if (addDotsAfter && !dotsAddedAfter && i > surroundingNumbersEnd)
                                             {
-                                                 <a>...</a>
+                                                <a>...</a>
                                                 dotsAddedAfter = true;
                                             }
                                         }
