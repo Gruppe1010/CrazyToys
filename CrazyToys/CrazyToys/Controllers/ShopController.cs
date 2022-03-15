@@ -100,6 +100,8 @@ namespace CrazyToys.Web.Controllers
     
             ViewData["TempDict"] = CreateDictFromParams(categories, subCategory, brand, priceGroup, ageGroupIntervals, colours, search);
 
+            ViewBag.Current = "Shop";
+
             // return a 'model' to the selected template/view for this page.
             return CurrentTemplate(CurrentPage);
         }
