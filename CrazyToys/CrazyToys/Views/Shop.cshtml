@@ -200,23 +200,15 @@
                                     <div class="card-body">
                                         <div class="shop__sidebar__size">
                                             @{
-                                                i = 1;
                                                 foreach (AgeGroup ageGroup in ageGroups)
                                                 {
-
-
                                                     if (tempDict.Count > 0)
+                                                    {
+                                                        if (tempDict.ContainsKey("ageGroupIntervals"))
                                                         {
-                                                            if (tempDict.ContainsKey("ageGroupIntervals"))
+                                                            if (tempDict["ageGroupIntervals"].Contains(ageGroup.Interval))
                                                             {
-                                                                if (tempDict["ageGroupIntervals"].Contains(ageGroup.Interval))
-                                                                {
-                                                                    <a class="age-group-active age-group hover" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "ageGroupIntervals", "@ageGroup.Interval")'> @ageGroup.Interval </a>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <a class="age-group hover" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "ageGroupIntervals", "@ageGroup.Interval")'> @ageGroup.Interval </a>
-                                                                }
+                                                                <a class="age-group-active age-group hover" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "ageGroupIntervals", "@ageGroup.Interval")'> @ageGroup.Interval </a>
                                                             }
                                                             else
                                                             {
@@ -227,11 +219,11 @@
                                                         {
                                                             <a class="age-group hover" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "ageGroupIntervals", "@ageGroup.Interval")'> @ageGroup.Interval </a>
                                                         }
-
-                                                    //<a class="age-group hover" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "ageGroupIntervals", "@ageGroup.Interval")'> @ageGroup.Interval </a>
-
-
-                                                    //i = i + 1;
+                                                    }
+                                                    else
+                                                    {
+                                                        <a class="age-group hover" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "ageGroupIntervals", "@ageGroup.Interval")'> @ageGroup.Interval </a>
+                                                    }
                                                 }
                                             }
                                         </div>
@@ -249,10 +241,12 @@
                                                 i = 1;
                                                 foreach (ColourGroup colourGroup in colourGroups)
                                                 {
+
+
                                                     <label title="@colourGroup.Name" class="c-@i" for="sp-@i" style="background: @colourGroup.ColourCode">
                                                         <input type="radio" id="sp-@i">
                                                     </label>
-
+                                                    
                                                     i = i + 1;
                                                 }
                                             }
