@@ -20,14 +20,13 @@ namespace CrazyToys.Services
         private readonly TSolrOperations _solr;
         private readonly IHttpClientFactory _httpClientFactory;
 
-
         public SolrService(ISolrOperations<T> solr, IHttpClientFactory httpClientFactory)
         {
             _solr = (TSolrOperations)solr;
             _httpClientFactory = httpClientFactory;
         }
 
-
+        // TODO overvej at lav ISearhcService og SolrService om så den ikke bruger solrNet men kun HttpClient og http-kald
 
         public bool CreateOrUpdate(T document)
         {
@@ -40,14 +39,14 @@ namespace CrazyToys.Services
             }
             catch (Exception ex)
             {
-                // TODO noget med fejl/manglende på required fileds
+                // TODO noget med fejl/manglende på required fields
 
                 //Log exception
                 Console.WriteLine("Solr ex: " + ex);
                 return false;
             }
         }
-
+        
         public void DeleteAll()
         {
             _solr.Delete(new SolrHasValueQuery("id"));
@@ -120,16 +119,14 @@ namespace CrazyToys.Services
             return s;
         }
         
+        /*
+         * Laver en get-request til solr for at få fat i toys ud fra de valgte filtreringer på shop-siden
+         * **/
         public async Task<Dictionary<int, List<ShopToyDTO>>> GetToysForSinglePage(
-            string category, 
-            string subCategory, 
-            string brands, 
-            string priceGroup, 
-            string ageGroups, 
-            string colours, // fx: rød.blå.grøn
-            int page, 
-            string search,
-            string sort // fx: price_asc
+            string category, string subCategory, 
+            string brands, string priceGroup, 
+            string ageGroups, string colours, // fx: rød.blå.grøn
+            int page,string search, string sort // fx: price_asc
             )
         {
             // sort=price asc
@@ -146,12 +143,12 @@ namespace CrazyToys.Services
             string ageGroupsParam = ageGroups != null ? CreateFilterParam(ageGroups) + "AND" : null;
             string coloursParam = colours != null ? CreateFilterParam(colours) + "AND" : null;
 
-            int start = page * 30 - 30; //det sted hvor den skal starte (fordi page 2 starter på 30: 2 * 30 == 60 --> 60 - 30 --> 30)
+            //det sted hvor den skal starte (fordi page 2 starter på 30: 2 * 30 == 60 --> 60 - 30 --> 30)
+            int start = page * 30 - 30; 
             string paging = $"&rows=30&start={start}";
 
             string urlParams = categoryParam + subCategoryParam + brandsParam + priceParam + ageGroupsParam + coloursParam;
 
-            // 
             // Hvis der er nogle urlParams så sletter vi den sidste AND via urlParams.Substring(0, urlParams.Length - 3)
             urlParams = !String.IsNullOrWhiteSpace(urlParams) 
                 ? urlParams.Substring(0, urlParams.Length - 3)
@@ -186,7 +183,6 @@ namespace CrazyToys.Services
 
                 foreach (var toy in response.docs)
                 {
-
                     string id = toy.id;
                     string name = toy.name[0];
                     int price1 = toy.price;
@@ -202,65 +198,6 @@ namespace CrazyToys.Services
             }
             return dict;
         }
-
-
-
-        //TODO Fjern det her nå vi får hentet fra SQL i stedet
-        /*
-        public List<string> GetPriceGroupFacet()
-        {
-            List<string> priceGroup = new List<string>();
-
-            var facets = _solr.Query(SolrQuery.All, new QueryOptions
-            {
-                Rows = 0,
-                Facet = new FacetParameters
-                {
-                    Queries = new[] { new SolrFacetFieldQuery("priceGroup") }
-                }
-            });
-            // For at få result fra FacetFieldQuery skal FacetFields[] kaldes
-            foreach (var facet in facets.FacetFields["priceGroup"])
-            {
-                priceGroup.Add(facet.Key);
-            }
-
-            return priceGroup;
-        }
-        */
-
-        /*
-        // TODO slet hvis det er
-        public List<SolrToy> GetAll()
-        {
-            var searchResults = _solr.Query(SolrQuery.All, new QueryOptions
-            {
-                Rows = 10,
-                StartOrCursor = StartOrCursor.Cursor.Start,
-                OrderBy = new[] {
-                    new SortOrder("id", Order.DESC)
-                }
-            });
-
-            var pagedResults = _solr.Query(SolrQuery.All, new QueryOptions
-            {
-                Rows = 100,
-                StartOrCursor = searchResults.NextCursorMark,
-                OrderBy = new[] {
-                    new SortOrder("id", Order.DESC)
-                }
-            });
-
-            List<SolrToy> solrToys = new List<SolrToy>();
-
-            foreach (var document in searchResults)
-            {
-                object solrToyObj = (object) document;
-                solrToys.Add((SolrToy) solrToyObj);
-            }
-
-            return solrToys;
-        }
-        */
+     
     }
 }

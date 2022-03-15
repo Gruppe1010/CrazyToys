@@ -9,9 +9,7 @@ namespace CrazyToys.Interfaces
 {
     public interface IHangfireService
     {
-        Task GetProductsFromIcecat(string url, PerformContext context);
-
-        Task CreateToysFromSimpleToys(bool isDaily, string dateString);
+        Task GetProductsDataService(string url, PerformContext context);
 
         Task UpdateSolrDb();
 
