@@ -1791,7 +1791,7 @@ ol {
 	font-weight: 600;
 }
 
-.product__details__cart__option .quantity .pro-qty .qtybtn.inc {
+.product__details__cart__option .quantity .pro-qty .qtybtn.dec {
 	top: 16px;
 }
 
