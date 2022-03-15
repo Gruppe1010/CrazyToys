@@ -1,6 +1,7 @@
 ﻿@using CrazyToys.Entities.DTOs
 @using CrazyToys.Entities.Entities
 @using CrazyToys.Entities.SolrModels
+@using CrazyToys.Web;
 @using Umbraco.Cms.Web.Common.PublishedModels;
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Shop>
 @{
@@ -11,17 +12,22 @@
     var colourGroups = ViewData["ColourGroups"] as List<ColourGroup>;
     var priceGroups = ViewData["PriceGroups"] as List<PriceGroup>;
     var shopToyDTOs = ViewData["ShopToyDTOs"] as List<ShopToyDTO>;
-    var numFound = ViewData["NumFound"];
     var categoryList = ViewData["CategoryList"] as List<Category>;
+    var numFound = (int)ViewData["NumFound"];
+    var pageNumber = (int)ViewData["PageNumber"];
+    var tempDict = ViewData["TempDict"] as Dictionary<string, HashSet<string>>;
+
     var paramsDict = @Html.Raw(ViewData["ParamsDict"]); // http://localhost:44325/shop?brands=_brand.Barbie"
-    var i = 0;
+    var k = 0;
+
+
+
+
 
     // as Dictionary<string, HashSet<string>>
+    int numberOfPages = (numFound + 30 - 1) / 30;
 
-    Console.WriteLine("paramsDict" + paramsDict);
 }
-
-
 
 
 <!-- Breadcrumb Section Begin -->
@@ -62,23 +68,93 @@
                                 <div id="collapseOne" class="collapse show" data-parent="#accordionExample">
                                     <div class="card-body">
                                         <div class="shop__sidebar__categories">
-                                            <ul>
+                                            <ul class="list-height">
                                                 @{
                                                     foreach (var category in categoryList)
                                                     {
-                                                        <li>
-                                                            <a data-toggle="collapse" data-target="#@category.Name" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "categories", "@category.Name", )'>@category.Name</a>
-                                                            <div class="nice-scroll collapse" id="@category.Name" aria-expanded="false">
-                                                                <ul>
-                                                                    @foreach (var subCategory in category.SubCategories)
-                                                                    {
-                                                                        <li><a class="nav-link py-0" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "subCategory", "@subCategory.Name", )'>@subCategory.Name</a></li>
-                                                                    }
-                                                                </ul>
-                                                            </div>
-                                                        </li>
-
-                                                        <!--<li><a href ="javascript:void(0);" onclick='updateDictAndCreateUrl(paramsDict, "categories", "category.Key", )'>category.Key (category.Value)</a></li>-->
+                                                        if (tempDict.Count > 0)
+                                                        {
+                                                            if (tempDict.ContainsKey("categories"))
+                                                            {
+                                                                if (tempDict["categories"].Contains(category.Name))
+                                                                {
+                                                                    <li>
+                                                                        <a class="active-filter" aria-expanded="true" data-toggle="collapse" data-target="#@category.Name" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "categories", "@category.Name", )'>@category.Name</a>
+                                                                        <div class="nice-scroll" id="@category.Name">
+                                                                            <ul class="list-height">
+                                                                                @foreach (var subCategory in category.SubCategories)
+                                                                                {
+                                                                                    if (tempDict.Count > 0)
+                                                                                    {
+                                                                                        if (tempDict.ContainsKey("subCategory"))
+                                                                                        {
+                                                                                            if (tempDict["subCategory"].Contains(subCategory.Name))
+                                                                                            {
+                                                                                                 <li><a class="active-filter nav-link py-0" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "subCategory", "@subCategory.Name", )'>@subCategory.Name</a></li>
+                                                                                            }
+                                                                                            else
+                                                                                            {
+                                                                                                <li><a class="nav-link py-0" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "subCategory", "@subCategory.Name", )'>@subCategory.Name</a></li>
+                                                                                            }
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <li><a class="nav-link py-0" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "subCategory", "@subCategory.Name", )'>@subCategory.Name</a></li>
+                                                                                        }
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <li><a class="nav-link py-0" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "subCategory", "@subCategory.Name", )'>@subCategory.Name</a></li>
+                                                                                    }
+                                                                                }
+                                                                            </ul>
+                                                                        </div>
+                                                                    </li>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <li>
+                                                                        <a data-toggle="collapse" data-target="#@category.Name" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "categories", "@category.Name", )'>@category.Name</a>
+                                                                        <div class="nice-scroll collapse" id="@category.Name" aria-expanded="false">
+                                                                            <ul>
+                                                                                @foreach (var subCategory in category.SubCategories)
+                                                                                {
+                                                                                    <li><a class="nav-link py-0" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "subCategory", "@subCategory.Name", )'>@subCategory.Name</a></li>
+                                                                                }
+                                                                            </ul>
+                                                                        </div>
+                                                                    </li>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <li>
+                                                                    <a data-toggle="collapse" data-target="#@category.Name" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "categories", "@category.Name", )'>@category.Name</a>
+                                                                    <div class="nice-scroll collapse" id="@category.Name" aria-expanded="false">
+                                                                        <ul>
+                                                                            @foreach (var subCategory in category.SubCategories)
+                                                                            {
+                                                                                <li><a class="nav-link py-0" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "subCategory", "@subCategory.Name", )'>@subCategory.Name</a></li>
+                                                                            }
+                                                                        </ul>
+                                                                    </div>
+                                                                </li>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <li>
+                                                                <a data-toggle="collapse" data-target="#@category.Name" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "categories", "@category.Name", )'>@category.Name</a>
+                                                                <div class="nice-scroll collapse" id="@category.Name" aria-expanded="false">
+                                                                    <ul>
+                                                                        @foreach (var subCategory in category.SubCategories)
+                                                                        {
+                                                                            <li><a class="nav-link py-0" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "subCategory", "@subCategory.Name", )'>@subCategory.Name</a></li>
+                                                                        }
+                                                                    </ul>
+                                                                </div>
+                                                            </li>
+                                                        }
                                                     }
                                                 }
                                             </ul>
@@ -97,7 +173,30 @@
                                                 @{
                                                     foreach (KeyValuePair<string, int> brand in brands)
                                                     {
-                                                        <li class="chosen-brand"><a href ="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "brand", "@brand.Key")'>@brand.Key (@brand.Value)</a></li>
+                                                        if (tempDict.Count > 0)
+                                                        {
+                                                            if (tempDict.ContainsKey("brand"))
+                                                            {
+                                                                if (tempDict["brand"].Contains(brand.Key))
+                                                                {
+                                                                    <li><a class="active-filter" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "brand", "@brand.Key")'>@brand.Key (@brand.Value)</a></li>
+                                                                }
+
+                                                                else
+                                                                {
+                                                                    <li><a href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "brand", "@brand.Key")'>@brand.Key (@brand.Value)</a></li>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <li><a href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "brand", "@brand.Key")'>@brand.Key (@brand.Value)</a></li>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <li><a href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "brand", "@brand.Key")'>@brand.Key (@brand.Value)</a></li>
+                                                        }
+                                                        //<li class="chosen-brand"><a href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "brand", "@brand.Key")'>@brand.Key (@brand.Value)</a></li>
                                                     }
                                                 }
                                             </ul>
@@ -116,7 +215,34 @@
                                                 @{
                                                     foreach (PriceGroup priceGroup in priceGroups)
                                                     {
-                                                        <li><a href ="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "priceGroup", "@priceGroup.Interval")'>@priceGroup.Interval DKK</a></li>
+
+                                                        if (tempDict.Count > 0)
+                                                        {
+                                                            if (tempDict.ContainsKey("priceGroup"))
+                                                            {
+                                                                if (tempDict["priceGroup"].Contains(priceGroup.Interval))
+                                                                {
+                                                                    <li><a class="active-filter" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "priceGroup", "@priceGroup.Interval")'>@priceGroup.Interval DKK</a></li>
+                                                                }
+
+                                                                else
+                                                                {
+                                                                    <li><a href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "priceGroup", "@priceGroup.Interval")'>@priceGroup.Interval DKK</a></li>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <li><a href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "priceGroup", "@priceGroup.Interval")'>@priceGroup.Interval DKK</a></li>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <li><a href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "priceGroup", "@priceGroup.Interval")'>@priceGroup.Interval DKK</a></li>
+                                                        }
+
+
+
+                                                        //<li><a href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "priceGroup", "@priceGroup.Interval")'>@priceGroup.Interval DKK</a></li>
                                                     }
                                                 }
                                             </ul>
@@ -132,21 +258,30 @@
                                     <div class="card-body">
                                         <div class="shop__sidebar__size">
                                             @{
-                                                i = 1;
                                                 foreach (AgeGroup ageGroup in ageGroups)
                                                 {
-
-                                                    <a class="age-group hover" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "ageGroupIntervals", "@ageGroup.Interval")'> @ageGroup.Interval </a>
-
-                                                    /*
-                                                    <label class="hover" for="@i">
-                                                        @ageGroup.Interval
-                                                        <input type="radio" id="@i">
-                                                    </label>
-
-                                                    */
-
-                                                    i = i + 1;
+                                                    if (tempDict.Count > 0)
+                                                    {
+                                                        if (tempDict.ContainsKey("ageGroupIntervals"))
+                                                        {
+                                                            if (tempDict["ageGroupIntervals"].Contains(ageGroup.Interval))
+                                                            {
+                                                                <a class="age-group-active age-group hover" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "ageGroupIntervals", "@ageGroup.Interval")'> @ageGroup.Interval </a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a class="age-group hover" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "ageGroupIntervals", "@ageGroup.Interval")'> @ageGroup.Interval </a>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <a class="age-group hover" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "ageGroupIntervals", "@ageGroup.Interval")'> @ageGroup.Interval </a>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <a class="age-group hover" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "ageGroupIntervals", "@ageGroup.Interval")'> @ageGroup.Interval </a>
+                                                    }
                                                 }
                                             }
                                         </div>
@@ -161,14 +296,14 @@
                                     <div class="card-body">
                                         <div class="shop__sidebar__color">
                                             @{
-                                                i = 1;
+                                                k = 1;
                                                 foreach (ColourGroup colourGroup in colourGroups)
                                                 {
-                                                    <label title="@colourGroup.Name" class="c-@i" for="sp-@i" style="background: @colourGroup.ColourCode">
-                                                        <input type="radio" id="sp-@i">
+                                                    <label title="@colourGroup.Name" class="c-@k" for="sp-@k" style="background: @colourGroup.ColourCode">
+                                                        <input type="radio" id="sp-@k">
                                                     </label>
 
-                                                    i = i + 1;
+                                                    k = k + 1;
                                                 }
                                             }
                                         </div>
@@ -184,13 +319,24 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-6">
                             <div class="shop__product__option__left">
-                                <p>Viser 1–30 af @numFound resultater</p> <!-- TODO Sæt antal per side ind-->
+                                @{
+                                    if (numFound > 0)
+                                    {
+                                        int start = pageNumber * 30 - 30 + 1;
+
+                                        int end = pageNumber == numberOfPages
+                                        ? numFound
+                                        : start + 29;
+
+                                        <p>Viser @start-@end af @numFound resultater</p>
+                                    }
+                                }
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6">
                             <div class="shop__product__option__right">
                                 <p>Sorter efter pris:</p>
-                                <select id="sorter" onchange='createUrlFromParams(@paramsDict)'>
+                                <select id="sorter" onchange='createUrlFromParams(@pageNumber, @paramsDict)'>
                                     <option value="sort=price_asc">Lav til Høj</option>
                                     <option value="sort=price_desc">Høj til Lav</option>
                                 </select>
@@ -204,9 +350,9 @@
                         {
                             <div class="col-lg-4 col-md-6 col-sm-6">
                                 <div class="product__item">
-                                   <div class="product__item__pic set-bg" data-setbg="@(shopToyDTOs[j].ImageUrl ?? shopToyDTOs[j].Name)">
+                                    <div class="product__item__pic set-bg" data-setbg="@(shopToyDTOs[j].ImageUrl ?? shopToyDTOs[j].Name)">
                                         <a class="item-link" href="/shop-details?id=@shopToyDTOs[j].Id"></a>
-                                
+
                                         <ul class="product__hover">
                                             <li><a href="#"><img src="img/icon/search.png" alt=""></a></li>
                                             <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
@@ -225,11 +371,77 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="product__pagination">
-                            <a class="active" href="#">1</a>
-                            <a href="#">2</a>
-                            <a href="#">3</a>
-                            <span>...</span>
-                            <a href="#">21</a>
+                            @{
+                                if (numFound > 0)
+                                {
+                                    HashSet<int> pagesToShow = new HashSet<int>();
+
+                                    pagesToShow.Add(1);
+                                    pagesToShow.Add(numberOfPages);
+                                    pagesToShow.Add(pageNumber);
+                                    pagesToShow.Add(pageNumber + 1);
+                                    pagesToShow.Add(pageNumber + 2);
+                                    pagesToShow.Add(pageNumber - 1);
+                                    pagesToShow.Add(pageNumber - 2);
+
+                                    if (pageNumber - 3 == 2)
+                                    {
+                                        pagesToShow.Add(2);
+                                    }
+
+                                    if (numberOfPages - 4 == pageNumber)
+                                    {
+                                        pagesToShow.Add(numberOfPages - 1);
+                                    }
+
+                                    int surroundingNumbersStart = pageNumber - 2;
+                                    int surroundingNumbersEnd = pageNumber + 2;
+
+                                    // skal der være dotter før eller efter?
+                                    bool addDotsBefore = surroundingNumbersStart > 3; // hvis vi vil have at den ikke viser et enkelt tal som ... >=
+                                    bool dotsAddedBefore = false;
+                                    bool addDotsAfter = numberOfPages - 2 > surroundingNumbersEnd; // hvis vi vil have at den ikke viser et enkelt tal som ... >=
+                                    bool dotsAddedAfter = false;
+
+                                    for (int i = 1; i <= numberOfPages; i++)
+                                    {
+                                        // hvis vi står på denne side: tilføj class="active", så man kan se det
+                                        if (pageNumber == i)
+                                        {
+                                            <a id="activePage" class="active" href="javascript:void(0);" onclick='createUrlFromParams(@i, @paramsDict)'>@i</a>
+                                        }
+                                        else if (pagesToShow.Contains(i))
+                                        {
+                                            <a href="javascript:void(0);" onclick='createUrlFromParams(@i, @paramsDict)'>@i</a>
+                                        }
+                                        else // så skal der tilføjes dutter
+                                        {
+                                            if (addDotsBefore && !dotsAddedBefore && i < surroundingNumbersStart)
+                                            {
+                                                <a>...</a>
+                                                dotsAddedBefore = true;
+                                            }
+                                            else if (addDotsAfter && !dotsAddedAfter && i > surroundingNumbersEnd)
+                                            {
+                                                <a>...</a>
+                                                dotsAddedAfter = true;
+                                            }
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    <div>Der er ikke noget legetøj der matcher søgekriterierne ØV BØØØØØØØØØØØV</div>
+                                }
+
+                                /*
+                                <a class="active" href="#">1</a>
+                                <a href="#">2</a>
+                                <a href="#">3</a>
+                                <span>...</span>
+                                <a href="#">21</a>
+                                */
+                            }
                         </div>
                     </div>
                 </div>

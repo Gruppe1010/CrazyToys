@@ -23,7 +23,7 @@ namespace CrazyToys.Interfaces
             string price,
             string ageGroups,
             string colours,
-            string page,
+            int page,
             string search,
             string sort);
 
