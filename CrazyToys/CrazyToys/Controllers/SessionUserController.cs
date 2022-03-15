@@ -4,6 +4,7 @@ using CrazyToys.Interfaces;
 using CrazyToys.Services;
 using CrazyToys.Services.EntityDbServices;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 
@@ -27,7 +28,9 @@ namespace CrazyToys.Web.Controllers
         [HttpGet]
         public async Task<ActionResult<SessionUser>> GetSessionUser()
         {
-            return Ok(_sessionService.GetNewOrExistingSessionUser(HttpContext));
+            var sessionUser = _sessionService.GetNewOrExistingSessionUser(HttpContext);
+
+            return Ok(JsonConvert.SerializeObject(sessionUser));
         }
 
 
