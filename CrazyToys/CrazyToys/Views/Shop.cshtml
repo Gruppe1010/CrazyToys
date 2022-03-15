@@ -12,6 +12,7 @@
     var priceGroups = ViewData["PriceGroups"] as List<PriceGroup>;
     var shopToyDTOs = ViewData["ShopToyDTOs"] as List<ShopToyDTO>;
     var numFound = ViewData["NumFound"];
+    var categoryList = ViewData["CategoryList"] as List<Category>;
     var paramsDict = @Html.Raw(ViewData["ParamsDict"]); // http://localhost:44325/shop?brands=_brand.Barbie"
     var i = 0;
 
@@ -61,16 +62,23 @@
                                 <div id="collapseOne" class="collapse show" data-parent="#accordionExample">
                                     <div class="card-body">
                                         <div class="shop__sidebar__categories">
-                                            <ul class="nice-scroll">
+                                            <ul>
                                                 @{
-                                                    foreach (KeyValuePair<string, int> category in categories)
+                                                    foreach (var category in categoryList)
                                                     {
+                                                        <li>
+                                                            <a data-toggle="collapse" data-target="#@category.Name" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "categories", "@category.Name", )'>@category.Name</a>
+                                                            <div class="nice-scroll collapse" id="@category.Name" aria-expanded="false">
+                                                                <ul>
+                                                                    @foreach (var subCategory in category.SubCategories)
+                                                                    {
+                                                                        <li><a class="nav-link py-0" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "subCategory", "@subCategory.Name", )'>@subCategory.Name</a></li>
+                                                                    }
+                                                                </ul>
+                                                            </div>
+                                                        </li>
 
-                                                        // lav tjek på om paramsDict indeholder category.name på settet til tilsvarende key "categories"
-                                                        // hvis ja - tilføj klasse som gør fed
-                                                        // hvis nej tilføj ikke klasse
-
-                                                        <li><a href ="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "categories", "@category.Key", )'>@category.Key (@category.Value)</a></li>
+                                                        <!--<li><a href ="javascript:void(0);" onclick='updateDictAndCreateUrl(paramsDict, "categories", "category.Key", )'>category.Key (category.Value)</a></li>-->
                                                     }
                                                 }
                                             </ul>

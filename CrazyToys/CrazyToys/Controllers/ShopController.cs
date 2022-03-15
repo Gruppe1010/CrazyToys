@@ -26,21 +26,22 @@ namespace CrazyToys.Web.Controllers
         private readonly IEntityCRUD<ColourGroup> _colourGroupDbService;
         private readonly IEntityCRUD<AgeGroup> _ageGroupDbService;
         private readonly IEntityCRUD<PriceGroup> _priceGroupDbService;
+        private readonly IEntityCRUD<Category> _categoryDbService;
 
 
 
 
         public ShopController(
-            ILogger<HomeController> logger, 
-            ICompositeViewEngine compositeViewEngine, 
-            IUmbracoContextAccessor umbracoContextAccessor, 
+            ILogger<HomeController> logger,
+            ICompositeViewEngine compositeViewEngine,
+            IUmbracoContextAccessor umbracoContextAccessor,
             IHangfireService hangfireService,
             ISearchService<SolrToy> solrToyService,
             ToyDbService toyDbService,
-            IEntityCRUD<ColourGroup> colourGroupDbService, 
+            IEntityCRUD<ColourGroup> colourGroupDbService,
             IEntityCRUD<AgeGroup> ageGroupDbService,
-            IEntityCRUD<PriceGroup> priceGroupDbService
-          )
+            IEntityCRUD<PriceGroup> priceGroupDbService, 
+            IEntityCRUD<Category> categoryDbService)
             : base(logger, compositeViewEngine, umbracoContextAccessor)
         {
             _hangfireService = hangfireService;
@@ -50,6 +51,7 @@ namespace CrazyToys.Web.Controllers
             _colourGroupDbService = colourGroupDbService;
             _ageGroupDbService = ageGroupDbService;
             _priceGroupDbService = priceGroupDbService;
+            _categoryDbService = categoryDbService;
         }
 
         //
@@ -81,13 +83,15 @@ namespace CrazyToys.Web.Controllers
             List<PriceGroup> priceGroups = await _priceGroupDbService.GetAll();
             List<ColourGroup> colourGroups = await _colourGroupDbService.GetAll();
             List<AgeGroup> ageGroupList = await _ageGroupDbService.GetAll();
+            List<Category> categoryList = await _categoryDbService.GetAllWithRelations();
 
             ViewData["NumFound"] = numFound;
             ViewData["Categories"] = categoryDict;
             ViewData["AgeGroups"] = ageGroupList.OrderBy(a => a.Interval).ToList();
-            ViewData["PriceGroups"] = priceGroups.OrderBy(a => a.Interval).ToList();
+            ViewData["PriceGroups"] = priceGroups.OrderBy(p => p.Interval).ToList();
+            ViewData["CategoryList"] = categoryList.OrderBy(c => c.Name).ToList();
             ViewData["Brands"] = brandDict;
-            ViewData["ColourGroups"] = colourGroups.OrderBy(a => a.Name).ToList();
+            ViewData["ColourGroups"] = colourGroups.OrderBy(c => c.Name).ToList();
             ViewData["ShopToyDTOs"] = shopToyDTOs;
             ViewData["ParamsDict"] = JsonConvert.SerializeObject(CreateDictFromParams(category, subCategory, brand, priceGroup, ageGroupIntervals, colours, page, search));
 
