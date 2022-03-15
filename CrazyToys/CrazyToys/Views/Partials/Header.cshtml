@@ -1,7 +1,6 @@
 ﻿@using Umbraco.Cms.Web.Common.PublishedModels;
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
 @{
-    var cartQuantity = ViewData["CartQuantity"];
 }
 
 <!-- Header Section Begin -->
@@ -66,6 +65,7 @@
                 <div class="header__nav__option">
                     <a href="#" class="search-switch"><img src="img/icon/search.png" class="header-icons" alt=""></a>
                     <a href="#"><img src="img/icon/heart.png" class="header-icons" alt=""></a>
+
                     <a href="/shopping-cart"><img src="img/icon/cart.png" class="header-icons" alt=""> <span id="cartQuantity" class="bold700 size13px"></span></a>
                     <div class="price">0.00 DKK</div>
                 </div>
