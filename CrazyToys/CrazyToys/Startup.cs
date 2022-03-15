@@ -154,10 +154,6 @@ namespace CrazyToys.Web
             // TODO denne er bare for convenience 
             recurringJobManager.AddOrUpdate<HangfireService>("UpdateSolrDb", hangfireService => hangfireService.UpdateSolrDb(), Cron.Never);
             recurringJobManager.AddOrUpdate<HangfireService>("DeleteSolrDb", hangfireService => hangfireService.DeleteSolrDb(), Cron.Never);
-
-
-
-
         }
     }
 }
