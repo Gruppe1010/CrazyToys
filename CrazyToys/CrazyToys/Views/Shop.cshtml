@@ -12,19 +12,20 @@
     var colourGroups = ViewData["ColourGroups"] as List<ColourGroup>;
     var priceGroups = ViewData["PriceGroups"] as List<PriceGroup>;
     var shopToyDTOs = ViewData["ShopToyDTOs"] as List<ShopToyDTO>;
-    var numFound = ViewData["NumFound"];
+    var numFound = (int)ViewData["NumFound"];
+    var pageNumber = (int)ViewData["PageNumber"];
+    var paramsDict = @Html.Raw(ViewData["ParamsDict"]); // http://localhost:44325/shop?brands=_brand.Barbie"
+    var k = 0;
+
     var tempDict = ViewData["TempDict"] as Dictionary<string, HashSet<string>>;
 
 
-    var paramsDict = @Html.Raw(ViewData["ParamsDict"]); // http://localhost:44325/shop?brands=_brand.Barbie" @Html.Raw()
-    var i = 0;
+  
 
     // as Dictionary<string, HashSet<string>>
+    int numberOfPages = (numFound + 30 - 1) / 30;
 
-    //Console.WriteLine("paramsDict" + paramsDict);
 }
-
-
 
 
 <!-- Breadcrumb Section Begin -->
@@ -238,16 +239,14 @@
                                     <div class="card-body">
                                         <div class="shop__sidebar__color">
                                             @{
-                                                i = 1;
+                                                k = 1;
                                                 foreach (ColourGroup colourGroup in colourGroups)
                                                 {
-
-
-                                                    <label title="@colourGroup.Name" class="c-@i" for="sp-@i" style="background: @colourGroup.ColourCode">
-                                                        <input type="radio" id="sp-@i">
+                                                    <label title="@colourGroup.Name" class="c-@k" for="sp-@k" style="background: @colourGroup.ColourCode">
+                                                        <input type="radio" id="sp-@k">
                                                     </label>
-                                                    
-                                                    i = i + 1;
+
+                                                    k = k + 1;
                                                 }
                                             }
                                         </div>
@@ -263,13 +262,24 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-6">
                             <div class="shop__product__option__left">
-                                <p>Viser 1–30 af @numFound resultater</p> <!-- TODO Sæt antal per side ind-->
+                                @{
+                                    if (numFound > 0)
+                                    {
+                                        int start = pageNumber * 30 - 30 + 1;
+
+                                        int end = pageNumber == numberOfPages
+                                        ? numFound
+                                        : start + 29;
+
+                                        <p>Viser @start-@end af @numFound resultater</p>
+                                    }
+                                }
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6">
                             <div class="shop__product__option__right">
                                 <p>Sorter efter pris:</p>
-                                <select id="sorter" onchange='createUrlFromParams(@paramsDict)'>
+                                <select id="sorter" onchange='createUrlFromParams(@pageNumber, @paramsDict)'>
                                     <option value="sort=price_asc">Lav til Høj</option>
                                     <option value="sort=price_desc">Høj til Lav</option>
                                 </select>
@@ -304,11 +314,77 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="product__pagination">
-                            <a class="active" href="#">1</a>
-                            <a href="#">2</a>
-                            <a href="#">3</a>
-                            <span>...</span>
-                            <a href="#">21</a>
+                            @{
+                                if (numFound > 0)
+                                {
+                                    HashSet<int> pagesToShow = new HashSet<int>();
+
+                                    pagesToShow.Add(1);
+                                    pagesToShow.Add(numberOfPages);
+                                    pagesToShow.Add(pageNumber);
+                                    pagesToShow.Add(pageNumber + 1);
+                                    pagesToShow.Add(pageNumber + 2);
+                                    pagesToShow.Add(pageNumber - 1);
+                                    pagesToShow.Add(pageNumber - 2);
+
+                                    if(pageNumber - 3 == 2)
+                                    {
+                                        pagesToShow.Add(2);
+                                    }
+
+                                    if(numberOfPages - 4 == pageNumber)
+                                    {
+                                        pagesToShow.Add(numberOfPages - 1);
+                                    }
+
+                                    int surroundingNumbersStart = pageNumber - 2;
+                                    int surroundingNumbersEnd = pageNumber + 2;
+
+                                    // skal der være dotter før eller efter?
+                                    bool addDotsBefore = surroundingNumbersStart > 3; // hvis vi vil have at den ikke viser et enkelt tal som ... >=
+                                    bool dotsAddedBefore = false;
+                                    bool addDotsAfter = numberOfPages - 2 > surroundingNumbersEnd; // hvis vi vil have at den ikke viser et enkelt tal som ... >=
+                                    bool dotsAddedAfter = false;
+                                    
+                                    for (int i = 1; i <= numberOfPages; i++)
+                                    {
+                                        // hvis vi står på denne side: tilføj class="active", så man kan se det 
+                                        if (pageNumber == i)
+                                        {
+                                            <a id="activePage" class="active" href="javascript:void(0);" onclick='createUrlFromParams(@i, @paramsDict)'>@i</a>
+                                        }
+                                        else if (pagesToShow.Contains(i))
+                                        {
+                                            <a href="javascript:void(0);" onclick='createUrlFromParams(@i, @paramsDict)'>@i</a>
+                                        }
+                                        else // så skal der tilføjes dutter
+                                        {
+                                            if (addDotsBefore && !dotsAddedBefore && i < surroundingNumbersStart)
+                                            {
+                                                <a>...</a>
+                                                dotsAddedBefore = true;
+                                            }
+                                            else if (addDotsAfter && !dotsAddedAfter && i > surroundingNumbersEnd)
+                                            {
+                                                 <a>...</a>
+                                                dotsAddedAfter = true;
+                                            }
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    <div>Der er ikke noget legetøj der matcher søgekriterierne ØV BØØØØØØØØØØØV</div>
+                                }
+
+                                /*
+                                <a class="active" href="#">1</a>
+                                <a href="#">2</a>
+                                <a href="#">3</a>
+                                <span>...</span>
+                                <a href="#">21</a>
+                                */
+                            }
                         </div>
                     </div>
                 </div>

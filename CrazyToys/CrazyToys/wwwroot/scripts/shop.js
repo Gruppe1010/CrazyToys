@@ -1,16 +1,27 @@
 ﻿
-var sortOption = document.getElementById("sorter").value;
-console.log(sortOption);
 
 
+
+/** 
+ *  Hvis man har trykket på én af filtreringsmulighederne ude til venstre på shop-siden, kaldes denne metode
+ *  Opdaterer dictionary<string, set<string>>, som indeholder de forskellige typer af parametre og selve parameter-værdierne
+ *      paramsDict == den nuværende dictionary med de filtreringsmuligheder som er valgt af brugeren
+ *      type == typen af filtreringen som brugeren netop har trykket på
+ *          fx: "categories"
+ *      param == selve værdiern af det som brugeren har trykket på
+ *          fx "Barbie"
+ *          
+ *  Først opdateres paramsDictet og derefter dannes urlen (ud fra paramsDictet) til at ramme vores shop-controller med de rette parans
+ */
 function updateDictAndCreateUrl(paramsDict, type, param) {
     updateParamsDict(paramsDict, type, param);
-    createUrlFromParams(paramsDict, type, param);
+    // pageNumber-paramet som vi giver med er hardcodet til 1 fordi hver gang man tilføjer en filtrering, 
+    //får vi jo vist nogle andre produkter, og så vil vi hen til forsiden igen
+    createUrlFromParams(1, paramsDict, type, param);
 }
 
 
-function createUrlFromParams(paramsDict) {
-
+function createUrlFromParams(pageNumber, paramsDict) {
     let url = "https://localhost:44325/shop?";
 
     //&brand=_brand.Barbie
@@ -28,19 +39,17 @@ function createUrlFromParams(paramsDict) {
     // Finder værdien fra select (f.eks. sort=price_asc)
     var sortOption = document.getElementById("sorter").value;
 
-    // tilføj sorting til url
-    url = url + sortOption;
-   
+    // tilføjer paging og sorting til url
+    url = url + `p=${pageNumber}&` + sortOption;
+
+    // hvis der er +'er i vores url (fx ved prisgruppen 800+) skal det encodes til %2b
     url = url.replace("+", "%2b")
  
-    
     window.location.replace(url);
 }
 
 function updateParamsDict(paramsDict, type, param) // type == colour, param == rød
 {
-
-
     // hvis den allerede har den TYPE param
     if (paramsDict.hasOwnProperty(type)) {
         // tjek om param'en IKKE allerede står der
@@ -60,9 +69,7 @@ function updateParamsDict(paramsDict, type, param) // type == colour, param == r
                 // ellers fjern hele propertien == dvs. type
                 delete paramsDict[type];
             }
-
         }
-
     }
     else // tilføj nyt key-value pair
     {
