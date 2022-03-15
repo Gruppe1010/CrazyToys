@@ -18,17 +18,8 @@
     var tempDict = ViewData["TempDict"] as Dictionary<string, HashSet<string>>;
 
     var paramsDict = @Html.Raw(ViewData["ParamsDict"]); // http://localhost:44325/shop?brands=_brand.Barbie"
-    var k = 0;
-
-
-
-
-
-    // as Dictionary<string, HashSet<string>>
     int numberOfPages = (numFound + 30 - 1) / 30;
-
 }
-
 
 <!-- Breadcrumb Section Begin -->
 <section class="breadcrumb-option">
@@ -196,7 +187,6 @@
                                                         {
                                                             <li><a href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "brand", "@brand.Key")'>@brand.Key (@brand.Value)</a></li>
                                                         }
-                                                        //<li class="chosen-brand"><a href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "brand", "@brand.Key")'>@brand.Key (@brand.Value)</a></li>
                                                     }
                                                 }
                                             </ul>
@@ -215,7 +205,6 @@
                                                 @{
                                                     foreach (PriceGroup priceGroup in priceGroups)
                                                     {
-
                                                         if (tempDict.Count > 0)
                                                         {
                                                             if (tempDict.ContainsKey("priceGroup"))
@@ -239,10 +228,6 @@
                                                         {
                                                             <li><a href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "priceGroup", "@priceGroup.Interval")'>@priceGroup.Interval DKK</a></li>
                                                         }
-
-
-
-                                                        //<li><a href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "priceGroup", "@priceGroup.Interval")'>@priceGroup.Interval DKK</a></li>
                                                     }
                                                 }
                                             </ul>
@@ -296,14 +281,30 @@
                                     <div class="card-body">
                                         <div class="shop__sidebar__color">
                                             @{
-                                                k = 1;
                                                 foreach (ColourGroup colourGroup in colourGroups)
                                                 {
-                                                    <label title="@colourGroup.Name" class="c-@k" for="sp-@k" style="background: @colourGroup.ColourCode">
-                                                        <input type="radio" id="sp-@k">
-                                                    </label>
-
-                                                    k = k + 1;
+                                                    if (tempDict.Count > 0)
+                                                    {
+                                                        if (tempDict.ContainsKey("colours"))
+                                                        {
+                                                            if (tempDict["colours"].Contains(colourGroup.Name))
+                                                            {
+                                                                <a class="colour-group-filter colour-group-filter-active" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "colours", "@colourGroup.Name")' style="background: @colourGroup.ColourCode"></a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a class="colour-group-filter" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "colours", "@colourGroup.Name")' style="background: @colourGroup.ColourCode"></a>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <a class="colour-group-filter" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "colours", "@colourGroup.Name")' style="background: @colourGroup.ColourCode"></a>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <a class="colour-group-filter" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "colours", "@colourGroup.Name")' style="background: @colourGroup.ColourCode"></a>
+                                                    }
                                                 }
                                             }
                                         </div>
@@ -450,6 +451,5 @@
     </div>
 </section>
 <!-- Shop Section End -->
-
 
 <script src="~/scripts/shop.js"></script>

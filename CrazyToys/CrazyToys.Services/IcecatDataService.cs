@@ -3,6 +3,8 @@ using CrazyToys.Interfaces;
 using CrazyToys.Interfaces.EntityDbInterfaces;
 using CrazyToys.Services.EntityDbServices;
 using CrazyToys.Web.Logging;
+using Hangfire;
+using Hangfire.Server;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -14,6 +16,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace CrazyToys.Services
 {
@@ -30,8 +33,6 @@ namespace CrazyToys.Services
         private readonly ImageDbService _imageDbService;
         private readonly IEntityCRUD<PriceGroup> _priceGroupDbService;
 
-
-
         private Random random;
         private IList<AgeGroup> ageGroups;
         private IList<PriceGroup> priceGroups;
@@ -42,16 +43,11 @@ namespace CrazyToys.Services
 
 
         public IcecatDataService(
-            IHttpClientFactory httpClientFactory, 
-            IEntityCRUD<Brand> brandDbService, 
-            IEntityCRUD<Category> categoryDbService,
-            IEntityCRUD<SubCategory> subCategoryDbService, 
-            IEntityCRUD<ColourGroup> colourGroupDbService, 
-            ToyDbService toyDbService, 
-            SimpleToyDbService simpleToyDbService,
-            IEntityCRUD<AgeGroup> ageGroupDbService, 
-            ImageDbService imageDbService,
-            IEntityCRUD<PriceGroup> priceGroupDbService)
+            IHttpClientFactory httpClientFactory, IEntityCRUD<Brand> brandDbService, 
+            IEntityCRUD<Category> categoryDbService,IEntityCRUD<SubCategory> subCategoryDbService, 
+            IEntityCRUD<ColourGroup> colourGroupDbService, ToyDbService toyDbService, 
+            SimpleToyDbService simpleToyDbService,IEntityCRUD<AgeGroup> ageGroupDbService, 
+            ImageDbService imageDbService,IEntityCRUD<PriceGroup> priceGroupDbService)
         {
             _httpClientFactory = httpClientFactory;
             _brandDbService = brandDbService;
@@ -84,6 +80,96 @@ namespace CrazyToys.Services
             var brandTask = GetBrandDict();
             brandTask.Wait();
             brandDict = brandTask.Result;
+        }
+
+
+        /*
+         * Henter enten index eller daily-fil fra icecat
+         * Den tjekker alle produkter om brand-id passer på vores udvalgte brands
+         *      hvis ja --> henter den værdier til at lave SimpleToy-obj, som lægges ned i db
+         * Efter ALLE produkter i fil er løbet igennem og lagt i db, hentes de op og oprettes som Toy-obj
+         * 
+         * De lægges FØRST ned i SimpleToy-tabel for at undgå at processen af at hente alt fra filen afbrydes, hvis der sker en fejl i hentningen af et enkelt produkt
+         * **/
+        public async Task GetProductsFromIcecat(string url)
+        {
+            string credentials = GetIcecatCredentials();
+
+            var httpRequestMessage = new HttpRequestMessage(
+                HttpMethod.Get, url)
+            {
+                Headers =
+                    {
+                        { HeaderNames.Accept, "application/xml" },
+                        { HeaderNames.Authorization, $"Basic {credentials} " }
+                    }
+            };
+
+            var httpClient = _httpClientFactory.CreateClient();
+            httpClient.Timeout = TimeSpan.FromMinutes(1000);
+            var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
+
+            if (httpResponseMessage.IsSuccessStatusCode)
+            {
+                Dictionary<string, Brand> brandDict = await GetBrandDict();
+                string dateString = DateTime.Now.ToString();
+
+                var contentStream =
+                    await httpResponseMessage.Content.ReadAsStreamAsync();
+
+                XmlReaderSettings settings = new XmlReaderSettings();
+                settings.Async = true;
+                settings.IgnoreWhitespace = true;
+                settings.DtdProcessing = DtdProcessing.Ignore;
+                settings.IgnoreComments = true;
+
+                XmlReader reader = XmlReader.Create(contentStream, settings);
+
+                while (await reader.ReadAsync())
+                {
+                    if (reader.Name == "file" && (reader.NodeType != XmlNodeType.EndElement))
+                    {
+                        string supplierId = reader.GetAttribute("Supplier_id");
+
+                        if (brandDict.ContainsKey(supplierId))
+                        {
+                            //string productId = reader.GetAttribute("Prod_ID");
+                            string onMarket = reader.GetAttribute("On_Market");
+                            string icecatId = reader.GetAttribute("Product_ID");
+
+                            SimpleToy simpleToy = url.Contains("daily")
+                                ? await CreateOrUpdateSimpleToyInDb(new SimpleToy(supplierId, onMarket, icecatId, dateString))
+                                : await CreateSimpleToyInDb(new SimpleToy(supplierId, onMarket, icecatId, dateString));
+                        }
+                    }
+                }
+                // nu har vi lagt alle toys fra enten index eller daily successfuldt - nu skal de hentes op og lægges ned som Toy-objs
+                await CreateToysFromSimpleToys(url.Contains("daily"), dateString);
+            }
+        }
+        /*
+        * Denne metode henter alle SimpleToys op, som lige er blevet lagt i db ud fra index eller daily
+        * Derefter henter den den fulde produktinfo i json, laver et nyt toy-obj og tilføjer til db 
+        * - hvis det er daily laver den CreateOrUpdate 
+        * - hvis det er index findes der ikke nogen toy-obj i db, og derfor laver den bare Create()
+        ***/
+        public async Task CreateToysFromSimpleToys(bool isDaily, string dateString)
+        {
+            HashSet<SimpleToy> simpleToys = isDaily
+                ? GetAllSimpleToysByDate(dateString)
+                : GetAllSimpleToysAsHashSet();
+
+            foreach (SimpleToy simpleToy in simpleToys)
+            {
+                //if (!simpleToy.ProductId.Contains("E+25"))
+                Toy toy = await GetSingleProduct(simpleToy);
+                if (toy != null)
+                {
+                    Toy addedToy = isDaily
+                                  ? await CreateOrUpdateToyInDb(toy)
+                                  : await CreateToyInDb(toy); // TODO det ville så være her at man så skulle tilføje ting som fx forbindelse til colourgroups og pricegroups osv.
+                }
+            }
         }
 
         public string GetIcecatCredentials()
@@ -356,7 +442,7 @@ namespace CrazyToys.Services
             }
         }
 
-        // TODO slet!
+        // TODO slet! Passer dette stadig? 
         public async Task RemoveDuplicateAgeGroups(Toy toyFromDb, Toy toy)
         {
           
@@ -394,7 +480,6 @@ namespace CrazyToys.Services
                 }
             }
         }
-
 
         public async Task<SubCategory> GetOrCreateSubCategory(string id, string name, IList<Category> categories)
         {
