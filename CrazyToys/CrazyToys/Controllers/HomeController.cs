@@ -34,14 +34,7 @@ namespace CrazyToys.Web.Controllers
         {
             // Session
             SessionUser sessionUser = _sessionService.GetNewOrExistingSessionUser(HttpContext);
-
-            sessionUser.Cart.Add(new SelectedToy());
-
-            ViewData["CartQuantity"] = 13;//sessionUser.Cart.Count;
-            string test = "gruppe10";
-
-            ViewData["Test"] = test;//JsonConvert.SerializeObject(test);
-
+            ViewData["CartQuantity"] = sessionUser.Cart.Count;
             // return a 'model' to the selected template/view for this page.
             return CurrentTemplate(CurrentPage);
         }
