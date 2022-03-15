@@ -81,16 +81,12 @@
                                                                                         {
                                                                                             if (tempDict["subCategory"].Contains(subCategory.Name))
                                                                                             {
-                                                                                                 <li><a class="active-filter nav-link py-0" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "subCategory", "@subCategory.Name", )'>@subCategory.Name</a></li>
+                                                                                                <li><a class="active-filter nav-link py-0" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "subCategory", "@subCategory.Name", )'>@subCategory.Name</a></li>
                                                                                             }
                                                                                             else
                                                                                             {
                                                                                                 <li><a class="nav-link py-0" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "subCategory", "@subCategory.Name", )'>@subCategory.Name</a></li>
                                                                                             }
-                                                                                        }
-                                                                                        else
-                                                                                        {
-                                                                                            <li><a class="nav-link py-0" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "subCategory", "@subCategory.Name", )'>@subCategory.Name</a></li>
                                                                                         }
                                                                                     }
                                                                                     else
@@ -116,20 +112,6 @@
                                                                         </div>
                                                                     </li>
                                                                 }
-                                                            }
-                                                            else
-                                                            {
-                                                                <li>
-                                                                    <a data-toggle="collapse" data-target="#@category.Name" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "categories", "@category.Name", )'>@category.Name</a>
-                                                                    <div class="nice-scroll collapse" id="@category.Name" aria-expanded="false">
-                                                                        <ul>
-                                                                            @foreach (var subCategory in category.SubCategories)
-                                                                            {
-                                                                                <li><a class="nav-link py-0" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "subCategory", "@subCategory.Name", )'>@subCategory.Name</a></li>
-                                                                            }
-                                                                        </ul>
-                                                                    </div>
-                                                                </li>
                                                             }
                                                         }
                                                         else
