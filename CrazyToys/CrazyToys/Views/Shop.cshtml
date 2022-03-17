@@ -71,7 +71,7 @@
                                                             <div class="@(tempDict.Count > 0 && tempDict.ContainsKey("categories") && tempDict["categories"].Contains(category.Name)
                                                             ? ""
                                                             : "collapse")" id="@category.Name">
-                                                                <ul class="list-height">
+                                                                <ul class="subcat-scroll nice-scroll">
                                                                     @foreach (var subCategory in category.SubCategories)
                                                                     {
                                                                         <li>

@@ -104,3 +104,10 @@
     left: 160px;
 }
 
+.subcat-scroll {
+    margin-right: 12px;
+    padding: 0;
+    height: auto !important;
+    max-height: calc(38px * 8) !important;
+    overflow-x: hidden;
+}
