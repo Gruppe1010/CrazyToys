@@ -25,5 +25,12 @@ namespace CrazyToys.Services
             }
             return JsonConvert.DeserializeObject<SessionUser>(sessionUser);
         }
+
+        public void Update(HttpContext httpContext, SessionUser sessionUser)
+        {
+            httpContext.Session.SetString("SessionUser", JsonConvert.SerializeObject(sessionUser));
+        }
+
+
     }
 }

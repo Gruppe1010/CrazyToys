@@ -32,18 +32,8 @@ namespace CrazyToys.Web.Controllers
 
         public override IActionResult Index()
         {
-            // Session
-            SessionUser sessionUser = _sessionService.GetNewOrExistingSessionUser(HttpContext);
-
-            sessionUser.Cart.Add(new SelectedToy());
-
-            ViewData["CartQuantity"] = 13;//sessionUser.Cart.Count;
-            string test = "gruppe10";
-
-            ViewData["Test"] = test;//JsonConvert.SerializeObject(test);
-
-            ViewBag.Current = "Home";
-
+          
+           
             // return a 'model' to the selected template/view for this page.
             return CurrentTemplate(CurrentPage);
         }

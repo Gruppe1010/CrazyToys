@@ -24,3 +24,30 @@ function incOrDecChosenAmount(stockAmount, inc) {
     }
     chosenAmount.value = newVal;
 }
+
+
+function addToCart(toyId) {
+    const quantity = document.getElementById('chosenAmount').value;
+
+    const selectedToy = {
+        toyId: toyId,
+        quantity: quantity
+    }
+
+    fetch(`https://localhost:44325/api/sessionuser`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json; charset=UTF-8' // denne linje siger at dataen som vi sender er en string 
+        },
+        body: JSON.stringify(selectedToy)
+    })
+    .then(response => {
+        if (response.ok) {
+            alert("Wow den blev tilføjet til kurven")
+        } else {
+            alert("Du kan ikke lægge så meget i kurven");
+        }
+    });
+  
+}
+
