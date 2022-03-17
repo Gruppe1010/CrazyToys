@@ -126,11 +126,10 @@ namespace CrazyToys.Services
             string category, string subCategory, 
             string brands, string priceGroup, 
             string ageGroups, string colours, // fx: rød.blå.grøn
-            int page,string search, string sort // fx: price_asc
-            )
+            int page,string search, string sort) // fx: price_asc
         {
             // sort=price asc
-            sort = "&sort=" + sort.Replace("_", "%20");
+            sort = sort != null ? "&sort=" + sort.Replace("_", "%20") : null;
             page = page == 0 ? 1 : page;
 
             var dict = new Dictionary<int, List<ShopToyDTO>>();

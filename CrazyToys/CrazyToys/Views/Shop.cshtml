@@ -63,89 +63,26 @@
                                                 @{
                                                     foreach (var category in categoryList)
                                                     {
-                                                        if (tempDict.Count > 0)
-                                                        {
-                                                            if (tempDict.ContainsKey("categories"))
-                                                            {
-                                                                if (tempDict["categories"].Contains(category.Name))
-                                                                {
-                                                                    <li>
-                                                                        <a class="active-filter" aria-expanded="true" data-toggle="collapse" data-target="#@category.Name" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "categories", "@category.Name", )'>@category.Name</a>
-                                                                        <div id="@category.Name">
-                                                                            <ul class="list-height">
-                                                                                @foreach (var subCategory in category.SubCategories)
-                                                                                {
-                                                                                    if (tempDict.Count > 0)
-                                                                                    {
-                                                                                        if (tempDict.ContainsKey("subCategory"))
-                                                                                        {
-                                                                                            if (tempDict["subCategory"].Contains(subCategory.Name))
-                                                                                            {
-                                                                                                 <li><a class="active-filter nav-link py-0" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "subCategory", "@subCategory.Name", )'>@subCategory.Name</a></li>
-                                                                                            }
-                                                                                            else
-                                                                                            {
-                                                                                                <li><a class="nav-link py-0" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "subCategory", "@subCategory.Name", )'>@subCategory.Name</a></li>
-                                                                                            }
-                                                                                        }
-                                                                                        else
-                                                                                        {
-                                                                                            <li><a class="nav-link py-0" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "subCategory", "@subCategory.Name", )'>@subCategory.Name</a></li>
-                                                                                        }
-                                                                                    }
-                                                                                    else
-                                                                                    {
-                                                                                        <li><a class="nav-link py-0" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "subCategory", "@subCategory.Name", )'>@subCategory.Name</a></li>
-                                                                                    }
-                                                                                }
-                                                                            </ul>
-                                                                        </div>
-                                                                    </li>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <li>
-                                                                        <a data-toggle="collapse" data-target="#@category.Name" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "categories", "@category.Name", )'>@category.Name</a>
-                                                                        <div class="collapse" id="@category.Name" aria-expanded="false">
-                                                                            <ul >
-                                                                                @foreach (var subCategory in category.SubCategories)
-                                                                                {
-                                                                                    <li><a class="nav-link py-0" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "subCategory", "@subCategory.Name", )'>@subCategory.Name</a></li>
-                                                                                }
-                                                                            </ul>
-                                                                        </div>
-                                                                    </li>
-                                                                }
-                                                            }
-                                                            else
-                                                            {
-                                                                <li>
-                                                                    <a data-toggle="collapse" data-target="#@category.Name" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "categories", "@category.Name", )'>@category.Name</a>
-                                                                    <div class="collapse" id="@category.Name" aria-expanded="false">
-                                                                        <ul>
-                                                                            @foreach (var subCategory in category.SubCategories)
-                                                                            {
-                                                                                <li><a class="nav-link py-0" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "subCategory", "@subCategory.Name", )'>@subCategory.Name</a></li>
-                                                                            }
-                                                                        </ul>
-                                                                    </div>
-                                                                </li>
-                                                            }
-                                                        }
-                                                        else
-                                                        {
-                                                            <li>
-                                                                <a data-toggle="collapse" data-target="#@category.Name" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "categories", "@category.Name", )'>@category.Name</a>
-                                                                <div class="collapse" id="@category.Name" aria-expanded="false">
-                                                                    <ul>
-                                                                        @foreach (var subCategory in category.SubCategories)
-                                                                        {
-                                                                            <li><a class="nav-link py-0" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "subCategory", "@subCategory.Name", )'>@subCategory.Name</a></li>
-                                                                        }
-                                                                    </ul>
-                                                                </div>
-                                                            </li>
-                                                        }
+                                                        <li>
+                                                            <a class="@(tempDict.Count > 0 && tempDict.ContainsKey("categories") && tempDict["categories"].Contains(category.Name)
+                                                            ? "active-filter underline"
+                                                            : "")" aria-expanded="true" data-toggle="collapse" data-target="#@category.Name" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "categories", "@category.Name", )'>@category.Name</a>
+
+                                                            <div class="@(tempDict.Count > 0 && tempDict.ContainsKey("categories") && tempDict["categories"].Contains(category.Name)
+                                                            ? ""
+                                                            : "collapse")" id="@category.Name">
+                                                                <ul class="subcat-scroll nice-scroll">
+                                                                    @foreach (var subCategory in category.SubCategories)
+                                                                    {
+                                                                        <li>
+                                                                            <a class="@(tempDict.Count > 0 && tempDict.ContainsKey("subCategory") && tempDict["subCategory"].Contains(subCategory.Name)
+                                                                            ? "active-filter"
+                                                                            : "") nav-link py-0" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "subCategory", "@subCategory.Name", )'>@subCategory.Name</a>
+                                                                        </li>
+                                                                    }
+                                                                </ul>
+                                                            </div>
+                                                        </li>
                                                     }
                                                 }
                                             </ul>
@@ -164,29 +101,11 @@
                                                 @{
                                                     foreach (KeyValuePair<string, int> brand in brands)
                                                     {
-                                                        if (tempDict.Count > 0)
-                                                        {
-                                                            if (tempDict.ContainsKey("brand"))
-                                                            {
-                                                                if (tempDict["brand"].Contains(brand.Key))
-                                                                {
-                                                                    <li><a class="active-filter" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "brand", "@brand.Key")'>@brand.Key (@brand.Value)</a></li>
-                                                                }
-
-                                                                else
-                                                                {
-                                                                    <li><a href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "brand", "@brand.Key")'>@brand.Key (@brand.Value)</a></li>
-                                                                }
-                                                            }
-                                                            else
-                                                            {
-                                                                <li><a href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "brand", "@brand.Key")'>@brand.Key (@brand.Value)</a></li>
-                                                            }
-                                                        }
-                                                        else
-                                                        {
-                                                            <li><a href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "brand", "@brand.Key")'>@brand.Key (@brand.Value)</a></li>
-                                                        }
+                                                        <li>
+                                                            <a class="@(tempDict.Count > 0 && tempDict.ContainsKey("brand") && tempDict["brand"].Contains(brand.Key)
+                                                        ? "active-filter"
+                                                        : "")" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "brand", "@brand.Key")'>@brand.Key (@brand.Value)</a>
+                                                        </li>
                                                     }
                                                 }
                                             </ul>
@@ -205,29 +124,11 @@
                                                 @{
                                                     foreach (PriceGroup priceGroup in priceGroups)
                                                     {
-                                                        if (tempDict.Count > 0)
-                                                        {
-                                                            if (tempDict.ContainsKey("priceGroup"))
-                                                            {
-                                                                if (tempDict["priceGroup"].Contains(priceGroup.Interval))
-                                                                {
-                                                                    <li><a class="active-filter" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "priceGroup", "@priceGroup.Interval")'>@priceGroup.Interval DKK</a></li>
-                                                                }
-
-                                                                else
-                                                                {
-                                                                    <li><a href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "priceGroup", "@priceGroup.Interval")'>@priceGroup.Interval DKK</a></li>
-                                                                }
-                                                            }
-                                                            else
-                                                            {
-                                                                <li><a href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "priceGroup", "@priceGroup.Interval")'>@priceGroup.Interval DKK</a></li>
-                                                            }
-                                                        }
-                                                        else
-                                                        {
-                                                            <li><a href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "priceGroup", "@priceGroup.Interval")'>@priceGroup.Interval DKK</a></li>
-                                                        }
+                                                        <li>
+                                                            <a class="@(tempDict.Count > 0 && tempDict.ContainsKey("priceGroup") && tempDict["priceGroup"].Contains(priceGroup.Interval)
+                                                            ? "active-filter"
+                                                            : "")" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "priceGroup", "@priceGroup.Interval")'>@priceGroup.Interval DKK</a>
+                                                        </li>
                                                     }
                                                 }
                                             </ul>
@@ -245,28 +146,9 @@
                                             @{
                                                 foreach (AgeGroup ageGroup in ageGroups)
                                                 {
-                                                    if (tempDict.Count > 0)
-                                                    {
-                                                        if (tempDict.ContainsKey("ageGroupIntervals"))
-                                                        {
-                                                            if (tempDict["ageGroupIntervals"].Contains(ageGroup.Interval))
-                                                            {
-                                                                <a class="age-group-active age-group hover" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "ageGroupIntervals", "@ageGroup.Interval")'> @ageGroup.Interval </a>
-                                                            }
-                                                            else
-                                                            {
-                                                                <a class="age-group hover" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "ageGroupIntervals", "@ageGroup.Interval")'> @ageGroup.Interval </a>
-                                                            }
-                                                        }
-                                                        else
-                                                        {
-                                                            <a class="age-group hover" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "ageGroupIntervals", "@ageGroup.Interval")'> @ageGroup.Interval </a>
-                                                        }
-                                                    }
-                                                    else
-                                                    {
-                                                        <a class="age-group hover" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "ageGroupIntervals", "@ageGroup.Interval")'> @ageGroup.Interval </a>
-                                                    }
+                                                    <a class="@(tempDict.Count > 0 && tempDict.ContainsKey("ageGroupIntervals") && tempDict["ageGroupIntervals"].Contains(ageGroup.Interval)
+                                                    ? "age-group-active"
+                                                    : "") age-group hover" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "ageGroupIntervals", "@ageGroup.Interval")'> @ageGroup.Interval </a>
                                                 }
                                             }
                                         </div>
@@ -283,28 +165,9 @@
                                             @{
                                                 foreach (ColourGroup colourGroup in colourGroups)
                                                 {
-                                                    if (tempDict.Count > 0)
-                                                    {
-                                                        if (tempDict.ContainsKey("colours"))
-                                                        {
-                                                            if (tempDict["colours"].Contains(colourGroup.Name))
-                                                            {
-                                                                <a class="colour-group-filter colour-group-filter-active" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "colours", "@colourGroup.Name")' style="background: @colourGroup.ColourCode"></a>
-                                                            }
-                                                            else
-                                                            {
-                                                                <a class="colour-group-filter" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "colours", "@colourGroup.Name")' style="background: @colourGroup.ColourCode"></a>
-                                                            }
-                                                        }
-                                                        else
-                                                        {
-                                                            <a class="colour-group-filter" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "colours", "@colourGroup.Name")' style="background: @colourGroup.ColourCode"></a>
-                                                        }
-                                                    }
-                                                    else
-                                                    {
-                                                        <a class="colour-group-filter" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "colours", "@colourGroup.Name")' style="background: @colourGroup.ColourCode"></a>
-                                                    }
+                                                    <a class="@(tempDict.Count > 0 && tempDict.ContainsKey("colours") && tempDict["colours"].Contains(colourGroup.Name)
+                                                    ? "colour-group-filter-active"
+                                                    : "") colour-group-filter" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "colours", "@colourGroup.Name")' style="background: @colourGroup.ColourCode"></a>
                                                 }
                                             }
                                         </div>

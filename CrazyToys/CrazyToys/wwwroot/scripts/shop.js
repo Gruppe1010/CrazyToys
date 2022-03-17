@@ -48,18 +48,35 @@ function createUrlFromParams(pageNumber, paramsDict) {
     window.location.replace(url);
 }
 
+// type == categories
+// param == Dukker
 function updateParamsDict(paramsDict, type, param) // type == colour, param == rød
 {
+    debugger;
+
+
+    // hvis type == subcategory
+    
+
+    // læg på Dict på en specielt måde
+
+
     // hvis den allerede har den TYPE param
     if (paramsDict.hasOwnProperty(type)) {
         // tjek om param'en IKKE allerede står der
-
         if (!paramsDict[type].includes(param)) {
             // hvis den IKKE allerde står der: tilføj
             paramsDict[type].push(param);
         }
         else // ellers: fjern
         {
+            debugger;
+            // hvis der er flere end den ene param tilbage på arrayet
+            paramsDict[type].length > 1
+                ? paramsDict[type] = paramsDict[type].filter(n => n != param) // fjern den enkelte param fra arrayet
+                : delete paramsDict[type]; // fjern den enkelte param fra arrayet
+
+            /*
             // hvis der er flere end den ene param tilbage på arrayet
             if (paramsDict[type].length > 1) {
                 // fjern den enkelte param fra arrayet
@@ -69,6 +86,20 @@ function updateParamsDict(paramsDict, type, param) // type == colour, param == r
                 // ellers fjern hele propertien == dvs. type
                 delete paramsDict[type];
             }
+            */
+            // hvis type der skal fjernes er categories skal alle dens subcategories også fjernes
+            if (type == "categories") {
+                // hvis der er nogle subcats på dictet
+                if (paramsDict.hasOwnProperty("subCategory")) {
+                    // så gennemgå alle subcategories på paramsDict og slet dem som har [0] == param
+
+                    paramsDict.subCategory.forEach(subCat => {
+                        subCat[0] == type && delete subCat;
+                    })
+
+                }
+            }
+
         }
     }
     else // tilføj nyt key-value pair

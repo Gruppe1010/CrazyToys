@@ -108,7 +108,7 @@ namespace CrazyToys.Data.Data
                 {
                     new Category("Dukker", new string[] {"dukke"}),
                     new Category("Figurer", new string[] {"figur", "transformer"}),
-                    new Category("Bamser", new string[] {"bamse", "tøjdyr"}),
+                    new Category("Bamser", new string[] {"bamse", "tøjdyr", "plush"}),
                     new Category("Kreativ", new string[] {"kunst", "håndværk", "modellering", "maling", "male", "kridt", "blyant", "tegning", "perle", "saks", "smykke", "tegne", "syforsy"}),
                     new Category("Spil", new string[] {"spil", "hjernevrider", "pinball", "domino", }),
                     new Category("Musiklegetøj", new string[] {"musik", "instrument"}),

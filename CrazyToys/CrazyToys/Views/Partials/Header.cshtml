@@ -44,8 +44,8 @@
                     <ul>
                         <li class="@(ViewBag.Current == "Home" ? "active" : "")"><a href="/">FORSIDE</a></li>
                         <li class="@(ViewBag.Current == "Shop" ? "active" : "")"><a href="/shop?sort=price_asc">BUTIK</a></li>
-                        <li><a href="/about">OM OS</a></li>
-                        <li><a href="/contact">KONTAKT OS</a></li>
+                        <li class="@(ViewBag.Current == "About" ? "active" : "")"><a href="/about">OM OS</a></li>
+                        <li class="@(ViewBag.Current == "Contact" ? "active" : "")"><a href="/contact">KONTAKT OS</a></li>
                     </ul>
                 </nav>
             </div>
