@@ -43,7 +43,6 @@ function addToCart(toyId) {
     })
     .then(response => {
         if (response.ok) {
-            // vis 
             alert("Wow den blev tilføjet til kurven")
         } else {
             alert("Du kan ikke lægge så meget i kurven");
