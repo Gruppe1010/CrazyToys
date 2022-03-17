@@ -34,6 +34,7 @@ namespace CrazyToys.Web.Controllers
         {
 
             ViewBag.Current = "Home";
+
             // return a 'model' to the selected template/view for this page.
             return CurrentTemplate(CurrentPage);
         }
