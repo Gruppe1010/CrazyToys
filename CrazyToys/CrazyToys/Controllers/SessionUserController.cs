@@ -34,7 +34,7 @@ namespace CrazyToys.Web.Controllers
         }
 
 
-            [HttpPost]
+        [HttpPost]
         public async Task<ActionResult<SelectedToy>> AddToCart([FromBody] SelectedToy selectedToy)
         {
             string toyId = selectedToy.ToyId;
