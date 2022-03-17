@@ -65,13 +65,13 @@
                                                     {
                                                         <li>
                                                             <a class="@(tempDict.Count > 0 && tempDict.ContainsKey("categories") && tempDict["categories"].Contains(category.Name)
-                                                            ? "active-filter"
+                                                            ? "active-filter underline"
                                                             : "")" aria-expanded="true" data-toggle="collapse" data-target="#@category.Name" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "categories", "@category.Name", )'>@category.Name</a>
 
                                                             <div class="@(tempDict.Count > 0 && tempDict.ContainsKey("categories") && tempDict["categories"].Contains(category.Name)
                                                             ? ""
                                                             : "collapse")" id="@category.Name">
-                                                                <ul class="list-height">
+                                                                <ul class="subcat-scroll nice-scroll">
                                                                     @foreach (var subCategory in category.SubCategories)
                                                                     {
                                                                         <li>
