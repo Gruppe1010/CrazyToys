@@ -32,8 +32,8 @@ namespace CrazyToys.Web.Controllers
 
         public override IActionResult Index()
         {
-          
-           
+
+            ViewBag.Current = "Home";
             // return a 'model' to the selected template/view for this page.
             return CurrentTemplate(CurrentPage);
         }
