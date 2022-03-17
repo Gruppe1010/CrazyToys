@@ -2,10 +2,26 @@
 @using Umbraco.Cms.Web.Common.PublishedModels;
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ShoppingCart>
 @{
-	Layout = "Master.cshtml";
+    Layout = "Master.cshtml";
     List<ShoppingCartToyDTO> shoppingCartToyDTOs = ViewData["ShoppingCartToytDTOs"] as  List<ShoppingCartToyDTO>;
 
+    double subtotal = 0.0;
+    double total = 0.0;
+    double deliveryPrice = 39.0;
+
+     foreach (ShoppingCartToyDTO shoppingCartToyDTO in shoppingCartToyDTOs)
+        {
+            subtotal = subtotal + shoppingCartToyDTO.Price * shoppingCartToyDTO.Quantity;
+        }
+        if(subtotal > 499.0)
+        {
+            deliveryPrice = 0.0;
+        }
+
+        total = subtotal + deliveryPrice;
 }
+
+
 
 <!-- Breadcrumb Section Begin -->
 <section class="breadcrumb-option">
@@ -105,8 +121,12 @@
                 <div class="cart__total">
                     <h6>Cart total</h6>
                     <ul>
-                        <li>Subtotal <span>$ 169.50</span></li>
-                        <li>Total <span>$ 169.50</span></li>
+                        <li>Subtotal <span>@subtotal DKK</span></li>
+                        <li class="italic">Levering <span>@(deliveryPrice < 1 ? "Gratis Levering" : deliveryPrice + " DKK")</span></li>
+                        @{
+                            Console.WriteLine(total);
+                        }
+                        <li class="bold">Total <span>@total DKK</span></li>
                     </ul>
                     <a href="#" class="primary-btn">Proceed to checkout</a>
                 </div>

@@ -10,6 +10,13 @@
     height: 88%;
 }
 
+.bold {
+    font-weight: bolder;
+}
+
+.italic {
+    font-style: italic;
+}
 
 
 .hover:hover {
