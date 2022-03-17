@@ -94,5 +94,13 @@
     border: 1px solid black !important;
 }
 
+.image-style {
+    max-height: 550px;
+    overflow: auto;
+}
 
+.ul-image-style {
+    position: relative;
+    left: 160px;
+}
 
