@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using CrazyToys.Entities.DTOs;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CrazyToys.Entities.Entities
@@ -52,5 +53,12 @@ namespace CrazyToys.Entities.Entities
             ColourGroups = toy.ColourGroups;
             AgeGroups = toy.AgeGroups;
         }
+
+
+        public ShoppingCartToyDTO ConvertToShoppingCartToyDTO(int quantity)
+        {
+            return new ShoppingCartToyDTO(ID, Name, Price, quantity, Images.Count > 0 ? Images[0].UrlHigh : null);
+        }
+
     }
 }
