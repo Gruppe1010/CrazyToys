@@ -130,7 +130,7 @@ namespace CrazyToys.Services
             )
         {
             // sort=price asc
-            sort = "&sort=" + sort.Replace("_", "%20");
+            sort = sort != null ? "&sort=" + sort.Replace("_", "%20") : null;
             page = page == 0 ? 1 : page;
 
             var dict = new Dictionary<int, List<ShopToyDTO>>();
