@@ -17,9 +17,6 @@ fetch(`https://localhost:44325/api/sessionUser`, {
         // TODO test at det virker!
         // plusser alle entries i dictets quantity-værdier sammen
         cartQuantity.innerText = Object.entries(data.Cart).reduce((result, item) => {
-            console.log("item", item)
-
-            console.log("result", result)
             return result + item[1];
         }, 0);
     } else {
