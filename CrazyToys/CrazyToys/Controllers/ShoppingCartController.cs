@@ -1,4 +1,5 @@
 ﻿using CrazyToys.Entities.DTOs;
+using CrazyToys.Entities.Entities;
 using CrazyToys.Interfaces;
 using CrazyToys.Services.EntityDbServices;
 using Microsoft.AspNetCore.Mvc;
@@ -29,16 +30,16 @@ namespace CrazyToys.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-
             var sessionsUser = _sessionService.GetNewOrExistingSessionUser(HttpContext);
 
-            List<ShoppingCartToyDTO> shoppingCartToytDTOs = null;
-
-            if(sessionsUser.Cart.Count > 0)
+            List<ShoppingCartToyDTO> shoppingCartToytDTOs = new List<ShoppingCartToyDTO>();
+       
+            foreach (var entry in sessionsUser.Cart)
             {
-
+                Toy toy = await _toyDbService.GetById(entry.Key);
+                shoppingCartToytDTOs.Add(toy.ConvertToShoppingCartToyDTO(entry.Value));
             }
-
+            
             ViewData["ShoppingCartToytDTOs"] = shoppingCartToytDTOs;
             return CurrentTemplate(CurrentPage);
         }
