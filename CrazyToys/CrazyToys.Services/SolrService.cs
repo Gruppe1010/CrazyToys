@@ -126,8 +126,7 @@ namespace CrazyToys.Services
             string category, string subCategory, 
             string brands, string priceGroup, 
             string ageGroups, string colours, // fx: rød.blå.grøn
-            int page,string search, string sort // fx: price_asc
-            )
+            int page,string search, string sort) // fx: price_asc
         {
             // sort=price asc
             sort = sort != null ? "&sort=" + sort.Replace("_", "%20") : null;
