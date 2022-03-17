@@ -1,7 +1,10 @@
-﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+﻿@using CrazyToys.Entities.DTOs
+@using Umbraco.Cms.Web.Common.PublishedModels;
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ShoppingCart>
 @{
 	Layout = "Master.cshtml";
+    List<ShoppingCartToyDTO> shoppingCartToyDTOs = ViewData["ShoppingCartToytDTOs"] as  List<ShoppingCartToyDTO>;
+
 }
 
 <!-- Breadcrumb Section Begin -->
@@ -39,86 +42,37 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td class="product__cart__item">
-                                    <div class="product__cart__item__pic">
-                                        <img src="img/shopping-cart/cart-1.jpg" alt="">
-                                    </div>
-                                    <div class="product__cart__item__text">
-                                        <h6>T-shirt Contrast Pocket</h6>
-                                        <h5>$98.49</h5>
-                                    </div>
-                                </td>
-                                <td class="quantity__item">
-                                    <div class="quantity">
-                                        <div class="pro-qty-2">
-                                            <input type="text" value="1">
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="cart__price">$ 30.00</td>
-                                <td class="cart__close"><i class="fa fa-close"></i></td>
-                            </tr>
-                            <tr>
-                                <td class="product__cart__item">
-                                    <div class="product__cart__item__pic">
-                                        <img src="img/shopping-cart/cart-2.jpg" alt="">
-                                    </div>
-                                    <div class="product__cart__item__text">
-                                        <h6>Diagonal Textured Cap</h6>
-                                        <h5>$98.49</h5>
-                                    </div>
-                                </td>
-                                <td class="quantity__item">
-                                    <div class="quantity">
-                                        <div class="pro-qty-2">
-                                            <input type="text" value="1">
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="cart__price">$ 32.50</td>
-                                <td class="cart__close"><i class="fa fa-close"></i></td>
-                            </tr>
-                            <tr>
-                                <td class="product__cart__item">
-                                    <div class="product__cart__item__pic">
-                                        <img src="img/shopping-cart/cart-3.jpg" alt="">
-                                    </div>
-                                    <div class="product__cart__item__text">
-                                        <h6>Basic Flowing Scarf</h6>
-                                        <h5>$98.49</h5>
-                                    </div>
-                                </td>
-                                <td class="quantity__item">
-                                    <div class="quantity">
-                                        <div class="pro-qty-2">
-                                            <input type="text" value="1">
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="cart__price">$ 47.00</td>
-                                <td class="cart__close"><i class="fa fa-close"></i></td>
-                            </tr>
-                            <tr>
-                                <td class="product__cart__item">
-                                    <div class="product__cart__item__pic">
-                                        <img src="img/shopping-cart/cart-4.jpg" alt="">
-                                    </div>
-                                    <div class="product__cart__item__text">
-                                        <h6>Basic Flowing Scarf</h6>
-                                        <h5>$98.49</h5>
-                                    </div>
-                                </td>
-                                <td class="quantity__item">
-                                    <div class="quantity">
-                                        <div class="pro-qty-2">
-                                            <input type="text" value="1">
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="cart__price">$ 30.00</td>
-                                <td class="cart__close"><i class="fa fa-close"></i></td>
-                            </tr>
+                            @{
+                                if (shoppingCartToyDTOs.Count > 0)
+                                {
+                                    @foreach(ShoppingCartToyDTO toyDTO in shoppingCartToyDTOs){
+                                        <tr>
+                                            <td class="product__cart__item">
+                                                <div class="product__cart__item__pic">
+                                                    <img class="cart-image-size" src="@toyDTO.Image" alt="@toyDTO.Name">
+                                                </div>
+                                                <div class="product__cart__item__text">
+                                                    <h6>@toyDTO.Name</h6>
+                                                    <h5>@toyDTO.Price DKK</h5>
+                                                </div>
+                                            </td>
+                                            <td class="quantity__item">
+                                                <div class="quantity">
+                                                    <div class="pro-qty-2">
+                                                        <input type="text" value="@toyDTO.Quantity">
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="cart__price">@(toyDTO.Price * toyDTO.Quantity) DKK</td>
+                                            <td class="cart__close"><i class="fa fa-close"></i></td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <h2>Der er intet i kurven endnu</h2>
+                                }
+                            }
                         </tbody>
                     </table>
                 </div>

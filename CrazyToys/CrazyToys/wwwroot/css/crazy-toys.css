@@ -2,6 +2,11 @@
 }
 
 
+.cart-image-size{
+    width: 90px;
+}
+
+
 
 .hover:hover {
     background-color: palevioletred;
