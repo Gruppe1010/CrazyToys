@@ -2,6 +2,22 @@
 }
 
 
+.cart-image-size{
+    width: 90px;
+}
+
+.headline{
+    height: 88%;
+}
+
+.bold {
+    font-weight: bolder;
+}
+
+.italic {
+    font-style: italic;
+}
+
 
 .hover:hover {
     background-color: palevioletred;

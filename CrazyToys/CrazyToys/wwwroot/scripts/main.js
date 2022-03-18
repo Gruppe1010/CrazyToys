@@ -165,7 +165,8 @@
 
 
     // VIBE her har jeg fjernet det som jeg har tilføjet oppe tidligere i en funktion
-    
+
+    /*
     var proQty = $('.pro-qty-2');
     proQty.prepend('<span class="fa fa-angle-left dec qtybtn"></span>');
     proQty.append('<span class="fa fa-angle-right inc qtybtn"></span>');
@@ -184,6 +185,7 @@
         }
         $button.parent().find('input').val(newVal);
     });
+    */
     
 
     /*------------------
