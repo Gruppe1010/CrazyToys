@@ -8,17 +8,17 @@ namespace CrazyToys.Entities.DTOs
 {
     public class ShopToyDTO
     {
-        public string Id { get; set; }
+        public string ID { get; set; }
         public string Name { get; set; }
         public int Price { get; set; }
-        public string ImageUrl { get; set; }
+        public string Image { get; set; }
 
-        public ShopToyDTO(string id, string name, int price, string imageUrl)
+        public ShopToyDTO(string id, string name, int price, string image)
         {
-            Id = id;
+            ID = id;
             Name = name;
             Price = price;
-            ImageUrl = imageUrl;
+            Image = image;
         }
     }
 }

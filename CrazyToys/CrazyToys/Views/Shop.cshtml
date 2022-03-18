@@ -214,10 +214,10 @@
                         {
                             <div class="col-lg-4 col-md-6 col-sm-6">
                                 <div class="product__item">
-                                    <div class="product__item__pic set-bg" data-setbg="@(shopToyDTOs[j].ImageUrl ?? shopToyDTOs[j].Name)">
-                                        <a class="item-link" href="/shop-details?id=@shopToyDTOs[j].Id"></a>
+                                    <div class="product__item__pic set-bg" data-setbg="@(shopToyDTOs[j].Image ?? shopToyDTOs[j].Name)">
+                                        <a class="item-link" href="/shop-details?id=@shopToyDTOs[j].ID"></a>
                                         <ul class="product__hover">
-                                            <li><a href="#"><img class="hover-icon" src="img/icon/heart.png" alt=""></a></li>
+                                            <li><button onclick='addOrRemoveFromWishlist(@shopToyDTOs[j].ID)'><img class="hover-icon" src="img/icon/heart.png" alt=""></button></li>
                                         </ul>
                                     </div>
                                     <div class="product__item__text">

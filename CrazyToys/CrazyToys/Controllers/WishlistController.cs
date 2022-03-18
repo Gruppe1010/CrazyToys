@@ -33,16 +33,15 @@ namespace CrazyToys.Web.Controllers
         {
             var sessionsUser = _sessionService.GetNewOrExistingSessionUser(HttpContext);
 
-            List<ShoppingCartToyDTO> shoppingCartToytDTOs = new List<ShoppingCartToyDTO>();
+            List<ShopToyDTO> wishlistToys = new List<ShopToyDTO>();
 
-            // TODO ændre til Wishlist
-            foreach (var entry in sessionsUser.Cart)
+            foreach (var entry in sessionsUser.Wishlist)
             {
-                Toy toy = await _toyDbService.GetById(entry.Key);
-                shoppingCartToytDTOs.Add(toy.ConvertToShoppingCartToyDTO(entry.Value));
+                Toy toy = await _toyDbService.GetById(entry);
+                wishlistToys.Add(toy.ConvertToShopToyDTO());
             }
 
-            ViewData["ShoppingCartToytDTOs"] = shoppingCartToytDTOs;
+            ViewData["wishlistToys"] = wishlistToys;
             return CurrentTemplate(CurrentPage);
         }
     }

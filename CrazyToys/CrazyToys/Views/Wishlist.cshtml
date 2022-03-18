@@ -3,8 +3,8 @@
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Wishlist>
 @{
     Layout = "Master.cshtml";
-    List<ShoppingCartToyDTO> shoppingCartToyDTOs = ViewData["ShoppingCartToytDTOs"] as List<ShoppingCartToyDTO>;
-    int numFound = shoppingCartToyDTOs.Count;
+    List<ShopToyDTO> wishlistToys = ViewData["wishlistToys"] as List<ShopToyDTO>;
+    int numFound = wishlistToys.Count;
 }
 
 <!-- Breadcrumb Section Begin -->
@@ -40,20 +40,20 @@
                 </div>
                 <div class="row">
                     @{
-                        for (int j = 0; j < shoppingCartToyDTOs.Count; j++)//shopToyDTOs.Count > 29 ? 30 : shopToyDTOs.Count); j++)
+                        for (int j = 0; j < wishlistToys.Count; j++)//shopToyDTOs.Count > 29 ? 30 : shopToyDTOs.Count); j++)
                         {
                             <div class="col-lg-3 col-md-4 col-sm-6">
                                 <div class="product__item">
-                                    <div class="product__item__pic set-bg" data-setbg="@(shoppingCartToyDTOs[j].Image ?? shoppingCartToyDTOs[j].Name)">
-                                        <a class="item-link" href="/shop-details?id=@shoppingCartToyDTOs[j].ID"></a>
+                                    <div class="product__item__pic set-bg" data-setbg="@(wishlistToys[j].Image ?? wishlistToys[j].Name)">
+                                        <a class="item-link" href="/shop-details?id=@wishlistToys[j].ID"></a>
                                         <ul class="product__hover">
                                             <li><a href="#"><img class="hover-icon" src="img/icon/close.png" alt=""></a></li>
                                         </ul>
                                     </div>
                                     <div class="product__item__text">
-                                        <h6>@shoppingCartToyDTOs[j].Name</h6>
+                                        <h6>@wishlistToys[j].Name</h6>
                                         <a href="#" class="add-cart">+ Tilføj Til Kurv</a>
-                                        <h5>@shoppingCartToyDTOs[j].Price DKK</h5>
+                                        <h5>@wishlistToys[j].Price DKK</h5>
                                     </div>
                                 </div>
                             </div>
