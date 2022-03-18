@@ -112,8 +112,7 @@ namespace CrazyToys.Data.Data
                     new Category("Kreativ", new string[] {"kunst", "håndværk", "modellering", "maling", "male", "kridt", "blyant", "tegning", "perle", "saks", "smykke", "tegne", "syforsy"}),
                     new Category("Spil", new string[] {"spil", "hjernevrider", "pinball", "domino", }),
                     new Category("Musiklegetøj", new string[] {"musik", "instrument"}),
-                    new Category("Vandleg", new string[] {"water", "vand", "pool", "svøm", "bade"}),
-                    new Category("Udendørsleg", new string[] {"løbehjul", "sjippe"}),
+                    new Category("Udendørsleg", new string[] {"løbehjul", "sjippe", "water", "vand", "pool", "svøm", "bade"}),
                     new Category("Udklædning", new string[] {"kostume", "maske", "teat", "tatov", "makeup"}),
                     new Category("Beklædning", new string[] {"taske", "hair", "kjole", "beklæd", "skjorte", "støvle", "haslkæde", "rygsæk"}),
                     new Category("Assorteret")
