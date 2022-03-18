@@ -57,7 +57,7 @@ namespace CrazyToys.Entities.Entities
 
         public ShoppingCartToyDTO ConvertToShoppingCartToyDTO(int quantity)
         {
-            return new ShoppingCartToyDTO(ID, Name, Price, quantity, Images.Count > 0 ? Images[0].UrlHigh : null);
+            return new ShoppingCartToyDTO(ID, Name, Price, quantity, Images.Count > 0 ? Images[0].UrlHigh : null, Stock);
         }
 
     }
