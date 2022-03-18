@@ -1,5 +1,5 @@
 ﻿
-function incAmount(shoppingCartToyDTO) {
+function incQuantity(shoppingCartToyDTO) {
     debugger;
 
     var amountElement = document.getElementById('chosenAmount');
@@ -35,7 +35,7 @@ function incAmount(shoppingCartToyDTO) {
 
 // TODO indsæt at den også skal rette i SessionUser hver gang man trykker inc eller dec
 
-function decAmount() {
+function decQuantity() {
 
     var amountElement = document.getElementById('chosenAmount');
     var oldValue = amountElement.value;
