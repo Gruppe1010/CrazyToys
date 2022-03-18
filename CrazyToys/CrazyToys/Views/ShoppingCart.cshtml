@@ -77,7 +77,7 @@
                                             <div class="quantity">
                                                 <div class="pro-qty-2">
                                                     <span class="fa fa-angle-left dec qtybtn" onclick='decQuantity(@Html.Raw(JsonConvert.SerializeObject(toyDTO)))'></span>
-                                                    <input id="chosenAmount" type="text" value="@toyDTO.Quantity">
+                                                    <input id="chosenAmount-@toyDTO.ID" type="text" value="@toyDTO.Quantity">
                                                     <span class="fa fa-angle-right inc qtybtn" onclick='incQuantity(@Html.Raw(JsonConvert.SerializeObject(toyDTO)))'></span>
                                                 </div>
                                             </div>

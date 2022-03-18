@@ -1,7 +1,7 @@
 ﻿
 // TODO test ordentligt
 function incQuantity(shoppingCartToyDTO) {
-    var amountElement = document.getElementById('chosenAmount');
+    var amountElement = document.getElementById(`chosenAmount-${shoppingCartToyDTO.ID}`);
     var oldValue = parseFloat(amountElement.value);
     var newValue = oldValue;
 
@@ -35,9 +35,7 @@ function incQuantity(shoppingCartToyDTO) {
 // TODO få den til at rette i sessionUser når man trykker dec
 function decQuantity(shoppingCartToyDTO) {
 
-    debugger;
-
-    var amountElement = document.getElementById('chosenAmount');
+    var amountElement = document.getElementById(`chosenAmount-${shoppingCartToyDTO.ID}`);
     var oldValue = parseFloat(amountElement.value);
     var newValue = oldValue;
 
@@ -72,7 +70,6 @@ function updateTotal(id, price) {
 
 
 function updateCartTotal(priceChange) {
-    debugger;
 
     let subtotal = parseFloat(document.getElementById('subtotal').innerText.split(" ")[0]);
     let deliveryPrice = 39;
