@@ -9,6 +9,7 @@ function incOrDecChosenAmount(stockAmount, inc) {
         if (oldValue < stockAmount) {
             newVal = parseFloat(oldValue) + 1;
         } else {
+
             newVal = oldValue;
 
             alert(`Der er kun ${oldValue} stk. tilbage af denne vare`);
@@ -55,7 +56,7 @@ function addToCart(toyId) {
 
 
 function updateCartNumber() {
-    fetch(`https://localhost:44325/api/sessionuser`, {
+    fetch(`https://localhost:44325/api/sessionUser`, {
         method: 'GET'
     })
     .then(response => {
