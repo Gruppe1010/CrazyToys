@@ -1,12 +1,12 @@
 ﻿const cartQuantity = document.getElementById('cartQuantity');
 
 
-fetch(`https://localhost:44325/api/sessionUser`, {
+fetch(`https://localhost:44325/api/sessionUser/GetSessionUser`, {
     method: 'GET',
 }).then(response => {
     if (!response.ok) {
         alert("404 - getting cartQuantity");
-        throw new Error('Error getting cartQuantity from /api/sessionUser')
+        throw new Error('Error getting cartQuantity from /api/sessionUser/GetSessionUser')
     }
     return response.json();
 }).then(data => {

@@ -35,7 +35,7 @@ function addToCart(toyId) {
         quantity: quantity
     }
 
-    fetch(`https://localhost:44325/api/sessionuser`, {
+    fetch(`https://localhost:44325/api/sessionuser/AddToCart`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json; charset=UTF-8' // denne linje siger at dataen som vi sender er en string 
@@ -55,7 +55,7 @@ function addToCart(toyId) {
 
 
 function updateCartNumber() {
-    fetch(`https://localhost:44325/api/sessionuser`, {
+    fetch(`https://localhost:44325/api/sessionuser/GetSessionUser`, {
         method: 'GET'
     })
     .then(response => {
