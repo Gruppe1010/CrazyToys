@@ -92,7 +92,49 @@ function updateCartTotal(priceChange) {
 
 
 
-function removeToyFromCart() {
+function removeToyFromCart(shoppingCartToyDTO) {
+
+    // fjern én fra quantity på sessionsUser
+    fetch(`https://localhost:44325/api/sessionuser?id=${shoppingCartToyDTO.ID}`, {
+        method: 'DELETE'
+    }).then(response => {
+        if (response.ok) {
+            debugger;
+
+            // find ud af hvor mange der har stået
+            var quantity = parseFloat(document.getElementById('chosenAmount').value);
+
+            // hvis toyet blev fjernet successfuldt fra sessionUsers cart
+            // så fjern "toyDataRow-@toyDTO.ID"-elementet fra siden
+            var toyTableBody = document.getElementById('toyTableBody');
+
+            var toyDataRow = document.getElementById(`toyDataRow-${shoppingCartToyDTO.ID}`);
+
+            toyTableBody.removeChild(toyDataRow);
+
+            //hvis toyTableBody-element ikke har nogen childNodes
+            if (toyTableBody.childElementCount === 0) {
+                // slet toyTable-element
+                var tableWrapper = document.getElementById('tableWrapper');
+
+                var toyTable = document.getElementById('toyTable');
+                tableWrapper.removeChild(toyTable);
+
+                // og tilføj "der er ikke noget i kurven"-besked
+                var h2 = document.createElement('h2');
+                h2.classList.add('headline');
+                h2.innerText = "Der er intet i kurven endnu";
+
+                tableWrapper.appendChild(h2)
+            }
+            // opdater updateCartTotal(shoppingCartToyDTO)
+            updateCartTotal(-shoppingCartToyDTO.Price * quantity);
+
+        } else {
+            alert("Der skete en fejl");
+            throw new Error("Error in removing toy from cart");
+        }
+    }).catch(error => console.log);
     // TODO lav et kald til api/sessionUser med id'et på toy'et som skal fjernes
 
     // i controlleren: 

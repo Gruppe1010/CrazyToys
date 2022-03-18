@@ -46,11 +46,11 @@
 <section class="shopping-cart spad">
     <div class="container">
         <div class="row">
-            <div class="col-lg-8">
+            <div id="tableWrapper" class="col-lg-8">
                 @{
                     @if (shoppingCartToyDTOs.Count > 0)
                     {
-                        <div class="shopping__cart__table">
+                        <div id="toyTable" class="shopping__cart__table">
                             <table>
                                 <thead>
                                     <tr>
@@ -60,11 +60,11 @@
                                         <th></th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="toyTableBody">
                             
                                 @foreach(ShoppingCartToyDTO toyDTO in shoppingCartToyDTOs){
-                                    <tr>
-                                        <td class="product__cart__item">
+                                    <tr id="toyDataRow-@toyDTO.ID">
+                                        <td  class="product__cart__item">
                                             <div class="product__cart__item__pic">
                                                 <img class="cart-image-size" src="@toyDTO.Image" alt="@toyDTO.Name">
                                             </div>
@@ -83,7 +83,7 @@
                                             </div>
                                         </td>
                                         <td id="total-@toyDTO.ID" class="cart__price">@(toyDTO.Price * toyDTO.Quantity) DKK</td>
-                                        <td class="cart__close"><i class="fa fa-close"></i></td>
+                                        <td class="cart__close" onclick='removeToyFromCart(@Html.Raw(JsonConvert.SerializeObject(toyDTO)))'><i class="fa fa-close mouse-hover"></i></td>
                                     </tr>
                                 }
                              

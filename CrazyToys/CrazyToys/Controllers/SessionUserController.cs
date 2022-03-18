@@ -33,6 +33,22 @@ namespace CrazyToys.Web.Controllers
             return Ok(JsonConvert.SerializeObject(sessionUser));
         }
 
+        [HttpDelete]
+        public async Task<ActionResult<SessionUser>> RemoveToyFromSessionUser([FromQuery(Name = "id")] string id)
+        {
+            var sessionUser = _sessionService.GetNewOrExistingSessionUser(HttpContext);
+
+            sessionUser.Cart.Remove(id);
+            _sessionService.Update(HttpContext, sessionUser);
+
+            if (!sessionUser.Cart.ContainsKey(id))
+            {
+                return Ok(JsonConvert.SerializeObject(sessionUser));
+            }
+
+            return StatusCode(500);
+        }
+
 
         [HttpPost]
         public async Task<ActionResult<SelectedToy>> AddToCart([FromBody] SelectedToy selectedToy)
