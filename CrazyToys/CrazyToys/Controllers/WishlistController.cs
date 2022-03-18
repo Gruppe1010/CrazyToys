@@ -35,6 +35,7 @@ namespace CrazyToys.Web.Controllers
 
             List<ShoppingCartToyDTO> shoppingCartToytDTOs = new List<ShoppingCartToyDTO>();
 
+            // TODO ændre til Wishlist
             foreach (var entry in sessionsUser.Cart)
             {
                 Toy toy = await _toyDbService.GetById(entry.Key);
