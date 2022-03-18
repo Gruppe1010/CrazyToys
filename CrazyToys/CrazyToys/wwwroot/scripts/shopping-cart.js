@@ -1,7 +1,6 @@
 ﻿
+// TODO test ordentligt
 function incQuantity(shoppingCartToyDTO) {
-    debugger;
-
     var amountElement = document.getElementById('chosenAmount');
     var oldValue = parseFloat(amountElement.value);
     var newValue = oldValue;
@@ -10,7 +9,7 @@ function incQuantity(shoppingCartToyDTO) {
 
         const selectedToy = { ToyID: shoppingCartToyDTO.ID, Quantity: 1 };
 
-        fetch(`https://localhost:44325/api/sessionuser/AddToCart`, {
+        fetch(`https://localhost:44325/api/sessionuser`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json; charset=UTF-8' // denne linje siger at dataen som vi sender er en string 
@@ -33,20 +32,38 @@ function incQuantity(shoppingCartToyDTO) {
     }
 }
 
-// TODO indsæt at den også skal rette i SessionUser hver gang man trykker inc eller dec
+// TODO få den til at rette i sessionUser når man trykker dec
+function decQuantity(shoppingCartToyDTO) {
 
-function decQuantity() {
+    debugger;
 
     var amountElement = document.getElementById('chosenAmount');
-    var oldValue = amountElement.value;
+    var oldValue = parseFloat(amountElement.value);
+    var newValue = oldValue;
 
-    var newVal = oldValue > 1
-        ? parseFloat(oldValue) - 1
-        : 1;
+    if (oldValue > 1) {
 
-    amountElement.value = newVal;
+        const selectedToy = { ToyID: shoppingCartToyDTO.ID, Quantity: -1 };
 
-    updateCartTotal(newValue < oldValue ? -price : 0);
+        // fjern én fra quantity på sessionsUser
+        fetch(`https://localhost:44325/api/sessionuser`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json; charset=UTF-8' // denne linje siger at dataen som vi sender er en string 
+            },
+            body: JSON.stringify(selectedToy)
+        }).then(response => {
+            if (response.ok) {
+                // hvis toyet blev decrementet successfuldt på sessionUsers cart, så vis det ude på siden
+                newValue--;
+                amountElement.value = newValue;
+                updateTotal(shoppingCartToyDTO.ID, shoppingCartToyDTO.Price * newValue);
+                updateCartTotal(newValue < oldValue ? -shoppingCartToyDTO.Price : 0);
+            } else {
+                throw new Error("Error in incrementing toy in cart");
+            }
+        }).catch(error => console.log);
+    }
 }
 
 function updateTotal(id, price) {
