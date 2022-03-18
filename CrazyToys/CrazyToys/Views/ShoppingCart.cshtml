@@ -69,7 +69,7 @@
                                                 <img class="cart-image-size" src="@toyDTO.Image" alt="@toyDTO.Name">
                                             </div>
                                             <div class="product__cart__item__text">
-                                                <h6>@toyDTO.Name</h6>
+                                                <h6 class="text-capitalize">@toyDTO.Name</h6>
                                                 <h5>@toyDTO.Price DKK</h5>
                                             </div>
                                         </td>
@@ -102,7 +102,7 @@
                             <h2 class="headline">Der er intet i kurven endnu</h2>
                        }
                 }
-
+                <!--
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-6">
                         <div class="continue__btn">
@@ -115,6 +115,7 @@
                         </div>
                     </div>
                 </div>
+                -->
             </div>
             <div class="col-lg-4">
                 <div class="cart__discount">
@@ -128,11 +129,12 @@
                     <h6>Cart total</h6>
                     <ul>
                         <li>Subtotal <span id="subtotal">@subtotal DKK</span></li>
-                        <li class="italic">Levering <span id="deliveryPrice">@(deliveryPrice < 1 ? "Gratis levering" : deliveryPrice + " DKK")</span></li>
-                        <li class="bold">Total <span id="total">@total DKK</span></li>
+                        <li class="font-italic">Levering <span id="deliveryPrice">@(deliveryPrice < 1 ? "Gratis levering" : deliveryPrice + " DKK")</span></li>
+                        <li class="font-weight-bold">Total <span id="total">@total DKK</span></li>
                     </ul>
                     <a href="#" class="primary-btn">Proceed to checkout</a>
                 </div>
+                <p class="font-italic text-center">Varerne er ikke reserverede før du går videre i købet</p>
             </div>
         </div>
     </div>
