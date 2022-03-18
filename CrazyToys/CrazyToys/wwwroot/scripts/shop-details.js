@@ -9,6 +9,7 @@ function incOrDecChosenAmount(stockAmount, inc) {
         if (oldValue < stockAmount) {
             newVal = parseFloat(oldValue) + 1;
         } else {
+
             newVal = oldValue;
 
             alert(`Der er kun ${oldValue} stk. tilbage af denne vare`);
@@ -27,7 +28,6 @@ function incOrDecChosenAmount(stockAmount, inc) {
 
 
 function addToCart(toyId) {
-    debugger;
     const quantity = document.getElementById('chosenAmount').value;
 
     const selectedToy = {
@@ -65,7 +65,6 @@ function updateCartNumber() {
         throw new Error("Error in getting sessionUser to update cartQuantity");
     })
         .then(data => {
-            debugger;
         document.getElementById('cartQuantity').innerText = Object.entries(data.Cart).reduce((result, item) => {
             return result + item[1];
         }, 0);

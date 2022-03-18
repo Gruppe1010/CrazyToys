@@ -17,5 +17,5 @@ fetch(`https://localhost:44325/api/sessionUser/GetSessionUser`, {
     } else {
         cartQuantity.innerText = 0;
     }
-});
+}).catch(error => console.log);
 
