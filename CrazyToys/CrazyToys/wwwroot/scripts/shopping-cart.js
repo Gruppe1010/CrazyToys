@@ -44,7 +44,7 @@ function decQuantity(shoppingCartToyDTO) {
         const selectedToy = { ToyID: shoppingCartToyDTO.ID, Quantity: -1 };
 
         // fjern én fra quantity på sessionsUser
-        fetch(`https://localhost:44325/api/sessionuser`, {
+        fetch(`https://localhost:44325/api/sessionuser/AddToCart`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json; charset=UTF-8' // denne linje siger at dataen som vi sender er en string 
@@ -92,7 +92,7 @@ function updateCartTotal(priceChange) {
 function removeToyFromCart(shoppingCartToyDTO) {
 
     // fjern én fra quantity på sessionsUser
-    fetch(`https://localhost:44325/api/sessionuser?id=${shoppingCartToyDTO.ID}`, {
+    fetch(`https://localhost:44325/api/sessionuser/RemoveToyFromSessionUser?id=${shoppingCartToyDTO.ID}`, {
         method: 'DELETE'
     }).then(response => {
         if (response.ok) {
