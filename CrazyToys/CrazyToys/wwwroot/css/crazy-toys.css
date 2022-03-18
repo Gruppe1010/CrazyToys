@@ -16,8 +16,11 @@
 }
 
 .header-icons {
-    width: 150%;
-    max-width: 150% !important;
+    width: 30px;
+}
+
+.search-icon {
+    width: 28px;
 }
 
 .bold700 {
