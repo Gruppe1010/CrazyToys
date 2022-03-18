@@ -9,7 +9,7 @@
 
 <!-- Shop Details Section Begin -->
 <section class="shop-details">
-    <div class="product__details__pic">
+    <div class="product-pic-div product__details__pic">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -58,9 +58,6 @@
             <div class="row d-flex justify-content-center">
                 <div class="col-lg-8">
                     <div class="product__details__text">
-                        <h4>@toy.Name</h4>
-                        <h3>@toy.Price DKK</h3>
-                        <p>@toy.ShortDescription</p>
                         <div class="product__details__cart__option">
                             <div class="quantity">
                                 <div class="pro-qty">
@@ -71,6 +68,9 @@
                             </div>
                             <button class="primary-btn" onclick='addToCart("@toy.ID")'>Tilføj til kurv</button>
                         </div>
+                        <h4>@toy.Name</h4>
+                        <h3>@toy.Price DKK</h3>
+                        <p>@toy.ShortDescription</p>
                         <div class="product__details__btns__option">
                             <a href="#"><i class="fa fa-heart"></i> Tilføj til ønskeliste</a>
                         </div>

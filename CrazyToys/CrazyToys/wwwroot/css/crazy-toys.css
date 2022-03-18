@@ -54,6 +54,10 @@
     top: 25%;
 }
 
+.product-pic-div {
+    margin-bottom: 40px !important;
+}
+
 .product-details {
     padding: 40px 0;
 }
