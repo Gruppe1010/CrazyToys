@@ -24,6 +24,7 @@ function incQuantity(shoppingCartToyDTO) {
                 amountElement.value = newValue;
                 updateTotal(shoppingCartToyDTO.ID, shoppingCartToyDTO.Price * newValue);
                 updateCartTotal(newValue > oldValue ? shoppingCartToyDTO.Price : 0);
+                updateCartNumber();
             } else {
                 throw new Error("Error in incrementing toy in cart");
             }
@@ -59,6 +60,7 @@ function decQuantity(shoppingCartToyDTO) {
                 amountElement.value = newValue;
                 updateTotal(shoppingCartToyDTO.ID, shoppingCartToyDTO.Price * newValue);
                 updateCartTotal(newValue < oldValue ? -shoppingCartToyDTO.Price : 0);
+                updateCartNumber();
             } else {
                 throw new Error("Error in incrementing toy in cart");
             }
