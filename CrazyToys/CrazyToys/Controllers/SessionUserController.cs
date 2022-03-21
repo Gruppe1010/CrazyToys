@@ -93,7 +93,7 @@ namespace CrazyToys.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<SelectedToy>> AddOrRemoveFromWishlist([FromBody] SelectedToy selectedToy)
+        public async Task<ActionResult<SelectedToy>> AddToyToSessionUsersWishlist([FromBody] SelectedToy selectedToy)
         {
             string toyId = selectedToy.ToyId;
 
@@ -103,23 +103,33 @@ namespace CrazyToys.Web.Controllers
             // hent toy'et som tilsvarer til id
             Toy toy = await _toyDbService.GetById(toyId);
 
-            // hvis den allerede har den type toy på wishlist
-            if (sessionUser.Wishlist.Contains(toyId))
-            {
-                sessionUser.Wishlist.Remove(toyId);
-                _sessionService.Update(HttpContext, sessionUser);
-
-                return Ok(selectedToy);
-            }
-            else // tilføj nyt element på HashSet
+            // tilføj hvis den ikke allerede har den type toy på wishlist
+            if (!sessionUser.Wishlist.Contains(toyId))
             {
                 sessionUser.Wishlist.Add(toyId);
                 _sessionService.Update(HttpContext, sessionUser);
 
                 return Ok(selectedToy);
             }
+
             // Bad request fordi den beder om noget som vi ikke kan gøre 
             return BadRequest();
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult<SessionUser>> RemoveToyFromSessionUsersWishlist([FromQuery(Name = "id")] string toyId)
+        {
+            var sessionUser = _sessionService.GetNewOrExistingSessionUser(HttpContext);
+
+            sessionUser.Wishlist.Remove(toyId);
+            _sessionService.Update(HttpContext, sessionUser);
+
+            if (!sessionUser.Wishlist.Contains(toyId))
+            {
+                return Ok(JsonConvert.SerializeObject(sessionUser));
+            }
+
+            return StatusCode(500);
         }
     }
 }

@@ -33,21 +33,21 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-6">
                             <div class="shop__product__option__left">
-                                <p>@(numFound > 0 ? "Du har " + numFound + " produkter på din ønskelisten" : "Du har ingen produkter på din ønskelisten")</p>
+                                <p id="wishlist-count">@(numFound > 0 ? "Du har " + numFound + " produkter på din ønskelisten" : "Du har ingen produkter på din ønskelisten")</p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div id="wishlist-toy-row" class="row">
                     @{
                         for (int j = 0; j < wishlistToys.Count; j++)//shopToyDTOs.Count > 29 ? 30 : shopToyDTOs.Count); j++)
                         {
-                            <div class="col-lg-3 col-md-4 col-sm-6">
+                            <div id="wishlist-toy-@wishlistToys[j].ID" class="col-lg-3 col-md-4 col-sm-6">
                                 <div class="product__item">
                                     <div class="product__item__pic set-bg" data-setbg="@(wishlistToys[j].Image ?? wishlistToys[j].Name)">
                                         <a class="item-link" href="/shop-details?id=@wishlistToys[j].ID"></a>
                                         <ul class="product__hover">
-                                            <li><button class="wishlist-btn" onclick='addOrRemoveFromWishlist("@wishlistToys[j].ID")'><img class="hover-icon" src="img/icon/close.png" alt=""></button></li>
+                                            <li><button class="wishlist-btn" onclick='removeFromWishlist("@wishlistToys[j].ID")'><img class="hover-icon" src="img/icon/close.png" alt=""></button></li>
                                         </ul>
                                     </div>
                                     <div class="product__item__text">
