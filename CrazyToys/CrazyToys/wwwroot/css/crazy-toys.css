@@ -1,6 +1,17 @@
 ﻿body {
 }
 
+.small {
+    font-size: 12px;
+    float: right;
+    margin: 0;
+    line-height: 12px;
+}
+
+.free {
+    height: 12px;
+}
+
 .black {
     color: black !important;
 }

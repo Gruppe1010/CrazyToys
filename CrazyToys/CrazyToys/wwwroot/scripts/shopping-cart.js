@@ -85,10 +85,16 @@ function updateCartTotal(priceChange) {
     }
 
     const total = subtotal + deliveryPrice;
+    const priceToFreeShipping = 499 - subtotal;
+
+    const text = priceToFreeShipping > 0
+        ? priceToFreeShipping + " DKK til gratis fragt"
+        : "";
 
     document.getElementById('subtotal').innerText = subtotal + " DKK";
-    document.getElementById('deliveryPrice').innerText = deliveryPrice < 1 ? "Gratis levering" : deliveryPrice;
+    document.getElementById('deliveryPrice').innerText = deliveryPrice < 1 ? "Gratis levering" : deliveryPrice + " DKK";
     document.getElementById('total').innerText = total + " DKK";
+    document.getElementById('priceToFreeShipping').innerText = text;
 }
 
 

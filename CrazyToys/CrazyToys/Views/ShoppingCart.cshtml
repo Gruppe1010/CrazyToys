@@ -98,34 +98,44 @@
                 }
                 <!--
                 <div class="row">
-                    <div class="col-lg-6 col-md-6 col-sm-6">
-                        <div class="continue__btn">
-                            <a href="#">Continue Shopping</a>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6">
-                        <div class="continue__btn update__btn">
-                            <a href="./shopping-cart"><i class="fa fa-spinner"></i> Update cart</a>
-                        </div>
-                    </div>
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="continue__btn">
+                <a href="#">Continue Shopping</a>
+                </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="continue__btn update__btn">
+                <a href="./shopping-cart"><i class="fa fa-spinner"></i> Update cart</a>
+                </div>
+                </div>
                 </div>
                 -->
             </div>
             <div class="col-lg-4">
                 <!--
                 <div class="cart__discount">
-                    <h6>Rabatkode</h6>
-                    <form action="#">
-                        <input type="text" placeholder="Rabatkode">
-                        <button type="submit">Indløs</button>
-                    </form>
+                <h6>Rabatkode</h6>
+                <form action="#">
+                <input type="text" placeholder="Rabatkode">
+                <button type="submit">Indløs</button>
+                </form>
                 </div>
                 -->
+              
                 <div class="cart__total">
                     <h6>Pris i alt</h6>
                     <ul>
                         <li>Subtotal <span id="subtotal" class="font-weight-normal black">@subtotal DKK</span></li>
                         <li class="font-italic">Levering <span id="deliveryPrice" class="font-weight-normal black">@(deliveryPrice < 1 ? "Gratis levering" : deliveryPrice + " DKK")</span></li>
+                            <li class="free">
+                            @{
+                                var priceToFreeShipping = 499 - subtotal;
+                                var text = priceToFreeShipping > 0
+                                    ? @priceToFreeShipping + " DKK til gratis fragt"
+                                    : "";
+                                <p id="priceToFreeShipping" class="text-center small">@text</p>
+                            }
+                            </li>
                         <hr>
                         <li class="font-weight-bold">Pris i alt (inkl. moms) <span id="total" class="black">@total DKK</span></li>
                     </ul>
