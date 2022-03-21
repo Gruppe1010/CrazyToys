@@ -102,7 +102,7 @@ namespace CrazyToys.Web.Controllers
             ViewData["ShopToyDTOs"] = shopToyDTOs;
             ViewData["ParamsDict"] = JsonConvert.SerializeObject(CreateDictFromParams(categories, subCategory, brand, priceGroup, ageGroupIntervals, colours, search));
             ViewData["PageNumber"] = pageNumber == 0 ? 1 : pageNumber;
-            ViewData["wishlistToys"] = wishlistToys;
+            ViewData["WishlistToys"] = wishlistToys;
 
             ViewData["TempDict"] = CreateDictFromParams(categories, subCategory, brand, priceGroup, ageGroupIntervals, colours, search);
 
