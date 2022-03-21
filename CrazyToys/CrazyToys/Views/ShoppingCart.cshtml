@@ -6,20 +6,12 @@
     Layout = "Master.cshtml";
     List<ShoppingCartToyDTO> shoppingCartToyDTOs = ViewData["ShoppingCartToytDTOs"] as  List<ShoppingCartToyDTO>;
 
+    // dette bliver regnet ud længere nede
     double subtotal = 0.0;
     double deliveryPrice = 39;
-    foreach (ShoppingCartToyDTO shoppingCartToyDTO in shoppingCartToyDTOs)
-    {
-        subtotal = subtotal + shoppingCartToyDTO.Price * shoppingCartToyDTO.Quantity;
-    }
-    if(subtotal > 499.0)
-    {
-        deliveryPrice = 0.0;
-    }
+    double total = 0;
 
-    double total = subtotal + deliveryPrice;
-
-    HashSet<ShoppingCartToyDTO> unavailableToys = new HashSet<ShoppingCartToyDTO>();
+    Dictionary<ShoppingCartToyDTO, int> unavailableToys = new  Dictionary<ShoppingCartToyDTO, int>();
 }
 
 @functions{
@@ -39,20 +31,20 @@
             <td class="quantity__item">
                 <div class="quantity">
                     <div class="pro-qty-2">
-                        <span class="fa fa-angle-left dec qtybtn mouse-hover" onclick='decQuantity(@Html.Raw(JsonConvert.SerializeObject(toyDTO)))'></span>
+                        <span class="fa fa-angle-left dec qtybtn mouse-hover" onclick='decQuantity("@toyDTO.ID", @toyDTO.Stock, @toyDTO.Price)'></span>
                         <input id="chosenAmount-@toyDTO.ID" type="text" value="@quantity">
-                        <span class="fa fa-angle-right inc qtybtn mouse-hover" onclick='incQuantity(@Html.Raw(JsonConvert.SerializeObject(toyDTO)))'></span>
+                        <span class="fa fa-angle-right inc qtybtn mouse-hover" onclick='incQuantity("@toyDTO.ID", @toyDTO.Stock, @toyDTO.Price)'></span>
                     </div>
                 </div>
             </td>
-            <td id="total-@toyDTO.ID" class="cart__price">@(toyDTO.Price * toyDTO.Quantity) DKK</td>
-            <td class="cart__close" onclick='removeToyFromCart(@Html.Raw(JsonConvert.SerializeObject(toyDTO)))'><i class="fa fa-close mouse-hover"></i></td>
+            <td id="total-@toyDTO.ID" class="cart__price">@(toyDTO.Price * quantity) DKK</td>
+            <td class="cart__close" onclick='removeToyFromCart("@toyDTO.ID", @toyDTO.Stock, @toyDTO.Price)'><i class="fa fa-close mouse-hover"></i></td>
         </tr>
     }
 
             /* TODO lav anden onclick som ikke opdaterer cart total (men stadig alt det andet!!)*/
 
-    void RenderUnavailableToy(ShoppingCartToyDTO toyDTO)
+    void RenderUnavailableToy(ShoppingCartToyDTO toyDTO, int unavailableAmount)
     {
         // TODO lav denne
           <tr id="unavailableToyDataRow-@toyDTO.ID">
@@ -68,7 +60,7 @@
                     <td class="quantity__item"></td>
                     <td class="cart__price"></td>
 
-            <td class="cart__close" onclick='removeToyFromCart(@Html.Raw(JsonConvert.SerializeObject(toyDTO)))'><i class="fa fa-close mouse-hover"></i></td>
+            <td class="cart__close" onclick='removeUnavailbleToyFromCart("@toyDTO.ID", @(toyDTO.Quantity - unavailableAmount))'><i class="fa fa-close mouse-hover"></i></td>
         </tr>
     }
 
@@ -122,16 +114,18 @@
 
                                     if(toyDTO.Stock == 0)
                                     {
-                                        unavailableToys.Add(toyDTO);
+                                        unavailableToys.Add(toyDTO, toyDTO.Quantity);
                                     }
                                     else if(toyDTO.Stock >= toyDTO.Quantity)
                                     {
+                                        subtotal += toyDTO.Price * toyDTO.Quantity;
                                         RenderAvailableToy(toyDTO, toyDTO.Quantity);
                                     }
                                     else // Stock > 0 && Quantity > Stock
                                     {
+                                        subtotal += toyDTO.Price * toyDTO.Stock;
                                         RenderAvailableToy(toyDTO, toyDTO.Stock);
-                                        unavailableToys.Add(toyDTO);
+                                        unavailableToys.Add(toyDTO, toyDTO.Quantity - toyDTO.Stock);
                                     }
                                 }
                                 </tbody>
@@ -142,6 +136,12 @@
                     {
                         <h2 class="headline">Der er intet i kurven endnu</h2>
                     }
+                    
+                    if(subtotal > 499.0)
+                    {
+                        deliveryPrice = 0.0;
+                    }
+                    total = subtotal + deliveryPrice;
 
                     @if (unavailableToys.Count > 0)
                     {
@@ -153,9 +153,9 @@
                                 <tbody id="unavailableToyTableBody">
                                    @if(unavailableToys.Count > 0)
                                    {
-                                        @foreach(ShoppingCartToyDTO toyDTO in unavailableToys)
+                                        @foreach(var entry in unavailableToys)
                                         {
-                                            RenderUnavailableToy(toyDTO);
+                                            RenderUnavailableToy(entry.Key, entry.Value);
                                         }
                                    }
 
