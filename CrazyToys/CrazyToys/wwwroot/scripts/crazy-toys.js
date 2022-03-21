@@ -1,7 +1,5 @@
 ﻿
 function addToCart(toyId) {
-    debugger;
-
     const chosenAmount = document.getElementById('chosenAmount');
     let quantity = 1;
 
