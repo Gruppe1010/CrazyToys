@@ -72,12 +72,14 @@ namespace CrazyToys.Web.Controllers
                 }
             }
 
-            sessionUser.Cart.Clear();
-            _sessionService.Update(HttpContext, sessionUser);
-            // Work with form data here
+
             //TODO Lav en Order entity Og få hangfire til at kalde en metode der sender email til kunde med en ordre bekfræftelse
 
             var noget = model.Firstname;
+
+            sessionUser.Cart.Clear();
+            _sessionService.Update(HttpContext, sessionUser);
+            
 
             return Redirect("https://localhost:44325/order-confirmation");
         }
