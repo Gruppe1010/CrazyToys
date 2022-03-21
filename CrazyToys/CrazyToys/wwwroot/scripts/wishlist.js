@@ -1,4 +1,6 @@
-﻿function addOrRemoveFromWishlist(toyId) {
+﻿
+function addOrRemoveFromWishlist(toyId) {
+
     const selectedToy = {
         toyId: toyId,
     }
@@ -12,9 +14,9 @@
     })
     .then(response => {
         if (response.ok) {
-            alert("Wow den blev tilføjet til ønskelisten");
+            console.log("Toy blev tilføjet/fjernet til/fra ønskelisten");
         } else {
-            alert("Kunne ikke ligge produktet på ønskelisten");
+            console.log("Toy kunne ikke tilføjet/fjernet til/fra ønskelisten");
         }
     });
 }

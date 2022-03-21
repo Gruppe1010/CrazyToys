@@ -217,7 +217,7 @@
                                     <div class="product__item__pic set-bg" data-setbg="@(shopToyDTOs[j].Image ?? shopToyDTOs[j].Name)">
                                         <a class="item-link" href="/shop-details?id=@shopToyDTOs[j].ID"></a>
                                         <ul class="product__hover">
-                                            <li><button onclick='addOrRemoveFromWishlist(@shopToyDTOs[j].ID)'><img class="hover-icon" src="img/icon/heart.png" alt=""></button></li>
+                                            <li><button class="wishlist-btn" onclick='addOrRemoveFromWishlist("@shopToyDTOs[j].ID")'><img class="hover-icon" src="img/icon/heart.png" alt=""></button></li>
                                         </ul>
                                     </div>
                                     <div class="product__item__text">

@@ -152,3 +152,8 @@
 .underline {
     text-decoration: underline;
 }
+
+.wishlist-btn {
+    all: unset;
+    cursor: pointer;
+}
