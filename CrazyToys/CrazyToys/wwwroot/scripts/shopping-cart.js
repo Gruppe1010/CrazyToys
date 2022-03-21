@@ -1,6 +1,8 @@
 ﻿
 // TODO test ordentligt
 function incQuantity(shoppingCartToyDTO) {
+
+    debugger;
     var amountElement = document.getElementById(`chosenAmount-${shoppingCartToyDTO.ID}`);
     var oldValue = parseFloat(amountElement.value);
     var newValue = oldValue;
@@ -9,7 +11,7 @@ function incQuantity(shoppingCartToyDTO) {
 
         const selectedToy = { ToyID: shoppingCartToyDTO.ID, Quantity: 1 };
 
-        fetch(`https://localhost:44325/api/sessionuser`, {
+        fetch("https://localhost:44325/api/sessionuser/AddToCart", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json; charset=UTF-8' // denne linje siger at dataen som vi sender er en string 
@@ -99,7 +101,7 @@ function removeToyFromCart(shoppingCartToyDTO) {
             debugger;
 
             // find ud af hvor mange der har stået
-            var quantity = parseFloat(document.getElementById('chosenAmount').value);
+            var quantity = parseFloat(document.getElementById(`chosenAmount-${shoppingCartToyDTO.ID}`).value);
 
             // hvis toyet blev fjernet successfuldt fra sessionUsers cart
             // så fjern "toyDataRow-@toyDTO.ID"-elementet fra siden
@@ -108,6 +110,8 @@ function removeToyFromCart(shoppingCartToyDTO) {
             var toyDataRow = document.getElementById(`toyDataRow-${shoppingCartToyDTO.ID}`);
 
             toyTableBody.removeChild(toyDataRow);
+
+            debugger;
 
             //hvis toyTableBody-element ikke har nogen childNodes
             if (toyTableBody.childElementCount === 0) {
