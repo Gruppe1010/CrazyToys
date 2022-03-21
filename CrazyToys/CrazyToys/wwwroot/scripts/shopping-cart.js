@@ -98,7 +98,6 @@ function removeToyFromCart(shoppingCartToyDTO) {
         method: 'DELETE'
     }).then(response => {
         if (response.ok) {
-            debugger;
 
             // find ud af hvor mange der har stået
             var quantity = parseFloat(document.getElementById(`chosenAmount-${shoppingCartToyDTO.ID}`).value);
@@ -110,8 +109,6 @@ function removeToyFromCart(shoppingCartToyDTO) {
             var toyDataRow = document.getElementById(`toyDataRow-${shoppingCartToyDTO.ID}`);
 
             toyTableBody.removeChild(toyDataRow);
-
-            debugger;
 
             //hvis toyTableBody-element ikke har nogen childNodes
             if (toyTableBody.childElementCount === 0) {
