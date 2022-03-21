@@ -93,7 +93,7 @@ namespace CrazyToys.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<SelectedToy>> addOrRemoveFromWishlist([FromBody] SelectedToy selectedToy)
+        public async Task<ActionResult<SelectedToy>> AddOrRemoveFromWishlist([FromBody] SelectedToy selectedToy)
         {
             string toyId = selectedToy.ToyId;
 
@@ -107,6 +107,9 @@ namespace CrazyToys.Web.Controllers
             if (sessionUser.Wishlist.Contains(toyId))
             {
                 sessionUser.Wishlist.Remove(toyId);
+                _sessionService.Update(HttpContext, sessionUser);
+
+                return Ok(selectedToy);
             }
             else // tilføj nyt element på HashSet
             {
