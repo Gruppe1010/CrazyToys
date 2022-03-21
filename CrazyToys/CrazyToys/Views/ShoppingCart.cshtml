@@ -19,7 +19,59 @@
 
     double total = subtotal + deliveryPrice;
 
-    // updateCartTotalPrices(@Html.Raw(JsonConvert.SerializeObject(shoppingCartToyDTOs)))
+    HashSet<ShoppingCartToyDTO> unavailableToys = new HashSet<ShoppingCartToyDTO>();
+}
+
+@functions{
+
+    void RenderAvailableToy(ShoppingCartToyDTO toyDTO, int quantity)
+    {
+          <tr id="toyDataRow-@toyDTO.ID">
+            <td class="product__cart__item">
+                <div class="product__cart__item__pic mouse-hover" onclick='redirect("/shop-details?id=@toyDTO.ID")'>
+                    <img class="cart-image-size" src="@toyDTO.Image" alt="@toyDTO.Name">
+                </div>
+                <div class="product__cart__item__text">
+                    <h6 class="text-capitalize mouse-hover" onclick='redirect("/shop-details?id=@toyDTO.ID")'>@toyDTO.Name</h6>
+                    <h5>@toyDTO.Price DKK</h5>
+                </div>
+            </td>
+            <td class="quantity__item">
+                <div class="quantity">
+                    <div class="pro-qty-2">
+                        <span class="fa fa-angle-left dec qtybtn mouse-hover" onclick='decQuantity(@Html.Raw(JsonConvert.SerializeObject(toyDTO)))'></span>
+                        <input id="chosenAmount-@toyDTO.ID" type="text" value="@quantity">
+                        <span class="fa fa-angle-right inc qtybtn mouse-hover" onclick='incQuantity(@Html.Raw(JsonConvert.SerializeObject(toyDTO)))'></span>
+                    </div>
+                </div>
+            </td>
+            <td id="total-@toyDTO.ID" class="cart__price">@(toyDTO.Price * toyDTO.Quantity) DKK</td>
+            <td class="cart__close" onclick='removeToyFromCart(@Html.Raw(JsonConvert.SerializeObject(toyDTO)))'><i class="fa fa-close mouse-hover"></i></td>
+        </tr>
+    }
+
+            /* TODO lav anden onclick som ikke opdaterer cart total (men stadig alt det andet!!)*/
+
+    void RenderUnavailableToy(ShoppingCartToyDTO toyDTO)
+    {
+        // TODO lav denne
+          <tr id="unavailableToyDataRow-@toyDTO.ID">
+            <td class="product__cart__item grey-out">
+                <div class="product__cart__item__pic">
+                    <img class="cart-image-size grey-out" src="@toyDTO.Image" alt="@toyDTO.Name">
+                </div>
+                <div class="product__cart__item__text">
+                    <h6 class="text-capitalize">@toyDTO.Name</h6>
+                    <h5>@toyDTO.Price DKK</h5>
+                </div>
+                    <!-- dette giver bare ekstra space så slet-knappen sidder ligesom på dem der er available-->
+                    <td class="quantity__item"></td>
+                    <td class="cart__price"></td>
+
+            <td class="cart__close" onclick='removeToyFromCart(@Html.Raw(JsonConvert.SerializeObject(toyDTO)))'><i class="fa fa-close mouse-hover"></i></td>
+        </tr>
+    }
+
 }
 
 
@@ -52,50 +104,67 @@
                     {
                         <div id="toyTable" class="shopping__cart__table">
                             <table>
-                                <thead>
+                               <thead id="tHead">
+                                    <h3>Dine varer</h3>
+                                    <br/>
                                     <tr>
                                         <th>Produkt</th>
                                         <th>Antal</th>
                                         <th>Total</th>
                                         <th></th>
                                     </tr>
-                                </thead>
+                               </thead>
                                 <tbody id="toyTableBody">
-                            
                                 @foreach(ShoppingCartToyDTO toyDTO in shoppingCartToyDTOs){
-                                    <tr id="toyDataRow-@toyDTO.ID">
-                                        <td class="product__cart__item">
-                                            <div class="product__cart__item__pic mouse-hover" onclick='redirect("/shop-details?id=@toyDTO.ID")'>
-                                                <img class="cart-image-size" src="@toyDTO.Image" alt="@toyDTO.Name">
-                                            </div>
-                                            <div class="product__cart__item__text">
-                                                <h6 class="text-capitalize mouse-hover" onclick='redirect("/shop-details?id=@toyDTO.ID")'>@toyDTO.Name</h6>
-                                                <h5>@toyDTO.Price DKK</h5>
-                                            </div>
-                                        </td>
-                                        <td class="quantity__item">
-                                            <div class="quantity">
-                                                <div class="pro-qty-2">
-                                                    <span class="fa fa-angle-left dec qtybtn mouse-hover" onclick='decQuantity(@Html.Raw(JsonConvert.SerializeObject(toyDTO)))'></span>
-                                                    <input id="chosenAmount-@toyDTO.ID" type="text" value="@toyDTO.Quantity">
-                                                    <span class="fa fa-angle-right inc qtybtn mouse-hover" onclick='incQuantity(@Html.Raw(JsonConvert.SerializeObject(toyDTO)))'></span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td id="total-@toyDTO.ID" class="cart__price">@(toyDTO.Price * toyDTO.Quantity) DKK</td>
-                                        <td class="cart__close" onclick='removeToyFromCart(@Html.Raw(JsonConvert.SerializeObject(toyDTO)))'><i class="fa fa-close mouse-hover"></i></td>
-                                    </tr>
+
+                                    toyDTO.Stock = 2;
+                                    toyDTO.Quantity = 3;
+
+                                    if(toyDTO.Stock == 0)
+                                    {
+                                        unavailableToys.Add(toyDTO);
+                                    }
+                                    else if(toyDTO.Stock >= toyDTO.Quantity)
+                                    {
+                                        RenderAvailableToy(toyDTO, toyDTO.Quantity);
+                                    }
+                                    else // Stock > 0 && Quantity > Stock
+                                    {
+                                        RenderAvailableToy(toyDTO, toyDTO.Stock);
+                                        unavailableToys.Add(toyDTO);
+                                    }
                                 }
-                             
                                 </tbody>
                             </table>
                         </div>
-                       }
-                       else
-                       {
-                            <h2 class="headline">Der er intet i kurven endnu</h2>
-                       }
+                    }
+                    else
+                    {
+                        <h2 class="headline">Der er intet i kurven endnu</h2>
+                    }
+
+                    @if (unavailableToys.Count > 0)
+                    {
+                        <div id="unavailableToyTable" class="shopping__cart__table">
+                            <table>
+                               <thead>
+                                    <h3>Ikke tilgængelig</h3>
+                               </thead>
+                                <tbody id="unavailableToyTableBody">
+                                   @if(unavailableToys.Count > 0)
+                                   {
+                                        @foreach(ShoppingCartToyDTO toyDTO in unavailableToys)
+                                        {
+                                            RenderUnavailableToy(toyDTO);
+                                        }
+                                   }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    }
                 }
+                
                 <!--
                 <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6">

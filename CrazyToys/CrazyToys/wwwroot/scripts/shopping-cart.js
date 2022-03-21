@@ -1,4 +1,15 @@
-﻿
+﻿const toyTableBody = document.getElementById('toyTableBody');
+
+if (toyTableBody.childElementCount === 0) {
+
+    debugger;
+    const tHead = document.getElementById('tHead');
+
+    tHead.parentElement.removeChild(tHead);
+}
+
+
+
 // TODO test ordentligt
 function incQuantity(shoppingCartToyDTO) {
 
@@ -124,13 +135,28 @@ function removeToyFromCart(shoppingCartToyDTO) {
 }
 
 function deleteToyRowFromView(id) {
+
+    debugger;
     // hvis toyet blev fjernet successfuldt fra sessionUsers cart
-    // så fjern "toyDataRow-@toyDTO.ID"-elementet fra siden
-    var toyTableBody = document.getElementById('toyTableBody');
+    // så fjern rækken ("toyDataRow-@toyDTO.ID")
+    const toyDataRow = document.getElementById(`toyDataRow-${id}`);
 
-    var toyDataRow = document.getElementById(`toyDataRow-${id}`);
+    toyDataRow.parentElement.removeChild(toyDataRow);
 
-    toyTableBody.removeChild(toyDataRow);
+    // hvis der ikke er flere toys i tabellen efter dette er blevet fjernet, så fjern hele tabellen
+    deleteToyTableIfEmpty();
+
+    // hvis samme type toy er nede i "Ikke tilgængelige", skal den også slettes
+    const unavailbaleToyDataRow = document.getElementById(`unavailableToyDataRow-${id}`);
+    if (unavailbaleToyDataRow != null) {
+        unavailbaleToyDataRow.parentElement.removeChild(unavailbaleToyDataRow);
+    }
+
+    deleteUnavailbaleToyTableIfEmpty();
+}
+
+
+function deleteToyTableIfEmpty() {
 
     //hvis toyTableBody-element ikke har nogen childNodes
     if (toyTableBody.childElementCount === 0) {
@@ -146,6 +172,19 @@ function deleteToyRowFromView(id) {
         h2.innerText = "Der er intet i indkøbskurven endnu";
 
         tableWrapper.appendChild(h2)
+    }
+
+}
+
+
+function deleteUnavailbaleToyTableIfEmpty() {
+    const unavailableToyTableBody = document.getElementById('unavailableToyTableBody');
+
+    //hvis toyTableBody-element ikke har nogen childNodes
+    if (unavailableToyTableBody != null && unavailableToyTableBody.childElementCount === 0) {
+        // slet toyTable-element
+        var unavailableToyTable = document.getElementById('unavailableToyTable');
+        unavailableToyTable.parentElement.removeChild(unavailableToyTable);
     }
 }
 
