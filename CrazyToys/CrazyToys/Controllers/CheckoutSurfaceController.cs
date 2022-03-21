@@ -1,4 +1,5 @@
 ﻿using CrazyToys.Entities.Entities;
+using CrazyToys.Entities.SolrModels;
 using CrazyToys.Interfaces;
 using CrazyToys.Services.EntityDbServices;
 using CrazyToys.Web.Models;
@@ -19,15 +20,25 @@ namespace CrazyToys.Web.Controllers
     {
         private readonly ISessionService _sessionService;
         private readonly ToyDbService _toyDbService;
+        private readonly ISearchService<SolrToy> _solrToyService;
 
 
-        public CheckoutSurfaceController(IUmbracoContextAccessor umbracoContextAccessor, IUmbracoDatabaseFactory databaseFactory,
-            ServiceContext services, AppCaches appCaches, IProfilingLogger profilingLogger, IPublishedUrlProvider publishedUrlProvider, ISessionService sessionService, ToyDbService toyDbService)
+
+        public CheckoutSurfaceController(
+            IUmbracoContextAccessor umbracoContextAccessor, 
+            IUmbracoDatabaseFactory databaseFactory,
+            ServiceContext services, 
+            AppCaches appCaches, 
+            IProfilingLogger profilingLogger, 
+            IPublishedUrlProvider publishedUrlProvider, 
+            ISessionService sessionService, 
+            ToyDbService toyDbService,
+            ISearchService<SolrToy> solrToyService)
             : base(umbracoContextAccessor, databaseFactory, services, appCaches, profilingLogger, publishedUrlProvider)
         {
             _sessionService = sessionService;
             _toyDbService = toyDbService;
-
+            _solrToyService = solrToyService;
         }
 
 
@@ -47,11 +58,17 @@ namespace CrazyToys.Web.Controllers
                 {
                     toy.Stock = toy.Stock - item.Value;
                     await _toyDbService.Update(toy);
+                    if(toy.Stock == 0)
+                    {
+                        _solrToyService.Delete(new SolrToy(toy));
+                    }
                 }
                 else
                 {
                     toy.Stock = 0;
                     await _toyDbService.Update(toy);
+                    _solrToyService.Delete(new SolrToy(toy));
+
                 }
             }
 
