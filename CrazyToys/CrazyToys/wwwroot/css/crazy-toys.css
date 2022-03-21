@@ -1,6 +1,10 @@
 ﻿body {
 }
 
+.grey-out {
+    filter: opacity(60%);
+}
+
 .small {
     font-size: 12px;
     float: right;
