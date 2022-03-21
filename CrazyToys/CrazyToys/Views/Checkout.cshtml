@@ -1,10 +1,25 @@
-﻿@using CrazyToys.Web.Controllers
+﻿@using CrazyToys.Entities.DTOs
+@using CrazyToys.Web.Controllers
 @using Umbraco.Cms.Web.Common.PublishedModels;
 @using CrazyToys.Web.Models;
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Checkout>
 @{
     Layout = "Master.cshtml";
-   
+    List<ShoppingCartToyDTO> shoppingCartToyDTOs = ViewData["ShoppingCartToytDTOs"] as List<ShoppingCartToyDTO>;
+
+    double subtotal = 0.0;
+    double deliveryPrice = 39;
+    foreach (ShoppingCartToyDTO shoppingCartToyDTO in shoppingCartToyDTOs)
+    {
+        subtotal = subtotal + shoppingCartToyDTO.Price * shoppingCartToyDTO.Quantity;
+    }
+    if(subtotal > 499.0)
+    {
+        deliveryPrice = 0.0;
+    }
+
+    double total = subtotal + deliveryPrice;
+
 }
 
 <!-- Breadcrumb Section Begin -->
@@ -18,7 +33,7 @@
                         <a href="./index.html">Home</a>
                         <a href="./shop.html">Shop</a>
                         <span>Check Out</span>
-                      
+
                     </div>
                 </div>
             </div>
@@ -26,15 +41,56 @@
     </div>
 </section>
 <!-- Breadcrumb Section End -->
-
 <!-- Checkout Section Begin -->
 <section class="checkout spad">
     <div class="container">
         <div class="checkout__form">
-            @{
-                Html.RenderPartial("~/Views/Partials/CheckoutUserForm.cshtml", new CheckoutUserModel());
-            }
-  
+            <div class="row">
+                <div class="col-lg-8 col-md-6">
+
+                @{
+                    Html.RenderPartial("~/Views/Partials/CheckoutUserForm.cshtml", new CheckoutUserModel());
+                }
+                </div>
+                <div class="col-lg-4 col-md-6">
+
+                    <div class="checkout__order">
+                        <h4 class="order__title">Your order</h4>
+                        <div class="checkout__order__products">Product <span>Total</span></div>
+                        <ul class="checkout__total__products">
+                            @{
+                                foreach (ShoppingCartToyDTO shoppingCartToyDTO in shoppingCartToyDTOs)
+                                {
+                                    <li>@shoppingCartToyDTO.Name <span>@shoppingCartToyDTO.CalculateTotalPrice() DKK</span></li>
+                                }
+                            }
+                        </ul>
+                        <ul class="checkout__total__all">
+                            <li>Subtotal <span>@subtotal DKK</span></li>
+                            <li>Total <span>@total DKK</span></li>
+                        </ul>
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adip elit, sed do eiusmod tempor incididunt
+                            ut labore et dolore magna aliqua.
+                        </p>
+                        <div class="checkout__input__checkbox">
+                            <label for="payment">
+                                Check Payment
+                                <input type="checkbox" id="payment">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <div class="checkout__input__checkbox">
+                            <label for="paypal">
+                                Paypal
+                                <input type="checkbox" id="paypal">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                       
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
