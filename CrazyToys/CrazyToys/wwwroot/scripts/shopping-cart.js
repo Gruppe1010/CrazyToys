@@ -73,10 +73,9 @@ function decQuantity(id, stock, price) { //
                 updateCartTotal(newValue < oldValue ? -price : 0);
                 updateCartNumber();
 
-
-                // hvis den også er på ikke-tilgængelig listen
+                // hvis den også er på ikke-tilgængelig listen og den nye værdie er indenfor available stock
+                // TODO overvej at lave et kald ned for at få stock - fordi denne stock hentes kun når vi går ind i kurven og så opdateres den ikke derfra - og det er ikke superrr godt
                 const unavailbaleToyDataRow = document.getElementById(`unavailableToyDataRow-${id}`);
-
                 if (unavailbaleToyDataRow != null && newValue <= stock) {
                     deleteUnavailableToyRowFromView(id);
                 }
