@@ -54,8 +54,8 @@
                             <table>
                                 <thead>
                                     <tr>
-                                        <th>Product</th>
-                                        <th>Quantity</th>
+                                        <th>Produkt</th>
+                                        <th>Antal</th>
                                         <th>Total</th>
                                         <th></th>
                                     </tr>
@@ -112,22 +112,26 @@
                 -->
             </div>
             <div class="col-lg-4">
+                <!--
                 <div class="cart__discount">
-                    <h6>Discount codes</h6>
+                    <h6>Rabatkode</h6>
                     <form action="#">
-                        <input type="text" placeholder="Coupon code">
-                        <button type="submit">Apply</button>
+                        <input type="text" placeholder="Rabatkode">
+                        <button type="submit">Indløs</button>
                     </form>
                 </div>
+                -->
                 <div class="cart__total">
-                    <h6>Cart total</h6>
+                    <h6>Pris i alt</h6>
                     <ul>
-                        <li>Subtotal <span id="subtotal">@subtotal DKK</span></li>
-                        <li class="font-italic">Levering <span id="deliveryPrice">@(deliveryPrice < 1 ? "Gratis levering" : deliveryPrice + " DKK")</span></li>
-                        <li class="font-weight-bold">Total <span id="total">@total DKK</span></li>
+                        <li>Subtotal <span id="subtotal" class="font-weight-normal black">@subtotal DKK</span></li>
+                        <li class="font-italic">Levering <span id="deliveryPrice" class="font-weight-normal black">@(deliveryPrice < 1 ? "Gratis levering" : deliveryPrice + " DKK")</span></li>
+                        <hr>
+                        <li class="font-weight-bold">Pris i alt (inkl. moms) <span id="total" class="black">@total DKK</span></li>
                     </ul>
-                    <a href="#" class="primary-btn">Proceed to checkout</a>
+                    <a href="/checkout" class="primary-btn">Videre til kassen</a>
                 </div>
+                <br>
                 <p class="font-italic text-center">Varerne er ikke reserverede før du går videre i købet</p>
             </div>
         </div>
