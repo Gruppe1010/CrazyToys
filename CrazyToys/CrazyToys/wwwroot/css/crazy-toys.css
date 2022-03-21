@@ -1,6 +1,10 @@
 ﻿body {
 }
 
+.black {
+    color: black !important;
+}
+
 .mouse-hover {
     cursor: pointer;
 }
