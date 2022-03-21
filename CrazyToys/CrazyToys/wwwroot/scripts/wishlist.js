@@ -14,7 +14,8 @@ function addToWishlist(toyId) {
     })
         .then(response => {
             if (response.ok) {
-                changeOnclickAndFillHeart(toyId)
+                changeOnclickAndFillHeartShop(toyId)
+                changeOnclickAndFillHeartShopDetails(toyId)
                 console.log("Toy blev tilføjet til ønskelisten");
             } else {
                 console.log("Toy kunne ikke tilføjet til ønskelisten");
@@ -29,7 +30,8 @@ function removeFromWishlist(toyId) {
     })
         .then(response => {
             if (response.ok) {
-                changeOnclickAndUnfillHeart(toyId)
+                changeOnclickAndUnfillHeartShop(toyId)
+                changeOnclickAndUnfillHeartShopDetails(toyId)
                 removeChildNodeFromWishlist(toyId);
                 console.log("Toy blev fjernet fra ønskelisten");
             } else {
@@ -61,7 +63,7 @@ function removeChildNodeFromWishlist(toyId) {
     }
 }
 
-function changeOnclickAndFillHeart(toyId) {
+function changeOnclickAndFillHeartShop(toyId) {
     var wishlistIl = document.getElementById(`wishlist-il-${toyId}`);
     var wishlistBtn = document.getElementById(`wishlist-btn-${toyId}`);
 
@@ -94,7 +96,7 @@ function changeOnclickAndFillHeart(toyId) {
     }
 }
 
-function changeOnclickAndUnfillHeart(toyId) {
+function changeOnclickAndUnfillHeartShop(toyId) {
     var wishlistIl = document.getElementById(`wishlist-il-${toyId}`);
     var wishlistBtn = document.getElementById(`wishlist-btn-${toyId}`);
 
@@ -126,4 +128,71 @@ function changeOnclickAndUnfillHeart(toyId) {
         wishlistIl.appendChild(newWishlistBtn);
     }
 
+}
+function changeOnclickAndFillHeartShopDetails(toyId) {
+    var shopDetailsWishlist = document.getElementById('shop-details-wishlist')
+    var wishlistLink = document.getElementById(`wishlist-link-${toyId}`)
+
+
+    if (wishlistLink != null) {
+
+        shopDetailsWishlist.removeChild(wishlistLink);
+
+        var newWishlistLink = document.createElement('a');
+        var newWishlistImg = document.createElement('img');
+
+        // Tilføjer attributter til de nye elementer
+        Object.assign(newWishlistLink, {
+            id: `wishlist-link-${toyId}`,
+            href: 'javascript:void(0);',
+            onclick: function () { removeFromWishlist(toyId) }
+        });
+
+        Object.assign(newWishlistImg, {
+            className: 'shop-deatils-heart-icons',
+            id: `wishlist-img-${toyId}`,
+            src: 'img/icon/filledheart.png',
+            alt: '""'
+        });
+
+        newWishlistLink.innerText = "Tilføj til ønskeliste "
+
+        // Appender de nye elementer
+        newWishlistLink.appendChild(newWishlistImg);
+        shopDetailsWishlist.appendChild(newWishlistLink);
+    }
+}
+
+function changeOnclickAndUnfillHeartShopDetails(toyId) {
+    var shopDetailsWishlist = document.getElementById('shop-details-wishlist')
+    var wishlistLink = document.getElementById(`wishlist-link-${toyId}`)
+
+
+    if (wishlistLink != null) {
+
+        shopDetailsWishlist.removeChild(wishlistLink);
+
+        var newWishlistLink = document.createElement('a');
+        var newWishlistImg = document.createElement('img');
+
+        // Tilføjer attributter til de nye elementer
+        Object.assign(newWishlistLink, {
+            id: `wishlist-link-${toyId}`,
+            href: 'javascript:void(0);',
+            onclick: function () { addToWishlist(toyId) }
+        });
+
+        Object.assign(newWishlistImg, {
+            className: 'shop-deatils-heart-icons',
+            id: `wishlist-img-${toyId}`,
+            src: 'img/icon/heart.png',
+            alt: '""'
+        });
+
+        newWishlistLink.innerText = "Tilføj til ønskeliste "
+
+        // Appender de nye elementer
+        newWishlistLink.appendChild(newWishlistImg);
+        shopDetailsWishlist.appendChild(newWishlistLink);
+    }
 }
