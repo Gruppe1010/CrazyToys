@@ -21,6 +21,7 @@ namespace CrazyToys.Web.Controllers
     {
         private readonly IHangfireService _hangfireService;
         private readonly ISearchService<SolrToy> _solrToyService;
+        private readonly ISessionService _sessionService;
 
         private readonly ToyDbService _toyDbService;
         private readonly IEntityCRUD<ColourGroup> _colourGroupDbService;
@@ -37,6 +38,7 @@ namespace CrazyToys.Web.Controllers
             IUmbracoContextAccessor umbracoContextAccessor,
             IHangfireService hangfireService,
             ISearchService<SolrToy> solrToyService,
+            ISessionService sessionService,
             ToyDbService toyDbService,
             IEntityCRUD<ColourGroup> colourGroupDbService,
             IEntityCRUD<AgeGroup> ageGroupDbService,
@@ -46,6 +48,7 @@ namespace CrazyToys.Web.Controllers
         {
             _hangfireService = hangfireService;
             _solrToyService = solrToyService;
+            _sessionService = sessionService;
 
             _toyDbService = toyDbService;
             _colourGroupDbService = colourGroupDbService;
@@ -80,7 +83,9 @@ namespace CrazyToys.Web.Controllers
             SortedDictionary<string, int> brandDict = _solrToyService.GetBrandFacet();
             SortedDictionary<string, int> categoryDict = _solrToyService.GetCategoryFacet();
 
+            var sessionUser = _sessionService.GetNewOrExistingSessionUser(HttpContext);
 
+            HashSet<string> wishlistToys = sessionUser.Wishlist;
 
             List<PriceGroup> priceGroups = await _priceGroupDbService.GetAll();
             List<ColourGroup> colourGroups = await _colourGroupDbService.GetAll();
@@ -97,7 +102,8 @@ namespace CrazyToys.Web.Controllers
             ViewData["ShopToyDTOs"] = shopToyDTOs;
             ViewData["ParamsDict"] = JsonConvert.SerializeObject(CreateDictFromParams(categories, subCategory, brand, priceGroup, ageGroupIntervals, colours, search));
             ViewData["PageNumber"] = pageNumber == 0 ? 1 : pageNumber;
-    
+            ViewData["wishlistToys"] = wishlistToys;
+
             ViewData["TempDict"] = CreateDictFromParams(categories, subCategory, brand, priceGroup, ageGroupIntervals, colours, search);
 
             ViewBag.Current = "Shop";

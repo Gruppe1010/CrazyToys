@@ -15,6 +15,7 @@
     var categoryList = ViewData["CategoryList"] as List<Category>;
     var numFound = (int)ViewData["NumFound"];
     var pageNumber = (int)ViewData["PageNumber"];
+    var wishlistToys = ViewData["wishlistToys"] as HashSet<string>;
     var tempDict = ViewData["TempDict"] as Dictionary<string, HashSet<string>>;
 
     var paramsDict = @Html.Raw(ViewData["ParamsDict"]); // http://localhost:44325/shop?brands=_brand.Barbie"
@@ -217,7 +218,16 @@
                                     <div class="product__item__pic set-bg" data-setbg="@(shopToyDTOs[j].Image ?? shopToyDTOs[j].Name)">
                                         <a class="item-link" href="/shop-details?id=@shopToyDTOs[j].ID"></a>
                                         <ul class="product__hover">
-                                            <li><button class="wishlist-btn" onclick='addOrRemoveFromWishlist("@shopToyDTOs[j].ID")'><img class="hover-icon" src="img/icon/heart.png" alt=""></button></li>
+                                            @{  // Vi tjekker om toy er på sessionusers wishlist allerede og sætter onclick funktion efter dette
+                                                if (!wishlistToys.Contains(shopToyDTOs[j].ID))
+                                                {
+                                                    <li id="wishlist-il-@shopToyDTOs[j].ID"><button id="wishlist-btn-@shopToyDTOs[j].ID" class="wishlist-btn" onclick='addToWishlist("@shopToyDTOs[j].ID")'><img id="wishlist-icon-@shopToyDTOs[j].ID" class="hover-icon" src="img/icon/heart.png" alt=""></button></li>
+                                                }
+                                                else
+                                                {
+                                                    <li id="wishlist-il-@shopToyDTOs[j].ID"><button id="wishlist-btn-@shopToyDTOs[j].ID" class="wishlist-btn" onclick='removeFromWishlist("@shopToyDTOs[j].ID")'><img id="wishlist-icon-@shopToyDTOs[j].ID" class="hover-icon" src="img/icon/filledheart.png" alt=""></button></li>
+                                                }
+                                            }
                                         </ul>
                                     </div>
                                     <div class="product__item__text">
