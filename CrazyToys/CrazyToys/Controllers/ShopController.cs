@@ -100,11 +100,10 @@ namespace CrazyToys.Web.Controllers
             ViewData["Brands"] = brandDict;
             ViewData["ColourGroups"] = colourGroups.OrderBy(c => c.Name).ToList();
             ViewData["ShopToyDTOs"] = shopToyDTOs;
-            ViewData["ParamsDict"] = JsonConvert.SerializeObject(CreateDictFromParams(categories, subCategory, brand, priceGroup, ageGroupIntervals, colours, search));
+            ViewData["ParamsDict"] = CreateDictFromParams(categories, subCategory, brand, priceGroup, ageGroupIntervals, colours, search);
             ViewData["PageNumber"] = pageNumber == 0 ? 1 : pageNumber;
             ViewData["WishlistToys"] = wishlistToys;
 
-            ViewData["TempDict"] = CreateDictFromParams(categories, subCategory, brand, priceGroup, ageGroupIntervals, colours, search);
 
             ViewBag.Current = "Shop";
 

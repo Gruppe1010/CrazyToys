@@ -1,6 +1,25 @@
 ﻿body {
 }
 
+.grey-out {
+    filter: opacity(60%);
+}
+
+.small {
+    font-size: 12px;
+    float: right;
+    margin: 0;
+    line-height: 12px;
+}
+
+.free {
+    height: 12px;
+}
+
+.black {
+    color: black !important;
+}
+
 .mouse-hover {
     cursor: pointer;
 }

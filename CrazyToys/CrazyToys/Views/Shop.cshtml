@@ -2,10 +2,13 @@
 @using CrazyToys.Entities.Entities
 @using CrazyToys.Entities.SolrModels
 @using CrazyToys.Web;
+@using Newtonsoft.Json
 @using Umbraco.Cms.Web.Common.PublishedModels;
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Shop>
 @{
     Layout = "Master.cshtml";
+    var paramsDict = ViewData["ParamsDict"] as Dictionary<string, HashSet<string>>; 
+
     var categories = ViewData["Categories"] as SortedDictionary<string, int>;
     var brands = ViewData["Brands"] as SortedDictionary<string, int>;
     var ageGroups = ViewData["AgeGroups"] as List<AgeGroup>;
@@ -16,9 +19,7 @@
     var numFound = (int)ViewData["NumFound"];
     var pageNumber = (int)ViewData["PageNumber"];
     var wishlistToys = ViewData["WishlistToys"] as HashSet<string>;
-    var tempDict = ViewData["TempDict"] as Dictionary<string, HashSet<string>>;
 
-    var paramsDict = @Html.Raw(ViewData["ParamsDict"]); // http://localhost:44325/shop?brands=_brand.Barbie"
     int numberOfPages = (numFound + 30 - 1) / 30;
 }
 
@@ -65,20 +66,20 @@
                                                     foreach (var category in categoryList)
                                                     {
                                                         <li>
-                                                            <a class="@(tempDict.Count > 0 && tempDict.ContainsKey("categories") && tempDict["categories"].Contains(category.Name)
+                                                            <a class="@(paramsDict.Count > 0 && paramsDict.ContainsKey("categories") && paramsDict["categories"].Contains(category.Name)
                                                             ? "active-filter underline"
-                                                            : "")" aria-expanded="true" data-toggle="collapse" data-target="#@category.Name" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "categories", "@category.Name", )'>@category.Name</a>
+                                                            : "")" aria-expanded="true" data-toggle="collapse" data-target="#@category.Name" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@Html.Raw(JsonConvert.SerializeObject(@paramsDict)), "categories", "@category.Name", )'>@category.Name</a>
 
-                                                            <div class="@(tempDict.Count > 0 && tempDict.ContainsKey("categories") && tempDict["categories"].Contains(category.Name)
+                                                            <div class="@(paramsDict.Count > 0 && paramsDict.ContainsKey("categories") && paramsDict["categories"].Contains(category.Name)
                                                             ? ""
                                                             : "collapse")" id="@category.Name">
                                                                 <ul class="subcat-scroll nice-scroll">
                                                                     @foreach (var subCategory in category.SubCategories)
                                                                     {
                                                                         <li>
-                                                                            <a class="@(tempDict.Count > 0 && tempDict.ContainsKey("subCategory") && tempDict["subCategory"].Contains(subCategory.Name)
+                                                                            <a class="@(paramsDict.Count > 0 && paramsDict.ContainsKey("subCategory") && paramsDict["subCategory"].Contains(subCategory.Name)
                                                                             ? "active-filter"
-                                                                            : "") nav-link py-0" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "subCategory", "@subCategory.Name", )'>@subCategory.Name</a>
+                                                                            : "") nav-link py-0" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@Html.Raw(JsonConvert.SerializeObject(@paramsDict)), "subCategory", "@subCategory.Name", )'>@subCategory.Name</a>
                                                                         </li>
                                                                     }
                                                                 </ul>
@@ -103,9 +104,9 @@
                                                     foreach (KeyValuePair<string, int> brand in brands)
                                                     {
                                                         <li>
-                                                            <a class="@(tempDict.Count > 0 && tempDict.ContainsKey("brand") && tempDict["brand"].Contains(brand.Key)
+                                                            <a class="@(paramsDict.Count > 0 && paramsDict.ContainsKey("brand") && paramsDict["brand"].Contains(brand.Key)
                                                         ? "active-filter"
-                                                        : "")" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "brand", "@brand.Key")'>@brand.Key (@brand.Value)</a>
+                                                        : "")" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@Html.Raw(JsonConvert.SerializeObject(@paramsDict)), "brand", "@brand.Key")'>@brand.Key (@brand.Value)</a>
                                                         </li>
                                                     }
                                                 }
@@ -126,9 +127,9 @@
                                                     foreach (PriceGroup priceGroup in priceGroups)
                                                     {
                                                         <li>
-                                                            <a class="@(tempDict.Count > 0 && tempDict.ContainsKey("priceGroup") && tempDict["priceGroup"].Contains(priceGroup.Interval)
+                                                            <a class="@(paramsDict.Count > 0 && paramsDict.ContainsKey("priceGroup") && paramsDict["priceGroup"].Contains(priceGroup.Interval)
                                                             ? "active-filter"
-                                                            : "")" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "priceGroup", "@priceGroup.Interval")'>@priceGroup.Interval DKK</a>
+                                                            : "")" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@Html.Raw(JsonConvert.SerializeObject(@paramsDict)), "priceGroup", "@priceGroup.Interval")'>@priceGroup.Interval DKK</a>
                                                         </li>
                                                     }
                                                 }
@@ -147,9 +148,9 @@
                                             @{
                                                 foreach (AgeGroup ageGroup in ageGroups)
                                                 {
-                                                    <a class="@(tempDict.Count > 0 && tempDict.ContainsKey("ageGroupIntervals") && tempDict["ageGroupIntervals"].Contains(ageGroup.Interval)
+                                                    <a class="@(paramsDict.Count > 0 && paramsDict.ContainsKey("ageGroupIntervals") && paramsDict["ageGroupIntervals"].Contains(ageGroup.Interval)
                                                     ? "age-group-active"
-                                                    : "") age-group hover" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "ageGroupIntervals", "@ageGroup.Interval")'> @ageGroup.Interval </a>
+                                                    : "") age-group hover" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@Html.Raw(JsonConvert.SerializeObject(@paramsDict)), "ageGroupIntervals", "@ageGroup.Interval")'> @ageGroup.Interval </a>
                                                 }
                                             }
                                         </div>
@@ -166,9 +167,9 @@
                                             @{
                                                 foreach (ColourGroup colourGroup in colourGroups)
                                                 {
-                                                    <a class="@(tempDict.Count > 0 && tempDict.ContainsKey("colours") && tempDict["colours"].Contains(colourGroup.Name)
+                                                    <a class="@(paramsDict.Count > 0 && paramsDict.ContainsKey("colours") && paramsDict["colours"].Contains(colourGroup.Name)
                                                     ? "colour-group-filter-active"
-                                                    : "") colour-group-filter" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@paramsDict, "colours", "@colourGroup.Name")' style="background: @colourGroup.ColourCode"></a>
+                                                    : "") colour-group-filter" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@Html.Raw(JsonConvert.SerializeObject(@paramsDict)), "colours", "@colourGroup.Name")' style="background: @colourGroup.ColourCode"></a>
                                                 }
                                             }
                                         </div>
@@ -201,7 +202,7 @@
                         <div class="col-lg-6 col-md-6 col-sm-6">
                             <div class="shop__product__option__right">
                                 <p>Sorter efter pris:</p>
-                                <select id="sorter" onchange='createUrlFromParams(@pageNumber, @paramsDict)'>
+                                <select id="sorter" onchange='createUrlFromParams(@pageNumber, @Html.Raw(JsonConvert.SerializeObject(@paramsDict)))'>
                                     <option value="sort=price_asc">Lav til Høj</option>
                                     <option value="sort=price_desc">Høj til Lav</option>
                                 </select>
@@ -280,11 +281,11 @@
                                         // hvis vi står på denne side: tilføj class="active", så man kan se det
                                         if (pageNumber == i)
                                         {
-                                            <a id="activePage" class="active" href="javascript:void(0);" onclick='createUrlFromParams(@i, @paramsDict)'>@i</a>
+                                            <a id="activePage" class="active" href="javascript:void(0);" onclick='createUrlFromParams(@i, @Html.Raw(JsonConvert.SerializeObject(@paramsDict)))'>@i</a>
                                         }
                                         else if (pagesToShow.Contains(i))
                                         {
-                                            <a href="javascript:void(0);" onclick='createUrlFromParams(@i, @paramsDict)'>@i</a>
+                                            <a href="javascript:void(0);" onclick='createUrlFromParams(@i, @Html.Raw(JsonConvert.SerializeObject(@paramsDict)))'>@i</a>
                                         }
                                         else // så skal der tilføjes dutter
                                         {

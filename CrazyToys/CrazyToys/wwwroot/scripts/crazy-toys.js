@@ -1,4 +1,7 @@
-﻿
+﻿function redirect(url) {
+    window.location.replace(url);
+}
+
 function addToCart(toyId) {
     const chosenAmount = document.getElementById('chosenAmount');
     let quantity = 1;
