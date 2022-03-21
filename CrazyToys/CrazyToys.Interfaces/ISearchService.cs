@@ -11,6 +11,7 @@ namespace CrazyToys.Interfaces
     {
         bool CreateOrUpdate(T document);
         void DeleteAll();
+        void Delete(T document);
 
         SortedDictionary<string, int> GetBrandFacet();
 
@@ -26,6 +27,7 @@ namespace CrazyToys.Interfaces
             int page,
             string search,
             string sort);
+       
 
         //TODO Fjern det her nå vi får hentet fra SQL i stedet
         /*
