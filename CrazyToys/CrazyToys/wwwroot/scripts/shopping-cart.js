@@ -1,8 +1,6 @@
 ﻿const toyTableBody = document.getElementById('toyTableBody');
 
-if (toyTableBody.childElementCount === 0) {
-
-    debugger;
+if (toyTableBody != null && toyTableBody.childElementCount === 0) {
     const tHead = document.getElementById('tHead');
 
     tHead.parentElement.removeChild(tHead);
@@ -13,7 +11,6 @@ if (toyTableBody.childElementCount === 0) {
 // TODO test ordentligt
 function incQuantity(id, stock, price) { // shoppingCartToyDTO) {
 
-    debugger;
     var amountElement = document.getElementById(`chosenAmount-${id}`);
     var oldValue = parseFloat(amountElement.value);
     var newValue = oldValue;
@@ -171,7 +168,6 @@ function removeToyFromCart(id, stock, price) { //
 
 function deleteToyRowFromView(id) {
 
-    debugger;
     // hvis toyet blev fjernet successfuldt fra sessionUsers cart
     // så fjern rækken ("toyDataRow-@toyDTO.ID")
     const toyDataRow = document.getElementById(`toyDataRow-${id}`);
