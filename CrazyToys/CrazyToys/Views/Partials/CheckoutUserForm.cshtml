@@ -7,10 +7,9 @@
 }
 
 
-@using (Html.BeginUmbracoForm<CheckoutController>(nameof(CheckoutController.Submit)))
+@using (Html.BeginUmbracoForm<CheckoutSurfaceController>(nameof(CheckoutSurfaceController.Submit)))
 {
-    <div class="row">
-        <div class="col-lg-8 col-md-6">
+        
             <h6 class="checkout__title">Billing Details</h6>
             <div class="row">
                 <div class="col-lg-6">
@@ -53,43 +52,13 @@
                     <div class="checkout__input">
                         <p>Email<span>*</span></p>
                         @Html.TextBoxFor(m => m.Email, new { @placeholder = "Fx. Ole@hotmail.dk", @required  = "required"})
-
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-lg-4 col-md-6">
-            <div class="checkout__order">
-                <h4 class="order__title">Your order</h4>
-                <div class="checkout__order__products">Product <span>Total</span></div>
-                <ul class="checkout__total__products">
-                    <li>01. Vanilla salted caramel <span>$ 300.0</span></li>
-                    <li>02. German chocolate <span>$ 170.0</span></li>
-                    <li>03. Sweet autumn <span>$ 170.0</span></li>
-                    <li>04. Cluten free mini dozen <span>$ 110.0</span></li>
-                </ul>
-                <ul class="checkout__total__all">
-                    <li>Subtotal <span>$750.99</span></li>
-                    <li>Total <span>$750.99</span></li>
-                </ul>
-                <p>Lorem ipsum dolor sit amet, consectetur adip elit, sed do eiusmod tempor incididunt
-                ut labore et dolore magna aliqua.</p>
-                <div class="checkout__input__checkbox">
-                    <label for="payment">
-                        Check Payment
-                        <input type="checkbox" id="payment">
-                        <span class="checkmark"></span>
-                    </label>
-                </div>
-                <div class="checkout__input__checkbox">
-                    <label for="paypal">
-                        Paypal
-                        <input type="checkbox" id="paypal">
-                        <span class="checkmark"></span>
-                    </label>
-                </div>
-                <button type="submit" class="site-btn">PLACE ORDER</button>
-            </div>
-        </div>
-    </div>
+                
+
+             <button type="submit" class="site-btn" style="width:750px">PLACE ORDER</button>
+             
+        
+   
 }
