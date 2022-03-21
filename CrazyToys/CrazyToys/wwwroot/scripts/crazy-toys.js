@@ -1,6 +1,14 @@
 ﻿
 function addToCart(toyId) {
-    const quantity = document.getElementById('chosenAmount').value;
+    debugger;
+
+    const chosenAmount = document.getElementById('chosenAmount');
+    let quantity = 1;
+
+    if (chosenAmount != null) {
+        quantity = chosenAmount.value;
+    } 
+
 
     const selectedToy = {
         toyId: toyId,
@@ -17,7 +25,7 @@ function addToCart(toyId) {
     .then(response => {
         if (response.ok) {
             updateCartNumber(quantity);
-            alert("Wow den blev tilføjet til kurven");
+            // TODO lav noget flot javascript
         } else {
             alert("Du kan ikke lægge så meget i kurven");
         }

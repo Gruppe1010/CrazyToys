@@ -130,6 +130,7 @@ function removeToyFromCart(shoppingCartToyDTO) {
             }
             // opdater updateCartTotal(shoppingCartToyDTO)
             updateCartTotal(-shoppingCartToyDTO.Price * quantity);
+            updateCartNumber();
 
         } else {
             alert("Der skete en fejl");
