@@ -64,135 +64,69 @@ function removeChildNodeFromWishlist(toyId) {
 }
 
 function changeOnclickAndFillHeartShop(toyId) {
-    var wishlistIl = document.getElementById(`wishlist-il-${toyId}`);
     var wishlistBtn = document.getElementById(`wishlist-btn-${toyId}`);
+    var wishlistIcon = document.getElementById(`wishlist-icon-${toyId}`);
 
     if (wishlistBtn != null) {
 
-        // Vi fjerner wishlistBtn og wishlistIcon fra siden
-        wishlistIl.removeChild(wishlistBtn);
-
-        // Laver nye btn og icon elementer
-        var newWishlistBtn = document.createElement('button');
-        var newWishlistIcon = document.createElement('img');
-
-        // Tilføjer attributter til de nye elementer
-        Object.assign(newWishlistBtn, {
-            className: 'wishlist-btn',
-            id: `wishlist-btn-${toyId}`,
+        // Ændrer onclick og image
+        Object.assign(wishlistBtn, {
             onclick: function () { removeFromWishlist(toyId) }
         });
 
-        Object.assign(newWishlistIcon, {
-            className: 'hover-icon',
-            id: `wishlist-icon-${toyId}`,
-            src: 'img/icon/filledheart.png',
-            alt: '""'
+        Object.assign(wishlistIcon, {
+            src: 'img/icon/filledheart.png'
         });
-
-        // Appender de nye elementer
-        newWishlistBtn.appendChild(newWishlistIcon);
-        wishlistIl.appendChild(newWishlistBtn);
     }
 }
 
 function changeOnclickAndUnfillHeartShop(toyId) {
-    var wishlistIl = document.getElementById(`wishlist-il-${toyId}`);
     var wishlistBtn = document.getElementById(`wishlist-btn-${toyId}`);
+    var wishlistIcon = document.getElementById(`wishlist-icon-${toyId}`);
 
     if (wishlistBtn != null) {
 
-        // Vi fjerner wishlistBtn og wishlistIcon fra siden
-        wishlistIl.removeChild(wishlistBtn);
-
-        // Laver nye btn og icon elementer
-        var newWishlistBtn = document.createElement('button');
-        var newWishlistIcon = document.createElement('img');
-
-        // Tilføjer attributter til de nye elementer
-        Object.assign(newWishlistBtn, {
-            className: 'wishlist-btn',
-            id: `wishlist-btn-${toyId}`,
+        // Ændrer onclick og image
+        Object.assign(wishlistBtn, {
             onclick: function () { addToWishlist(toyId) }
         });
 
-        Object.assign(newWishlistIcon, {
-            className: 'hover-icon',
-            id: `wishlist-icon-${toyId}`,
-            src: 'img/icon/heart.png',
-            alt: '""'
+        Object.assign(wishlistIcon, {
+            src: 'img/icon/heart.png'
         });
-
-        // Appender de nye elementer
-        newWishlistBtn.appendChild(newWishlistIcon);
-        wishlistIl.appendChild(newWishlistBtn);
     }
 
 }
 function changeOnclickAndFillHeartShopDetails(toyId) {
-    var shopDetailsWishlist = document.getElementById('shop-details-wishlist')
     var wishlistLink = document.getElementById(`wishlist-link-${toyId}`)
-
+    var wishlistImg = document.getElementById(`wishlist-img-${toyId}`)
 
     if (wishlistLink != null) {
 
-        shopDetailsWishlist.removeChild(wishlistLink);
-
-        var newWishlistLink = document.createElement('a');
-        var newWishlistImg = document.createElement('img');
-
-        // Tilføjer attributter til de nye elementer
-        Object.assign(newWishlistLink, {
-            id: `wishlist-link-${toyId}`,
-            href: 'javascript:void(0);',
+        // Ændrer onclick og image
+        Object.assign(wishlistLink, {
             onclick: function () { removeFromWishlist(toyId) }
         });
 
-        Object.assign(newWishlistImg, {
-            className: 'shop-deatils-heart-icons',
-            id: `wishlist-img-${toyId}`,
-            src: 'img/icon/filledheart.png',
-            alt: '""'
+        Object.assign(wishlistImg, {
+            src: 'img/icon/filledheart.png'
         });
-
-        newWishlistLink.innerText = "Tilføj til ønskeliste "
-
-        // Appender de nye elementer
-        newWishlistLink.appendChild(newWishlistImg);
-        shopDetailsWishlist.appendChild(newWishlistLink);
     }
 }
 
 function changeOnclickAndUnfillHeartShopDetails(toyId) {
-    var shopDetailsWishlist = document.getElementById('shop-details-wishlist')
     var wishlistLink = document.getElementById(`wishlist-link-${toyId}`)
-
+    var wishlistImg = document.getElementById(`wishlist-img-${toyId}`)
 
     if (wishlistLink != null) {
 
-        shopDetailsWishlist.removeChild(wishlistLink);
-
-        var newWishlistLink = document.createElement('a');
-        var newWishlistImg = document.createElement('img');
-
-        // Tilføjer attributter til de nye elementer
-        Object.assign(newWishlistLink, {
-            id: `wishlist-link-${toyId}`,
-            href: 'javascript:void(0);',
+        // Ændrer onclick og image
+        Object.assign(wishlistLink, {
             onclick: function () { addToWishlist(toyId) }
         });
 
-        Object.assign(newWishlistImg, {
-            className: 'shop-deatils-heart-icons',
-            id: `wishlist-img-${toyId}`,
-            src: 'img/icon/heart.png',
-            alt: '""'
+        Object.assign(wishlistImg, {
+            src: 'img/icon/heart.png'
         });
-
-        newWishlistLink.innerText = "Tilføj til ønskeliste "
-
-        // Appender de nye elementer
-        newWishlistLink.appendChild(newWishlistImg);
-        shopDetailsWishlist.appendChild(newWishlistLink);
     }
 }

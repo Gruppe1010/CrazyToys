@@ -76,11 +76,11 @@
                             @{  // Vi tjekker om toy er på sessionusers wishlist allerede og sætter onclick funktion efter dette
                                 if (!wishlistToys.Contains(@toy.ID))
                                 {
-                                    <a id="wishlist-link-@toy.ID" href="javascript:void(0);" onclick='addToWishlist("@toy.ID")'>Tilføj til ønskeliste <img id="wishlist-img-@toy.ID" class="shop-deatils-heart-icons" src="img/icon/heart.png" alt=""></a>
+                                    <a id="wishlist-link-@toy.ID" href="javascript:void(0);" onclick='addToWishlist("@toy.ID")'><img id="wishlist-img-@toy.ID" class="shop-deatils-heart-icons" src="img/icon/heart.png" alt=""> Tilføj til ønskeliste</a>
                                 }
                                 else
                                 {
-                                    <a id="wishlist-link-@toy.ID" href="javascript:void(0);" onclick='removeFromWishlist("@toy.ID")'>Tilføj til ønskeliste <img id="wishlist-img-@toy.ID" class="shop-deatils-heart-icons" src="img/icon/filledheart.png" alt=""></a>
+                                    <a id="wishlist-link-@toy.ID" href="javascript:void(0);" onclick='removeFromWishlist("@toy.ID")'><img id="wishlist-img-@toy.ID" class="shop-deatils-heart-icons" src="img/icon/filledheart.png" alt=""> Tilføj til ønskeliste</a>
                                 }
                             }
                         </div>
