@@ -60,5 +60,10 @@ namespace CrazyToys.Entities.Entities
             return new ShoppingCartToyDTO(ID, Name, Price, quantity, Images.Count > 0 ? Images[0].UrlHigh : null, Stock);
         }
 
+        public ShopToyDTO ConvertToShopToyDTO()
+        {
+            return new ShopToyDTO(ID, Name, Price, Images.Count > 0 ? Images[0].UrlHigh : null);
+        }
+
     }
 }
