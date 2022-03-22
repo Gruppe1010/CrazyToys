@@ -22,7 +22,7 @@ namespace CrazyToys.Web.Controllers
         public async Task<IActionResult> Index()
         {
 
-            ViewBag.Current = "About";
+            ViewBag.Current = "Om Os";
 
             return CurrentTemplate(CurrentPage);
         }

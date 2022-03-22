@@ -104,8 +104,7 @@ namespace CrazyToys.Web.Controllers
             ViewData["PageNumber"] = pageNumber == 0 ? 1 : pageNumber;
             ViewData["WishlistToys"] = wishlistToys;
 
-
-            ViewBag.Current = "Shop";
+            ViewBag.Current = "Butik";
 
             // return a 'model' to the selected template/view for this page.
             return CurrentTemplate(CurrentPage);
