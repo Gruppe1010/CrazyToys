@@ -41,7 +41,7 @@ namespace CrazyToys.Web.Controllers
                 wishlistToys.Add(toy.ConvertToShopToyDTO());
             }
 
-            ViewData["Title"] = "Ønskeliste";
+            ViewBag.Current = "Ønskeliste";
             ViewData["wishlistToys"] = wishlistToys;
             return CurrentTemplate(CurrentPage);
         }

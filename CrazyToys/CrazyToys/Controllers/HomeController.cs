@@ -33,8 +33,7 @@ namespace CrazyToys.Web.Controllers
         public override IActionResult Index()
         {
 
-            ViewData["Title"] = "Forside";
-            ViewBag.Current = "Home";
+            ViewBag.Current = "Forside";
 
             // return a 'model' to the selected template/view for this page.
             return CurrentTemplate(CurrentPage);

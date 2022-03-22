@@ -44,7 +44,7 @@ namespace CrazyToys.Web.Controllers
                 shoppingCartToytDTOs.Add(toy.ConvertToShoppingCartToyDTO(entry.Value));
             }
 
-            ViewData["Title"] = "Tjek Ud";
+            ViewBag.Current = "Tjek Ud";
             ViewData["ShoppingCartToytDTOs"] = shoppingCartToytDTOs;
 
 
