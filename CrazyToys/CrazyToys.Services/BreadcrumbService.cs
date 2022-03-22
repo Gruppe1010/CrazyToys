@@ -21,7 +21,7 @@ namespace CrazyToys.Services
             string controller = $"{viewContext.RouteData.Values["controller"]}";
             string action = $"{viewContext.RouteData.Values["action"]}";
             object id = viewContext.RouteData.Values["id"];
-            string title = $"{viewContext.ViewData["Title"]}";
+            string title = $"{viewContext.ViewBag.Current}";
 
             breadcrumbs.Add(new Breadcrumb(area, controller, action, title, id));
 

@@ -15,9 +15,14 @@
                         <h4 asp-area="@breadcrumb.Area" asp-controller="@breadcrumb.Controller" asp-action="@breadcrumb.Action" asp-route-id="@breadcrumb.Id">@breadcrumb.Title</h4>
                         <div class="breadcrumb__links">
                             <a href="/">Forside</a>
-                            @if (@breadcrumb.Title == "Indkøbskurv" || @breadcrumb.Title == "Tjek Ud") 
+                            @if (@breadcrumb.Title == "Indkøbskurv")
                             {
-                                 <a href="/shop?sort=price_asc">Butik</a>
+                                <a href="/shop?sort=price_asc">Butik</a>
+                            }
+                            else if (@breadcrumb.Title == "Tjek Ud")
+                            {
+                                <a href="/shop?sort=price_asc">Butik</a>
+                                <a href="/shopping-cart">Indkøbskurv</a>
                             }
                             <span asp-area="@breadcrumb.Area" asp-controller="@breadcrumb.Controller" asp-action="@breadcrumb.Action" asp-route-id="@breadcrumb.Id">&nbsp;@breadcrumb.Title</span>
                         </div>
