@@ -5,14 +5,14 @@ window.onload = function () {
 
 function setSorter() {
     // Henter URL og select
-    var currentUrl = window.location.href.toString();
+    var currentUrl = window.location.href;
     var sorterSelect = document.getElementById("sorter");
 
     // Sætter substring
-    var substring = "sort=price_asc"
+    var currentUrlSubstring = "sort=price_asc"
 
     // Ændre afhængig af om substring er en del af URL
-    if (currentUrl.includes(substring)) {
+    if (currentUrl.includes(currentUrlSubstring)) {
         sorterSelect.value = "sort=price_asc";
         // Opdatere nice-select value
         $("#sorter").val("sort=price_asc").niceSelect('update');
