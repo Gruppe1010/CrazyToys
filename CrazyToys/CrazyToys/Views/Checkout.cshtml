@@ -55,7 +55,7 @@
 
                     <div class="checkout__order">
                         <h4 class="order__title">DIN ORDRE</h4>
-                        <div class="checkout__order__products">Produkt <span>Pris</span></div>
+                        <div class="checkout__order__products font-weight-bold">Produkt <span>Pris</span></div>
                         <ul class="checkout__total__products">
                             @{
                                 foreach (ShoppingCartToyDTO shoppingCartToyDTO in shoppingCartToyDTOs)
@@ -65,8 +65,9 @@
                             }
                         </ul>
                         <ul class="checkout__total__all">
-                            <li>Subtotal <span>@subtotal DKK</span></li>
-                            <li>Total <span>@total DKK</span></li>
+                            <li>Subtotal <span id="subtotal" class="font-weight-normal black">@subtotal DKK</span></li>
+                            <li class="font-italic">Levering <span id="deliveryPrice" class="font-weight-normal black">@(deliveryPrice < 1 ? "Gratis levering" : deliveryPrice + " DKK")</span></li>
+                            <li class="font-weight-bold">Pris i alt (inkl. moms) <span id="total" class="black">@total DKK</span></li>
                         </ul>
                         <!--
                         <div class="checkout__input__checkbox">
