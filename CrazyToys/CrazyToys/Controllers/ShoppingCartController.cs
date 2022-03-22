@@ -39,7 +39,8 @@ namespace CrazyToys.Web.Controllers
                 Toy toy = await _toyDbService.GetById(entry.Key);
                 shoppingCartToytDTOs.Add(toy.ConvertToShoppingCartToyDTO(entry.Value));
             }
-            
+
+            ViewData["Title"] = "Indkøbskurv";
             ViewData["ShoppingCartToytDTOs"] = shoppingCartToytDTOs;
             return CurrentTemplate(CurrentPage);
         }

@@ -38,6 +38,7 @@ namespace CrazyToys.Web.Controllers
 
             HashSet<string> wishlistToys = sessionUser.Wishlist;
 
+            ViewData["Title"] = "Legetøjs Detaljer";
             ViewData["Toy"] = toy;
             ViewData["WishlistToys"] = wishlistToys;
             return CurrentTemplate(CurrentPage);
