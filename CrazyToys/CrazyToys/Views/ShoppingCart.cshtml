@@ -31,9 +31,9 @@
             <td class="quantity__item">
                 <div class="quantity">
                     <div class="pro-qty-2">
-                        <span class="fa fa-angle-left dec qtybtn mouse-hover" onclick='decQuantity("@toyDTO.ID", @toyDTO.Stock, @toyDTO.Price)'></span>
+                        <span class="fa fa-angle-left dec qtybtn mouse-hover" onclick='decQuantity("@toyDTO.ID", @toyDTO.Quantity, @toyDTO.Stock, @toyDTO.Price)'></span>
                         <input id="chosenAmount-@toyDTO.ID" type="text" value="@quantity">
-                        <span class="fa fa-angle-right inc qtybtn mouse-hover" onclick='incQuantity("@toyDTO.ID", @toyDTO.Stock, @toyDTO.Price)'></span>
+                        <span class="fa fa-angle-right inc qtybtn mouse-hover" onclick='incQuantity("@toyDTO.ID", @toyDTO.Price)'></span>
                     </div>
                 </div>
             </td>
@@ -46,7 +46,6 @@
 
     void RenderUnavailableToy(ShoppingCartToyDTO toyDTO, int unavailableAmount)
     {
-        // TODO lav denne
           <tr id="unavailableToyDataRow-@toyDTO.ID">
             <td class="product__cart__item grey-out">
                 <div class="product__cart__item__pic">
@@ -60,7 +59,7 @@
                     <td class="quantity__item"></td>
                     <td class="cart__price"></td>
 
-            <td class="cart__close" onclick='removeUnavailbleToyFromCart("@toyDTO.ID", @(toyDTO.Quantity - unavailableAmount))'><i class="fa fa-close mouse-hover"></i></td>
+            <td class="cart__close" onclick='removeUnavailbleToyFromCart("@toyDTO.ID", @unavailableAmount)'><i class="fa fa-close mouse-hover"></i></td>
         </tr>
     }
 
@@ -107,29 +106,28 @@
                                     </tr>
                                </thead>
                                 <tbody id="toyTableBody">
-                                @foreach(ShoppingCartToyDTO toyDTO in shoppingCartToyDTOs){
 
-                                    /* TODO til test!!
-                                    toyDTO.Stock = 2;
-                                    toyDTO.Quantity = 3;
-                                    */
+                                  @foreach(ShoppingCartToyDTO toyDTO in shoppingCartToyDTOs){
 
-                                    if(toyDTO.Stock == 0)
-                                    {
-                                        unavailableToys.Add(toyDTO, toyDTO.Quantity);
-                                    }
-                                    else if(toyDTO.Stock >= toyDTO.Quantity)
-                                    {
-                                        subtotal += toyDTO.Price * toyDTO.Quantity;
-                                        RenderAvailableToy(toyDTO, toyDTO.Quantity);
-                                    }
-                                    else // Stock > 0 && Quantity > Stock
-                                    {
-                                        subtotal += toyDTO.Price * toyDTO.Stock;
-                                        RenderAvailableToy(toyDTO, toyDTO.Stock);
-                                        unavailableToys.Add(toyDTO, toyDTO.Quantity - toyDTO.Stock);
-                                    }
-                                }
+                                      if(toyDTO.Stock == 0)
+                                      {
+                                          Console.WriteLine("for meget: når 0: " + toyDTO.Quantity);
+                                          unavailableToys.Add(toyDTO, toyDTO.Quantity);
+                                      }
+                                      else if(toyDTO.Stock >= toyDTO.Quantity)
+                                      {
+                                          subtotal += toyDTO.Price * toyDTO.Quantity;
+                                          RenderAvailableToy(toyDTO, toyDTO.Quantity);
+                                      }
+                                      else // Stock > 0 && Quantity > Stock
+                                      {
+                                          subtotal += toyDTO.Price * toyDTO.Stock;
+                                          RenderAvailableToy(toyDTO, toyDTO.Stock);
+
+                                            Console.WriteLine("for meget: 3rd: " + (toyDTO.Quantity - toyDTO.Stock));
+                                            unavailableToys.Add(toyDTO, toyDTO.Quantity - toyDTO.Stock);
+                                      }
+                                  }
                                 </tbody>
                             </table>
                         </div>
@@ -138,29 +136,43 @@
                     {
                         <h2 class="headline">Der er intet i kurven endnu</h2>
                     }
-                    
+
                     if(subtotal > 499.0)
                     {
                         deliveryPrice = 0.0;
                     }
                     total = subtotal + deliveryPrice;
 
-                    @if (unavailableToys.Count > 0)
+                    if (unavailableToys.Count > 0)
                     {
+                        Console.WriteLine("Couunt " + unavailableToys.Count);
                         <div id="unavailableToyTable" class="shopping__cart__table">
                             <table>
                                <thead>
                                     <h3>Ikke tilgængelig</h3>
                                </thead>
-                                <tbody id="unavailableToyTableBody">
-                                   @if(unavailableToys.Count > 0)
-                                   {
+                                  <tbody id="unavailableToyTableBody">
+
+                                     @if(unavailableToys.Count > 0)
+                                     {
                                         @foreach(var entry in unavailableToys)
                                         {
+
+                                            Console.WriteLine("Value" + entry.Value);
                                             RenderUnavailableToy(entry.Key, entry.Value);
                                         }
-                                   }
-
+                                    }
+                                    </tbody>
+                            </table>
+                        </div>
+                    } else
+                    {
+                         <div id="unavailableToyTable" class="shopping__cart__table hidden">
+                            <table>
+                               <thead>
+                                    <h3>Ikke tilgængelig</h3>
+                               </thead>
+                                <tbody id="unavailableToyTableBody">
                                 </tbody>
                             </table>
                         </div>

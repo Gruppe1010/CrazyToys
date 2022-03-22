@@ -11,11 +11,13 @@ namespace CrazyToys.Entities.DTOs
     {
         public string ToyId { get; set; }
         public int Quantity { get; set; }
+        public int Stock { get; set; }
 
-        public SelectedToy(string toyId, int quantity)
+        public SelectedToy(string toyId, int quantity, int stock)
         {
             ToyId = toyId;
             Quantity = quantity;
+            Stock = stock;
         }
     }
 }

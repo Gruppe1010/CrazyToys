@@ -1,6 +1,14 @@
 ﻿body {
 }
 
+.table-headline {
+    font-size: 30px;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
 .grey-out {
     filter: opacity(60%);
 }

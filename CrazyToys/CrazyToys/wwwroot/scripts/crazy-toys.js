@@ -3,6 +3,7 @@
 }
 
 function addToCart(toyId) {
+    debugger;
     const chosenAmount = document.getElementById('chosenAmount');
     let quantity = 1;
 
@@ -13,8 +14,9 @@ function addToCart(toyId) {
 
     const selectedToy = {
         toyId: toyId,
-        quantity: quantity
-    }
+        quantity: quantity,
+        stock: 0
+    };
 
     fetch(`https://localhost:44325/api/sessionuser/AddToCart`, {
         method: 'POST',
