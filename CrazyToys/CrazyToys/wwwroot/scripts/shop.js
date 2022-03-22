@@ -1,6 +1,27 @@
 ﻿
+window.onload = function () {
+    setSorter();
+}
 
+function setSorter() {
+    // Henter URL og select
+    var currentUrl = window.location.href.toString();
+    var sorterSelect = document.getElementById("sorter");
 
+    // Sætter substring
+    var substring = "sort=price_asc"
+
+    // Ændre afhængig af om substring er en del af URL
+    if (currentUrl.includes(substring)) {
+        sorterSelect.value = "sort=price_asc";
+        // Opdatere nice-select value
+        $("#sorter").val("sort=price_asc").niceSelect('update');
+    } else {
+        sorterSelect.value = "sort=price_desc";
+        // Opdatere nice-select value
+        $("#sorter").val("sort=price_desc").niceSelect('update');
+    }
+}
 
 /** 
  *  Hvis man har trykket på én af filtreringsmulighederne ude til venstre på shop-siden, kaldes denne metode
@@ -44,7 +65,7 @@ function createUrlFromParams(pageNumber, paramsDict) {
 
     // hvis der er +'er i vores url (fx ved prisgruppen 800+) skal det encodes til %2b
     url = url.replace("+", "%2b")
- 
+
     window.location.replace(url);
 }
 
