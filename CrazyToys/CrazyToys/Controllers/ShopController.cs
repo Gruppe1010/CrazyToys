@@ -69,13 +69,13 @@ namespace CrazyToys.Web.Controllers
             [FromQuery(Name = "brand")] string brand,
             [FromQuery(Name = "priceGroup")] string priceGroup,
             [FromQuery(Name = "ageGroupIntervals")] string ageGroupIntervals,
-            [FromQuery(Name = "colours")] string colours,
+            [FromQuery(Name = "colourGroups")] string colourGroups,
             [FromQuery(Name = "p")] int pageNumber,
             [FromQuery(Name = "search")] string search,
             [FromQuery(Name = "sort")] string sort)
         {
 
-            Dictionary<int, List<ShopToyDTO>> dict = await _solrToyService.GetToysForSinglePage(categories, subCategory, brand, priceGroup, ageGroupIntervals, colours, pageNumber, search, sort);
+            Dictionary<int, List<ShopToyDTO>> dict = await _solrToyService.GetToysForSinglePage(categories, subCategory, brand, priceGroup, ageGroupIntervals, colourGroups, pageNumber, search, sort);
 
             int numFound = dict.ElementAt(0).Key;
             List<ShopToyDTO> shopToyDTOs = dict.ElementAt(0).Value;
@@ -88,7 +88,7 @@ namespace CrazyToys.Web.Controllers
             HashSet<string> wishlistToys = sessionUser.Wishlist;
 
             List<PriceGroup> priceGroups = await _priceGroupDbService.GetAll();
-            List<ColourGroup> colourGroups = await _colourGroupDbService.GetAll();
+            List<ColourGroup> colourGroupList = await _colourGroupDbService.GetAll();
             List<AgeGroup> ageGroupList = await _ageGroupDbService.GetAll();
             List<Category> categoryList = await _categoryDbService.GetAllWithRelations();
 
@@ -98,9 +98,9 @@ namespace CrazyToys.Web.Controllers
             ViewData["PriceGroups"] = priceGroups.OrderBy(p => p.Interval).ToList();
             ViewData["CategoryList"] = categoryList.OrderBy(c => c.Name).ToList();
             ViewData["Brands"] = brandDict;
-            ViewData["ColourGroups"] = colourGroups.OrderBy(c => c.Name).ToList();
+            ViewData["ColourGroups"] = colourGroupList.OrderBy(c => c.Name).ToList();
             ViewData["ShopToyDTOs"] = shopToyDTOs;
-            ViewData["ParamsDict"] = CreateDictFromParams(categories, subCategory, brand, priceGroup, ageGroupIntervals, colours, search);
+            ViewData["ParamsDict"] = CreateDictFromParams(categories, subCategory, brand, priceGroup, ageGroupIntervals, colourGroups, search);
             ViewData["PageNumber"] = pageNumber == 0 ? 1 : pageNumber;
             ViewData["WishlistToys"] = wishlistToys;
 
