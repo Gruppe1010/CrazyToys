@@ -91,7 +91,6 @@
 
                                       if(toyDTO.Stock == 0)
                                       {
-                                          Console.WriteLine("for meget: når 0: " + toyDTO.Quantity);
                                           unavailableToys.Add(toyDTO, toyDTO.Quantity);
                                       }
                                       else if(toyDTO.Stock >= toyDTO.Quantity)
@@ -104,8 +103,7 @@
                                           subtotal += toyDTO.Price * toyDTO.Stock;
                                           RenderAvailableToy(toyDTO, toyDTO.Stock);
 
-                                            Console.WriteLine("for meget: 3rd: " + (toyDTO.Quantity - toyDTO.Stock));
-                                            unavailableToys.Add(toyDTO, toyDTO.Quantity - toyDTO.Stock);
+                                          unavailableToys.Add(toyDTO, toyDTO.Quantity - toyDTO.Stock);
                                       }
                                   }
                                 </tbody>
@@ -125,7 +123,6 @@
 
                     if (unavailableToys.Count > 0)
                     {
-                        Console.WriteLine("Couunt " + unavailableToys.Count);
                         <div id="unavailableToyTable" class="shopping__cart__table">
                             <table>
                                <thead>
@@ -137,8 +134,6 @@
                                      {
                                         @foreach(var entry in unavailableToys)
                                         {
-
-                                            Console.WriteLine("Value" + entry.Value);
                                             RenderUnavailableToy(entry.Key, entry.Value);
                                         }
                                     }
@@ -158,33 +153,8 @@
                         </div>
                     }
                 }
-                
-                <!--
-                <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-6">
-                <div class="continue__btn">
-                <a href="#">Continue Shopping</a>
-                </div>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-6">
-                <div class="continue__btn update__btn">
-                <a href="./shopping-cart"><i class="fa fa-spinner"></i> Update cart</a>
-                </div>
-                </div>
-                </div>
-                -->
             </div>
             <div class="col-lg-4">
-                <!--
-                <div class="cart__discount">
-                <h6>Rabatkode</h6>
-                <form action="#">
-                <input type="text" placeholder="Rabatkode">
-                <button type="submit">Indløs</button>
-                </form>
-                </div>
-                -->
-              
                 <div class="cart__total">
                     <h6>Pris i alt</h6>
                     <ul>
