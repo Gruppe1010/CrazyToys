@@ -30,12 +30,13 @@
                                     <div class="product__item__pic set-bg" data-setbg="@(wishlistToys[j].Image ?? wishlistToys[j].Name)">
                                         <a class="item-link" href="/shop-details?id=@wishlistToys[j].ID"></a>
                                         <ul class="product__hover">
-                                            <li><button class="wishlist-btn" onclick='removeFromWishlist("@wishlistToys[j].ID")'><img class="hover-icon" src="img/icon/close.png" alt=""></button></li>
+                                            <li><button class="shop-hover-btn" onclick='removeFromWishlist("@wishlistToys[j].ID")'><img class="hover-icon" src="img/icon/close.png" alt=""></button></li>
+                                            <li><button id="cart-btn-@wishlistToys[j].ID" class="shop-hover-btn" onclick='addToCart("@wishlistToys[j].ID")'><img id="cart-icon-@wishlistToys[j].ID" class="hover-icon" src="img/icon/cart.png" alt=""></button></li>
+
                                         </ul>
                                     </div>
-                                    <div class="product__item__text">
+                                    <div class="product__item__text remove-opacity">
                                         <h6>@wishlistToys[j].Name</h6>
-                                        <a href="javascript:void(0);" onclick='addToCart("@wishlistToys[j].ID")' class="add-cart">+ Tilføj Til Kurv</a>
                                         <h5>@wishlistToys[j].Price DKK</h5>
                                     </div>
                                 </div>
