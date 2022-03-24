@@ -51,6 +51,12 @@ function updateCartNumber() {
             document.getElementById('cartQuantity').innerText = Object.entries(data.Cart).reduce((result, item) => {
                 return result + item[1];
             }, 0);
+            /*
+            var quantity = Object.entries(data.Cart).reduce((result, item) => {
+                return result + item[1];
+            }, 0);
+            document.title = "Crazy Toys (" + quantity + ")";
+            */
         })
         .catch(error => console.log);
 }
