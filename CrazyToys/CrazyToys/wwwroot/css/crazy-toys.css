@@ -36,7 +36,7 @@
     width: 90px;
 }
 
-.headline{
+.headline {
     height: 88%;
 }
 
@@ -136,21 +136,22 @@
     cursor: pointer;
 }
 
-.colour-group-filter:after {
-    position: absolute;
-    left: -3px;
-    top: -3px;
-    height: 36px;
-    width: 36px;
-    border: 1px solid #e5e5e5;
-    content: "";
-    border-radius: 50%;
-}
+    .colour-group-filter:after {
+        position: absolute;
+        left: -3px;
+        top: -3px;
+        height: 36px;
+        width: 36px;
+        border: 1px solid #e5e5e5;
+        content: "";
+        border-radius: 50%;
+    }
 
-.colour-group-filter input {
-    position: absolute;
-    visibility: hidden;
-}
+    .colour-group-filter input {
+        position: absolute;
+        visibility: hidden;
+    }
+
 .colour-group-filter-active:after {
     position: absolute;
     left: -3px;
