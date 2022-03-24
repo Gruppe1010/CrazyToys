@@ -9,7 +9,7 @@ if (toyTableBody != null && toyTableBody.childElementCount === 0) {
 
 
 // TODO test ordentligt
-function incQuantity(id, price) { // shoppingCartToyDTO) {
+function incQuantity(id) { // shoppingCartToyDTO) {
 
     var amountElement = document.getElementById(`chosenAmount-${id}`);
     var oldValue = parseFloat(amountElement.value);
@@ -69,7 +69,7 @@ function incQuantity(id, price) { // shoppingCartToyDTO) {
 }
 
 // TODO få den til at rette i sessionUser når man trykker dec
-function decQuantity(id, quantity, stock, price) { //
+function decQuantity(id) { //
 
     var amountElement = document.getElementById(`chosenAmount-${id}`);
     var oldValue = parseFloat(amountElement.value);
@@ -77,36 +77,50 @@ function decQuantity(id, quantity, stock, price) { //
 
     if (oldValue > 1) {
 
-        const selectedToy = { ToyID: id, Quantity: quantity - 1, Stock: 0  };
+        const selectedToy = {
+            ToyID: id,
+            Quantity: oldValue - 1
+        };
 
         // fjern én fra quantity på sessionsUser
-        fetch(`https://localhost:44325/api/sessionuser/AddToCart`, {
+        fetch(`https://localhost:44325/api/sessionuser/IncOrDecToyFromCart`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json; charset=UTF-8' // denne linje siger at dataen som vi sender er en string 
             },
             body: JSON.stringify(selectedToy)
-        }).then(response => {
+        }).then(async response => {
             if (response.ok) {
                 // hvis toyet blev decrementet successfuldt på sessionUsers cart, så vis det ude på siden
-                newValue--;
+                const shoppingCartToyDTO = await response.json();
+
+                newValue = shoppingCartToyDTO.quantity;
                 amountElement.value = newValue;
-                updateTotal(id, price * newValue);
-                updateCartTotal(newValue < oldValue ? -price : 0);
+                updateTotal(id, shoppingCartToyDTO.price * newValue);
+                updateCartTotal(newValue < oldValue ? shoppingCartToyDTO.price : 0);
                 updateCartNumber();
 
-                // hvis den også er på ikke-tilgængelig listen og den nye værdie er indenfor available stock
-                // TODO overvej at lave et kald ned for at få stock - fordi denne stock hentes kun når vi går ind i kurven og så opdateres den ikke derfra - og det er ikke superrr godt
-                const unavailbaleToyDataRow = document.getElementById(`unavailableToyDataRow-${id}`);
-
-
-                if (unavailbaleToyDataRow != null && newValue <= stock) {
-                    deleteUnavailableToyRowFromView(id);
-                }
-
-
+                // fjern unavailable fra view
+                deleteUnavailableToyRowFromView(id);
             } else {
-                throw new Error("Error in incrementing toy in cart");
+                const shoppingCartToyDTO = await response.json();
+
+                if (shoppingCartToyDTO.hasOwnProperty('id')) {
+
+                    const stock = shoppingCartToyDTO.quantity;
+                    if (stock > 0) {
+                        alert(`Der er kun ${shoppingCartToyDTO.quantity} stk. tilbage af ${shoppingCartToyDTO.name}`);
+
+                    } else {
+                        alert(`${shoppingCartToyDTO.name} er desværre udsolgt`);
+                    }
+
+                    window.location.replace("/shopping-cart");
+
+                }
+                else {
+                    throw new Error("Error in decrementing toy in cart")
+                }
             }
         }).catch(error => console.log);
     }
@@ -142,7 +156,6 @@ function updateCartTotal(priceChange) {
 }
 
 function removeUnavailbleToyFromCart(id, quantityToRemove) {
-    debugger;
     const selectedToy = { ToyID: id, Quantity: -quantityToRemove };
 
 
@@ -167,8 +180,8 @@ function removeUnavailbleToyFromCart(id, quantityToRemove) {
 }
 
 
-function removeToyFromCart(id, stock, price) { //
-
+function removeToyFromCart(id, price) { //
+    debugger;
     // fjern én fra quantity på sessionsUser
     fetch(`https://localhost:44325/api/sessionuser/RemoveToyFromSessionUser?id=${id}`, {
         method: 'DELETE'

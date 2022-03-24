@@ -31,14 +31,14 @@
             <td class="quantity__item">
                 <div class="quantity">
                     <div class="pro-qty-2">
-                        <span class="fa fa-angle-left dec qtybtn mouse-hover" onclick='decQuantity("@toyDTO.ID", @toyDTO.Quantity, @toyDTO.Stock, @toyDTO.Price)'></span>
+                        <span class="fa fa-angle-left dec qtybtn mouse-hover" onclick='decQuantity("@toyDTO.ID")'></span>
                         <input id="chosenAmount-@toyDTO.ID" type="text" value="@quantity">
-                        <span class="fa fa-angle-right inc qtybtn mouse-hover" onclick='incQuantity("@toyDTO.ID", @toyDTO.Price)'></span>
+                        <span class="fa fa-angle-right inc qtybtn mouse-hover" onclick='incQuantity("@toyDTO.ID")'></span>
                     </div>
                 </div>
             </td>
             <td id="total-@toyDTO.ID" class="cart__price">@(toyDTO.Price * quantity) DKK</td>
-            <td class="cart__close" onclick='removeToyFromCart("@toyDTO.ID", @toyDTO.Stock, @toyDTO.Price)'><i class="fa fa-close mouse-hover"></i></td>
+            <td class="cart__close" onclick='removeToyFromCart("@toyDTO.ID", @toyDTO.Price)'><i class="fa fa-close mouse-hover"></i></td>
         </tr>
     }
 
