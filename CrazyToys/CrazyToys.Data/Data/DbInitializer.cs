@@ -86,7 +86,7 @@ namespace CrazyToys.Data.Data
                     new ColourGroup("Rød",  new string[] {"rød"}, "#ec1c24"),
                     new ColourGroup("Lyserød", new string[] {"lyserød", "pink"}, "#ffaec8"),
                     new ColourGroup("Blå", new string[] {"blå", "aqua"}, "#00a8f3"),
-                    new ColourGroup("Multifarvet", new string[] {"mange", "fler", "forskellig", "multi"}, "linear-gradient(90deg, #fff810  33%, rgba(0,0,0,0) 33%), linear-gradient(90deg, #63e89e 66%, #ff7ee3 66%);"),
+                    new ColourGroup("Flerfarvet", new string[] {"flere", "mange", "fler", "forskellig", "multi"}, "linear-gradient(90deg, #fff810  33%, rgba(0,0,0,0) 33%), linear-gradient(90deg, #63e89e 66%, #ff7ee3 66%);"),
                     new ColourGroup("Sort",  new string[] {"sort"}, "black"),
                     new ColourGroup("Hvid",  new string[] {"hvid", "gennemsigtig", "klar"}, "white"), 
                     new ColourGroup("Grå",  new string[] {"grå"}, "#c3c3c3"),
