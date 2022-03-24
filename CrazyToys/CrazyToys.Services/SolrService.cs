@@ -46,7 +46,9 @@ namespace CrazyToys.Services
                 return false;
             }
         }
-        
+
+       
+
         public void DeleteAll()
         {
             _solr.Delete(new SolrHasValueQuery("id"));
@@ -197,6 +199,11 @@ namespace CrazyToys.Services
             }
             return dict;
         }
-     
+
+        public void Delete(T document)
+        {
+            _solr.Delete(document);
+            _solr.Commit();
+        }
     }
 }

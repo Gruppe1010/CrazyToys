@@ -106,6 +106,9 @@ namespace CrazyToys.Web
             // Solr
             services.AddSolrNet<SolrToy>("http://localhost:8983/solr/toys");
             services.AddScoped<ISearchService<SolrToy>, SolrService<SolrToy, ISolrOperations<SolrToy>>>();
+
+            // Breadcrumbs
+            services.AddTransient<BreadcrumbService>();
         }
 
         /// <summary>

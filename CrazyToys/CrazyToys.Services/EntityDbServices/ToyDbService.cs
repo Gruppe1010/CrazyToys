@@ -61,6 +61,7 @@ namespace CrazyToys.Services.EntityDbServices
                 .Include(t => t.Images) 
                 .Include(t => t.Brand)
                 .Include(t => t.SubCategory)
+                .Include(t => t.PriceGroup)
                 .FirstOrDefaultAsync(t => t.ID.Equals(id));
 
             return toy;

@@ -487,6 +487,12 @@ namespace CrazyToys.Services
             SubCategory subCategory = await _subCategoryDbService.GetById(id);
             if (subCategory == null) // hvis nej
             {
+                // fjerner & i subcats navn
+                if (name.Contains("&"))
+                {
+                    name = name.Replace("&", "og");
+                }
+
                 //opretter nyt obj
                 subCategory = new SubCategory(id, name);
 

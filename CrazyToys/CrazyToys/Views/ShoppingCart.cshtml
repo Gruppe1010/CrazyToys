@@ -4,21 +4,21 @@
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ShoppingCart>
 @{
     Layout = "Master.cshtml";
-    List<ShoppingCartToyDTO> shoppingCartToyDTOs = ViewData["ShoppingCartToytDTOs"] as  List<ShoppingCartToyDTO>;
+    List<ShoppingCartToyDTO> shoppingCartToyDTOs = ViewData["ShoppingCartToytDTOs"] as List<ShoppingCartToyDTO>;
 
     // dette bliver regnet ud længere nede
     double subtotal = 0.0;
     double deliveryPrice = 39;
     double total = 0;
 
-    Dictionary<ShoppingCartToyDTO, int> unavailableToys = new  Dictionary<ShoppingCartToyDTO, int>();
+    Dictionary<ShoppingCartToyDTO, int> unavailableToys = new Dictionary<ShoppingCartToyDTO, int>();
 }
 
-@functions{
+@functions {
 
     void RenderAvailableToy(ShoppingCartToyDTO toyDTO, int quantity)
     {
-          <tr id="toyDataRow-@toyDTO.ID">
+        <tr id="toyDataRow-@toyDTO.ID">
             <td class="product__cart__item">
                 <div class="product__cart__item__pic mouse-hover" onclick='redirect("/shop-details?id=@toyDTO.ID")'>
                     <img class="cart-image-size" src="@toyDTO.Image" alt="@toyDTO.Name">
@@ -31,23 +31,22 @@
             <td class="quantity__item">
                 <div class="quantity">
                     <div class="pro-qty-2">
-                        <span class="fa fa-angle-left dec qtybtn mouse-hover" onclick='decQuantity("@toyDTO.ID", @toyDTO.Stock, @toyDTO.Price)'></span>
+                        <span class="fa fa-angle-left dec qtybtn mouse-hover" onclick='decQuantity("@toyDTO.ID")'></span>
                         <input id="chosenAmount-@toyDTO.ID" type="text" value="@quantity">
-                        <span class="fa fa-angle-right inc qtybtn mouse-hover" onclick='incQuantity("@toyDTO.ID", @toyDTO.Stock, @toyDTO.Price)'></span>
+                        <span class="fa fa-angle-right inc qtybtn mouse-hover" onclick='incQuantity("@toyDTO.ID")'></span>
                     </div>
                 </div>
             </td>
             <td id="total-@toyDTO.ID" class="cart__price">@(toyDTO.Price * quantity) DKK</td>
-            <td class="cart__close" onclick='removeToyFromCart("@toyDTO.ID", @toyDTO.Stock, @toyDTO.Price)'><i class="fa fa-close mouse-hover"></i></td>
+            <td class="cart__close" onclick='removeToyFromCart("@toyDTO.ID", @toyDTO.Price)'><i class="fa fa-close mouse-hover"></i></td>
         </tr>
     }
 
-            /* TODO lav anden onclick som ikke opdaterer cart total (men stadig alt det andet!!)*/
+    /* TODO lav anden onclick som ikke opdaterer cart total (men stadig alt det andet!!)*/
 
     void RenderUnavailableToy(ShoppingCartToyDTO toyDTO, int unavailableAmount)
     {
-        // TODO lav denne
-          <tr id="unavailableToyDataRow-@toyDTO.ID">
+        <tr id="unavailableToyDataRow-@toyDTO.ID">
             <td class="product__cart__item grey-out">
                 <div class="product__cart__item__pic">
                     <img class="cart-image-size grey-out" src="@toyDTO.Image" alt="@toyDTO.Name">
@@ -56,35 +55,25 @@
                     <h6 class="text-capitalize">@toyDTO.Name</h6>
                     <h5>@toyDTO.Price DKK</h5>
                 </div>
-                    <!-- dette giver bare ekstra space så slet-knappen sidder ligesom på dem der er available-->
-                    <td class="quantity__item"></td>
-                    <td class="cart__price"></td>
+            </td>
+                <!-- dette giver bare ekstra space så slet-knappen sidder ligesom på dem der er available-->
+            <td class="quantity__item">
+                <div class="quantity">
+                    <div class="pro-qty-2">
+                        <span class="fa fa-angle-left dec qtybtn hidden"></span>
+                        <input id="unavailableChosenAmount-@toyDTO.ID" type="text" value="@unavailableAmount">
+                        <span class="fa fa-angle-right inc qtybtn hidden"></span>
+                    </div>
+                </div>
+            </td>
 
-            <td class="cart__close" onclick='removeUnavailbleToyFromCart("@toyDTO.ID", @(toyDTO.Quantity - unavailableAmount))'><i class="fa fa-close mouse-hover"></i></td>
+
+            <td class="cart__price"></td>
+            <td class="cart__close" onclick='removeUnavailbleToyFromCart("@toyDTO.ID", @unavailableAmount)'><i class="fa fa-close mouse-hover"></i></td>
         </tr>
     }
 
 }
-
-
-<!-- Breadcrumb Section Begin -->
-<section class="breadcrumb-option">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="breadcrumb__text">
-                    <h4>Indkøbskurv</h4>
-                    <div class="breadcrumb__links">
-                        <a href="/">Forside</a>
-                        <a href="/shop">Butik</a>
-                        <span>Indkøbskurv</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- Breadcrumb Section End -->
 
 <!-- Shopping Cart Section Begin -->
 <section class="shopping-cart spad">
@@ -96,40 +85,38 @@
                     {
                         <div id="toyTable" class="shopping__cart__table">
                             <table>
-                               <thead id="tHead">
+                                <thead id="tHead">
                                     <h3>Dine varer</h3>
-                                    <br/>
+                                    <br />
                                     <tr>
                                         <th>Produkt</th>
                                         <th>Antal</th>
                                         <th>Total</th>
                                         <th></th>
                                     </tr>
-                               </thead>
+                                </thead>
                                 <tbody id="toyTableBody">
-                                @foreach(ShoppingCartToyDTO toyDTO in shoppingCartToyDTOs){
 
-                                    /* TODO til test!!
-                                    toyDTO.Stock = 2;
-                                    toyDTO.Quantity = 3;
-                                    */
+                                    @foreach (ShoppingCartToyDTO toyDTO in shoppingCartToyDTOs)
+                                    {
 
-                                    if(toyDTO.Stock == 0)
-                                    {
-                                        unavailableToys.Add(toyDTO, toyDTO.Quantity);
+                                        if (toyDTO.Stock == 0)
+                                        {
+                                            unavailableToys.Add(toyDTO, toyDTO.Quantity);
+                                        }
+                                        else if (toyDTO.Stock >= toyDTO.Quantity)
+                                        {
+                                            subtotal += toyDTO.Price * toyDTO.Quantity;
+                                            RenderAvailableToy(toyDTO, toyDTO.Quantity);
+                                        }
+                                        else // Stock > 0 && Quantity > Stock
+                                        {
+                                            subtotal += toyDTO.Price * toyDTO.Stock;
+                                            RenderAvailableToy(toyDTO, toyDTO.Stock);
+
+                                            unavailableToys.Add(toyDTO, toyDTO.Quantity - toyDTO.Stock);
+                                        }
                                     }
-                                    else if(toyDTO.Stock >= toyDTO.Quantity)
-                                    {
-                                        subtotal += toyDTO.Price * toyDTO.Quantity;
-                                        RenderAvailableToy(toyDTO, toyDTO.Quantity);
-                                    }
-                                    else // Stock > 0 && Quantity > Stock
-                                    {
-                                        subtotal += toyDTO.Price * toyDTO.Stock;
-                                        RenderAvailableToy(toyDTO, toyDTO.Stock);
-                                        unavailableToys.Add(toyDTO, toyDTO.Quantity - toyDTO.Stock);
-                                    }
-                                }
                                 </tbody>
                             </table>
                         </div>
@@ -138,75 +125,62 @@
                     {
                         <h2 class="headline">Der er intet i indkøbskurven endnu</h2>
                     }
-                    
-                    if(subtotal > 499.0)
+
+                    if (subtotal > 499.0)
                     {
                         deliveryPrice = 0.0;
                     }
                     total = subtotal + deliveryPrice;
 
-                    @if (unavailableToys.Count > 0)
+                    if (unavailableToys.Count > 0)
                     {
                         <div id="unavailableToyTable" class="shopping__cart__table">
                             <table>
-                               <thead>
+                                <thead>
                                     <h3>Ikke tilgængelig</h3>
-                               </thead>
+                                </thead>
                                 <tbody id="unavailableToyTableBody">
-                                   @if(unavailableToys.Count > 0)
-                                   {
-                                        @foreach(var entry in unavailableToys)
+
+                                    @if (unavailableToys.Count > 0)
+                                    {
+                                        @foreach (var entry in unavailableToys)
                                         {
                                             RenderUnavailableToy(entry.Key, entry.Value);
                                         }
-                                   }
-
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div id="unavailableToyTable" class="shopping__cart__table hidden">
+                            <table>
+                                <thead>
+                                    <h3>Ikke tilgængelig</h3>
+                                </thead>
+                                <tbody id="unavailableToyTableBody">
                                 </tbody>
                             </table>
                         </div>
                     }
                 }
-                
-                <!--
-                <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-6">
-                <div class="continue__btn">
-                <a href="#">Continue Shopping</a>
-                </div>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-6">
-                <div class="continue__btn update__btn">
-                <a href="./shopping-cart"><i class="fa fa-spinner"></i> Update cart</a>
-                </div>
-                </div>
-                </div>
-                -->
             </div>
             <div class="col-lg-4">
-                <!--
-                <div class="cart__discount">
-                <h6>Rabatkode</h6>
-                <form action="#">
-                <input type="text" placeholder="Rabatkode">
-                <button type="submit">Indløs</button>
-                </form>
-                </div>
-                -->
-              
                 <div class="cart__total">
                     <h6>Pris i alt</h6>
                     <ul>
                         <li>Subtotal <span id="subtotal" class="font-weight-normal black">@subtotal DKK</span></li>
                         <li class="font-italic">Levering <span id="deliveryPrice" class="font-weight-normal black">@(deliveryPrice < 1 ? "Gratis levering" : deliveryPrice + " DKK")</span></li>
-                            <li class="free">
+                        <li class="free">
                             @{
                                 var priceToFreeShipping = 499 - subtotal;
                                 var text = priceToFreeShipping > 0
-                                    ? @priceToFreeShipping + " DKK til gratis fragt"
-                                    : "";
+                                ? @priceToFreeShipping + " DKK til gratis fragt"
+                                : "";
                                 <p id="priceToFreeShipping" class="text-center small">@text</p>
                             }
-                            </li>
+                        </li>
                         <hr>
                         <li class="font-weight-bold">Pris i alt (inkl. moms) <span id="total" class="black">@total DKK</span></li>
                     </ul>

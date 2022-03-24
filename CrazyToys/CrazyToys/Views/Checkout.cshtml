@@ -1,40 +1,76 @@
-﻿@using CrazyToys.Web.Controllers
+﻿@using CrazyToys.Entities.DTOs
+@using CrazyToys.Web.Controllers
 @using Umbraco.Cms.Web.Common.PublishedModels;
 @using CrazyToys.Web.Models;
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Checkout>
 @{
     Layout = "Master.cshtml";
-   
-}
+    List<ShoppingCartToyDTO> shoppingCartToyDTOs = ViewData["ShoppingCartToytDTOs"] as List<ShoppingCartToyDTO>;
 
-<!-- Breadcrumb Section Begin -->
-<section class="breadcrumb-option">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="breadcrumb__text">
-                    <h4>Check Out</h4>
-                    <div class="breadcrumb__links">
-                        <a href="./index.html">Home</a>
-                        <a href="./shop.html">Shop</a>
-                        <span>Check Out</span>
-                      
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- Breadcrumb Section End -->
+    double subtotal = 0.0;
+    double deliveryPrice = 39;
+    foreach (ShoppingCartToyDTO shoppingCartToyDTO in shoppingCartToyDTOs)
+    {
+        subtotal = subtotal + shoppingCartToyDTO.Price * shoppingCartToyDTO.Quantity;
+    }
+    if(subtotal > 499.0)
+    {
+        deliveryPrice = 0.0;
+    }
+
+    double total = subtotal + deliveryPrice;
+
+}
 
 <!-- Checkout Section Begin -->
 <section class="checkout spad">
     <div class="container">
         <div class="checkout__form">
-            @{
-                Html.RenderPartial("~/Views/Partials/CheckoutUserForm.cshtml", new CheckoutUserModel());
-            }
-  
+            <div class="row">
+                <div class="col-lg-8 col-md-6">
+
+                @{
+                    Html.RenderPartial("~/Views/Partials/CheckoutUserForm.cshtml", new CheckoutUserModel());
+                }
+                </div>
+                <div class="col-lg-4 col-md-6">
+
+                    <div class="checkout__order">
+                        <h4 class="order__title">DIN ORDRE</h4>
+                        <div class="checkout__order__products font-weight-bold">Produkt <span>Pris</span></div>
+                        <ul class="checkout__total__products">
+                            @{
+                                foreach (ShoppingCartToyDTO shoppingCartToyDTO in shoppingCartToyDTOs)
+                                {
+                                    <li>@shoppingCartToyDTO.Name <span>@shoppingCartToyDTO.CalculateTotalPrice() DKK</span></li>
+                                }
+                            }
+                        </ul>
+                        <ul class="checkout__total__all">
+                            <li>Subtotal <span id="subtotal" class="font-weight-normal black">@subtotal DKK</span></li>
+                            <li class="font-italic">Levering <span id="deliveryPrice" class="font-weight-normal black">@(deliveryPrice < 1 ? "Gratis levering" : deliveryPrice + " DKK")</span></li>
+                            <li class="font-weight-bold">Pris i alt (inkl. moms) <span id="total" class="black">@total DKK</span></li>
+                        </ul>
+                        <!--
+                        <div class="checkout__input__checkbox">
+                            <label for="payment">
+                                Check Payment
+                                <input type="checkbox" id="payment">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <div class="checkout__input__checkbox">
+                            <label for="paypal">
+                                Paypal
+                                <input type="checkbox" id="paypal">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        -->
+                       
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>

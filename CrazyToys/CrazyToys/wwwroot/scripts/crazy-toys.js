@@ -3,6 +3,7 @@
 }
 
 function addToCart(toyId) {
+    debugger;
     const chosenAmount = document.getElementById('chosenAmount');
     let quantity = 1;
 
@@ -13,8 +14,9 @@ function addToCart(toyId) {
 
     const selectedToy = {
         toyId: toyId,
-        quantity: quantity
-    }
+        quantityToAdd: quantity 
+       // l: 0 //TODO noget er ænndret
+    };
 
     fetch(`https://localhost:44325/api/sessionuser/AddToCart`, {
         method: 'POST',
@@ -28,6 +30,7 @@ function addToCart(toyId) {
             updateCartNumber(quantity);
             // TODO lav noget flot javascript
         } else {
+            debugger;
             alert("Du kan ikke lægge så meget i kurven");
         }
     });

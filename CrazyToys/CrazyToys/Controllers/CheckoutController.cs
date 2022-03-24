@@ -1,40 +1,60 @@
-﻿using CrazyToys.Web.Models;
+﻿
+using CrazyToys.Entities.DTOs;
+using CrazyToys.Entities.Entities;
+using CrazyToys.Interfaces;
+using CrazyToys.Services.EntityDbServices;
 using Microsoft.AspNetCore.Mvc;
-using Umbraco.Cms.Core.Cache;
-using Umbraco.Cms.Core.Logging;
-using Umbraco.Cms.Core.Routing;
-using Umbraco.Cms.Core.Services;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
+using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Umbraco.Cms.Core.Web;
-using Umbraco.Cms.Infrastructure.Persistence;
-using Umbraco.Cms.Web.Common.Filters;
-using Umbraco.Cms.Web.Website.Controllers;
+using Umbraco.Cms.Web.Common.Controllers;
 
 namespace CrazyToys.Web.Controllers
 {
-    public class CheckoutController : SurfaceController
-
+    public class CheckoutController : RenderController
     {
-        public CheckoutController(IUmbracoContextAccessor umbracoContextAccessor, IUmbracoDatabaseFactory databaseFactory, 
-            ServiceContext services, AppCaches appCaches, IProfilingLogger profilingLogger, IPublishedUrlProvider publishedUrlProvider) 
-            : base(umbracoContextAccessor, databaseFactory, services, appCaches, profilingLogger, publishedUrlProvider)
+
+        private readonly ISessionService _sessionService;
+        private readonly ToyDbService _toyDbService;
+
+
+
+        public CheckoutController(ILogger<RenderController> logger, ICompositeViewEngine compositeViewEngine, IUmbracoContextAccessor umbracoContextAccessor,
+            ISessionService sessionService, ToyDbService toyDbService)
+            : base(logger, compositeViewEngine, umbracoContextAccessor)
         {
+            _sessionService = sessionService;
+            _toyDbService = toyDbService;
+
         }
 
-
-        [HttpPost]
-        public IActionResult Submit(CheckoutUserModel model)
+        [HttpGet]
+        //[FromQuery bruges til at tage imod query parameter fra url]
+        public async Task<IActionResult> Index()
         {
-            if (!ModelState.IsValid)
+            var sessionsUser = _sessionService.GetNewOrExistingSessionUser(HttpContext);
+
+            List<ShoppingCartToyDTO> shoppingCartToytDTOs = new List<ShoppingCartToyDTO>();
+
+            foreach (var entry in sessionsUser.Cart)
             {
-                return CurrentUmbracoPage();
+                Toy toy = await _toyDbService.GetById(entry.Key);
+                shoppingCartToytDTOs.Add(toy.ConvertToShoppingCartToyDTO(entry.Value));
             }
 
-            // Work with form data here
-            //TODO Lav en Order entity Og få hangfire til at kalde en metode der sender email til kunde med en ordre bekfræftelse
-            
-            var noget = model.Firstname;
+            ViewBag.Current = "Tjek Ud";
+            ViewData["ShoppingCartToytDTOs"] = shoppingCartToytDTOs;
 
-            return Redirect("https://localhost:44325/order-confirmation");
+
+            return CurrentTemplate(CurrentPage);
         }
     }
 }
+
+
+
+
+
+   

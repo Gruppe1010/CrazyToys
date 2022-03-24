@@ -1,50 +1,76 @@
 ﻿const toyTableBody = document.getElementById('toyTableBody');
 
 if (toyTableBody != null && toyTableBody.childElementCount === 0) {
-    const tHead = document.getElementById('tHead');
-
-    tHead.parentElement.removeChild(tHead);
+    const toyTable = document.getElementById('toyTable');
+    
+    toyTable.parentElement.removeChild(toyTable);
 }
 
 
 
 // TODO test ordentligt
-function incQuantity(id, stock, price) { // shoppingCartToyDTO) {
+function incQuantity(id) { // shoppingCartToyDTO) {
 
     var amountElement = document.getElementById(`chosenAmount-${id}`);
     var oldValue = parseFloat(amountElement.value);
     var newValue = oldValue;
 
-    if (oldValue < stock) {
+    const selectedToy = {
+        ToyId: id,
+        QuantityToAdd: 1,
+        OldAvailableQuantity: oldValue
+    };
+    
 
-        const selectedToy = { ToyID: id, Quantity: 1 };
-
-        fetch("https://localhost:44325/api/sessionuser/AddToCart", {
+    fetch("https://localhost:44325/api/sessionuser/IncOrDecToyFromCart", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json; charset=UTF-8' // denne linje siger at dataen som vi sender er en string 
             },
-            body: JSON.stringify(selectedToy)
-        }).then(response => {
-            if (response.ok) {
-                // hvis toyet blev incrementet successfuldt på sessionUsers cart, så vis det ude på siden
-                newValue++;
-                amountElement.value = newValue;
-                updateTotal(id, price * newValue);
-                updateCartTotal(newValue > oldValue ? price : 0);
-                updateCartNumber();
-            } else {
-                throw new Error("Error in incrementing toy in cart");
-            }
-        }).catch(error => console.log);
+        body: JSON.stringify(selectedToy)
+    })
+        .then(async response => {
 
-    } else {
-        alert(`Der er kun ${oldValue} stk. tilbage af denne vare`);
-    }
+        if (response.ok) {
+            // hvis toyet blev incrementet successfuldt på sessionUsers cart, så vis det ude på siden
+            const shoppingCartToyDTO = await response.json();
+
+            newValue = shoppingCartToyDTO.quantity;
+            amountElement.value = newValue;
+            updateTotal(id, shoppingCartToyDTO.price * newValue);
+            updateCartTotal(newValue > oldValue ? shoppingCartToyDTO.price : 0);
+            updateCartNumber();
+
+            // fjern unavailable fra view
+            deleteUnavailableToyRowFromView(id);
+        } else {
+            const shoppingCartToyDTO = await response.json();
+
+            if (shoppingCartToyDTO.hasOwnProperty('id')) {
+
+                const stock = shoppingCartToyDTO.quantity;
+                if (stock > 0) {
+                    alert(`Der er kun ${shoppingCartToyDTO.quantity} stk. tilbage af ${shoppingCartToyDTO.name}`);
+
+                } else {
+                    alert(`${shoppingCartToyDTO.name} er desværre udsolgt`);
+                }
+
+                window.location.replace("/shopping-cart");
+
+            }
+            else {
+                throw new Error("Error in incrementing toy in cart")
+            }
+        }
+
+    })
+    .catch(error => console.log);
+
 }
 
 // TODO få den til at rette i sessionUser når man trykker dec
-function decQuantity(id, stock, price) { //
+function decQuantity(id) { //
 
     var amountElement = document.getElementById(`chosenAmount-${id}`);
     var oldValue = parseFloat(amountElement.value);
@@ -52,34 +78,53 @@ function decQuantity(id, stock, price) { //
 
     if (oldValue > 1) {
 
-        const selectedToy = { ToyID: id, Quantity: -1 };
+        const selectedToy = {
+            ToyID: id,
+            QuantityToAdd: - 1,
+            OldAvailableQuantity: oldValue
+        };
 
         // fjern én fra quantity på sessionsUser
-        fetch(`https://localhost:44325/api/sessionuser/AddToCart`, {
+        fetch(`https://localhost:44325/api/sessionuser/IncOrDecToyFromCart`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json; charset=UTF-8' // denne linje siger at dataen som vi sender er en string 
             },
             body: JSON.stringify(selectedToy)
-        }).then(response => {
+        }).then(async response => {
             if (response.ok) {
                 // hvis toyet blev decrementet successfuldt på sessionUsers cart, så vis det ude på siden
-                newValue--;
+                const shoppingCartToyDTO = await response.json();
+
+                newValue = shoppingCartToyDTO.quantity;
                 amountElement.value = newValue;
-                updateTotal(id, price * newValue);
-                updateCartTotal(newValue < oldValue ? -price : 0);
+                updateTotal(id, shoppingCartToyDTO.price * newValue);
+                updateCartTotal(newValue < oldValue ? shoppingCartToyDTO.price : 0);
                 updateCartNumber();
 
-                // hvis den også er på ikke-tilgængelig listen og den nye værdie er indenfor available stock
-                // TODO overvej at lave et kald ned for at få stock - fordi denne stock hentes kun når vi går ind i kurven og så opdateres den ikke derfra - og det er ikke superrr godt
-                const unavailbaleToyDataRow = document.getElementById(`unavailableToyDataRow-${id}`);
-                if (unavailbaleToyDataRow != null && newValue <= stock) {
-                    deleteUnavailableToyRowFromView(id);
-                }
-
-
+                // fjern unavailable fra view
+                deleteUnavailableToyRowFromView(id);
             } else {
-                throw new Error("Error in incrementing toy in cart");
+                const shoppingCartToyDTO = await response.json();
+
+                if (shoppingCartToyDTO.hasOwnProperty('id')) {
+
+                    const stock = shoppingCartToyDTO.quantity;
+                    if (stock > 0) {
+                        alert(`Der er kun ${shoppingCartToyDTO.quantity} stk. tilbage af ${shoppingCartToyDTO.name}`);
+
+                    } else {
+                        alert(`${shoppingCartToyDTO.name} er desværre udsolgt`);
+                    }
+
+                    updateCartNumber();
+
+                    window.location.replace("/shopping-cart");
+
+                }
+                else {
+                    throw new Error("Error in decrementing toy in cart")
+                }
             }
         }).catch(error => console.log);
     }
@@ -115,7 +160,6 @@ function updateCartTotal(priceChange) {
 }
 
 function removeUnavailbleToyFromCart(id, quantityToRemove) {
-
     const selectedToy = { ToyID: id, Quantity: -quantityToRemove };
 
 
@@ -130,6 +174,7 @@ function removeUnavailbleToyFromCart(id, quantityToRemove) {
         if (response.ok) {
             // hvis toyet blev decrementet successfuldt på sessionUsers cart, så slet unavailbaleToyRow
             deleteUnavailableToyRowFromView(id);
+            updateCartNumber();
         } else {
             throw new Error("Error in removing unavailable toy in cart");
         }
@@ -139,8 +184,8 @@ function removeUnavailbleToyFromCart(id, quantityToRemove) {
 }
 
 
-function removeToyFromCart(id, stock, price) { //
-
+function removeToyFromCart(id, price) { //
+    debugger;
     // fjern én fra quantity på sessionsUser
     fetch(`https://localhost:44325/api/sessionuser/RemoveToyFromSessionUser?id=${id}`, {
         method: 'DELETE'
@@ -172,21 +217,14 @@ function deleteToyRowFromView(id) {
     // så fjern rækken ("toyDataRow-@toyDTO.ID")
     const toyDataRow = document.getElementById(`toyDataRow-${id}`);
 
-    toyDataRow.parentElement.removeChild(toyDataRow);
+    if (toyDataRow != null) {
+        toyDataRow.parentElement.removeChild(toyDataRow);
+    }
 
     // hvis der ikke er flere toys i tabellen efter dette er blevet fjernet, så fjern hele tabellen
     deleteToyTableIfEmpty();
 }
 
-function deleteUnavailableToyRowFromView(id) {
-    // hvis samme type toy er nede i "Ikke tilgængelige", skal den også slettes
-    const unavailbaleToyDataRow = document.getElementById(`unavailableToyDataRow-${id}`);
-    if (unavailbaleToyDataRow != null) {
-        unavailbaleToyDataRow.parentElement.removeChild(unavailbaleToyDataRow);
-    }
-
-    deleteUnavailbaleToyTableIfEmpty();
-}
 
 
 function deleteToyTableIfEmpty() {
@@ -199,6 +237,50 @@ function deleteToyTableIfEmpty() {
         var toyTable = document.getElementById('toyTable');
         tableWrapper.removeChild(toyTable);
 
+
+        // hvis der ikke er nogen Ikke tilgængelig varer skal den lave "der er ingenting i kurven" overskriften
+        var unavailableToyTable = document.getElementById('unavailableToyTable');
+
+        if (unavailableToyTable == null) {
+
+            // og tilføj "der er ikke noget i kurven"-besked
+            var h2 = document.createElement('h2');
+            h2.classList.add('headline');
+            h2.innerText = "Der er intet i indkøbskurven endnu";
+
+            tableWrapper.appendChild(h2)
+        }
+
+    }
+
+}
+
+function deleteUnavailableToyRowFromView(id) {
+    // hvis samme type toy er nede i "Ikke tilgængelige", skal den også slettes
+    const unavailbaleToyDataRow = document.getElementById(`unavailableToyDataRow-${id}`);
+    if (unavailbaleToyDataRow != null) {
+        unavailbaleToyDataRow.parentElement.removeChild(unavailbaleToyDataRow);
+    }
+
+    deleteUnavailbaleToyTableIfEmpty();
+}
+
+function deleteUnavailbaleToyTableIfEmpty() {
+    const unavailableToyTableBody = document.getElementById('unavailableToyTableBody');
+
+    //hvis toyTableBody-element ikke har nogen childNodes
+    if (unavailableToyTableBody != null && unavailableToyTableBody.childElementCount === 0) {
+        // gør hidden
+        var unavailableToyTable = document.getElementById('unavailableToyTable');
+        unavailableToyTable.parentElement.removeChild(unavailableToyTable);
+    }
+
+    var toyTable = document.getElementById('toyTable');
+
+    if (toyTable == null) {
+
+        var tableWrapper = document.getElementById('tableWrapper');
+
         // og tilføj "der er ikke noget i kurven"-besked
         var h2 = document.createElement('h2');
         h2.classList.add('headline');
@@ -206,18 +288,4 @@ function deleteToyTableIfEmpty() {
 
         tableWrapper.appendChild(h2)
     }
-
 }
-
-
-function deleteUnavailbaleToyTableIfEmpty() {
-    const unavailableToyTableBody = document.getElementById('unavailableToyTableBody');
-
-    //hvis toyTableBody-element ikke har nogen childNodes
-    if (unavailableToyTableBody != null && unavailableToyTableBody.childElementCount === 0) {
-        // slet toyTable-element
-        var unavailableToyTable = document.getElementById('unavailableToyTable');
-        unavailableToyTable.parentElement.removeChild(unavailableToyTable);
-    }
-}
-

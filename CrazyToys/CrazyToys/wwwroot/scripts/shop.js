@@ -1,6 +1,27 @@
 ﻿
+window.onload = function () {
+    setSorter();
+}
 
+function setSorter() {
+    // Henter URL og select
+    var currentUrl = window.location.href;
+    var sorterSelect = document.getElementById("sorter");
 
+    // Sætter substring
+    var currentUrlSubstring = "sort=price_asc"
+
+    // Ændre afhængig af om substring er en del af URL
+    if (currentUrl.includes(currentUrlSubstring)) {
+        sorterSelect.value = "sort=price_asc";
+        // Opdatere nice-select value
+        $("#sorter").val("sort=price_asc").niceSelect('update');
+    } else {
+        sorterSelect.value = "sort=price_desc";
+        // Opdatere nice-select value
+        $("#sorter").val("sort=price_desc").niceSelect('update');
+    }
+}
 
 /** 
  *  Hvis man har trykket på én af filtreringsmulighederne ude til venstre på shop-siden, kaldes denne metode
@@ -22,6 +43,7 @@ function updateDictAndCreateUrl(paramsDict, type, param) {
 
 
 function createUrlFromParams(pageNumber, paramsDict) {
+    // TODO ændre denne når projektet skal køres på IISen
     let url = "https://localhost:44325/shop?";
 
     //&brand=_brand.Barbie
@@ -44,7 +66,7 @@ function createUrlFromParams(pageNumber, paramsDict) {
 
     // hvis der er +'er i vores url (fx ved prisgruppen 800+) skal det encodes til %2b
     url = url.replace("+", "%2b")
- 
+
     window.location.replace(url);
 }
 
