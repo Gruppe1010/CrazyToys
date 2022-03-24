@@ -111,7 +111,7 @@ function decQuantity(id) { //
 
                     const stock = shoppingCartToyDTO.quantity;
                     if (stock > 0) {
-                        alert(`Der er kun ${shoppingCartToyDTO.quantity} stk. tilbage af ${shoppingCartToyDTO.name}`);
+                        alert(`Der er kun ${shoppingCartToyDTO.stock} stk. tilbage af ${shoppingCartToyDTO.name}`);
 
                     } else {
                         alert(`${shoppingCartToyDTO.name} er desværre udsolgt`);
@@ -185,7 +185,6 @@ function removeUnavailbleToyFromCart(id, quantityToRemove) {
 
 
 function removeToyFromCart(id, price) { //
-    debugger;
     // fjern én fra quantity på sessionsUser
     fetch(`https://localhost:44325/api/sessionuser/RemoveToyFromSessionUser?id=${id}`, {
         method: 'DELETE'
@@ -280,7 +279,7 @@ function deleteUnavailbaleToyTableIfEmpty() {
     if (toyTable == null) {
 
         var tableWrapper = document.getElementById('tableWrapper');
-
+        
         // og tilføj "der er ikke noget i kurven"-besked
         var h2 = document.createElement('h2');
         h2.classList.add('headline');

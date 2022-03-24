@@ -4,6 +4,7 @@
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ShoppingCart>
 @{
     Layout = "Master.cshtml";
+    
     List<ShoppingCartToyDTO> shoppingCartToyDTOs = ViewData["ShoppingCartToytDTOs"] as List<ShoppingCartToyDTO>;
 
     // dette bliver regnet ud længere nede
@@ -123,7 +124,7 @@
                     }
                     else
                     {
-                        <h2 class="headline">Der er intet i kurven endnu</h2>
+                        <h2 class="headline">Der er intet i indkøbskurven endnu</h2>
                     }
 
                     if (subtotal > 499.0)
