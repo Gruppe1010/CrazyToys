@@ -17,7 +17,8 @@ function incQuantity(id) { // shoppingCartToyDTO) {
 
     const selectedToy = {
         ToyId: id,
-        Quantity: oldValue + 1
+        QuantityToAdd: 1,
+        OldAvailableQuantity: oldValue
     };
     
 
@@ -79,7 +80,8 @@ function decQuantity(id) { //
 
         const selectedToy = {
             ToyID: id,
-            Quantity: oldValue - 1
+            QuantityToAdd: - 1,
+            OldAvailableQuantity: oldValue
         };
 
         // fjern én fra quantity på sessionsUser
@@ -114,6 +116,8 @@ function decQuantity(id) { //
                     } else {
                         alert(`${shoppingCartToyDTO.name} er desværre udsolgt`);
                     }
+
+                    updateCartNumber();
 
                     window.location.replace("/shopping-cart");
 

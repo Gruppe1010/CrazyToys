@@ -14,8 +14,8 @@ function addToCart(toyId) {
 
     const selectedToy = {
         toyId: toyId,
-        quantity: quantity,
-        stock: 0
+        quantityToAdd: quantity 
+       // l: 0 //TODO noget er ænndret
     };
 
     fetch(`https://localhost:44325/api/sessionuser/AddToCart`, {
@@ -30,6 +30,7 @@ function addToCart(toyId) {
             updateCartNumber(quantity);
             // TODO lav noget flot javascript
         } else {
+            debugger;
             alert("Du kan ikke lægge så meget i kurven");
         }
     });
