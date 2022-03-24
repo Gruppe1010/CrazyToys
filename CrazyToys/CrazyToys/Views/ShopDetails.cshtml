@@ -4,8 +4,11 @@
 @{
     Layout = "Master.cshtml";
     Toy toy = ViewData["Toy"] as Toy;
-    var wishlistToys = ViewData["WishlistToys"] as HashSet<string>;
+    var wishlistToys = ViewData["WishlistToys"] as HashSet<string>; // TODO måske gør det til kun én? 
+    var amountInCart = (int)ViewData["AmountInCart"];
     string active = "active";
+
+    Console.WriteLine("stock: " + toy.Stock + ", amountInCart: " + amountInCart);
 }
 
 <!-- Shop Details Section Begin -->
@@ -63,14 +66,27 @@
                         <h4>@toy.Name</h4>
                         <h3>@toy.Price DKK</h3>
                         <div class="product__details__cart__option">
-                            <div class="quantity">
-                                <div class="pro-qty">
-                                    <span class="fa fa-angle-up inc qtybtn" onclick="incOrDecChosenAmount(@toy.Stock, true)"></span>
-                                    <input id="chosenAmount" type="text" value="1">
-                                    <span class="fa fa-angle-down dec qtybtn" onclick="incOrDecChosenAmount(@toy.Stock, false)"></span>
+
+
+                            @if(toy.Stock > amountInCart){
+                                <div class="quantity">
+                                    <div class="pro-qty">
+                                        <span class="fa fa-angle-up inc qtybtn" onclick="incOrDecChosenAmount(@toy.Stock, true)"></span>
+                                        <input id="chosenAmount" type="text" value="1">
+                                        <span class="fa fa-angle-down dec qtybtn" onclick="incOrDecChosenAmount(@toy.Stock, false)"></span>
+                                    </div>
                                 </div>
-                            </div>
-                            <button class="primary-btn" onclick='addToCart("@toy.ID")'>Tilføj til kurv</button>
+                                <button class="primary-btn" onclick='addToCart("@toy.ID")'>Tilføj til kurv</button>
+                            }
+                            else if(toy.Stock > 0) {
+                                <button class="primary-btn grey-out no-mouse-hover">no more @toy.Name for you my friend</button>
+                            }
+                            else {
+                                <button class="primary-btn grey-out no-mouse-hover">Udsolgt</button>
+                            }
+
+
+                            
                         </div>
                         <div id="shop-details-wishlist" class="product__details__btns__option">
                             @{  // Vi tjekker om toy er på sessionusers wishlist allerede og sætter onclick funktion efter dette

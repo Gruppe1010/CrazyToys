@@ -28,6 +28,10 @@
     color: black !important;
 }
 
+.no-mouse-hover {
+    cursor: default !important;
+}
+
 .mouse-hover {
     cursor: pointer;
 }

@@ -38,9 +38,12 @@ namespace CrazyToys.Web.Controllers
 
             HashSet<string> wishlistToys = sessionUser.Wishlist;
 
+            var noget = sessionUser.Cart.ContainsKey(id) ? sessionUser.Cart[id] : 0;
+
             ViewBag.Current = "Legetøjs Detaljer";
             ViewData["Toy"] = toy;
             ViewData["WishlistToys"] = wishlistToys;
+            ViewData["AmountInCart"] = noget;
             return CurrentTemplate(CurrentPage);
         }
     }
