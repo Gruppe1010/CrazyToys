@@ -33,12 +33,12 @@ namespace CrazyToys.Web.Controllers
         {
             var sessionsUser = _sessionService.GetNewOrExistingSessionUser(HttpContext);
 
-            List<ShopToyDTO> wishlistToys = new List<ShopToyDTO>();
+            List<WishlistToyDTO> wishlistToys = new List<WishlistToyDTO>();
 
             foreach (var entry in sessionsUser.Wishlist)
             {
                 Toy toy = await _toyDbService.GetById(entry);
-                wishlistToys.Add(toy.ConvertToShopToyDTO());
+                wishlistToys.Add(toy.ConvertToWishlistToyDTO());
             }
 
             ViewBag.Current = "Ønskeliste";

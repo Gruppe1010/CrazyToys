@@ -3,7 +3,7 @@
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Wishlist>
 @{
     Layout = "Master.cshtml";
-    List<ShopToyDTO> wishlistToys = ViewData["wishlistToys"] as List<ShopToyDTO>;
+    List<WishlistToyDTO> wishlistToys = ViewData["wishlistToys"] as List<WishlistToyDTO>;
     int numFound = wishlistToys.Count;
 }
 
@@ -23,21 +23,19 @@
                 </div>
                 <div id="wishlist-toy-row" class="row">
                     @{
-                        for (int j = 0; j < wishlistToys.Count; j++)//shopToyDTOs.Count > 29 ? 30 : shopToyDTOs.Count); j++)
+                        for (int j = 0; j < wishlistToys.Count; j++)
                         {
-                            <div id="wishlist-toy-@wishlistToys[j].ID" class="col-lg-3 col-md-4 col-sm-6">
+                            <div id="wishlist-toy-@wishlistToys[j].ID" class="@(wishlistToys[j].Stock == 0 ? "sold-out-fade" : "") col-lg-3 col-md-4 col-sm-6">
                                 <div class="product__item">
                                     <div class="product__item__pic set-bg" data-setbg="@(wishlistToys[j].Image ?? wishlistToys[j].Name)">
                                         <a class="item-link" href="/shop-details?id=@wishlistToys[j].ID"></a>
                                         <ul class="product__hover">
                                             <li><button class="shop-hover-btn" onclick='removeFromWishlist("@wishlistToys[j].ID")'><img class="hover-icon" src="img/icon/close.png" alt=""></button></li>
-                                            <li><button id="cart-btn-@wishlistToys[j].ID" class="shop-hover-btn" onclick='addToCart("@wishlistToys[j].ID")'><img id="cart-icon-@wishlistToys[j].ID" class="hover-icon" src="img/icon/cart.png" alt=""></button></li>
-
                                         </ul>
                                     </div>
                                     <div class="product__item__text remove-opacity">
                                         <h6>@wishlistToys[j].Name</h6>
-                                        <h5>@wishlistToys[j].Price DKK</h5>
+                                        <h5>@(wishlistToys[j].Stock == 0 ? "Udsolgt" : @wishlistToys[j].Price + " DKK")</h5>
                                     </div>
                                 </div>
                             </div>

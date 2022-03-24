@@ -192,3 +192,11 @@
 .product__item:hover .remove-opacity h6 {
     opacity: 1 !important;
 }
+
+.sold-out-fade {
+    opacity: 0.4;
+}
+
+.hover-icon-visibility {
+    opacity: 1 !important;
+}
