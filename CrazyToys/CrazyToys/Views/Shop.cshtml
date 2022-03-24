@@ -150,7 +150,7 @@
                                             @{
                                                 foreach (ColourGroup colourGroup in colourGroups)
                                                 {
-                                                    <a class="@(paramsDict.Count > 0 && paramsDict.ContainsKey("colours") && paramsDict["colours"].Contains(colourGroup.Name)
+                                                    <a class="@(paramsDict.Count > 0 && paramsDict.ContainsKey("colourGroups") && paramsDict["colourGroups"].Contains(colourGroup.Name)
                                                     ? "colour-group-filter-active"
                                                     : "") colour-group-filter" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@Html.Raw(JsonConvert.SerializeObject(@paramsDict)), "colours", "@colourGroup.Name")' style="background: @colourGroup.ColourCode"></a>
                                                 }
