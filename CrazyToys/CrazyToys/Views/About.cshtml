@@ -58,31 +58,31 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="section-title">
-                    <span>Crazy Toys Ansatte</span>
-                    <h2>Mød Holdet</h2>
+                    <span>@Model.TeamTitle</span>
+                    <h2>@Model.TeamSubtitle</h2>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-4 col-md-6 col-sm-6">
                 <div class="team__item">
-                    <img src="img/about/team-1.jpg" alt="">
-                    <h4>John Smith</h4>
-                    <span>Fashion Design</span>
+                    <img class="team-img" src="@Model.Member1Image.Url()" alt="">
+                    <h4>@Model.Member1Name</h4>
+                    <span>@Model.Member1Position</span>
                 </div>
             </div>
             <div class="col-lg-4 col-md-6 col-sm-6">
                 <div class="team__item">
-                    <img src="img/about/team-2.jpg" alt="">
-                    <h4>Christine Wise</h4>
-                    <span>C.E.O</span>
+                    <img class="team-img" src="@Model.Member2Image.Url()" alt="">
+                    <h4>@Model.Member2Name</h4>
+                    <span>@Model.Member2Position</span>
                 </div>
             </div>
             <div class="col-lg-4 col-md-6 col-sm-6">
                 <div class="team__item">
-                    <img src="img/about/team-3.jpg" alt="">
-                    <h4>Sean Robbins</h4>
-                    <span>Manager</span>
+                    <img class="team-img" src="@Model.Member3Image.Url()" alt="">
+                    <h4>@Model.Member3Name</h4>
+                    <span>@Model.Member3Position</span>
                 </div>
             </div>
         </div>

@@ -200,3 +200,8 @@
 .hover-icon-visibility {
     opacity: 1 !important;
 }
+
+.team-img {
+    height: 480px;
+    width: 360px;
+}
