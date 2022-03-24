@@ -43,6 +43,7 @@ function updateDictAndCreateUrl(paramsDict, type, param) {
 
 
 function createUrlFromParams(pageNumber, paramsDict) {
+    // TODO ændre denne når projektet skal køres på IISen
     let url = "https://localhost:44325/shop?";
 
     //&brand=_brand.Barbie
