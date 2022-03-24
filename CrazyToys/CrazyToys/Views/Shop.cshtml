@@ -152,7 +152,7 @@
                                                 {
                                                     <a class="@(paramsDict.Count > 0 && paramsDict.ContainsKey("colourGroups") && paramsDict["colourGroups"].Contains(colourGroup.Name)
                                                     ? "colour-group-filter-active"
-                                                    : "") colour-group-filter" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@Html.Raw(JsonConvert.SerializeObject(@paramsDict)), "colours", "@colourGroup.Name")' style="background: @colourGroup.ColourCode"></a>
+                                                    : "") colour-group-filter" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@Html.Raw(JsonConvert.SerializeObject(@paramsDict)), "colourGroups", "@colourGroup.Name")' style="background: @colourGroup.ColourCode"></a>
                                                 }
                                             }
                                         </div>
