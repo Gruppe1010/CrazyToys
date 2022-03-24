@@ -184,7 +184,11 @@
     text-decoration: underline;
 }
 
-.wishlist-btn {
+.shop-hover-btn {
     all: unset;
     cursor: pointer;
+}
+
+.product__item:hover .remove-opacity h6 {
+    opacity: 1 !important;
 }

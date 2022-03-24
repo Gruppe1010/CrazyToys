@@ -7,7 +7,7 @@
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Shop>
 @{
     Layout = "Master.cshtml";
-    var paramsDict = ViewData["ParamsDict"] as Dictionary<string, HashSet<string>>; 
+    var paramsDict = ViewData["ParamsDict"] as Dictionary<string, HashSet<string>>;
 
     var categories = ViewData["Categories"] as SortedDictionary<string, int>;
     var brands = ViewData["Brands"] as SortedDictionary<string, int>;
@@ -202,21 +202,22 @@
                                     <div class="product__item__pic set-bg" data-setbg="@(shopToyDTOs[j].Image ?? shopToyDTOs[j].Name)">
                                         <a class="item-link" href="/shop-details?id=@shopToyDTOs[j].ID"></a>
                                         <ul class="product__hover">
-                                            @{  // Vi tjekker om toy er på sessionusers wishlist allerede og sætter onclick funktion efter dette
+                                            <li id="cart-il-@shopToyDTOs[j].ID"><button id="cart-btn-@shopToyDTOs[j].ID" class="shop-hover-btn" onclick='addToCart("@shopToyDTOs[j].ID")'><img id="cart-icon-@shopToyDTOs[j].ID" class="hover-icon" src="img/icon/cart.png" alt=""></button></li>
+                                            @{
+                                                // Vi tjekker om toy er på sessionusers wishlist allerede og sætter onclick funktion efter dette
                                                 if (!wishlistToys.Contains(shopToyDTOs[j].ID))
                                                 {
-                                                    <li id="wishlist-il-@shopToyDTOs[j].ID"><button id="wishlist-btn-@shopToyDTOs[j].ID" class="wishlist-btn" onclick='addToWishlist("@shopToyDTOs[j].ID")'><img id="wishlist-icon-@shopToyDTOs[j].ID" class="hover-icon" src="img/icon/heart.png" alt=""></button></li>
+                                                    <li id="wishlist-il-@shopToyDTOs[j].ID"><button id="wishlist-btn-@shopToyDTOs[j].ID" class="shop-hover-btn" onclick='addToWishlist("@shopToyDTOs[j].ID")'><img id="wishlist-icon-@shopToyDTOs[j].ID" class="hover-icon" src="img/icon/heart.png" alt=""></button></li>
                                                 }
                                                 else
                                                 {
-                                                    <li id="wishlist-il-@shopToyDTOs[j].ID"><button id="wishlist-btn-@shopToyDTOs[j].ID" class="wishlist-btn" onclick='removeFromWishlist("@shopToyDTOs[j].ID")'><img id="wishlist-icon-@shopToyDTOs[j].ID" class="hover-icon" src="img/icon/filledheart.png" alt=""></button></li>
+                                                    <li id="wishlist-il-@shopToyDTOs[j].ID"><button id="wishlist-btn-@shopToyDTOs[j].ID" class="shop-hover-btn" onclick='removeFromWishlist("@shopToyDTOs[j].ID")'><img id="wishlist-icon-@shopToyDTOs[j].ID" class="hover-icon" src="img/icon/filledheart.png" alt=""></button></li>
                                                 }
                                             }
                                         </ul>
                                     </div>
-                                    <div class="product__item__text">
+                                    <div class="product__item__text remove-opacity">
                                         <h6>@shopToyDTOs[j].Name</h6>
-                                        <a href="javascript:void(0);" onclick='addToCart("@shopToyDTOs[j].ID")' class="add-cart">+ Tilføj Til Kurv</a>
                                         <h5>@shopToyDTOs[j].Price DKK</h5>
                                     </div>
                                 </div>
