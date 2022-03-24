@@ -79,8 +79,8 @@ namespace CrazyToys.Web.Controllers
 
             sessionUser.Cart.Clear();
             _sessionService.Update(HttpContext, sessionUser);
-            
 
+            // TODO ændre denne når projektet skal køres på IISen
             return Redirect("https://localhost:44325/order-confirmation");
         }
     }

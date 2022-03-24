@@ -21,7 +21,7 @@ namespace CrazyToys.Web.Controllers
         public async Task<IActionResult> Index()
         {
 
-            ViewBag.Current = "Contact";
+            ViewBag.Current = "Kontakt";
 
             return CurrentTemplate(CurrentPage);
         }

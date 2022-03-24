@@ -3,7 +3,7 @@
 
 @{
     Layout = null;
-
+    var pageName = ViewContext.RouteData.Values["controller"].ToString();
 }
 
 <!DOCTYPE html>
@@ -17,9 +17,12 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Crazy Toys</title>
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="img/icon/favicon.png">
+
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
-    rel="stylesheet">
+          rel="stylesheet">
 
     <!-- Css Styles -->
     <link rel="stylesheet" href="~/css/bootstrap.min.css" type="text/css">
@@ -38,18 +41,29 @@
 
 <body>
 
- 
 
-  
-    <!-- Offcanvas-->
+
+
+    <!-- Offcanvas -->
     @Html.Partial("~/Views/Partials/Offcanvas.cshtml")
 
-    <!-- Header-->
+    <!-- Header -->
     @Html.Partial("~/Views/Partials/Header.cshtml")
-    
+
+    <!-- Breadcrumb -->
+    @if (pageName == "Home" || pageName == "Contact" || pageName == "ShopDetails")
+    {
+        
+    } 
+    else
+    {
+        @Html.Partial("~/Views/Partials/Breadcrumb.cshtml");
+    }
+
+
     @RenderBody()
 
-    <!--Footer-->
+    <!-- Footer -->
     @Html.Partial("~/Views/Partials/Footer.cshtml")
 
     <!-- Search Begin -->
@@ -62,7 +76,6 @@
         </div>
     </div>
     <!-- Search End -->
-
     <!-- Js Plugins -->
     <script src="~/scripts/jquery-3.3.1.min.js"></script>
     <script src="~/scripts/bootstrap.min.js"></script>
