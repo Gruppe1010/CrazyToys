@@ -4,6 +4,7 @@
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ShoppingCart>
 @{
     Layout = "Master.cshtml";
+    
     List<ShoppingCartToyDTO> shoppingCartToyDTOs = ViewData["ShoppingCartToytDTOs"] as List<ShoppingCartToyDTO>;
 
     // dette bliver regnet ud længere nede
