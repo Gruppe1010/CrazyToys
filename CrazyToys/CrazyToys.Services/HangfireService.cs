@@ -68,7 +68,7 @@ namespace CrazyToys.Services
             {
                 var subAmount = toy.CalculateTotalPrice();
 
-                bodyText = bodyText + "<tr>" + "<td>" + toy.Name + "&nbsp;&nbsp;&nbsp;&nbsp;" + "</td>" + "<td>" + "&nbsp;&nbsp;&nbsp;&nbsp;" + toy.Quantity + " stk.&nbsp;&nbsp;&nbsp;&nbsp;" + "</td>" + "<td align='right'>" + subAmount + " DKK" + "</td>" + "</tr>";
+                bodyText = bodyText + "<tr>" + "<td>" + "<img width='90' height='90' src='" + toy.Image + "'>" + "</td>" + "<td>" + toy.Name + "&nbsp;&nbsp;&nbsp;&nbsp;" + "</td>" + "<td>" + "&nbsp;&nbsp;&nbsp;&nbsp;" + toy.Quantity + " stk.&nbsp;&nbsp;&nbsp;&nbsp;" + "</td>" + "<td align='right'>" + subAmount + " DKK" + "</td>" + "</tr>";
                 totalPrice = totalPrice + subAmount;
             }
 
@@ -81,10 +81,10 @@ namespace CrazyToys.Services
             msgMail.Body = "<h1> Tak for din ordre. </h1>" +
                 "<h2> Følgende varer vil blive sendt til din adresse hurtigst muligt </h2>" +
                 "<table>" +
-                    "<tr> <th align='left'> Navn </th> <th> Antal </th> <th align='right'> Pris </th></tr>" + 
+                    "<tr> <th align='left'> Produkt </th> <th> </th> <th> Antal </th> <th align='right'> Pris </th></tr>" + 
                     "<tbody>" + bodyText + "</tbody>" +
-                    "<tr><td>&nbsp;</td></tr>" + 
-                    "<tr><th align='left'> Total </th> <th> </th> <th align='right'>" + totalPrice + " DKK" + "</th></tr>" +
+                    "<tr><td>&nbsp;</td></tr>" +
+                    "<tr><th align='left'> Total </th> <th> </th> <th> </th> <th align='right'>" + totalPrice + " DKK" + "</th></tr>" +
                 "</table>";
 
             msgMail.IsBodyHtml = true;
