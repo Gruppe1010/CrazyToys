@@ -102,7 +102,7 @@ namespace CrazyToys.Web.Controllers
             string s = "";
             foreach (ShoppingCartToyDTO toy in list)
             {
-                s = s + "<li>" + toy.Name + " " + toy.Price + "</li>";
+                s = s + "<tr>" + "<td>" + toy.Name + "&nbsp;&nbsp;&nbsp;&nbsp;" + "</td>" + "<td>" + "&nbsp;&nbsp;&nbsp;&nbsp;" + toy.Quantity + " stk.&nbsp;&nbsp;&nbsp;&nbsp;" + "</td>" + "<td>" + "&nbsp;&nbsp;" + toy.CalculateTotalPrice() + " DKK" + "&nbsp;&nbsp;" + "</td>" + "</tr>";
             }
 
 
@@ -117,7 +117,7 @@ namespace CrazyToys.Web.Controllers
 
         
 
-            msgMail.Body = "<ul>" + s + "</ul>";
+            msgMail.Body = "<h1> Tak for din ordre. </h1><h2> Følgende varer vil blive sendt til din adresse hurtigst muligt </h2><table>" + "<tr> <th> Navn </th> <th> Antal </th> <th> Pris </th> </tr>" + "<tbody>" + s + "</tbody>" + "</table>";
 
 
             msgMail.IsBodyHtml = true;
