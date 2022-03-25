@@ -98,7 +98,6 @@ namespace CrazyToys.Web.Controllers
 
         public void SendOrderConfirmation(CheckoutUserModel model, List<ShoppingCartToyDTO> list)
         {
-
             string bodyText = "";
             foreach (ShoppingCartToyDTO toy in list)
             {
@@ -122,7 +121,6 @@ namespace CrazyToys.Web.Controllers
             server.EnableSsl = true;
             server.Credentials = new NetworkCredential("gruppe1010@hotmail.com", "DAT20v1!");
             server.Send(msgMail);
-
         }
     }
 }
