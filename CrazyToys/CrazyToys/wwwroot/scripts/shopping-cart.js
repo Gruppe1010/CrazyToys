@@ -245,6 +245,7 @@ function deleteToyTableIfEmpty() {
             // og tilføj "der er ikke noget i kurven"-besked
             var h2 = document.createElement('h2');
             h2.classList.add('headline');
+            h2.setAttribute("id", "mainEmptyCartHeadline");
             h2.innerText = "Der er intet i indkøbskurven endnu";
 
             tableWrapper.appendChild(h2)
@@ -274,9 +275,10 @@ function deleteUnavailbaleToyTableIfEmpty() {
         unavailableToyTable.parentElement.removeChild(unavailableToyTable);
     }
 
+    var mainEmptyCartHeadline = document.getElementById('mainEmptyCartHeadline');
     var toyTable = document.getElementById('toyTable');
 
-    if (toyTable == null) {
+    if (toyTable == null && mainEmptyCartHeadline == null) {
 
         var tableWrapper = document.getElementById('tableWrapper');
         
