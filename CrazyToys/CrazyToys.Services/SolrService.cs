@@ -1,8 +1,6 @@
 ﻿using CrazyToys.Entities.DTOs;
-using CrazyToys.Entities.Entities;
 using CrazyToys.Interfaces;
 using Microsoft.Net.Http.Headers;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SolrNet;
 using SolrNet.Commands.Parameters;

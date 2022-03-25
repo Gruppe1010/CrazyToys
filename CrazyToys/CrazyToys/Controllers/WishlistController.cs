@@ -1,6 +1,5 @@
 ﻿using CrazyToys.Entities.DTOs;
 using CrazyToys.Entities.Entities;
-using CrazyToys.Entities.SolrModels;
 using CrazyToys.Interfaces;
 using CrazyToys.Services.EntityDbServices;
 using Microsoft.AspNetCore.Mvc;

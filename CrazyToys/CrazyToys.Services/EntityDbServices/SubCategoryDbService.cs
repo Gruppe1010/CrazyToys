@@ -1,12 +1,9 @@
 ﻿using CrazyToys.Data.Data;
 using CrazyToys.Entities.Entities;
-using CrazyToys.Interfaces;
 using CrazyToys.Interfaces.EntityDbInterfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CrazyToys.Services.EntityDbServices

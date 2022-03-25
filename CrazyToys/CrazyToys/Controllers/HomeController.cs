@@ -1,13 +1,7 @@
-﻿using CrazyToys.Entities.DTOs;
-using CrazyToys.Entities.Entities;
-using CrazyToys.Interfaces;
-using Microsoft.AspNetCore.Http;
+﻿using CrazyToys.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using System;
-using System.Threading.Tasks;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Web.Common.Controllers;
 

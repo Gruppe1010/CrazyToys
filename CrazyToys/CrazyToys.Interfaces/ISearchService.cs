@@ -1,7 +1,5 @@
 ﻿
 using CrazyToys.Entities.DTOs;
-using CrazyToys.Entities.Entities;
-using CrazyToys.Entities.SolrModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

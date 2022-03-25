@@ -5,14 +5,9 @@ using CrazyToys.Interfaces.EntityDbInterfaces;
 using CrazyToys.Services.EntityDbServices;
 using Hangfire;
 using Hangfire.Server;
-using Microsoft.Net.Http.Headers;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
-using System.Xml;
 
 namespace CrazyToys.Services
 {

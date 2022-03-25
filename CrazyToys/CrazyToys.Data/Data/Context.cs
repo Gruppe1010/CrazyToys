@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using CrazyToys.Entities.Entities;
+﻿using CrazyToys.Entities.Entities;
 using Microsoft.EntityFrameworkCore;
 
 

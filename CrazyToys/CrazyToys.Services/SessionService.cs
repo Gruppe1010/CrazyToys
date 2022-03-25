@@ -1,13 +1,9 @@
-﻿using CrazyToys.Entities.DTOs;
-using CrazyToys.Entities.Entities;
+﻿using CrazyToys.Entities.Entities;
 using CrazyToys.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace CrazyToys.Services
 {
