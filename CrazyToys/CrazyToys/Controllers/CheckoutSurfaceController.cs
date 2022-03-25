@@ -99,13 +99,11 @@ namespace CrazyToys.Web.Controllers
         public void SendOrderConfirmation(CheckoutUserModel model, List<ShoppingCartToyDTO> list)
         {
 
-            string s = "";
+            string bodyText = "";
             foreach (ShoppingCartToyDTO toy in list)
             {
-                s = s + "<tr>" + "<td>" + toy.Name + "&nbsp;&nbsp;&nbsp;&nbsp;" + "</td>" + "<td>" + "&nbsp;&nbsp;&nbsp;&nbsp;" + toy.Quantity + " stk.&nbsp;&nbsp;&nbsp;&nbsp;" + "</td>" + "<td>" + "&nbsp;&nbsp;" + toy.CalculateTotalPrice() + " DKK" + "&nbsp;&nbsp;" + "</td>" + "</tr>";
+                bodyText = bodyText + "<tr>" + "<td>" + toy.Name + "&nbsp;&nbsp;&nbsp;&nbsp;" + "</td>" + "<td>" + "&nbsp;&nbsp;&nbsp;&nbsp;" + toy.Quantity + " stk.&nbsp;&nbsp;&nbsp;&nbsp;" + "</td>" + "<td>" + "&nbsp;&nbsp;" + toy.CalculateTotalPrice() + " DKK" + "&nbsp;&nbsp;" + "</td>" + "</tr>";
             }
-
-
 
             var msgMail = new MailMessage();
             //(model.Email, "Ordrebekræftelse", totalPrice.ToString()
@@ -113,16 +111,12 @@ namespace CrazyToys.Web.Controllers
             msgMail.From = new MailAddress("gruppe1010@hotmail.com");
             msgMail.To.Add(new MailAddress(model.Email));
             msgMail.Subject = "Ordrebekræftelse fra Crazy Toys";
-            
 
-        
-
-            msgMail.Body = "<h1> Tak for din ordre. </h1><h2> Følgende varer vil blive sendt til din adresse hurtigst muligt </h2><table>" + "<tr> <th> Navn </th> <th> Antal </th> <th> Pris </th> </tr>" + "<tbody>" + s + "</tbody>" + "</table>";
-
+            msgMail.Body = "<h1> Tak for din ordre. </h1><h2> Følgende varer vil blive sendt til din adresse hurtigst muligt </h2><table>" + "<tr> <th> Navn </th> <th> Antal </th> <th> Pris </th> </tr>" + "<tbody>" + bodyText + "</tbody>" + "</table>";
 
             msgMail.IsBodyHtml = true;
 
-            var server = new SmtpClient();
+            SmtpClient server = new SmtpClient();
             server.Host = "smtp.office365.com";
             server.Port = 587;
             server.EnableSsl = true;
