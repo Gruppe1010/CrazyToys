@@ -3,7 +3,6 @@ using CrazyToys.Entities.Entities;
 using CrazyToys.Entities.SolrModels;
 using CrazyToys.Interfaces;
 using CrazyToys.Services.EntityDbServices;
-using CrazyToys.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Net;
@@ -24,6 +23,7 @@ namespace CrazyToys.Web.Controllers
         private readonly ISessionService _sessionService;
         private readonly ToyDbService _toyDbService;
         private readonly ISearchService<SolrToy> _solrToyService;
+        private readonly IHangfireService _hangfireService;
 
 
 
@@ -36,12 +36,14 @@ namespace CrazyToys.Web.Controllers
             IPublishedUrlProvider publishedUrlProvider,
             ISessionService sessionService,
             ToyDbService toyDbService,
-            ISearchService<SolrToy> solrToyService)
+            ISearchService<SolrToy> solrToyService,
+            IHangfireService hangfireService)
             : base(umbracoContextAccessor, databaseFactory, services, appCaches, profilingLogger, publishedUrlProvider)
         {
             _sessionService = sessionService;
             _toyDbService = toyDbService;
             _solrToyService = solrToyService;
+            _hangfireService = hangfireService;
         }
 
 
@@ -52,23 +54,16 @@ namespace CrazyToys.Web.Controllers
             {
                 return CurrentUmbracoPage();
             }
-
-
             
             var orderConfirmationToyList = new List<ShoppingCartToyDTO>();
             var sessionUser = _sessionService.GetNewOrExistingSessionUser(HttpContext);
             foreach (var item in sessionUser.Cart)
             {
-
                 Toy toy = await _toyDbService.GetById(item.Key);
                 orderConfirmationToyList.Add(toy.ConvertToShoppingCartToyDTO(item.Value));
-                var test = toy.Price * item.Value;
-                
-
 
                 if (toy.Stock >= item.Value)
                 {
-
                     toy.Stock = toy.Stock - item.Value;
                     await _toyDbService.Update(toy);
                     if (toy.Stock == 0)
@@ -81,46 +76,17 @@ namespace CrazyToys.Web.Controllers
                     toy.Stock = 0;
                     await _toyDbService.Update(toy);
                     _solrToyService.Delete(new SolrToy(toy));
-
                 }
             }
 
-
-            //TODO Lav en Order entity Og få hangfire til at kalde en metode der sender email til kunde med en ordre bekfræftelse
-            SendOrderConfirmation(model, orderConfirmationToyList);
+            //Laver job i hangfire og kalder metode der sender OrderConfirmation til kunden
+            _hangfireService.CreateOrderConfirmationJob(model, orderConfirmationToyList);
 
             sessionUser.Cart.Clear();
             _sessionService.Update(HttpContext, sessionUser);
 
             // TODO ændre denne når projektet skal køres på IISen
             return Redirect("https://localhost:44325/order-confirmation");
-        }
-
-        public void SendOrderConfirmation(CheckoutUserModel model, List<ShoppingCartToyDTO> list)
-        {
-            string bodyText = "";
-            foreach (ShoppingCartToyDTO toy in list)
-            {
-                bodyText = bodyText + "<tr>" + "<td>" + toy.Name + "&nbsp;&nbsp;&nbsp;&nbsp;" + "</td>" + "<td>" + "&nbsp;&nbsp;&nbsp;&nbsp;" + toy.Quantity + " stk.&nbsp;&nbsp;&nbsp;&nbsp;" + "</td>" + "<td>" + "&nbsp;&nbsp;" + toy.CalculateTotalPrice() + " DKK" + "&nbsp;&nbsp;" + "</td>" + "</tr>";
-            }
-
-            var msgMail = new MailMessage();
-            //(model.Email, "Ordrebekræftelse", totalPrice.ToString()
-
-            msgMail.From = new MailAddress("gruppe1010@hotmail.com");
-            msgMail.To.Add(new MailAddress(model.Email));
-            msgMail.Subject = "Ordrebekræftelse fra Crazy Toys";
-
-            msgMail.Body = "<h1> Tak for din ordre. </h1><h2> Følgende varer vil blive sendt til din adresse hurtigst muligt </h2><table>" + "<tr> <th> Navn </th> <th> Antal </th> <th> Pris </th> </tr>" + "<tbody>" + bodyText + "</tbody>" + "</table>";
-
-            msgMail.IsBodyHtml = true;
-
-            SmtpClient server = new SmtpClient();
-            server.Host = "smtp.office365.com";
-            server.Port = 587;
-            server.EnableSsl = true;
-            server.Credentials = new NetworkCredential("gruppe1010@hotmail.com", "DAT20v1!");
-            server.Send(msgMail);
         }
     }
 }

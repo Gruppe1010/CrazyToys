@@ -1,4 +1,6 @@
-﻿using Hangfire.Server;
+﻿using CrazyToys.Entities.DTOs;
+using Hangfire.Server;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace CrazyToys.Interfaces
@@ -10,6 +12,8 @@ namespace CrazyToys.Interfaces
         Task UpdateSolrDb();
 
         void DeleteSolrDb();
+
+        void CreateOrderConfirmationJob(CheckoutUserModel model, List<ShoppingCartToyDTO> list);
 
     }
 }
