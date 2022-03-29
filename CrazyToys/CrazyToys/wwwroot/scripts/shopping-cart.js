@@ -6,8 +6,6 @@ if (toyTableBody != null && toyTableBody.childElementCount === 0) {
     toyTable.parentElement.removeChild(toyTable);
 }
 
-
-
 // TODO test ordentligt
 function incQuantity(id) { // shoppingCartToyDTO) {
 
@@ -20,7 +18,6 @@ function incQuantity(id) { // shoppingCartToyDTO) {
         QuantityToAdd: 1,
         OldAvailableQuantity: oldValue
     };
-    
 
     fetch("https://localhost:44325/api/sessionuser/IncOrDecToyFromCart", {
             method: 'POST',
@@ -66,7 +63,6 @@ function incQuantity(id) { // shoppingCartToyDTO) {
 
     })
     .catch(error => console.log);
-
 }
 
 // TODO få den til at rette i sessionUser når man trykker dec
@@ -179,10 +175,7 @@ function removeUnavailbleToyFromCart(id, quantityToRemove) {
             throw new Error("Error in removing unavailable toy in cart");
         }
     }).catch(error => console.log);
-
-
 }
-
 
 function removeToyFromCart(id, price) { //
     // fjern én fra quantity på sessionsUser
@@ -224,8 +217,6 @@ function deleteToyRowFromView(id) {
     deleteToyTableIfEmpty();
 }
 
-
-
 function deleteToyTableIfEmpty() {
 
     //hvis toyTableBody-element ikke har nogen childNodes
@@ -235,7 +226,6 @@ function deleteToyTableIfEmpty() {
 
         var toyTable = document.getElementById('toyTable');
         tableWrapper.removeChild(toyTable);
-
 
         // hvis der ikke er nogen Ikke tilgængelig varer skal den lave "der er ingenting i kurven" overskriften
         var unavailableToyTable = document.getElementById('unavailableToyTable');
@@ -250,9 +240,7 @@ function deleteToyTableIfEmpty() {
 
             tableWrapper.appendChild(h2)
         }
-
     }
-
 }
 
 function deleteUnavailableToyRowFromView(id) {

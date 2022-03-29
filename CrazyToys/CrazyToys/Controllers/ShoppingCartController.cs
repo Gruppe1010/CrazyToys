@@ -17,8 +17,6 @@ namespace CrazyToys.Web.Controllers
         private readonly ToyDbService _toyDbService;
         private readonly ISessionService _sessionService;
 
-
-
         public ShoppingCartController(ILogger<RenderController> logger, ICompositeViewEngine compositeViewEngine, IUmbracoContextAccessor umbracoContextAccessor, 
             ToyDbService toyDbService, ISessionService sessionService) 
             : base(logger, compositeViewEngine, umbracoContextAccessor)
@@ -46,9 +44,3 @@ namespace CrazyToys.Web.Controllers
         }
     }
 }
-
-
-
-
-
-   

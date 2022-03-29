@@ -22,17 +22,9 @@ namespace CrazyToys.Web.Controllers
             _sessionService = sessionsService;
         }
 
-        //
-        // Summary:
-        //     Before the controller executes we will handle redirects and not founds
-
         public override IActionResult Index()
         {
-
             ViewBag.Current = "Forside";
-
-
-          
 
             // return a 'model' to the selected template/view for this page.
             return CurrentTemplate(CurrentPage);

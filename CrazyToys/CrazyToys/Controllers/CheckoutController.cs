@@ -15,11 +15,8 @@ namespace CrazyToys.Web.Controllers
 {
     public class CheckoutController : RenderController
     {
-
         private readonly ISessionService _sessionService;
         private readonly ToyDbService _toyDbService;
-
-
 
         public CheckoutController(ILogger<RenderController> logger, ICompositeViewEngine compositeViewEngine, IUmbracoContextAccessor umbracoContextAccessor,
             ISessionService sessionService, ToyDbService toyDbService)
@@ -27,7 +24,6 @@ namespace CrazyToys.Web.Controllers
         {
             _sessionService = sessionService;
             _toyDbService = toyDbService;
-
         }
 
         [HttpGet]
@@ -47,14 +43,7 @@ namespace CrazyToys.Web.Controllers
             ViewBag.Current = "Tjek Ud";
             ViewData["ShoppingCartToytDTOs"] = shoppingCartToytDTOs;
 
-
             return CurrentTemplate(CurrentPage);
         }
     }
 }
-
-
-
-
-
-   

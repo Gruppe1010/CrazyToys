@@ -25,8 +25,6 @@ namespace CrazyToys.Web.Controllers
         private readonly ISearchService<SolrToy> _solrToyService;
         private readonly IHangfireService _hangfireService;
 
-
-
         public CheckoutSurfaceController(
             IUmbracoContextAccessor umbracoContextAccessor,
             IUmbracoDatabaseFactory databaseFactory,

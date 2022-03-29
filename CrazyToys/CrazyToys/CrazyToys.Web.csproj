@@ -39,9 +39,6 @@
         <ProjectReference Include="..\CrazyToys.Services\CrazyToys.Services.csproj" />
         <RuntimeHostConfigurationOption Include="System.Globalization.AppLocalIcu" Value="68.2" />
     </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Models\" />
-    </ItemGroup>
 
   	<PropertyGroup>
 		<ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>

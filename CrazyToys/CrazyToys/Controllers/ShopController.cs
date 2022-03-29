@@ -27,9 +27,6 @@ namespace CrazyToys.Web.Controllers
         private readonly IEntityCRUD<PriceGroup> _priceGroupDbService;
         private readonly IEntityCRUD<Category> _categoryDbService;
 
-
-
-
         public ShopController(
             ILogger<HomeController> logger,
             ICompositeViewEngine compositeViewEngine,
@@ -54,11 +51,6 @@ namespace CrazyToys.Web.Controllers
             _priceGroupDbService = priceGroupDbService;
             _categoryDbService = categoryDbService;
         }
-
-        //
-        // Summary:
-        //     Before the controller executes we will handle redirects and not founds
-
 
         [HttpGet]
         public async Task<IActionResult> Index(
@@ -108,7 +100,6 @@ namespace CrazyToys.Web.Controllers
             return CurrentTemplate(CurrentPage);
         }
 
-
         public Dictionary<string, HashSet<string>> CreateDictFromParams(
             string category, // category.Spil
             string subCategory,
@@ -151,9 +142,3 @@ namespace CrazyToys.Web.Controllers
         }
     }
 }
-
-
-
-
-
-   

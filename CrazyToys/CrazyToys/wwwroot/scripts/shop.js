@@ -22,7 +22,6 @@ function setSorter() {
             $("#sorter").val("sort=price_desc").niceSelect('update');
         }
     }
-
 }
 
 /** 
@@ -76,14 +75,9 @@ function createUrlFromParams(pageNumber, paramsDict) {
 // param == Dukker
 function updateParamsDict(paramsDict, type, param) // type == colour, param == rød
 {
-    debugger;
-
-
     // hvis type == subcategory
-    
 
     // læg på Dict på en specielt måde
-
 
     // hvis den allerede har den TYPE param
     if (paramsDict.hasOwnProperty(type)) {
@@ -94,7 +88,6 @@ function updateParamsDict(paramsDict, type, param) // type == colour, param == r
         }
         else // ellers: fjern
         {
-            debugger;
             // hvis der er flere end den ene param tilbage på arrayet
             paramsDict[type].length > 1
                 ? paramsDict[type] = paramsDict[type].filter(n => n != param) // fjern den enkelte param fra arrayet

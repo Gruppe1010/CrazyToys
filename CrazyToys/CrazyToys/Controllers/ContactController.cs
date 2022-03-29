@@ -9,7 +9,6 @@ namespace CrazyToys.Web.Controllers
 {
     public class ContactController : RenderController
     {
- 
         public ContactController(ILogger<RenderController> logger, ICompositeViewEngine compositeViewEngine, IUmbracoContextAccessor umbracoContextAccessor) 
             : base(logger, compositeViewEngine, umbracoContextAccessor)
         {
@@ -27,9 +26,3 @@ namespace CrazyToys.Web.Controllers
         }
     }
 }
-
-
-
-
-
-   

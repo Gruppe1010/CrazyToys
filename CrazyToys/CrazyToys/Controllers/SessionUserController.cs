@@ -12,7 +12,6 @@ namespace CrazyToys.Web.Controllers
     [ApiController]
     public class SessionUserController : ControllerBase
     {
-
         private readonly ISessionService _sessionService;
         private readonly ToyDbService _toyDbService;
 
@@ -21,7 +20,6 @@ namespace CrazyToys.Web.Controllers
             _sessionService = sessionService;
             _toyDbService = toyDbService;
         }
-
 
         [HttpGet]
         public async Task<ActionResult<SessionUser>> GetSessionUser()
@@ -101,11 +99,9 @@ namespace CrazyToys.Web.Controllers
                 shoppingCartToyDTO.Quantity = toy.Stock;
                 return BadRequest(shoppingCartToyDTO);
             }
-
             // Bad request fordi den beder om noget som vi ikke kan gøre 
             return BadRequest();
         }
-
 
         [HttpPost]
         public async Task<ActionResult<SelectedToy>> AddToCart([FromBody] SelectedToy selectedToy)
