@@ -8,18 +8,19 @@ function setSorter() {
     var currentUrl = window.location.href;
     var sorterSelect = document.getElementById("sorter");
     // Sætter substring
-    var currentUrlSubstring = "sort=price_asc"
+    var currentUrlSubstring = "sort=price_desc"
 
     if (currentUrl.includes("shop?")) {
         // Ændre afhængig af om substring er en del af URL
         if (currentUrl.includes(currentUrlSubstring)) {
-            sorterSelect.value = "sort=price_asc";
-            // Opdatere nice-select value
-            $("#sorter").val("sort=price_asc").niceSelect('update');
-        } else {
             sorterSelect.value = "sort=price_desc";
             // Opdatere nice-select value
             $("#sorter").val("sort=price_desc").niceSelect('update');
+            
+        } else {
+            sorterSelect.value = "";
+            // Opdaterer nice-select value
+            $("#sorter").val("").niceSelect('update');
         }
     }
 }
