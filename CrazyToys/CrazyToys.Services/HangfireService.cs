@@ -63,14 +63,30 @@ namespace CrazyToys.Services
         public void SendOrderConfirmation(CheckoutUserModel model, List<ShoppingCartToyDTO> list)
         {
             string bodyText = "";
-            double totalPrice = 0; 
+            double subTotal = 0;
+            double totalPrice;
+        
             foreach (ShoppingCartToyDTO toy in list)
             {
                 var subAmount = toy.CalculateTotalPrice();
 
                 bodyText = bodyText + "<tr></tr>" +  "<tr>" + "<td>" + "<img width='90' height='90' src='" + toy.Image + "'>" + "</td>" + "<td>" + "&nbsp;&nbsp;&nbsp;&nbsp;" + toy.Name + "&nbsp;&nbsp;&nbsp;&nbsp;" + "</td>" + "<td>" + "&nbsp;&nbsp;&nbsp;&nbsp;" + toy.Quantity + " stk.&nbsp;&nbsp;&nbsp;&nbsp;" + "</td>" + "<td align='right'>" + subAmount + " DKK" + "</td>" + "</tr>";
-                totalPrice = totalPrice + subAmount;
+                subTotal = subTotal + subAmount;
+
             }
+
+            string freightPrice = "39 DKK";
+            if (subTotal > 499)
+            {
+                totalPrice = subTotal;
+                freightPrice = "Gratis levering";
+            } 
+            else
+            {
+                totalPrice = subTotal + 39;
+
+            }
+
 
             var msgMail = new MailMessage();
 
@@ -84,6 +100,9 @@ namespace CrazyToys.Services
                     "<tr> <th align='left'> Produkt </th> <th> </th> <th> Antal </th> <th align='right'> Pris </th></tr>" + 
                     "<tbody>" + bodyText + "</tbody>" +
                     "<tr><td>&nbsp;</td></tr>" +
+                    "<tr><th align='left'> Subtotal </th> <th> </th> <th> </th> <th align='right'>" + subTotal + " DKK" + "</th></tr>" +
+                    "<tr><th align='left'> Fragt </th> <th> </th> <th> </th> <th align='right'>" + freightPrice  + "</th></tr>" +
+                     "<tr><td>&nbsp;</td></tr>" +
                     "<tr><th align='left'> Total </th> <th> </th> <th> </th> <th align='right'>" + totalPrice + " DKK" + "</th></tr>" +
                 "</table>";
 
