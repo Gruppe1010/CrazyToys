@@ -71,6 +71,7 @@ namespace CrazyToys.Web.Controllers
                 }
                 else
                 {
+                    //TODO Hvis 7 købes men kun 5 på lager. skriv 5 købt
                     toy.Stock = 0;
                     await _toyDbService.Update(toy);
                     _solrToyService.Delete(new SolrToy(toy));

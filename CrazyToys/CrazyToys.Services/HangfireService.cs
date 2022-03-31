@@ -93,6 +93,7 @@ namespace CrazyToys.Services
             server.Host = "smtp.office365.com";
             server.Port = 587;
             server.EnableSsl = true;
+            //TODO Sikkerhedsbrud!
             server.Credentials = new NetworkCredential("gruppe1010@hotmail.com", "DAT20v1!");
             server.Send(msgMail);
         }
