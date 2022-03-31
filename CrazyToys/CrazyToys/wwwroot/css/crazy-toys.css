@@ -206,3 +206,7 @@
     height: 480px;
     width: 360px;
 }
+.product-checkout {
+    width: 200px !important;
+    float: left !important;
+}
