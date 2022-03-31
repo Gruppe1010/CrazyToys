@@ -130,7 +130,9 @@ namespace CrazyToys.Services
         {
             // sort=price asc
             sort = sort != null ? "&sort=" + sort.Replace("_", "%20") : null;
-            page = page == 0 ? 1 : page;
+            //det sted hvor den skal starte (fordi page 2 starter på 30: 2 * 30 == 60 --> 60 - 30 --> 30)
+            // "" hvis page 0 fordi så bruger den default-start 0
+            string paging = page == 0 ? "" : $"&start={page * 30 - 30}";
 
             var dict = new Dictionary<int, List<ShopToyDTO>>();
 
@@ -141,10 +143,7 @@ namespace CrazyToys.Services
             string priceParam = priceGroup != null ? CreateFilterParam(priceGroup) + "AND" : null;
             string ageGroupsParam = ageGroups != null ? CreateFilterParam(ageGroups) + "AND" : null;
             string coloursParam = colours != null ? CreateFilterParam(colours) + "AND" : null;
-
-            //det sted hvor den skal starte (fordi page 2 starter på 30: 2 * 30 == 60 --> 60 - 30 --> 30)
-            int start = page * 30 - 30; 
-            string paging = $"&rows=30&start={start}";
+           
 
             string urlParams = categoryParam + subCategoryParam + brandsParam + priceParam + ageGroupsParam + coloursParam;
 
@@ -152,7 +151,7 @@ namespace CrazyToys.Services
             urlParams = !String.IsNullOrWhiteSpace(urlParams) 
                 ? urlParams.Substring(0, urlParams.Length - 3)
                 : "*:*";
-            
+
             string url = "http://solr:8983/solr/toys/select?indent=true&q.op=OR&q=" + HttpUtility.UrlEncode(urlParams).Replace("+", "%20") + paging + sort;
             
 

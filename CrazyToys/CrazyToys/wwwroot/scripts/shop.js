@@ -46,7 +46,18 @@ function updateDictAndCreateUrl(paramsDict, type, param) {
 
 function createUrlFromParams(pageNumber, paramsDict) {
     // TODO ændre denne når projektet skal køres på IISen
-    let url = "https://localhost:44325/shop?";
+    let url = "https://localhost:44325/shop";
+
+
+    const pageParam = pageNumber == 1 ? "" : `&p=${pageNumber}`;
+
+    // Finder værdien fra select (f.eks. sort=price_asc)
+    var sortOption = document.getElementById("sorter").value;
+
+    console.log(paramsDict.length)
+
+
+    url = Object.keys(paramsDict).length != 0 || pageParam != "" || sortOption != "" ? url + "?" : url;
 
     //&brand=_brand.Barbie
     // tilføj 
@@ -60,14 +71,14 @@ function createUrlFromParams(pageNumber, paramsDict) {
         url = url + paramUnit + "&";
     }
 
-    // Finder værdien fra select (f.eks. sort=price_asc)
-    var sortOption = document.getElementById("sorter").value;
-
     // tilføjer paging og sorting til url
-    url = url + `p=${pageNumber}&` + sortOption;
+    url = url + pageParam + (sortOption != "" && pageParam != "" ? "&" + sortOption : sortOption);
+
+    url = url.charAt(url.length - 1) == "&" ? url.substr(0, url.length - 1) : url;
 
     // hvis der er +'er i vores url (fx ved prisgruppen 800+) skal det encodes til %2b
     url = url.replace("+", "%2b")
+
 
     window.location.replace(url);
 }
