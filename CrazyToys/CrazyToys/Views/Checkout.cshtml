@@ -41,7 +41,7 @@
                             @{
                                 foreach (ShoppingCartToyDTO shoppingCartToyDTO in shoppingCartToyDTOs)
                                 {
-                                    <li>@shoppingCartToyDTO.Name <span>@shoppingCartToyDTO.CalculateTotalPrice() DKK</span></li>
+                                    <li>@shoppingCartToyDTO.Quantity x @shoppingCartToyDTO.Name <span>@shoppingCartToyDTO.CalculateTotalPrice() DKK</span></li>
                                 }
                             }
                         </ul>
