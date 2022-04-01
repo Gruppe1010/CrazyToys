@@ -153,7 +153,8 @@ namespace CrazyToys.Services
                 : "*:*";
 
             string url = "http://solr:8983/solr/toys/select?indent=true&q.op=OR&q=" + HttpUtility.UrlEncode(urlParams).Replace("+", "%20") + paging + sort;
-            
+
+
 
             var httpRequestMessage = new HttpRequestMessage(
                 HttpMethod.Get, url)
@@ -176,6 +177,7 @@ namespace CrazyToys.Services
                 dynamic content = JObject.Parse(jsonString);
 
                 var response = content.response;
+                // var facetFields = content.facet_counts.facet_fields;
 
                 int numFound = response.numFound;
 
@@ -201,6 +203,159 @@ namespace CrazyToys.Services
         {
             _solr.Delete(document);
             _solr.Commit();
+        }
+
+        public SortedDictionary<string, int> GetSubCategoryFacet()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<dynamic> GetContent(string category, string subCategory,
+            string brands, string priceGroup,
+            string ageGroups, string colours, // fx: rød.blå.grøn
+            int page, string search, string sort)
+        {
+            // sort=price asc
+            sort = sort != null ? "&sort=" + sort.Replace("_", "%20") : null;
+            //det sted hvor den skal starte (fordi page 2 starter på 30: 2 * 30 == 60 --> 60 - 30 --> 30)
+            // "" hvis page 0 fordi så bruger den default-start 0
+            string paging = page == 0 ? "" : $"&start={page * 30 - 30}";
+
+
+            // laver hver param om til fx "(color:rød OR grøn) AND"
+            string categoryParam = category != null ? CreateFilterParam(category) + "AND" : null;
+            string subCategoryParam = subCategory != null ? CreateFilterParam(subCategory) + "AND" : null;
+            string brandsParam = brands != null ? CreateFilterParam(brands) + "AND" : null;
+            string priceParam = priceGroup != null ? CreateFilterParam(priceGroup) + "AND" : null;
+            string ageGroupsParam = ageGroups != null ? CreateFilterParam(ageGroups) + "AND" : null;
+            string coloursParam = colours != null ? CreateFilterParam(colours) + "AND" : null;
+
+
+            string urlParams = categoryParam + subCategoryParam + brandsParam + priceParam + ageGroupsParam + coloursParam;
+
+            // Hvis der er nogle urlParams så sletter vi den sidste AND via urlParams.Substring(0, urlParams.Length - 3)
+            urlParams = !String.IsNullOrWhiteSpace(urlParams)
+                ? urlParams.Substring(0, urlParams.Length - 3)
+                : "*:*";
+
+            string url = "http://solr:8983/solr/toys/select?indent=true&q.op=OR&q=" + HttpUtility.UrlEncode(urlParams).Replace("+", "%20") + paging + sort;
+
+
+
+            var httpRequestMessage = new HttpRequestMessage(
+                HttpMethod.Get, url)
+            {
+                Headers =
+                    {
+                        { HeaderNames.Accept, "application/json" },
+                    }
+            };
+
+            var httpClient = _httpClientFactory.CreateClient();
+            httpClient.Timeout = TimeSpan.FromMinutes(1000);
+            var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
+
+            if (httpResponseMessage.IsSuccessStatusCode)
+            {
+                var jsonString = await httpResponseMessage.Content.ReadAsStringAsync();
+                dynamic content = JObject.Parse(jsonString);
+                return content;
+            }
+
+            return null;
+        }
+
+        public Dictionary<int, List<ShopToyDTO>> GetToysFromContent(dynamic content)
+        {
+            var toyDict = new Dictionary<int, List<ShopToyDTO>>();
+
+            if(content != null)
+            {
+                List<ShopToyDTO> shopToyDTOs = new List<ShopToyDTO>();
+
+                var response = content.response;
+
+                int numFound = response.numFound;
+
+                foreach (var toy in response.docs)
+                {
+                    string id = toy.id;
+                    string name = toy.name[0];
+                    int price = toy.price;
+                    string imageUrl = toy.image[0];
+
+                    shopToyDTOs.Add(new ShopToyDTO(id, name, price, imageUrl));
+                }
+                toyDict.Add(numFound, shopToyDTOs);
+            }
+            else
+            {
+                toyDict.Add(0, null);
+            }
+         
+            return toyDict;
+        }
+
+        public Dictionary<string, Dictionary<int, string>> GetFacetFieldsFromContent(dynamic content)
+        {
+            var facetFieldDict = new Dictionary<string, Dictionary<int, string>>();
+
+            if (content != null)
+            {
+                List<ShopToyDTO> shopToyDTOs = new List<ShopToyDTO>();
+
+                dynamic facetFields = content.facet_counts;
+
+
+                foreach (var facet in facetFields[1])
+                {
+
+                    dynamic keys = facet.brand;
+                    Console.WriteLine(keys);
+                    foreach(dynamic noget1 in facet)
+                    {
+                        Console.WriteLine(noget1);
+
+
+                    }
+                    
+
+
+
+                    Console.WriteLine(facet);
+
+                    var noget = facet.brand;
+
+
+                    //facetFieldDict.Add();
+
+
+
+
+
+                    /*
+
+                    string id = toy.id;
+                    string name = toy.name[0];
+                    int price = toy.price;
+                    string imageUrl = toy.image[0];
+
+                    shopToyDTOs.Add(new ShopToyDTO(id, name, price, imageUrl));
+                    */
+
+
+
+                }
+                //facetFieldDict.Add(numFound, shopToyDTOs);
+
+            }
+            else
+            {
+                facetFieldDict.Add(null, null);
+            }
+
+
+            return facetFieldDict;
         }
     }
 }

@@ -65,13 +65,29 @@ namespace CrazyToys.Web.Controllers
             [FromQuery(Name = "sort")] string sort)
         {
 
-            Dictionary<int, List<ShopToyDTO>> dict = await _solrToyService.GetToysForSinglePage(categories, subCategory, brand, priceGroup, ageGroupIntervals, colourGroups, pageNumber, search, sort);
+            dynamic content = await _solrToyService.GetContent(categories, subCategory, brand, priceGroup, ageGroupIntervals, colourGroups, pageNumber, search, sort);
 
-            int numFound = dict.ElementAt(0).Key;
-            List<ShopToyDTO> shopToyDTOs = dict.ElementAt(0).Value;
+            
+            Dictionary<int, List<ShopToyDTO>> toyDict = _solrToyService.GetToysFromContent(content);
+            Dictionary<string, Dictionary<int, string>> facetFieldDict = _solrToyService.GetFacetFieldsFromContent(content);
+
+             
+
+
+
+
+
+            //Dictionary<int, List<ShopToyDTO>> dict = await _solrToyService.GetToysForSinglePage(categories, subCategory, brand, priceGroup, ageGroupIntervals, colourGroups, pageNumber, search, sort);
+
+
+
+            int numFound = toyDict.ElementAt(0).Key;
+            List<ShopToyDTO> shopToyDTOs = toyDict.ElementAt(0).Value;
 
             SortedDictionary<string, int> brandDict = _solrToyService.GetBrandFacet();
             SortedDictionary<string, int> categoryDict = _solrToyService.GetCategoryFacet();
+            //SortedDictionary<string, int> subCategoryDict = _solrToyService.GetSubCategoryFacet();
+
 
             var sessionUser = _sessionService.GetNewOrExistingSessionUser(HttpContext);
 
@@ -81,6 +97,10 @@ namespace CrazyToys.Web.Controllers
             List<ColourGroup> colourGroupList = await _colourGroupDbService.GetAll();
             List<AgeGroup> ageGroupList = await _ageGroupDbService.GetAll();
             List<Category> categoryList = await _categoryDbService.GetAllWithRelations();
+
+
+
+            // Dict - 
 
             ViewData["NumFound"] = numFound;
             ViewData["Categories"] = categoryDict;

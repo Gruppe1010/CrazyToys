@@ -105,17 +105,6 @@ function updateParamsDict(paramsDict, type, param) // type == colour, param == r
                 ? paramsDict[type] = paramsDict[type].filter(n => n != param) // fjern den enkelte param fra arrayet
                 : delete paramsDict[type]; // fjern den enkelte param fra arrayet
 
-            /*
-            // hvis der er flere end den ene param tilbage på arrayet
-            if (paramsDict[type].length > 1) {
-                // fjern den enkelte param fra arrayet
-                paramsDict[type] = paramsDict[type].filter(n => n != param);
-            }
-            else {
-                // ellers fjern hele propertien == dvs. type
-                delete paramsDict[type];
-            }
-            */
             // hvis type der skal fjernes er categories skal alle dens subcategories også fjernes
             if (type == "categories") {
                 // hvis der er nogle subcats på dictet
@@ -128,7 +117,6 @@ function updateParamsDict(paramsDict, type, param) // type == colour, param == r
 
                 }
             }
-
         }
     }
     else // tilføj nyt key-value pair
