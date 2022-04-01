@@ -9,11 +9,11 @@
     Layout = "Master.cshtml";
     var paramsDict = ViewData["ParamsDict"] as Dictionary<string, HashSet<string>>;
 
-    var categories = ViewData["Categories"] as SortedDictionary<string, int>;
-    var brands = ViewData["Brands"] as SortedDictionary<string, int>;
-    var ageGroups = ViewData["AgeGroups"] as List<AgeGroup>;
-    var colourGroups = ViewData["ColourGroups"] as List<ColourGroup>;
-    var priceGroups = ViewData["PriceGroups"] as List<PriceGroup>;
+    var categories = ViewData["Categories"] as Dictionary<string, int>;
+    var brands = ViewData["Brands"] as Dictionary<string, int>;
+    var ageGroups = ViewData["AgeGroups"] as Dictionary<string, int>;
+    var colourGroups = ViewData["ColourGroups"] as Dictionary<string, int>;
+    var priceGroups = ViewData["PriceGroups"] as Dictionary<string, int>;
     var shopToyDTOs = ViewData["ShopToyDTOs"] as List<ShopToyDTO>;
     var categoryList = ViewData["CategoryList"] as List<Category>;
     var numFound = (int)ViewData["NumFound"];
@@ -107,12 +107,12 @@
                                         <div class="shop__sidebar__price">
                                             <ul>
                                                 @{
-                                                    foreach (PriceGroup priceGroup in priceGroups)
+                                                    foreach (KeyValuePair<string, int> priceGroup in priceGroups)
                                                     {
                                                         <li>
-                                                            <a class="@(paramsDict.Count > 0 && paramsDict.ContainsKey("priceGroup") && paramsDict["priceGroup"].Contains(priceGroup.Interval)
+                                                            <a class="@(paramsDict.Count > 0 && paramsDict.ContainsKey("priceGroup") && paramsDict["priceGroup"].Contains(priceGroup.Key)
                                                             ? "active-filter"
-                                                            : "")" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@Html.Raw(JsonConvert.SerializeObject(@paramsDict)), "priceGroup", "@priceGroup.Interval")'>@priceGroup.Interval DKK</a>
+                                                            : "")" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@Html.Raw(JsonConvert.SerializeObject(@paramsDict)), "priceGroup", "@priceGroup.Key")'>@priceGroup.Key DKK</a>
                                                         </li>
                                                     }
                                                 }
@@ -129,11 +129,11 @@
                                     <div class="card-body">
                                         <div class="shop__sidebar__size">
                                             @{
-                                                foreach (AgeGroup ageGroup in ageGroups)
+                                                foreach (KeyValuePair<string, int> ageGroup in ageGroups)
                                                 {
-                                                    <a class="@(paramsDict.Count > 0 && paramsDict.ContainsKey("ageGroupIntervals") && paramsDict["ageGroupIntervals"].Contains(ageGroup.Interval)
+                                                    <a class="@(paramsDict.Count > 0 && paramsDict.ContainsKey("ageGroupIntervals") && paramsDict["ageGroupIntervals"].Contains(ageGroup.Key)
                                                     ? "age-group-active"
-                                                    : "") age-group hover" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@Html.Raw(JsonConvert.SerializeObject(@paramsDict)), "ageGroupIntervals", "@ageGroup.Interval")'> @ageGroup.Interval </a>
+                                                    : "") age-group hover" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@Html.Raw(JsonConvert.SerializeObject(@paramsDict)), "ageGroupIntervals", "@ageGroup.Key")'> @ageGroup.Key </a>
                                                 }
                                             }
                                         </div>
@@ -148,11 +148,11 @@
                                     <div class="card-body">
                                         <div class="shop__sidebar__color">
                                             @{
-                                                foreach (ColourGroup colourGroup in colourGroups)
+                                                foreach (KeyValuePair<string, int> colourGroup in colourGroups)
                                                 {
-                                                    <a class="@(paramsDict.Count > 0 && paramsDict.ContainsKey("colourGroups") && paramsDict["colourGroups"].Contains(colourGroup.Name)
+                                                    <a class="@(paramsDict.Count > 0 && paramsDict.ContainsKey("colourGroups") && paramsDict["colourGroups"].Contains(colourGroup.Key)
                                                     ? "colour-group-filter-active"
-                                                    : "") colour-group-filter" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@Html.Raw(JsonConvert.SerializeObject(@paramsDict)), "colourGroups", "@colourGroup.Name")' style="background: @colourGroup.ColourCode"></a>
+                                                    : "") colour-group-filter" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@Html.Raw(JsonConvert.SerializeObject(@paramsDict)), "colourGroups", "@colourGroup.Key")'></a> // style="background: @colourGroup.ColourCode" TODO INDSÆT MANDAG
                                                 }
                                             }
                                         </div>

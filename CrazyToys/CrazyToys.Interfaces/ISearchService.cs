@@ -32,7 +32,7 @@ namespace CrazyToys.Interfaces
 
         Dictionary<int, List<ShopToyDTO>> GetToysFromContent(dynamic content);
 
-        Dictionary<string, Dictionary<int, string>> GetFacetFieldsFromContent(dynamic content);
+        Dictionary<string, Dictionary<string, int>> GetFacetFieldsFromContent(dynamic content);
 
 
         // TODO slet

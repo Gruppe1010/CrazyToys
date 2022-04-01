@@ -296,64 +296,43 @@ namespace CrazyToys.Services
             return toyDict;
         }
 
-        public Dictionary<string, Dictionary<int, string>> GetFacetFieldsFromContent(dynamic content)
+        public Dictionary<string, Dictionary<string, int>> GetFacetFieldsFromContent(dynamic content)
         {
-            var facetFieldDict = new Dictionary<string, Dictionary<int, string>>();
+            var facetFieldDict = new Dictionary<string, Dictionary<string, int>>();
 
             if (content != null)
             {
-                List<ShopToyDTO> shopToyDTOs = new List<ShopToyDTO>();
-
-                dynamic facetFields = content.facet_counts;
-
-
-                foreach (var facet in facetFields[1])
+                foreach (var facet in content.facet_counts.facet_fields)
                 {
+                    Dictionary<string, int> facetValueDict = new Dictionary<string, int>();
 
-                    dynamic keys = facet.brand;
-                    Console.WriteLine(keys);
-                    foreach(dynamic noget1 in facet)
+                    var key = facet.Name;
+                    var facetValues = facet.Value;
+
+                    facetFieldDict.Add(key, facetValueDict);
+
+                    string facetValueName = null;
+                    int facetValueQuantity;
+
+                    for (int i = 0; i < facetValues.Count; i++)
                     {
-                        Console.WriteLine(noget1);
-
-
+                        if (i % 2 == 1)
+                        {
+                            facetValueQuantity = facetValues[i];
+                            facetFieldDict[key].Add(facetValueName, facetValueQuantity);
+                        } 
+                        else
+                        {
+                            facetValueName = facetValues[i];
+                        }
                     }
-                    
-
-
-
-                    Console.WriteLine(facet);
-
-                    var noget = facet.brand;
-
-
-                    //facetFieldDict.Add();
-
-
-
-
-
-                    /*
-
-                    string id = toy.id;
-                    string name = toy.name[0];
-                    int price = toy.price;
-                    string imageUrl = toy.image[0];
-
-                    shopToyDTOs.Add(new ShopToyDTO(id, name, price, imageUrl));
-                    */
-
-
-
                 }
-                //facetFieldDict.Add(numFound, shopToyDTOs);
 
             }
             else
             {
                 facetFieldDict.Add(null, null);
             }
-
 
             return facetFieldDict;
         }
