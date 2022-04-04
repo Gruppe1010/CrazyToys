@@ -12,7 +12,7 @@
     var categories = ViewData["Categories"] as Dictionary<string, int>;
     var brands = ViewData["Brands"] as Dictionary<string, int>;
     var ageGroups = ViewData["AgeGroups"] as Dictionary<string, int>;
-    var colourGroups = ViewData["ColourGroups"] as Dictionary<string, int>;
+    var colourGroupDTOs = ViewData["ColourGroupDTOs"] as List<ColourGroupDTO>;
     var priceGroups = ViewData["PriceGroups"] as Dictionary<string, int>;
     var shopToyDTOs = ViewData["ShopToyDTOs"] as List<ShopToyDTO>;
     var categoryList = ViewData["CategoryList"] as List<Category>;
@@ -146,13 +146,14 @@
                                 </div>
                                 <div id="collapseFive" class="collapse show" data-parent="#accordionExample">
                                     <div class="card-body">
-                                        <div class="shop__sidebar__color">
+                                        <div class="shop__sidebar__color col-lg-6 col-sm-12">
                                             @{
-                                                foreach (KeyValuePair<string, int> colourGroup in colourGroups)
+                                                foreach (ColourGroupDTO colourGroupDTO in colourGroupDTOs)
                                                 {
-                                                    <a class="@(paramsDict.Count > 0 && paramsDict.ContainsKey("colourGroups") && paramsDict["colourGroups"].Contains(colourGroup.Key)
+                                                    <a class="@(paramsDict.Count > 0 && paramsDict.ContainsKey("colourGroups") && paramsDict["colourGroups"].Contains(colourGroupDTO.Name)
                                                     ? "colour-group-filter-active"
-                                                    : "") colour-group-filter" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@Html.Raw(JsonConvert.SerializeObject(@paramsDict)), "colourGroups", "@colourGroup.Key")'></a> // style="background: @colourGroup.ColourCode" TODO INDSÆT MANDAG
+                                                    : "") colour-group-filter" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@Html.Raw(JsonConvert.SerializeObject(@paramsDict)), "colourGroups", "@colourGroupDTO.Name")' style="background: @colourGroupDTO.ColourCode"></a>
+                                                    <span class="colour-group-found-amount">&nbsp;(@colourGroupDTO.FoundAmount)</span><br>
                                                 }
                                             }
                                         </div>
