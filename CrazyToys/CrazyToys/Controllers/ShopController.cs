@@ -72,15 +72,10 @@ namespace CrazyToys.Web.Controllers
 
             dynamic content = await _solrToyService.GetContent(categories, subCategory, brand, priceGroup, ageGroupIntervals, colourGroups, pageNumber, search, sort);
 
-
             Dictionary<int, List<ShopToyDTO>> toyDict = _solrToyService.GetToysFromContent(content);
             Dictionary<string, Dictionary<string, int>> facetFieldDict = _solrToyService.GetFacetFieldsFromContent(content);
 
-            // farvekoder skal hentes fra db også
-            //Dictionary<int, List<ShopToyDTO>> dict = await _solrToyService.GetToysForSinglePage(categories, subCategory, brand, priceGroup, ageGroupIntervals, colourGroups, pageNumber, search, sort);
-
-
-
+         
             int numFound = toyDict.ElementAt(0).Key;
             List<ShopToyDTO> shopToyDTOs = toyDict.ElementAt(0).Value;
 
@@ -105,46 +100,20 @@ namespace CrazyToys.Web.Controllers
                 : new List<BrandDTO>();
 
 
-            //SortedDictionary<string, int> brandDict = _solrToyService.GetBrandFacet();
-            //SortedDictionary<string, int> categoryDict = _solrToyService.GetCategoryFacet();
-            //SortedDictionary<string, int> subCategoryDict = _solrToyService.GetSubCategoryFacet();
-
-
-
-
-            /*
-            List<PriceGroup> priceGroups = await _priceGroupDbService.GetAll();
-            List<AgeGroup> ageGroupList = await _ageGroupDbService.GetAll();
-            */
-
             var sessionUser = _sessionService.GetNewOrExistingSessionUser(HttpContext);
             HashSet<string> wishlistToys = sessionUser.Wishlist;
 
             ViewData["NumFound"] = numFound;
-            ViewData["Categories"] = facetFieldDict["categories"];
-            ViewData["AgeGroupDTOs"] = ageGroupDTOs;
-
-            ViewData["PriceGroups"] = priceGroupDTOs;
-            ViewData["CategoryDTOs"] = categoryDTOs; // TODO Vi skal hente fra Solr og Db og få ind i view
-            ViewData["BrandDTOs"] = brandDTOs;
-            ViewData["ColourGroupDTOs"] = colourGroupDTOs;
-
-
             ViewData["ShopToyDTOs"] = shopToyDTOs;
+            ViewData["WishlistToys"] = wishlistToys;
             ViewData["ParamsDict"] = CreateDictFromParams(categories, subCategory, brand, priceGroup, ageGroupIntervals, colourGroups, search);
             ViewData["PageNumber"] = pageNumber == 0 ? 1 : pageNumber;
-            ViewData["WishlistToys"] = wishlistToys;
 
-            /*
-            ViewData["NumFound"] = numFound;
-            ViewData["Categories"] = categoryDict;
-            ViewData["AgeGroups"] = ageGroupList.OrderBy(a => a.Interval).ToList();
-            ViewData["PriceGroups"] = priceGroups.OrderBy(p => p.Interval).ToList();
-            ViewData["CategoryList"] = categoryList.OrderBy(c => c.Name).ToList();
-            ViewData["Brands"] = brandDict;
-            ViewData["ColourGroups"] = colourGroupList.OrderBy(c => c.Name).ToList();
-      
-            */
+            ViewData["CategoryDTOs"] = categoryDTOs;
+            ViewData["BrandDTOs"] = brandDTOs;
+            ViewData["PriceGroups"] = priceGroupDTOs;
+            ViewData["AgeGroupDTOs"] = ageGroupDTOs;
+            ViewData["ColourGroupDTOs"] = colourGroupDTOs;
 
             ViewBag.Current = "Butik";
 
