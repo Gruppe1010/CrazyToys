@@ -210,3 +210,9 @@
     width: 200px !important;
     float: left !important;
 }
+
+.colour-group-found-amount {
+    position: absolute;
+    padding-top: 3px;
+}
+
