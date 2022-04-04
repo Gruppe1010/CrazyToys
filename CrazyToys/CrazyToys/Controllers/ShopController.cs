@@ -80,7 +80,7 @@ namespace CrazyToys.Web.Controllers
             List<ShopToyDTO> shopToyDTOs = toyDict.ElementAt(0).Value;
 
             List<CategoryDTO> categoryDTOs = facetFieldDict.ContainsKey("categories")
-               ? await CreateCategoryDTOList(facetFieldDict["categories"], facetFieldDict.ContainsKey("subCategory") ? facetFieldDict["subCategory"] : null)
+               ? await CreateCategoryDTOList(facetFieldDict["categories"], facetFieldDict.ContainsKey("subCategory_str") ? facetFieldDict["subCategory_str"] : null)
                : new List<CategoryDTO>();
 
             List<BrandDTO> brandDTOs = facetFieldDict.ContainsKey("brand")
@@ -160,9 +160,13 @@ namespace CrazyToys.Web.Controllers
                         {
                             foreach (SubCategory subCategory in category.SubCategories)
                             {
-                                if (subCategoryGroupFacets.ContainsKey(subCategory.Name.ToLower()))
+                                Console.WriteLine(subCategory.Name);
+
+                                if (subCategoryGroupFacets.ContainsKey(subCategory.Name))
                                 {
-                                    categoryDTO.SubCategoryDTOs.Add(new SubCategoryDTO(subCategory.ID, subCategory.Name, subCategoryGroupFacets[subCategory.Name.ToLower()]));
+                                    Console.WriteLine("-------------------------" + subCategory.Name);
+
+                                    categoryDTO.SubCategoryDTOs.Add(new SubCategoryDTO(subCategory.ID, subCategory.Name, subCategoryGroupFacets[subCategory.Name]));
                                 }
                             }
                             categoryDTO.SubCategoryDTOs = categoryDTO.SubCategoryDTOs.OrderBy(s => s.Name).ToList();
