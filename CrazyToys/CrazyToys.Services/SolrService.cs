@@ -98,106 +98,31 @@ namespace CrazyToys.Services
         // _colour.rød.blå.grøn ---> (colour: rød OR blå OR grøn)
         public string CreateFilterParam(string param)
         {
-            if(param == null)
+            if (param == null)
             {
                 return null;
             }
-            string s = "(";
+            string s = "fq={!tag=";
 
             string[] values = param.Split('.');
 
-            // "(colour:"
-            s = s + values[0] + ":(";
+            // filterOption == navnet på en af propertiesne på et solrToy - fx colourGroups
+            string filterOption = values[0];
 
-            for(int i = 1; i < values.Length; i++)
+            // "fq={!tag=colourGroups
+            s = s + filterOption + "}" + filterOption + ":";
+
+            for (int i = 1; i < values.Length; i++)
             {
                 s = s + "\"" + values[i] + "\",";
             }
 
-            s = s.Substring(0, s.Length - 1) + "))"; // vi sletter det sidste OR
+            s = s.Substring(0, s.Length - 1); // vi sletter det sidste komma
 
             return s;
         }
+
         
-        /*
-         * Laver en get-request til solr for at få fat i toys ud fra de valgte filtreringer på shop-siden
-         * **/
-        public async Task<Dictionary<int, List<ShopToyDTO>>> GetToysForSinglePage(
-            string category, string subCategory, 
-            string brands, string priceGroup, 
-            string ageGroups, string colours, // fx: rød.blå.grøn
-            int page,string search, string sort) // fx: price_asc
-        {
-            // sort=price asc
-            sort = sort != null ? "&sort=" + sort.Replace("_", "%20") : null;
-            //det sted hvor den skal starte (fordi page 2 starter på 30: 2 * 30 == 60 --> 60 - 30 --> 30)
-            // "" hvis page 0 fordi så bruger den default-start 0
-            string paging = page == 0 ? "" : $"&start={page * 30 - 30}";
-
-            var dict = new Dictionary<int, List<ShopToyDTO>>();
-
-            // laver hver param om til fx "(color:rød OR grøn) AND"
-            string categoryParam = category != null ? CreateFilterParam(category) + "AND" : null;
-            string subCategoryParam = subCategory != null ? CreateFilterParam(subCategory) + "AND" : null;
-            string brandsParam = brands != null ? CreateFilterParam(brands) + "AND" : null;
-            string priceParam = priceGroup != null ? CreateFilterParam(priceGroup) + "AND" : null;
-            string ageGroupsParam = ageGroups != null ? CreateFilterParam(ageGroups) + "AND" : null;
-            string coloursParam = colours != null ? CreateFilterParam(colours) + "AND" : null;
-           
-
-            string urlParams = categoryParam + subCategoryParam + brandsParam + priceParam + ageGroupsParam + coloursParam;
-
-            // Hvis der er nogle urlParams så sletter vi den sidste AND via urlParams.Substring(0, urlParams.Length - 3)
-            urlParams = !String.IsNullOrWhiteSpace(urlParams) 
-                ? urlParams.Substring(0, urlParams.Length - 3)
-                : "*:*";
-
-            string url = "http://solr:8983/solr/toys/select?indent=true&q.op=OR&q=" + HttpUtility.UrlEncode(urlParams).Replace("+", "%20") + paging + sort;
-
-
-
-            var httpRequestMessage = new HttpRequestMessage(
-                HttpMethod.Get, url)
-            {
-                Headers =
-                    {
-                        { HeaderNames.Accept, "application/json" },
-                    }
-            };
-
-            var httpClient = _httpClientFactory.CreateClient();
-            httpClient.Timeout = TimeSpan.FromMinutes(1000);
-            var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
-
-            if (httpResponseMessage.IsSuccessStatusCode)
-            {
-                List<ShopToyDTO> shopToyDTOs = new List<ShopToyDTO>();
-
-                var jsonString = await httpResponseMessage.Content.ReadAsStringAsync();
-                dynamic content = JObject.Parse(jsonString);
-
-                var response = content.response;
-                // var facetFields = content.facet_counts.facet_fields;
-
-                int numFound = response.numFound;
-
-                foreach (var toy in response.docs)
-                {
-                    string id = toy.id;
-                    string name = toy.name[0];
-                    int price1 = toy.price;
-                    string imageUrl = toy.image[0];
-
-                    shopToyDTOs.Add(new ShopToyDTO(id, name, price1, imageUrl));
-                }
-                dict.Add(numFound, shopToyDTOs);
-            }
-            else
-            {
-                dict.Add(0, null);
-            }
-            return dict;
-        }
 
         public void Delete(T document)
         {
@@ -221,26 +146,21 @@ namespace CrazyToys.Services
             // "" hvis page 0 fordi så bruger den default-start 0
             string paging = page == 0 ? "" : $"&start={page * 30 - 30}";
 
-
             // laver hver param om til fx "(color:rød OR grøn) AND"
-            string categoryParam = category != null ? CreateFilterParam(category) + "AND" : null;
-            string subCategoryParam = subCategory != null ? CreateFilterParam(subCategory) + "AND" : null;
-            string brandsParam = brands != null ? CreateFilterParam(brands) + "AND" : null;
-            string priceParam = priceGroup != null ? CreateFilterParam(priceGroup) + "AND" : null;
-            string ageGroupsParam = ageGroups != null ? CreateFilterParam(ageGroups) + "AND" : null;
-            string coloursParam = colours != null ? CreateFilterParam(colours) + "AND" : null;
-
+            string categoryParam = category != null ? CreateFilterParam(category) + "&" : null;
+            string subCategoryParam = subCategory != null ? CreateFilterParam(subCategory) + "&" : null;
+            string brandsParam = brands != null ? CreateFilterParam(brands) + "&" : null;
+            string priceParam = priceGroup != null ? CreateFilterParam(priceGroup) + "&" : null;
+            string ageGroupsParam = ageGroups != null ? CreateFilterParam(ageGroups) + "&" : null;
+            string coloursParam = colours != null ? CreateFilterParam(colours) + "&" : null;
 
             string urlParams = categoryParam + subCategoryParam + brandsParam + priceParam + ageGroupsParam + coloursParam;
 
-            // Hvis der er nogle urlParams så sletter vi den sidste AND via urlParams.Substring(0, urlParams.Length - 3)
             urlParams = !String.IsNullOrWhiteSpace(urlParams)
-                ? urlParams.Substring(0, urlParams.Length - 3)
-                : "*:*";
+                ? urlParams.Substring(0, urlParams.Length - 1)
+                : "";
 
-            string url = "http://solr:8983/solr/toys/select?indent=true&q.op=OR&q=" + HttpUtility.UrlEncode(urlParams).Replace("+", "%20") + paging + sort;
-
-
+            string url = "http://solr:8983/solr/toys/select?indent=true&q.op=OR&q=*%3A*" + paging + sort + "&" + urlParams.Replace("+", "%20"); 
 
             var httpRequestMessage = new HttpRequestMessage(
                 HttpMethod.Get, url)

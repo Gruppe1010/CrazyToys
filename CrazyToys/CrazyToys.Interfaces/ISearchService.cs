@@ -28,34 +28,9 @@ namespace CrazyToys.Interfaces
             string search, 
             string sort);
 
-
-
         Dictionary<int, List<ShopToyDTO>> GetToysFromContent(dynamic content);
 
         Dictionary<string, Dictionary<string, int>> GetFacetFieldsFromContent(dynamic content);
 
-
-        // TODO slet
-        Task<Dictionary<int, List<ShopToyDTO>>> GetToysForSinglePage(
-            string category,
-            string subCategory,
-            string brands,
-            string price,
-            string ageGroups,
-            string colours,
-            int page,
-            string search,
-            string sort);
-       
-
-        //TODO Fjern det her nå vi får hentet fra SQL i stedet
-        /*
-        List<string> GetPriceGroupFacet();
-        */
-
-        /*
-        // TODO slet hvis det er
-        List<SolrToy> GetAll();
-        */
     }
 }

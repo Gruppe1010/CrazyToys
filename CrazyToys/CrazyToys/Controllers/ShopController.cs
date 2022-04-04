@@ -83,6 +83,14 @@ namespace CrazyToys.Web.Controllers
                ? await CreateCategoryDTOList(facetFieldDict["categories"], facetFieldDict.ContainsKey("subCategory") ? facetFieldDict["subCategory"] : null)
                : new List<CategoryDTO>();
 
+            List<BrandDTO> brandDTOs = facetFieldDict.ContainsKey("brand")
+                ? await CreateBrandDTOList(facetFieldDict["brand"])
+                : new List<BrandDTO>();
+
+            List<PriceGroupDTO> priceGroupDTOs = facetFieldDict.ContainsKey("priceGroup")
+                ? await CreatePriceGroupDTOList(facetFieldDict["priceGroup"])
+                : new List<PriceGroupDTO>();
+
             List<AgeGroupDTO> ageGroupDTOs = facetFieldDict.ContainsKey("ageGroupIntervals")
                ? await CreateAgeGroupDTOList(facetFieldDict["ageGroupIntervals"])
                : new List<AgeGroupDTO>();
@@ -90,15 +98,6 @@ namespace CrazyToys.Web.Controllers
             List<ColourGroupDTO> colourGroupDTOs = facetFieldDict.ContainsKey("colourGroups")
                 ? await CreateColourGroupDTOList(facetFieldDict["colourGroups"])
                 : new List<ColourGroupDTO>();
-
-            List<PriceGroupDTO> priceGroupDTOs = facetFieldDict.ContainsKey("priceGroup")
-                ? await CreatePriceGroupDTOList(facetFieldDict["priceGroup"])
-                : new List<PriceGroupDTO>();
-
-            List<BrandDTO> brandDTOs = facetFieldDict.ContainsKey("brand")
-                ? await CreateBrandDTOList(facetFieldDict["brand"])
-                : new List<BrandDTO>();
-
 
             var sessionUser = _sessionService.GetNewOrExistingSessionUser(HttpContext);
             HashSet<string> wishlistToys = sessionUser.Wishlist;
