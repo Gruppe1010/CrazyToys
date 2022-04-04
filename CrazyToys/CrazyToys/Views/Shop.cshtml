@@ -12,9 +12,9 @@
 
     var categories = ViewData["Categories"] as Dictionary<string, int>;
     var brandDTOs = ViewData["BrandDTOs"] as List<BrandDTO>;
-    var ageGroups = ViewData["AgeGroups"] as Dictionary<string, int>;
+    var ageGroupDTOs = ViewData["AgeGroupDTOs"] as List<AgeGroupDTO>;
     var colourGroupDTOs = ViewData["ColourGroupDTOs"] as List<ColourGroupDTO>;
-    var priceGroups = ViewData["PriceGroups"] as Dictionary<string, int>;
+    var priceGroupDTOs = ViewData["PriceGroups"] as List<PriceGroupDTO>;
     var shopToyDTOs = ViewData["ShopToyDTOs"] as List<ShopToyDTO>;
     var categoryDTOs = ViewData["CategoryDTOs"] as List<CategoryDTO> ;
     var numFound = (int)ViewData["NumFound"];
@@ -108,12 +108,12 @@
                                         <div class="shop__sidebar__price">
                                             <ul>
                                                 @{
-                                                    foreach (KeyValuePair<string, int> priceGroup in priceGroups)
+                                                    foreach (PriceGroupDTO priceGroupDTO in priceGroupDTOs)
                                                     {
                                                         <li>
-                                                            <a class="@(paramsDict.Count > 0 && paramsDict.ContainsKey("priceGroup") && paramsDict["priceGroup"].Contains(priceGroup.Key)
+                                                            <a class="@(paramsDict.Count > 0 && paramsDict.ContainsKey("priceGroup") && paramsDict["priceGroup"].Contains(priceGroupDTO.Interval)
                                                             ? "active-filter"
-                                                            : "")" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@Html.Raw(JsonConvert.SerializeObject(@paramsDict)), "priceGroup", "@priceGroup.Key")'>@priceGroup.Key DKK</a>
+                                                            : "")" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@Html.Raw(JsonConvert.SerializeObject(@paramsDict)), "priceGroup", "@priceGroupDTO.Interval")'>@priceGroupDTO.Interval DKK (@priceGroupDTO.FoundAmount)</a>
                                                         </li>
                                                     }
                                                 }
@@ -130,11 +130,13 @@
                                     <div class="card-body">
                                         <div class="shop__sidebar__size">
                                             @{
-                                                foreach (KeyValuePair<string, int> ageGroup in ageGroups)
+                                                foreach (AgeGroupDTO ageGroupDTO in ageGroupDTOs)
                                                 {
-                                                    <a class="@(paramsDict.Count > 0 && paramsDict.ContainsKey("ageGroupIntervals") && paramsDict["ageGroupIntervals"].Contains(ageGroup.Key)
+                                                    <a class="@(paramsDict.Count > 0 && paramsDict.ContainsKey("ageGroupIntervals") && paramsDict["ageGroupIntervals"].Contains(ageGroupDTO.Interval)
                                                     ? "age-group-active"
-                                                    : "") age-group hover" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@Html.Raw(JsonConvert.SerializeObject(@paramsDict)), "ageGroupIntervals", "@ageGroup.Key")'> @ageGroup.Key </a>
+                                                    : "") age-group hover" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@Html.Raw(JsonConvert.SerializeObject(@paramsDict)), "ageGroupIntervals", "@ageGroupDTO.Interval")'> @ageGroupDTO.Interval</a>
+                                                    <span>&nbsp;(@ageGroupDTO.FoundAmount)</span>
+                                                    <br>
                                                 }
                                             }
                                         </div>

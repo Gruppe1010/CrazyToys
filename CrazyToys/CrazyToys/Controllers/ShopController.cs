@@ -88,16 +88,21 @@ namespace CrazyToys.Web.Controllers
                ? await CreateCategoryDTOList(facetFieldDict["categories"], facetFieldDict.ContainsKey("subCategory") ? facetFieldDict["subCategory"] : null)
                : new List<CategoryDTO>();
 
+            List<AgeGroupDTO> ageGroupDTOs = facetFieldDict.ContainsKey("ageGroupIntervals")
+               ? await CreateAgeGroupDTOList(facetFieldDict["ageGroupIntervals"])
+               : new List<AgeGroupDTO>();
+
             List<ColourGroupDTO> colourGroupDTOs = facetFieldDict.ContainsKey("colourGroups")
                 ? await CreateColourGroupDTOList(facetFieldDict["colourGroups"])
                 : new List<ColourGroupDTO>();
 
+            List<PriceGroupDTO> priceGroupDTOs = facetFieldDict.ContainsKey("priceGroup")
+                ? await CreatePriceGroupDTOList(facetFieldDict["priceGroup"])
+                : new List<PriceGroupDTO>();
 
             List<BrandDTO> brandDTOs = facetFieldDict.ContainsKey("brand")
                 ? await CreateBrandDTOList(facetFieldDict["brand"])
                 : new List<BrandDTO>();
-
-
 
 
             //SortedDictionary<string, int> brandDict = _solrToyService.GetBrandFacet();
@@ -117,8 +122,9 @@ namespace CrazyToys.Web.Controllers
 
             ViewData["NumFound"] = numFound;
             ViewData["Categories"] = facetFieldDict["categories"];
-            ViewData["AgeGroups"] = facetFieldDict["ageGroupIntervals"];
-            ViewData["PriceGroups"] = facetFieldDict["priceGroup"];
+            ViewData["AgeGroupDTOs"] = ageGroupDTOs;
+
+            ViewData["PriceGroups"] = priceGroupDTOs;
             ViewData["CategoryDTOs"] = categoryDTOs; // TODO Vi skal hente fra Solr og Db og få ind i view
             ViewData["BrandDTOs"] = brandDTOs;
             ViewData["ColourGroupDTOs"] = colourGroupDTOs;
@@ -171,7 +177,7 @@ namespace CrazyToys.Web.Controllers
             List<CategoryDTO> categoryDTOs = new List<CategoryDTO>();
 
             List<Category> categories = await _categoryDbService.GetAllWithRelations();
-           
+
 
             if (categories != null)
             {
@@ -200,6 +206,49 @@ namespace CrazyToys.Web.Controllers
             }
 
             return categoryDTOs.OrderBy(c => c.Name).ToList();
+        }
+
+        public async Task<List<PriceGroupDTO>> CreatePriceGroupDTOList(Dictionary<string, int> priceGroupFacets)
+        {
+            List<PriceGroupDTO> priceGroupDTOs = new List<PriceGroupDTO>();
+
+            List<PriceGroup> priceGroups = await _priceGroupDbService.GetAll();
+
+            if (priceGroupFacets != null)
+            {
+                foreach (PriceGroup priceGroup in priceGroups)
+                {
+
+                    if (priceGroupFacets.ContainsKey(priceGroup.Interval.ToLower()))
+                    {
+                        priceGroupDTOs.Add(new PriceGroupDTO(priceGroup.ID, priceGroup.Interval, priceGroupFacets[priceGroup.Interval.ToLower()]));
+                    }
+                }
+            }
+
+            return priceGroupDTOs.OrderBy(c => c.Interval).ToList();
+        }
+
+
+        public async Task<List<AgeGroupDTO>> CreateAgeGroupDTOList(Dictionary<string, int> ageGroupFacets)
+        {
+            List<AgeGroupDTO> ageGroupDTOs = new List<AgeGroupDTO>();
+
+            List<AgeGroup> ageGroups = await _ageGroupDbService.GetAll();
+
+            if (ageGroupFacets != null)
+            {
+                foreach (AgeGroup ageGroup in ageGroups)
+                {
+
+                    if (ageGroupFacets.ContainsKey(ageGroup.Interval.ToLower()))
+                    {
+                        ageGroupDTOs.Add(new AgeGroupDTO(ageGroup.ID, ageGroup.Interval, ageGroupFacets[ageGroup.Interval.ToLower()]));
+                    }
+                }
+            }
+
+            return ageGroupDTOs.OrderBy(a => a.Interval).ToList();
         }
 
 
