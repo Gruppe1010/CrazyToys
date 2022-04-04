@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CrazyToys.Entities.DTOs
+namespace CrazyToys.Entities.DTOs.FacetDTOs
 {
     public class CategoryDTO
     {
@@ -17,7 +17,7 @@ namespace CrazyToys.Entities.DTOs
             SubCategoryDTOs = new List<SubCategoryDTO>();
         }
 
-     
+
 
     }
 }

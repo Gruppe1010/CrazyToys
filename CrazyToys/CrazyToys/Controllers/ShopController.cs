@@ -1,4 +1,5 @@
 ﻿using CrazyToys.Entities.DTOs;
+using CrazyToys.Entities.DTOs.FacetDTOs;
 using CrazyToys.Entities.Entities;
 using CrazyToys.Entities.SolrModels;
 using CrazyToys.Interfaces;
@@ -83,6 +84,10 @@ namespace CrazyToys.Web.Controllers
                ? await CreateCategoryDTOList(facetFieldDict["categories"], facetFieldDict.ContainsKey("subCategory") ? facetFieldDict["subCategory"] : null)
                : new List<CategoryDTO>();
 
+            List<AgeGroupDTO> ageGroupDTOs = facetFieldDict.ContainsKey("ageGroupIntervals")
+               ? await CreateAgeGroupDTOList(facetFieldDict["ageGroupIntervals"])
+               : new List<AgeGroupDTO>();
+
             List<ColourGroupDTO> colourGroupDTOs = facetFieldDict.ContainsKey("colourGroups")
                 ? await CreateColourGroupDTOList(facetFieldDict["colourGroups"])
                 : new List<ColourGroupDTO>();
@@ -107,7 +112,7 @@ namespace CrazyToys.Web.Controllers
 
             ViewData["NumFound"] = numFound;
             ViewData["Categories"] = facetFieldDict["categories"];
-            ViewData["AgeGroups"] = facetFieldDict["ageGroupIntervals"];
+            ViewData["AgeGroupDTOs"] = ageGroupDTOs;
             ViewData["PriceGroups"] = facetFieldDict["priceGroup"];
             ViewData["CategoryDTOs"] = categoryDTOs; // TODO Vi skal hente fra Solr og Db og få ind i view
             ViewData["Brands"] = facetFieldDict["brand"];
@@ -141,7 +146,7 @@ namespace CrazyToys.Web.Controllers
             List<CategoryDTO> categoryDTOs = new List<CategoryDTO>();
 
             List<Category> categories = await _categoryDbService.GetAllWithRelations();
-           
+
 
             if (categories != null)
             {
@@ -170,6 +175,29 @@ namespace CrazyToys.Web.Controllers
             }
 
             return categoryDTOs.OrderBy(c => c.Name).ToList();
+        }
+
+
+
+        public async Task<List<AgeGroupDTO>> CreateAgeGroupDTOList(Dictionary<string, int> ageGroupFacets)
+        {
+            List<AgeGroupDTO> ageGroupDTOs = new List<AgeGroupDTO>();
+
+            List<AgeGroup> ageGroups = await _ageGroupDbService.GetAll();
+
+            if (ageGroupFacets != null)
+            {
+                foreach (AgeGroup ageGroup in ageGroups)
+                {
+
+                    if (ageGroupFacets.ContainsKey(ageGroup.Interval.ToLower()))
+                    {
+                        ageGroupDTOs.Add(new AgeGroupDTO(ageGroup.ID, ageGroup.Interval, ageGroupFacets[ageGroup.Interval.ToLower()]));
+                    }
+                }
+            }
+
+            return ageGroupDTOs.OrderBy(a => a.Interval).ToList();
         }
 
 

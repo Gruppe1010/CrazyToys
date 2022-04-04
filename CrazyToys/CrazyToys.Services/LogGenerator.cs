@@ -3,11 +3,11 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace CrazyToys.Web.Logging
+namespace CrazyToys.Services
 {
     public class LogGenerator : ILog
     {
-        public async Task WriteExceptionToLog(string className, string methodName,  Exception e)
+        public async Task WriteExceptionToLog(string className, string methodName, Exception e)
         {
             DateTime timeOfError = DateTime.Now;
             string dateString = timeOfError.ToString();

@@ -1,4 +1,5 @@
-﻿@using CrazyToys.Entities.DTOs
+﻿@using CrazyToys.Entities.DTOs.FacetDTOs
+@using CrazyToys.Entities.DTOs
 @using CrazyToys.Entities.Entities
 @using CrazyToys.Entities.SolrModels
 @using CrazyToys.Web;
@@ -11,7 +12,7 @@
 
     var categories = ViewData["Categories"] as Dictionary<string, int>;
     var brands = ViewData["Brands"] as Dictionary<string, int>;
-    var ageGroups = ViewData["AgeGroups"] as Dictionary<string, int>;
+    var ageGroupDTOs = ViewData["AgeGroupDTOs"] as List<AgeGroupDTO>;
     var colourGroupDTOs = ViewData["ColourGroupDTOs"] as List<ColourGroupDTO>;
     var priceGroups = ViewData["PriceGroups"] as Dictionary<string, int>;
     var shopToyDTOs = ViewData["ShopToyDTOs"] as List<ShopToyDTO>;
@@ -129,11 +130,13 @@
                                     <div class="card-body">
                                         <div class="shop__sidebar__size">
                                             @{
-                                                foreach (KeyValuePair<string, int> ageGroup in ageGroups)
+                                                foreach (AgeGroupDTO ageGroupDTO in ageGroupDTOs)
                                                 {
-                                                    <a class="@(paramsDict.Count > 0 && paramsDict.ContainsKey("ageGroupIntervals") && paramsDict["ageGroupIntervals"].Contains(ageGroup.Key)
+                                                    <a class="@(paramsDict.Count > 0 && paramsDict.ContainsKey("ageGroupIntervals") && paramsDict["ageGroupIntervals"].Contains(ageGroupDTO.Interval)
                                                     ? "age-group-active"
-                                                    : "") age-group hover" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@Html.Raw(JsonConvert.SerializeObject(@paramsDict)), "ageGroupIntervals", "@ageGroup.Key")'> @ageGroup.Key </a>
+                                                    : "") age-group hover" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@Html.Raw(JsonConvert.SerializeObject(@paramsDict)), "ageGroupIntervals", "@ageGroupDTO.Interval")'> @ageGroupDTO.Interval</a>
+                                                    <span>&nbsp;(@ageGroupDTO.FoundAmount)</span>
+                                                    <br>
                                                 }
                                             }
                                         </div>

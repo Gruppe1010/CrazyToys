@@ -1,4 +1,4 @@
-﻿using CrazyToys.Entities.Entities;
+﻿using CrazyToys.Entities.DTOs;
 using CrazyToys.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
