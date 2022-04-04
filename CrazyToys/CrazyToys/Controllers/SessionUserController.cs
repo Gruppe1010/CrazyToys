@@ -4,6 +4,7 @@ using CrazyToys.Interfaces;
 using CrazyToys.Services.EntityDbServices;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace CrazyToys.Web.Controllers
@@ -44,6 +45,34 @@ namespace CrazyToys.Web.Controllers
 
             return StatusCode(500);
         }
+        //TODO
+        [HttpPost]
+        public async Task<ActionResult> CheckIfAvailable()
+        {
+            var sessionUser = _sessionService.GetNewOrExistingSessionUser(HttpContext);
+
+            List<ShoppingCartToyDTO> shoppingCartToyDTOs = new List<ShoppingCartToyDTO>();
+
+            foreach (var entry in sessionUser.Cart)
+            {
+                Toy toy = await _toyDbService.GetById(entry.Key);
+                if(toy.Stock >= entry.Value)
+                {
+                    shoppingCartToyDTOs.Add(toy.ConvertToShoppingCartToyDTO(entry.Value));
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+
+            if(shoppingCartToyDTOs.Count != sessionUser.Cart.Count)
+            {
+                return BadRequest();
+            }
+            return Ok();
+        }
+
 
 
         [HttpPost]

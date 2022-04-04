@@ -30,11 +30,11 @@ namespace CrazyToys.Web.Controllers
         //[FromQuery bruges til at tage imod query parameter fra url]
         public async Task<IActionResult> Index()
         {
-            var sessionsUser = _sessionService.GetNewOrExistingSessionUser(HttpContext);
+            var sessionUser = _sessionService.GetNewOrExistingSessionUser(HttpContext);
 
             List<ShoppingCartToyDTO> shoppingCartToytDTOs = new List<ShoppingCartToyDTO>();
 
-            foreach (var entry in sessionsUser.Cart)
+            foreach (var entry in sessionUser.Cart)
             {
                 Toy toy = await _toyDbService.GetById(entry.Key);
                 shoppingCartToytDTOs.Add(toy.ConvertToShoppingCartToyDTO(entry.Value));

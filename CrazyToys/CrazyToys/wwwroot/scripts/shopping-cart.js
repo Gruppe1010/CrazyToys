@@ -126,6 +126,27 @@ function decQuantity(id) { //
     }
 }
 
+function goToCheckout() {
+
+    fetch(`https://localhost:44325/api/sessionuser/CheckIfAvailable`, {
+        method: 'POST'
+    }).then(response => {
+        debugger;
+        if (response.ok) {
+
+            window.location.replace("https://localhost:44325/checkout")
+            
+        } else {
+            alert("Der skete en fejl");
+            window.location.replace("/shopping-cart");
+
+        }
+    }).catch(error => console.log);
+
+
+
+}
+
 function updateTotal(id, price) {
     document.getElementById(`total-${id}`).innerText = price + " DKK";
 }
