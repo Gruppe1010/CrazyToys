@@ -10,15 +10,18 @@ namespace CrazyToys.Entities.DTOs
     {
         public string ID { get; set; }
         public string Name { get; set; }
-        public List<SubCategoryDTO> subCategoryDTOs { get; set; }
+        public List<SubCategoryDTO> SubCategoryDTOs { get; set; }
         public int FoundAmount { get; set; }
 
-        public CategoryDTO(string iD, string name, List<SubCategoryDTO> subCategoryDTOs, int foundAmount)
+        public CategoryDTO(string iD, string name, int foundAmount)
         {
             ID = iD;
             Name = name;
-            this.subCategoryDTOs = subCategoryDTOs;
             FoundAmount = foundAmount;
+            SubCategoryDTOs = new List<SubCategoryDTO>();
         }
+
+     
+
     }
 }
