@@ -1,4 +1,5 @@
 ﻿@using CrazyToys.Entities.DTOs
+@using CrazyToys.Entities.DTOs.FacetDTOs
 @using CrazyToys.Entities.Entities
 @using CrazyToys.Entities.SolrModels
 @using CrazyToys.Web;
@@ -13,7 +14,7 @@
     var brands = ViewData["Brands"] as Dictionary<string, int>;
     var ageGroups = ViewData["AgeGroups"] as Dictionary<string, int>;
     var colourGroupDTOs = ViewData["ColourGroupDTOs"] as List<ColourGroupDTO>;
-    var priceGroups = ViewData["PriceGroups"] as Dictionary<string, int>;
+    var priceGroupDTOs = ViewData["PriceGroups"] as List<PriceGroupDTO>;
     var shopToyDTOs = ViewData["ShopToyDTOs"] as List<ShopToyDTO>;
     var categoryDTOs = ViewData["CategoryDTOs"] as List<CategoryDTO> ;
     var numFound = (int)ViewData["NumFound"];
@@ -107,12 +108,12 @@
                                         <div class="shop__sidebar__price">
                                             <ul>
                                                 @{
-                                                    foreach (KeyValuePair<string, int> priceGroup in priceGroups)
+                                                    foreach (PriceGroupDTO priceGroupDTO in priceGroupDTOs)
                                                     {
                                                         <li>
-                                                            <a class="@(paramsDict.Count > 0 && paramsDict.ContainsKey("priceGroup") && paramsDict["priceGroup"].Contains(priceGroup.Key)
+                                                            <a class="@(paramsDict.Count > 0 && paramsDict.ContainsKey("priceGroup") && paramsDict["priceGroup"].Contains(priceGroupDTO.Interval)
                                                             ? "active-filter"
-                                                            : "")" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@Html.Raw(JsonConvert.SerializeObject(@paramsDict)), "priceGroup", "@priceGroup.Key")'>@priceGroup.Key DKK</a>
+                                                            : "")" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@Html.Raw(JsonConvert.SerializeObject(@paramsDict)), "priceGroup", "@priceGroupDTO.Interval")'>@priceGroupDTO.Interval DKK (@priceGroupDTO.FoundAmount)</a>
                                                         </li>
                                                     }
                                                 }
