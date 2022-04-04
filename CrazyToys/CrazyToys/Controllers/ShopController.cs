@@ -37,7 +37,7 @@ namespace CrazyToys.Web.Controllers
             ToyDbService toyDbService,
             IEntityCRUD<ColourGroup> colourGroupDbService,
             IEntityCRUD<AgeGroup> ageGroupDbService,
-            IEntityCRUD<PriceGroup> priceGroupDbService, 
+            IEntityCRUD<PriceGroup> priceGroupDbService,
             IEntityCRUD<Category> categoryDbService)
             : base(logger, compositeViewEngine, umbracoContextAccessor)
         {
@@ -67,7 +67,7 @@ namespace CrazyToys.Web.Controllers
 
             dynamic content = await _solrToyService.GetContent(categories, subCategory, brand, priceGroup, ageGroupIntervals, colourGroups, pageNumber, search, sort);
 
-            
+
             Dictionary<int, List<ShopToyDTO>> toyDict = _solrToyService.GetToysFromContent(content);
             Dictionary<string, Dictionary<string, int>> facetFieldDict = _solrToyService.GetFacetFieldsFromContent(content);
 
@@ -79,9 +79,15 @@ namespace CrazyToys.Web.Controllers
             int numFound = toyDict.ElementAt(0).Key;
             List<ShopToyDTO> shopToyDTOs = toyDict.ElementAt(0).Value;
 
-            List<ColourGroupDTO> colourGroupDTOs = facetFieldDict.ContainsKey("colourGroups") 
+            List<CategoryDTO> categoryDTOs = facetFieldDict.ContainsKey("categories")
+               ? await CreateCategoryDTOList(facetFieldDict["categories"], facetFieldDict.ContainsKey("subCategory") ? facetFieldDict["subCategory"] : null)
+               : new List<CategoryDTO>();
+
+            List<ColourGroupDTO> colourGroupDTOs = facetFieldDict.ContainsKey("colourGroups")
                 ? await CreateColourGroupDTOList(facetFieldDict["colourGroups"])
                 : new List<ColourGroupDTO>();
+
+
 
 
             //SortedDictionary<string, int> brandDict = _solrToyService.GetBrandFacet();
@@ -89,13 +95,12 @@ namespace CrazyToys.Web.Controllers
             //SortedDictionary<string, int> subCategoryDict = _solrToyService.GetSubCategoryFacet();
 
 
-          
+
 
             /*
             List<PriceGroup> priceGroups = await _priceGroupDbService.GetAll();
             List<AgeGroup> ageGroupList = await _ageGroupDbService.GetAll();
             */
-            List<Category> categoryList = await _categoryDbService.GetAllWithRelations();
 
             var sessionUser = _sessionService.GetNewOrExistingSessionUser(HttpContext);
             HashSet<string> wishlistToys = sessionUser.Wishlist;
@@ -104,7 +109,7 @@ namespace CrazyToys.Web.Controllers
             ViewData["Categories"] = facetFieldDict["categories"];
             ViewData["AgeGroups"] = facetFieldDict["ageGroupIntervals"];
             ViewData["PriceGroups"] = facetFieldDict["priceGroup"];
-            ViewData["CategoryList"] = categoryList.OrderBy(c => c.Name).ToList(); // TODO Vi skal hente fra Solr og Db og få ind i view
+            ViewData["CategoryDTOs"] = categoryDTOs; // TODO Vi skal hente fra Solr og Db og få ind i view
             ViewData["Brands"] = facetFieldDict["brand"];
             ViewData["ColourGroupDTOs"] = colourGroupDTOs;
 
@@ -131,13 +136,50 @@ namespace CrazyToys.Web.Controllers
             return CurrentTemplate(CurrentPage);
         }
 
+        public async Task<List<CategoryDTO>> CreateCategoryDTOList(Dictionary<string, int> categoryGroupFacets, Dictionary<string, int> subCategoryGroupFacets)
+        {
+            List<CategoryDTO> categoryDTOs = new List<CategoryDTO>();
+
+            List<Category> categories = await _categoryDbService.GetAllWithRelations();
+           
+
+            if (categories != null)
+            {
+                foreach (Category category in categories)
+                {
+                    if (categoryGroupFacets.ContainsKey(category.Name.ToLower()))
+                    {
+                        CategoryDTO categoryDTO = new CategoryDTO(category.ID, category.Name, categoryGroupFacets[category.Name.ToLower()]);
+                        categoryDTOs.Add(categoryDTO);
+
+                        if (subCategoryGroupFacets != null)
+                        {
+                            foreach (SubCategory subCategory in category.SubCategories)
+                            {
+                                if (subCategoryGroupFacets.ContainsKey(subCategory.Name.ToLower()))
+                                {
+                                    categoryDTO.SubCategoryDTOs.Add(new SubCategoryDTO(subCategory.ID, subCategory.Name, subCategoryGroupFacets[subCategory.Name.ToLower()]));
+                                }
+                            }
+                            categoryDTO.SubCategoryDTOs = categoryDTO.SubCategoryDTOs.OrderBy(s => s.Name).ToList();
+                        }
+
+
+                    }
+                }
+            }
+
+            return categoryDTOs.OrderBy(c => c.Name).ToList();
+        }
+
+
         public async Task<List<ColourGroupDTO>> CreateColourGroupDTOList(Dictionary<string, int> colourGroupFacets)
         {
             List<ColourGroupDTO> colourGroupDTOs = new List<ColourGroupDTO>();
 
             List<ColourGroup> colourGroups = await _colourGroupDbService.GetAll();
 
-            if(colourGroupFacets != null)
+            if (colourGroupFacets != null)
             {
                 foreach (ColourGroup colourGroup in colourGroups)
                 {

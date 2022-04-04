@@ -15,7 +15,7 @@
     var colourGroupDTOs = ViewData["ColourGroupDTOs"] as List<ColourGroupDTO>;
     var priceGroups = ViewData["PriceGroups"] as Dictionary<string, int>;
     var shopToyDTOs = ViewData["ShopToyDTOs"] as List<ShopToyDTO>;
-    var categoryList = ViewData["CategoryList"] as List<Category>;
+    var categoryDTOs = ViewData["CategoryDTOs"] as List<CategoryDTO> ;
     var numFound = (int)ViewData["NumFound"];
     var pageNumber = (int)ViewData["PageNumber"];
     var wishlistToys = ViewData["WishlistToys"] as HashSet<string>;
@@ -46,23 +46,23 @@
                                         <div class="shop__sidebar__categories">
                                             <ul class="list-height">
                                                 @{
-                                                    foreach (var category in categoryList)
+                                                    foreach (var categoryDTO in categoryDTOs)
                                                     {
                                                         <li>
-                                                            <a class="@(paramsDict.Count > 0 && paramsDict.ContainsKey("categories") && paramsDict["categories"].Contains(category.Name)
+                                                            <a class="@(paramsDict.Count > 0 && paramsDict.ContainsKey("categories") && paramsDict["categories"].Contains(categoryDTO.Name)
                                                             ? "active-filter underline"
-                                                            : "")" aria-expanded="true" data-toggle="collapse" data-target="#@category.Name" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@Html.Raw(JsonConvert.SerializeObject(@paramsDict)), "categories", "@category.Name", )'>@category.Name</a>
+                                                            : "")" aria-expanded="true" data-toggle="collapse" data-target="#@categoryDTO.Name" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@Html.Raw(JsonConvert.SerializeObject(@paramsDict)), "categories", "@categoryDTO.Name", )'>@categoryDTO.Name (@categoryDTO.FoundAmount)</a>
 
-                                                            <div class="@(paramsDict.Count > 0 && paramsDict.ContainsKey("categories") && paramsDict["categories"].Contains(category.Name)
+                                                            <div class="@(paramsDict.Count > 0 && paramsDict.ContainsKey("categories") && paramsDict["categories"].Contains(categoryDTO.Name)
                                                             ? ""
-                                                            : "collapse")" id="@category.Name">
+                                                            : "collapse")" id="@categoryDTO.Name">
                                                                 <ul class="subcat-scroll nice-scroll">
-                                                                    @foreach (var subCategory in category.SubCategories)
+                                                                    @foreach (var subCategoryDTO in categoryDTO.SubCategoryDTOs)
                                                                     {
                                                                         <li>
-                                                                            <a class="@(paramsDict.Count > 0 && paramsDict.ContainsKey("subCategory") && paramsDict["subCategory"].Contains(subCategory.Name)
+                                                                            <a class="@(paramsDict.Count > 0 && paramsDict.ContainsKey("subCategory") && paramsDict["subCategory"].Contains(subCategoryDTO.Name)
                                                                             ? "active-filter"
-                                                                            : "") nav-link py-0" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@Html.Raw(JsonConvert.SerializeObject(@paramsDict)), "subCategory", "@subCategory.Name", )'>@subCategory.Name</a>
+                                                                            : "") nav-link py-0" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@Html.Raw(JsonConvert.SerializeObject(@paramsDict)), "subCategory", "@subCategoryDTO.Name", )'>@subCategoryDTO.Name (@subCategoryDTO.FoundAmount)</a>
                                                                         </li>
                                                                     }
                                                                 </ul>
