@@ -1,4 +1,5 @@
 ﻿using CrazyToys.Entities.DTOs;
+using CrazyToys.Entities.DTOs.FacetDTOs;
 using CrazyToys.Entities.Entities;
 using CrazyToys.Entities.SolrModels;
 using CrazyToys.Interfaces;
@@ -7,6 +8,7 @@ using CrazyToys.Services.EntityDbServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,6 +24,7 @@ namespace CrazyToys.Web.Controllers
         private readonly ISessionService _sessionService;
 
         private readonly ToyDbService _toyDbService;
+        private readonly IEntityCRUD<Brand> _brandDbService;
         private readonly IEntityCRUD<ColourGroup> _colourGroupDbService;
         private readonly IEntityCRUD<AgeGroup> _ageGroupDbService;
         private readonly IEntityCRUD<PriceGroup> _priceGroupDbService;
@@ -35,6 +38,7 @@ namespace CrazyToys.Web.Controllers
             ISearchService<SolrToy> solrToyService,
             ISessionService sessionService,
             ToyDbService toyDbService,
+            IEntityCRUD<Brand> brandDbService,
             IEntityCRUD<ColourGroup> colourGroupDbService,
             IEntityCRUD<AgeGroup> ageGroupDbService,
             IEntityCRUD<PriceGroup> priceGroupDbService,
@@ -46,6 +50,7 @@ namespace CrazyToys.Web.Controllers
             _sessionService = sessionService;
 
             _toyDbService = toyDbService;
+            _brandDbService = brandDbService;
             _colourGroupDbService = colourGroupDbService;
             _ageGroupDbService = ageGroupDbService;
             _priceGroupDbService = priceGroupDbService;
@@ -88,6 +93,11 @@ namespace CrazyToys.Web.Controllers
                 : new List<ColourGroupDTO>();
 
 
+            List<BrandDTO> brandDTOs = facetFieldDict.ContainsKey("brand")
+                ? await CreateBrandDTOList(facetFieldDict["brand"])
+                : new List<BrandDTO>();
+
+
 
 
             //SortedDictionary<string, int> brandDict = _solrToyService.GetBrandFacet();
@@ -110,7 +120,7 @@ namespace CrazyToys.Web.Controllers
             ViewData["AgeGroups"] = facetFieldDict["ageGroupIntervals"];
             ViewData["PriceGroups"] = facetFieldDict["priceGroup"];
             ViewData["CategoryDTOs"] = categoryDTOs; // TODO Vi skal hente fra Solr og Db og få ind i view
-            ViewData["Brands"] = facetFieldDict["brand"];
+            ViewData["BrandDTOs"] = brandDTOs;
             ViewData["ColourGroupDTOs"] = colourGroupDTOs;
 
 
@@ -134,6 +144,26 @@ namespace CrazyToys.Web.Controllers
 
             // return a 'model' to the selected template/view for this page.
             return CurrentTemplate(CurrentPage);
+        }
+
+        private async Task<List<BrandDTO>> CreateBrandDTOList(Dictionary<string, int> brandFacets)
+        {
+            List<BrandDTO> brandDTOs = new List<BrandDTO>();
+
+            List<Brand> brands = await _brandDbService.GetAll();
+
+            if (brandFacets != null)
+            {
+                foreach (Brand brand in brands)
+                {
+                    if (brandFacets.ContainsKey(brand.Name))
+                    {
+                        brandDTOs.Add(new BrandDTO(brand.ID, brand.Name, brandFacets[brand.Name]));
+                    }
+                }
+            }
+
+            return brandDTOs.OrderBy(b => b.Name).ToList();
         }
 
         public async Task<List<CategoryDTO>> CreateCategoryDTOList(Dictionary<string, int> categoryGroupFacets, Dictionary<string, int> subCategoryGroupFacets)

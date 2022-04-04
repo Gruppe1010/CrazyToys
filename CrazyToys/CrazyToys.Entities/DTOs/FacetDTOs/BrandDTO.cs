@@ -4,9 +4,9 @@
     {
         public string ID { get; set; }
         public string Name { get; set; }
-        public string FoundAmount { get; set; }
+        public int FoundAmount { get; set; }
 
-        public BrandDTO(string iD, string name, string foundAmount)
+        public BrandDTO(string iD, string name, int foundAmount)
         {
             ID = iD;
             Name = name;

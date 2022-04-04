@@ -1,5 +1,4 @@
-﻿
-namespace CrazyToys.Entities.DTOs
+﻿namespace CrazyToys.Entities.DTOs.FacetDTOs
 {
     public class SubCategoryDTO
     {

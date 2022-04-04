@@ -1,4 +1,5 @@
 ﻿@using CrazyToys.Entities.DTOs
+@using CrazyToys.Entities.DTOs.FacetDTOs
 @using CrazyToys.Entities.Entities
 @using CrazyToys.Entities.SolrModels
 @using CrazyToys.Web;
@@ -10,7 +11,7 @@
     var paramsDict = ViewData["ParamsDict"] as Dictionary<string, HashSet<string>>;
 
     var categories = ViewData["Categories"] as Dictionary<string, int>;
-    var brands = ViewData["Brands"] as Dictionary<string, int>;
+    var brandDTOs = ViewData["BrandDTOs"] as List<BrandDTO>;
     var ageGroups = ViewData["AgeGroups"] as Dictionary<string, int>;
     var colourGroupDTOs = ViewData["ColourGroupDTOs"] as List<ColourGroupDTO>;
     var priceGroups = ViewData["PriceGroups"] as Dictionary<string, int>;
@@ -84,12 +85,12 @@
                                         <div class="shop__sidebar__brand">
                                             <ul id="ulBrand">
                                                 @{
-                                                    foreach (KeyValuePair<string, int> brand in brands)
+                                                    foreach (BrandDTO brandDTO in brandDTOs)
                                                     {
                                                         <li>
-                                                            <a class="@(paramsDict.Count > 0 && paramsDict.ContainsKey("brand") && paramsDict["brand"].Contains(brand.Key)
+                                                            <a class="@(paramsDict.Count > 0 && paramsDict.ContainsKey("brand") && paramsDict["brand"].Contains(brandDTO.Name)
                                                         ? "active-filter"
-                                                        : "")" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@Html.Raw(JsonConvert.SerializeObject(@paramsDict)), "brand", "@brand.Key")'>@brand.Key (@brand.Value)</a>
+                                                        : "")" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@Html.Raw(JsonConvert.SerializeObject(@paramsDict)), "brand", "@brandDTO.Name")'>@brandDTO.Name (@brandDTO.FoundAmount)</a>
                                                         </li>
                                                     }
                                                 }
