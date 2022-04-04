@@ -1,13 +1,12 @@
-﻿
-namespace CrazyToys.Entities.DTOs
+﻿namespace CrazyToys.Entities.DTOs.FacetDTOs
 {
-    public class SubCategoryDTO
+    public class BrandDTO
     {
         public string ID { get; set; }
         public string Name { get; set; }
-        public int FoundAmount { get; set; }
+        public string FoundAmount { get; set; }
 
-        public SubCategoryDTO(string iD, string name, int foundAmount)
+        public BrandDTO(string iD, string name, string foundAmount)
         {
             ID = iD;
             Name = name;
