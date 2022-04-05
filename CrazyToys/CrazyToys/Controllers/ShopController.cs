@@ -160,12 +160,8 @@ namespace CrazyToys.Web.Controllers
                         {
                             foreach (SubCategory subCategory in category.SubCategories)
                             {
-                                Console.WriteLine(subCategory.Name);
-
                                 if (subCategoryGroupFacets.ContainsKey(subCategory.Name))
                                 {
-                                    Console.WriteLine("-------------------------" + subCategory.Name);
-
                                     categoryDTO.SubCategoryDTOs.Add(new SubCategoryDTO(subCategory.ID, subCategory.Name, subCategoryGroupFacets[subCategory.Name]));
                                 }
                             }
