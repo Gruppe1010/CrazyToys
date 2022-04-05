@@ -110,14 +110,14 @@ namespace CrazyToys.Services
             string filterOption = values[0];
 
             // "fq={!tag=colourGroups
-            s = s + filterOption + "}" + filterOption + ":";
+            s = s + filterOption + "}" + filterOption + ":(";
 
             for (int i = 1; i < values.Length; i++)
             {
                 s = s + "\"" + values[i] + "\",";
             }
 
-            s = s.Substring(0, s.Length - 1); // vi sletter det sidste komma
+            s = s.Substring(0, s.Length - 1) + ")"; // vi sletter det sidste komma
 
             return s;
         }
