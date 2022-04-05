@@ -40,24 +40,37 @@ function updateDictAndCreateUrl(paramsDict, type, param) {
     updateParamsDict(paramsDict, type, param);
     // pageNumber-paramet som vi giver med er hardcodet til 1 fordi hver gang man tilføjer en filtrering, 
     //får vi jo vist nogle andre produkter, og så vil vi hen til forsiden igen
-    createUrlFromParams(1, paramsDict, type, param);
+    createUrlFromParams(1, paramsDict);
 }
 
 
-function createUrlFromParams(pageNumber, paramsDict) {
+function createUrlFromParams(pageNumber, paramsDict, event) {
     // TODO ændre denne når projektet skal køres på IISen
     let url = "https://localhost:44325/shop";
+    debugger;
+    // search sættes default til "" og hvis der så er noget i inputfeltet, så kommes det ind i stedet
+    let search = "";
+    if (event != undefined) {
+        // søgning
+        const searchInput = document.getElementById('searchInput');
 
+        if (searchInput && searchInput.value) {
+            search = `search=${searchInput.value}&`;
+        }
+    }
+  
 
+    // sider
     const pageParam = pageNumber == 1 ? "" : `&p=${pageNumber}`;
 
     // Finder værdien fra select (f.eks. sort=price_asc)
     var sortOption = document.getElementById("sorter").value;
 
-    console.log(paramsDict.length)
 
+    url = Object.keys(paramsDict).length != 0 || pageParam != "" || sortOption != "" || search
+        ? url + "?" + search
+        : url;
 
-    url = Object.keys(paramsDict).length != 0 || pageParam != "" || sortOption != "" ? url + "?" : url;
 
     //&brand=_brand.Barbie
     // tilføj 
@@ -72,9 +85,14 @@ function createUrlFromParams(pageNumber, paramsDict) {
     }
 
     // tilføjer paging og sorting til url
-    url = url + pageParam + (sortOption != "" && pageParam != "" ? "&" + sortOption : sortOption);
+    url = url + pageParam + (sortOption != "" && pageParam != ""
+        ? "&" + sortOption
+        : sortOption);
 
-    url = url.charAt(url.length - 1) == "&" ? url.substr(0, url.length - 1) : url;
+    // hvis der ikke er blevet tilføjet paging eller sorting, men der ER blevet tilføjet params, så står der et & til sidst som skal fjernes
+    url = url.charAt(url.length - 1) == "&"
+        ? url.substr(0, url.length - 1)
+        : url;
 
     // hvis der er +'er i vores url (fx ved prisgruppen 800+) skal det encodes til %2b
     url = url.replace("+", "%2b")

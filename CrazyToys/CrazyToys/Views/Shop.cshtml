@@ -19,6 +19,7 @@
     var categoryDTOs = ViewData["CategoryDTOs"] as List<CategoryDTO> ;
     var numFound = (int)ViewData["NumFound"];
     var pageNumber = (int)ViewData["PageNumber"];
+    var search = ViewData["Search"];
     var wishlistToys = ViewData["WishlistToys"] as HashSet<string>;
 
     int numberOfPages = (numFound + 30 - 1) / 30;
@@ -28,13 +29,16 @@
 <section class="shop spad">
     <div class="container">
         <div class="row">
+            <h3 class="search-headline">@(search != null ? $"Resultater for \"{search}\"" : "")</h3>
+        </div>
+        <div class="row">
             <div class="col-lg-3">
                 <div class="shop__sidebar">
                     <div class="shop__sidebar__search">
-                        <form action="#">
-                            <input type="text" placeholder="Søg...">
-                            <button type="submit"><span class="icon_search"></span></button>
-                        </form>
+                        
+                            <input id="searchInput" type="text" placeholder="Søg..." onchange='createUrlFromParams(1, @Html.Raw(JsonConvert.SerializeObject(@paramsDict)), event)'>
+                          
+                        
                     </div>
                     <div class="shop__sidebar__accordion">
                         <div class="accordion" id="accordionExample">

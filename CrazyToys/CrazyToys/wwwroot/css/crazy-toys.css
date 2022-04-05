@@ -5,6 +5,13 @@
     font-size: 30px;
 }
 
+.search-headline {
+    position: relative;
+    padding-left: 15px;
+    margin-bottom: 30px;
+    top: -30px;
+}
+
 .hidden {
     visibility: hidden;
 }

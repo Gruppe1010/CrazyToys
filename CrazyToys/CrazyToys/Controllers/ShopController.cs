@@ -105,8 +105,9 @@ namespace CrazyToys.Web.Controllers
             ViewData["NumFound"] = numFound;
             ViewData["ShopToyDTOs"] = shopToyDTOs;
             ViewData["WishlistToys"] = wishlistToys;
-            ViewData["ParamsDict"] = CreateDictFromParams(categories, subCategory, brand, priceGroup, ageGroupIntervals, colourGroups, search);
+            ViewData["ParamsDict"] = CreateDictFromParams(categories, subCategory, brand, priceGroup, ageGroupIntervals, colourGroups);
             ViewData["PageNumber"] = pageNumber == 0 ? 1 : pageNumber;
+            ViewData["Search"] = search;
 
             ViewData["CategoryDTOs"] = categoryDTOs;
             ViewData["BrandDTOs"] = brandDTOs;
@@ -247,8 +248,7 @@ namespace CrazyToys.Web.Controllers
             string brand,
             string price,
             string ageGroup,
-            string colour,
-            string search)
+            string colour)
         {
 
             var dict = new Dictionary<string, HashSet<string>>();
@@ -259,7 +259,6 @@ namespace CrazyToys.Web.Controllers
             AddParamToDict(dict, price);
             AddParamToDict(dict, ageGroup);
             AddParamToDict(dict, colour);
-            AddParamToDict(dict, search);
 
             return dict;
         }

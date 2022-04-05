@@ -140,6 +140,24 @@ namespace CrazyToys.Services
             string ageGroups, string colours, // fx: rød.blå.grøn
             int page, string search, string sort)
         {
+            string mainQuery = "";
+            if (!String.IsNullOrWhiteSpace(search))
+            {
+                string searchWordsInString = "(";
+
+                string[] searchWords = search.Split(' ');
+
+                foreach(string searchWord in searchWords)
+                {
+                    searchWordsInString = searchWordsInString + $"\"{searchWord}\",";
+                }
+                searchWordsInString = searchWordsInString.Substring(0, searchWordsInString.Length - 1);
+
+                searchWordsInString = searchWordsInString + ")";
+                mainQuery = $"q={searchWordsInString}";
+            }
+           
+
             // sort=price asc
             sort = sort != null ? "&sort=" + sort.Replace("_", "%20") : null;
             //det sted hvor den skal starte (fordi page 2 starter på 30: 2 * 30 == 60 --> 60 - 30 --> 30)
@@ -160,7 +178,7 @@ namespace CrazyToys.Services
                 ? urlParams.Substring(0, urlParams.Length - 1)
                 : "";
 
-            string url = "http://solr:8983/solr/toys/select?" + paging + sort + "&" + urlParams.Replace("+", "%20"); 
+            string url = "http://solr:8983/solr/toys/select?" + mainQuery + paging + sort + "&" + urlParams.Replace("+", "%20"); 
 
             var httpRequestMessage = new HttpRequestMessage(
                 HttpMethod.Get, url)
