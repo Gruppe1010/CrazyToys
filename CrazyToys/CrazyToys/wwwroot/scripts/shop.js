@@ -46,16 +46,21 @@ function updateDictAndCreateUrl(paramsDict, type, param) {
 
 function createUrlFromParams(pageNumber, paramsDict, event) {
     // TODO ændre denne når projektet skal køres på IISen
+    debugger;
     let url = "https://localhost:44325/shop";
     debugger;
     // search sættes default til "" og hvis der så er noget i inputfeltet, så kommes det ind i stedet
     let search = "";
     if (event != undefined) {
-        // søgning
-        const searchInput = document.getElementById('searchInput');
+        // søgning i lille søgefelt
+        const searchInputFromShop = document.getElementById('searchInput');
+        const searchInputFromSearchBar = document.getElementById('searchInput1');
 
-        if (searchInput && searchInput.value) {
-            search = `search=${searchInput.value}&`;
+        if (searchInputFromShop && searchInputFromShop.value) { // hvis der er blevet søgt i det lille felt, så tag værdien derfra
+            search = `search=${searchInputFromShop.value}&`;
+        }
+        else if (searchInputFromSearchBar && searchInputFromSearchBar.value) { // hvis der er blevet søgt i det store felt
+            search = `search=${searchInputFromSearchBar.value}&`;
         }
     }
   
