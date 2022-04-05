@@ -160,7 +160,7 @@ namespace CrazyToys.Services
                 ? urlParams.Substring(0, urlParams.Length - 1)
                 : "";
 
-            string url = "http://solr:8983/solr/toys/select?indent=true&q.op=OR&q=*%3A*" + paging + sort + "&" + urlParams.Replace("+", "%20"); 
+            string url = "http://solr:8983/solr/toys/select?" + paging + sort + "&" + urlParams.Replace("+", "%20"); 
 
             var httpRequestMessage = new HttpRequestMessage(
                 HttpMethod.Get, url)
