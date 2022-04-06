@@ -5,7 +5,7 @@ function addToWishlist(toyId) {
         toyId: toyId
     }
 
-    fetch(`https://localhost:44325/api/sessionuser/AddToyToSessionUsersWishlist`, {
+    fetch(`/api/sessionuser/AddToyToSessionUsersWishlist`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json; charset=UTF-8' // denne linje siger at dataen som vi sender er en string 
@@ -25,7 +25,7 @@ function addToWishlist(toyId) {
 
 function removeFromWishlist(toyId) {
 
-    fetch(`https://localhost:44325/api/sessionuser/RemoveToyFromSessionUsersWishlist?id=${toyId}`, {
+    fetch(`/api/sessionuser/RemoveToyFromSessionUsersWishlist?id=${toyId}`, {
         method: 'DELETE',
     })
         .then(response => {

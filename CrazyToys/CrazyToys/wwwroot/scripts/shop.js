@@ -45,10 +45,9 @@ function updateDictAndCreateUrl(paramsDict, type, param) {
 
 
 function createUrlFromParams(pageNumber, paramsDict, event) {
-    // TODO ændre denne når projektet skal køres på IISen
-    debugger;
-    let url = "https://localhost:44325/shop";
-    debugger;
+
+    let url = "/shop";
+
     // search sættes default til "" og hvis der så er noget i inputfeltet, så kommes det ind i stedet
     let search = "";
     if (event != undefined) {

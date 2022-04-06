@@ -1,7 +1,7 @@
 ﻿const cartQuantity = document.getElementById('cartQuantity');
 
 
-fetch(`https://localhost:44325/api/sessionUser/GetSessionUser`, {
+fetch(`/api/sessionUser/GetSessionUser`, {
     method: 'GET',
 }).then(response => {
     if (!response.ok) {

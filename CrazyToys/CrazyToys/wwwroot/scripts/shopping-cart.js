@@ -19,7 +19,7 @@ function incQuantity(id) { // shoppingCartToyDTO) {
         OldAvailableQuantity: oldValue
     };
 
-    fetch("https://localhost:44325/api/sessionuser/IncOrDecToyFromCart", {
+    fetch("/api/sessionuser/IncOrDecToyFromCart", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json; charset=UTF-8' // denne linje siger at dataen som vi sender er en string 
@@ -81,7 +81,7 @@ function decQuantity(id) { //
         };
 
         // fjern én fra quantity på sessionsUser
-        fetch(`https://localhost:44325/api/sessionuser/IncOrDecToyFromCart`, {
+        fetch(`/api/sessionuser/IncOrDecToyFromCart`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json; charset=UTF-8' // denne linje siger at dataen som vi sender er en string 
@@ -128,13 +128,12 @@ function decQuantity(id) { //
 
 function goToCheckout() {
 
-    fetch(`https://localhost:44325/api/sessionuser/CheckIfAvailable`, {
+    fetch(`/api/sessionuser/CheckIfAvailable`, {
         method: 'POST'
     }).then(response => {
-        debugger;
         if (response.ok) {
 
-            window.location.replace("https://localhost:44325/checkout")
+            window.location.replace("/checkout")
             
         } else {
             alert("Der skete en fejl");
@@ -142,9 +141,6 @@ function goToCheckout() {
 
         }
     }).catch(error => console.log);
-
-
-
 }
 
 function updateTotal(id, price) {
@@ -177,11 +173,11 @@ function updateCartTotal(priceChange) {
 }
 
 function removeUnavailbleToyFromCart(id, quantityToRemove) {
+
     const selectedToy = { ToyID: id, Quantity: -quantityToRemove };
 
-
     // fjern én fra quantity på sessionsUser
-    fetch(`https://localhost:44325/api/sessionuser/AddToCart`, {
+    fetch(`/api/sessionuser/AddToCart`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json; charset=UTF-8' // denne linje siger at dataen som vi sender er en string 
@@ -199,8 +195,9 @@ function removeUnavailbleToyFromCart(id, quantityToRemove) {
 }
 
 function removeToyFromCart(id, price) { //
+
     // fjern én fra quantity på sessionsUser
-    fetch(`https://localhost:44325/api/sessionuser/RemoveToyFromSessionUser?id=${id}`, {
+    fetch(`/api/sessionuser/RemoveToyFromSessionUser?id=${id}`, {
         method: 'DELETE'
     }).then(response => {
         if (response.ok) {
@@ -265,6 +262,7 @@ function deleteToyTableIfEmpty() {
 }
 
 function deleteUnavailableToyRowFromView(id) {
+
     // hvis samme type toy er nede i "Ikke tilgængelige", skal den også slettes
     const unavailbaleToyDataRow = document.getElementById(`unavailableToyDataRow-${id}`);
     if (unavailbaleToyDataRow != null) {
@@ -275,6 +273,7 @@ function deleteUnavailableToyRowFromView(id) {
 }
 
 function deleteUnavailbaleToyTableIfEmpty() {
+
     const unavailableToyTableBody = document.getElementById('unavailableToyTableBody');
 
     //hvis toyTableBody-element ikke har nogen childNodes

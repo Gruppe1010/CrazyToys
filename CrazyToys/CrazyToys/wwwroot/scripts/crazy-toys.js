@@ -3,7 +3,7 @@
 }
 
 function addToCart(toyId) {
-    debugger;
+
     const chosenAmount = document.getElementById('chosenAmount');
     let quantity = 1;
 
@@ -18,7 +18,7 @@ function addToCart(toyId) {
        // l: 0 //TODO noget er ænndret
     };
 
-    fetch(`https://localhost:44325/api/sessionuser/AddToCart`, {
+    fetch(`/api/sessionuser/AddToCart`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json; charset=UTF-8' // denne linje siger at dataen som vi sender er en string 
@@ -30,7 +30,7 @@ function addToCart(toyId) {
             updateCartNumber(quantity);
             // TODO lav noget flot javascript
         } else {
-            debugger;
+
             alert("Du kan ikke lægge så meget i kurven");
         }
     });
@@ -38,7 +38,7 @@ function addToCart(toyId) {
 
 
 function updateCartNumber() {
-    fetch(`https://localhost:44325/api/sessionuser/GetSessionUser`, {
+    fetch(`/api/sessionuser/GetSessionUser`, {
         method: 'GET'
     })
         .then(response => {

@@ -4,6 +4,7 @@ using CrazyToys.Entities.SolrModels;
 using CrazyToys.Interfaces;
 using CrazyToys.Services.EntityDbServices;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Mail;
@@ -48,6 +49,8 @@ namespace CrazyToys.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Submit(CheckoutUserModel model)
         {
+            string UrlPath = Environment.GetEnvironmentVariable("UrlPath");
+
             if (!ModelState.IsValid)
             {
                 return CurrentUmbracoPage();
@@ -84,8 +87,7 @@ namespace CrazyToys.Web.Controllers
             sessionUser.Cart.Clear();
             _sessionService.Update(HttpContext, sessionUser);
 
-            // TODO ændre denne når projektet skal køres på IISen
-            return Redirect("https://localhost:44325/order-confirmation");
+            return Redirect($"{UrlPath}/order-confirmation");
         }
     }
 }
