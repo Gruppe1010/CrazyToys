@@ -226,3 +226,6 @@
 .colour-title {
     padding-bottom: 15px;
 }
+.max-width-40{
+    max-width: 40% !important;
+}
