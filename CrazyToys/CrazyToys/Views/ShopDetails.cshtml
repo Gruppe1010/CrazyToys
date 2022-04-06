@@ -43,9 +43,9 @@
                         for (int i = 0; i < toy.Images.Count; i++)
                         {
                             <div class="tab-pane @(i == 0 ? active : "")" id="tabs-@(i + 1)" role="tabpanel">
-                                <div class="product__details__pic__item">
+                                <a class="product__details__pic__item" data-fancybox="gallery" data-src="@toy.Images[i].UrlHigh">
                                     <img src="@toy.Images[i].UrlHigh" alt="">
-                                </div>
+                                </a>
                             </div>
                         }
                         }
@@ -73,15 +73,16 @@
                             <button class="primary-btn" onclick='addToCart("@toy.ID")'>Tilføj til kurv</button>
                         </div>
                         <div id="shop-details-wishlist" class="product__details__btns__option">
-                            @{  // Vi tjekker om toy er på sessionusers wishlist allerede og sætter onclick funktion efter dette
-                                if (!wishlistToys.Contains(@toy.ID))
-                                {
-                                    <a id="wishlist-link-@toy.ID" href="javascript:void(0);" onclick='addToWishlist("@toy.ID")'><img id="wishlist-img-@toy.ID" class="shop-deatils-heart-icons" src="img/icon/heart.png" alt=""> Tilføj til ønskeliste</a>
-                                }
-                                else
-                                {
-                                    <a id="wishlist-link-@toy.ID" href="javascript:void(0);" onclick='removeFromWishlist("@toy.ID")'><img id="wishlist-img-@toy.ID" class="shop-deatils-heart-icons" src="img/icon/filledheart.png" alt=""> Tilføj til ønskeliste</a>
-                                }
+                            @{
+                            // Vi tjekker om toy er på sessionusers wishlist allerede og sætter onclick funktion efter dette
+                            if (!wishlistToys.Contains(@toy.ID))
+                            {
+                                <a id="wishlist-link-@toy.ID" href="javascript:void(0);" onclick='addToWishlist("@toy.ID")'><img id="wishlist-img-@toy.ID" class="shop-deatils-heart-icons" src="img/icon/heart.png" alt=""> Tilføj til ønskeliste</a>
+                            }
+                            else
+                            {
+                                <a id="wishlist-link-@toy.ID" href="javascript:void(0);" onclick='removeFromWishlist("@toy.ID")'><img id="wishlist-img-@toy.ID" class="shop-deatils-heart-icons" src="img/icon/filledheart.png" alt=""> Tilføj til ønskeliste</a>
+                            }
                             }
                         </div>
                         <p>@toy.ShortDescription</p>
