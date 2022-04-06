@@ -16,7 +16,7 @@
     var colourGroupDTOs = ViewData["ColourGroupDTOs"] as List<ColourGroupDTO>;
     var priceGroupDTOs = ViewData["PriceGroups"] as List<PriceGroupDTO>;
     var shopToyDTOs = ViewData["ShopToyDTOs"] as List<ShopToyDTO>;
-    var categoryDTOs = ViewData["CategoryDTOs"] as List<CategoryDTO> ;
+    var categoryDTOs = ViewData["CategoryDTOs"] as List<CategoryDTO>;
     var numFound = (int)ViewData["NumFound"];
     var pageNumber = (int)ViewData["PageNumber"];
     var search = ViewData["Search"];
@@ -35,10 +35,10 @@
             <div class="col-lg-3">
                 <div class="shop__sidebar">
                     <div class="shop__sidebar__search">
-                        
-                            <input id="searchInput" type="text" placeholder="Søg..." onchange='createUrlFromParams(1, @Html.Raw(JsonConvert.SerializeObject(@paramsDict)), event)'>
-                          
-                        
+
+                        <input id="searchInput" type="text" placeholder="Søg..." onchange='createUrlFromParams(1, @Html.Raw(JsonConvert.SerializeObject(@paramsDict)), event)'>
+
+
                     </div>
                     <div class="shop__sidebar__accordion">
                         <div class="accordion" id="accordionExample">
@@ -148,23 +148,26 @@
                                 </div>
                             </div>
                             <div class="card">
-                                <div class="card-heading">
+                                <div class="colour-title card-heading">
                                     <a data-toggle="collapse" data-target="#collapseFive">Farver</a>
                                 </div>
-                                <div id="collapseFive" class="collapse show" data-parent="#accordionExample">
-                                    <div class="card-body">
-                                        <div class="shop__sidebar__color">
-                                            @{
-                                                foreach (ColourGroupDTO colourGroupDTO in colourGroupDTOs)
-                                                {
-                                                    <a class="@(paramsDict.Count > 0 && paramsDict.ContainsKey("colourGroups") && paramsDict["colourGroups"].Contains(colourGroupDTO.Name)
+                                <div id="collapseFive" class="collapse show row" data-parent="#accordionExample">
+                                    @{
+                                        foreach (ColourGroupDTO colourGroupDTO in colourGroupDTOs)
+                                        {
+                                            <div class="col-lg-6 col-sm-12 col-md-12">
+                                                <div class="card-body">
+                                                    <div class="">
+
+                                                        <a class="@(paramsDict.Count > 0 && paramsDict.ContainsKey("colourGroups") && paramsDict["colourGroups"].Contains(colourGroupDTO.Name)
                                                     ? "colour-group-filter-active"
                                                     : "") colour-group-filter" href="javascript:void(0);" onclick='updateDictAndCreateUrl(@Html.Raw(JsonConvert.SerializeObject(@paramsDict)), "colourGroups", "@colourGroupDTO.Name")' style="background: @colourGroupDTO.ColourCode"></a>
-                                                    <span class="colour-group-found-amount">&nbsp;(@colourGroupDTO.FoundAmount)</span><br>
-                                                }
-                                            }
-                                        </div>
-                                    </div>
+                                                        <span class="colour-group-found-amount">&nbsp;(@colourGroupDTO.FoundAmount)</span><br>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
                                 </div>
                             </div>
                         </div>
