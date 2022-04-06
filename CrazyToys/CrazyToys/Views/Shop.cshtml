@@ -36,8 +36,7 @@
                 <div class="shop__sidebar">
                     <div class="shop__sidebar__search">
 
-                        <input id="searchInput" type="text" placeholder="Søg..." onchange='createUrlFromParams(1, @Html.Raw(JsonConvert.SerializeObject(@paramsDict)), event)'>
-
+                        <input class="search-input" id="searchInput" type="text" placeholder="Søg..." onchange='createUrlFromParams(1, @Html.Raw(JsonConvert.SerializeObject(@paramsDict)), event)'>
 
                     </div>
                     <div class="shop__sidebar__accordion">
