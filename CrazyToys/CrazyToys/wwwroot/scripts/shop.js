@@ -80,6 +80,9 @@ function createUrlFromParams(pageNumber, paramsDict, event) {
         : url;
 
 
+    
+
+
     //&brand=_brand.Barbie
     // tilføj 
     for (const property in paramsDict) {
