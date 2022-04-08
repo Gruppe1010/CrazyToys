@@ -66,12 +66,13 @@ function createUrlFromParams(pageNumber, paramsDict, event) {
 
     // sider
     const pageParam = pageNumber == 1 ? "" : `&p=${pageNumber}`;
-
+    let sortOption = "";
     // Finder værdien fra select (f.eks. sort=price_asc)
-    var sortOption = document.getElementById("sorter");
-    if (sortOption) {
-        sortOption.value;
+    var sorter = document.getElementById("sorter");
+    if (sorter && sorter.value) {
+        sortOption = sorter.value;
     }
+    debugger;
 
 
     url = Object.keys(paramsDict).length != 0 || pageParam != "" || sortOption != "" || search
