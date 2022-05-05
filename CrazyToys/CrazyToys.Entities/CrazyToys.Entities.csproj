@@ -8,8 +8,4 @@
     <PackageReference Include="SolrNet.Core" Version="1.0.19" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="OrderEntities\" />
-  </ItemGroup>
-
 </Project>
