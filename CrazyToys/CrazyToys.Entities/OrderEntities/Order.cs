@@ -13,18 +13,33 @@ namespace CrazyToys.Entities.OrderEntities
         public string ID { get; set; }
         public int OrderNumber { get; set; }
         public Customer Customer { get; set; }
-        public IList<Status> statuses { get; set; }
+        public IList<Status> Statuses { get; set; }
         public Address ShippingAddress { get; set; }
         public IList<OrderLine> OrderLines { get; set; }
 
-        public Order(string iD, int orderNumber, Customer customer, IList<Status> statuses, Address shippingAddress, IList<OrderLine> orderLines)
+        public Order(int orderNumber, Customer customer, Address shippingAddress)
         {
-            ID = iD;
             OrderNumber = orderNumber;
             Customer = customer;
-            this.statuses = statuses;
             ShippingAddress = shippingAddress;
-            OrderLines = orderLines;
+            Statuses = new List<Status>();
+            OrderLines = new List<OrderLine>();
+        }
+
+        public double CalculateTotalPrice()
+        {
+            double totalPrice = 0;
+
+
+            foreach (OrderLine orderLine in OrderLines)
+            {
+                totalPrice += orderLine.CalculateSubTotal();
+
+            }
+
+
+
+            return totalPrice;
         }
     }
 }

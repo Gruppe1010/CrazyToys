@@ -14,9 +14,8 @@ namespace CrazyToys.Entities.OrderEntities
         public StatusType Type { get; set; }
         public DateTime TimeStamp { get; set; }
 
-        public Status(string iD, StatusType type, DateTime timeStamp)
+        public Status(StatusType type, DateTime timeStamp)
         {
-            ID = iD;
             Type = type;
             TimeStamp = timeStamp;
         }

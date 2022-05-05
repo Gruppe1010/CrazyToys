@@ -24,5 +24,10 @@ namespace CrazyToys.Entities.OrderEntities
             UnitPrice = unitPrice;
             TotalDiscount = totalDiscount;
         }
+
+        public double CalculateSubTotal()
+        {
+            return (UnitPrice * Quantity) - TotalDiscount;
+        }
     }
 }
