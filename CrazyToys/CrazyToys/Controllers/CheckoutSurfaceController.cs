@@ -87,6 +87,7 @@ namespace CrazyToys.Web.Controllers
             sessionUser.Cart.Clear();
             _sessionService.Update(HttpContext, sessionUser);
 
+            // TODO smid ordrenr. på redirect
             return Redirect($"{UrlPath}/order-confirmation");
         }
     }
