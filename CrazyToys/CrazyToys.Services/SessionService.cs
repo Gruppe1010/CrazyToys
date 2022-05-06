@@ -27,6 +27,11 @@ namespace CrazyToys.Services
             httpContext.Session.SetString("SessionUser", JsonConvert.SerializeObject(sessionUser));
         }
 
+        public void DeleteCart(HttpContext httpContext, SessionUser sessionUser)
+        {
+            httpContext.Session.SetString("SessionUser", JsonConvert.SerializeObject(sessionUser));
+        }
+
 
     }
 }

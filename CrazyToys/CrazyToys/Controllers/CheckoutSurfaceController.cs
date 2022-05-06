@@ -24,9 +24,6 @@ namespace CrazyToys.Web.Controllers
     public class CheckoutSurfaceController : SurfaceController
     {
         private readonly ISessionService _sessionService;
-        private readonly ToyDbService _toyDbService;
-        private readonly ISearchService<SolrToy> _solrToyService;
-        private readonly IHangfireService _hangfireService;
         private readonly SalesDataService _salesDataService;
 
         public CheckoutSurfaceController(
@@ -37,16 +34,10 @@ namespace CrazyToys.Web.Controllers
             IProfilingLogger profilingLogger,
             IPublishedUrlProvider publishedUrlProvider,
             ISessionService sessionService,
-            ToyDbService toyDbService,
-            ISearchService<SolrToy> solrToyService,
-            IHangfireService hangfireService,
             SalesDataService salesDataService)
             : base(umbracoContextAccessor, databaseFactory, services, appCaches, profilingLogger, publishedUrlProvider)
         {
             _sessionService = sessionService;
-            _toyDbService = toyDbService;
-            _solrToyService = solrToyService;
-            _hangfireService = hangfireService;
             _salesDataService = salesDataService;
         }
 
@@ -61,11 +52,20 @@ namespace CrazyToys.Web.Controllers
                 return CurrentUmbracoPage();
             }
 
+            SessionUser sessionUser = _sessionService.GetNewOrExistingSessionUser(HttpContext);
 
-            Order newOrder = await _salesDataService.CreateSale(model, _sessionService.GetNewOrExistingSessionUser(HttpContext).Cart);
+
+            Order newOrder = await _salesDataService.CreateSale(model, sessionUser.Cart);
 
             if (newOrder != null)
             {
+                // slet cart på sessionUser
+                _sessionService.
+
+
+                sessionUser.
+
+
                 // redirect til ny side/returner view med ordrenummer
             }
 

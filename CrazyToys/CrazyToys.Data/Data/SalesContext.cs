@@ -11,7 +11,6 @@ namespace CrazyToys.Data.Data
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Order> Orders { get; set; }
-        public DbSet<OrderedToy> OrderedToys { get; set; }
         public DbSet<OrderLine> OrderLines { get; set; }
         public DbSet<Status> Statuses { get; set; }
         public DbSet<StatusType> StatusTypes { get; set; }

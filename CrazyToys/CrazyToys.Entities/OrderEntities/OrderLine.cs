@@ -11,7 +11,7 @@ namespace CrazyToys.Entities.OrderEntities
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string ID { get; set; }
-        public OrderedToy OrderedToy { get; set; }
+        public string OrderedToyId { get; set; } // Denne svarer til Toy ID
         public int Quantity { get; set; }
         public double UnitPrice { get; set; }
         public double TotalDiscount { get; set; }
@@ -20,10 +20,9 @@ namespace CrazyToys.Entities.OrderEntities
         {
         }
 
-        public OrderLine(string iD, OrderedToy orderedToy, int quantity, double unitPrice, double totalDiscount)
+        public OrderLine(string orderedToyId, int quantity, double unitPrice, double totalDiscount)
         {
-            ID = iD;
-            OrderedToy = orderedToy;
+            OrderedToyId = orderedToyId;
             Quantity = quantity;
             UnitPrice = unitPrice;
             TotalDiscount = totalDiscount;

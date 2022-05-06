@@ -1,8 +1,10 @@
 ﻿using CrazyToys.Entities.DTOs;
 using CrazyToys.Entities.Entities;
 using CrazyToys.Entities.OrderEntities;
+using CrazyToys.Entities.SolrModels;
 using CrazyToys.Interfaces;
 using CrazyToys.Interfaces.EntityDbInterfaces;
+using CrazyToys.Services.ProductDbServices;
 using CrazyToys.Services.SalesDbServices;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -16,22 +18,25 @@ namespace CrazyToys.Services
     public class SalesDataService : ISalesDataService
     {
         private readonly ISessionService _sessionService;
+        private readonly ISearchService<SolrToy> _solrToyService;
         private readonly CustomerDbService _customerDbService;
         private readonly CountryDbService _countrybService;
-        private readonly OrderedToyDbService _orderedToyDbService;
+        private readonly ToyDbService _toyDbService;
         private readonly OrderDbService _orderDbService;
 
 
         public SalesDataService(
             ISessionService sessionService,
+            ISearchService<SolrToy> solrToyService,
             CustomerDbService customerDbService, 
             CountryDbService countrybService,
-            OrderedToyDbService orderedToyDbService,
+            ToyDbService toyDbService,
             OrderDbService orderDbService)
         {
+            _solrToyService = solrToyService;
             _customerDbService = customerDbService;
             _countrybService = countrybService;
-            _orderedToyDbService = orderedToyDbService;
+            _toyDbService = toyDbService;
             _orderDbService = orderDbService;
         }
 
@@ -48,7 +53,10 @@ namespace CrazyToys.Services
             await UpdateCustomerDetails(model, newOrder.Customer);
 
             // tilføj til customers ordrelist
-            newOrder.OrderLines = ConvertCartToOrderLines(cart);
+            newOrder.OrderLines = await ConvertCartToOrderLines(cart);
+
+            // TODO sørg for at den returnerer denne eller noget, fordi den skal sendes med - kig på gammel kode - her på mandag - nu skal i afsted og vinde trofæet
+            //orderConfirmationToyList.Add(toy.ConvertToShoppingCartToyDTO(item.Value));
 
             // gem ned
             return await _orderDbService.Create(newOrder);
@@ -83,26 +91,14 @@ namespace CrazyToys.Services
             customer.BillingAddress = new Address(new City(model.CityName, model.PostalCode), model.StreetAddress, countryFromDb);
         }
 
-        public List<OrderLine> ConvertCartToOrderLines(Dictionary<string, int> cart)
+        public async Task<List<OrderLine>> ConvertCartToOrderLines(Dictionary<string, int> cart)
         {
             List<OrderLine> orderLines = new List <OrderLine>();
 
             foreach (var item in cart)
             {
-                // tjek om dette toy allerede allerede er blevet tilføjet til OrderedToy
-                OrderedToy orderedToy = await _orderedToyDbService.GetByProductId(item.Value.Prod);
-
-                // GetOrCreate
-
-
-
-
-                //TODO toyStock skal IKKE ændres - den skal ændre i reservedAmount
-
-
-                /*
+                // hent Toy op fra db
                 Toy toy = await _toyDbService.GetById(item.Key);
-                orderConfirmationToyList.Add(toy.ConvertToShoppingCartToyDTO(item.Value));
 
                 if (toy.Stock >= item.Value)
                 {
@@ -112,24 +108,30 @@ namespace CrazyToys.Services
                     {
                         _solrToyService.Delete(new SolrToy(toy));
                     }
+
+                    // lav en ny OrderLine
+                    OrderLine orderLine = new OrderLine(item.Key, item.Value, toy.Price, 0); // altid 0 i rabat, fordi vi ikke har rabatter
+                    orderLines.Add(orderLine);
                 }
-                else
+                else // hvis der er færre på lager end der er i min kurv, så skal den tilføje det antal som er på lager - 
                 {
-                    //TODO Hvis 7 købes men kun 5 på lager. skriv 5 købt
+                    // TODO lav noget sådan så man kan se at man kun har fået 5 og ikke de 7 man faktisk ville have
+                    OrderLine orderLine = new OrderLine(item.Key, toy.Stock, toy.Price, 0); // altid 0 i rabat, fordi vi ikke har rabatter
+                    orderLines.Add(orderLine);
+
                     toy.Stock = 0;
                     await _toyDbService.Update(toy);
                     _solrToyService.Delete(new SolrToy(toy));
                 }
-                */
+
+                //TODO toyStock skal IKKE ændres - den skal ændre i reservedAmount
+
+
             }
 
             return orderLines;
         }
 
-        public OrderedToy GetOrCreateOrderedToy(string)
-        {
-
-        }
 
 
         /*
