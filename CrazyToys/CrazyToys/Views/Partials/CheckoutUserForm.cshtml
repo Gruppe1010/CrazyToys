@@ -25,10 +25,26 @@
                     </div>
                 </div>
             </div>
+
+            /*
+             <div class="checkout__input">
+                <p>Land<span>*</span></p>
+                @Html.DropDownListFor(m => m.CountryName, new SelectList( new List<Object> {
+                    new { value = 0 , text = "Danmark"}
+                },
+                "value",
+                "text",
+                Model.CountryName
+                ) 
+                )
+            </div>
+            */
+            
             <div class="checkout__input">
                 <p>Land<span>*</span></p>
-                @Html.TextBoxFor(m => m.CountryName, new { @placeholder = "Fx. Danmark", @required  = "required"})
+                @Html.TextBoxFor(m => m.CountryName, new { @Value = "Danmark" })
             </div>
+            
             <div class="checkout__input">
                 <p>By<span>*</span></p>
                 @Html.TextBoxFor(m => m.CityName, new { @placeholder = "Fx. København", @required  = "required"})
