@@ -18,6 +18,10 @@ namespace CrazyToys.Entities.OrderEntities
         public IList<Order> Orders { get; set; }
         public Address BillingAddress { get; set; }
 
+        public Customer()
+        {
+        }
+
         public Customer(string firstName, string lastName, string email, Address billingAddress)
         {
             FirstName = firstName;

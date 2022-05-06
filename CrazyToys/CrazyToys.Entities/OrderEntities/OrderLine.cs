@@ -16,6 +16,10 @@ namespace CrazyToys.Entities.OrderEntities
         public double UnitPrice { get; set; }
         public double TotalDiscount { get; set; }
 
+        public OrderLine()
+        {
+        }
+
         public OrderLine(string iD, OrderedToy orderedToy, int quantity, double unitPrice, double totalDiscount)
         {
             ID = iD;

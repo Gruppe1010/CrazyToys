@@ -13,6 +13,10 @@ namespace CrazyToys.Entities.OrderEntities
         public string ID { get; set; }
         public string ProductId { get; set; }
 
+        public OrderedToy()
+        {
+        }
+
         public OrderedToy(string iD, string productId)
         {
             ID = iD;

@@ -14,9 +14,12 @@ namespace CrazyToys.Entities.OrderEntities
         public string Name { get; set; }
         public string CountryCode { get; set; }
 
-        public Country(string iD, string name, string countryCode)
+        public Country()
         {
-            ID = iD;
+        }
+
+        public Country(string name, string countryCode)
+        {
             Name = name;
             CountryCode = countryCode;
         }

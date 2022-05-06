@@ -17,6 +17,10 @@ namespace CrazyToys.Entities.OrderEntities
         public Address ShippingAddress { get; set; }
         public IList<OrderLine> OrderLines { get; set; }
 
+        public Order()
+        {
+        }
+
         public Order(int orderNumber, Customer customer, Address shippingAddress)
         {
             OrderNumber = orderNumber;

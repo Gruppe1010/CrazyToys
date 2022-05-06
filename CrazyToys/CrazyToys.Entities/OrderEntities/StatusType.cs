@@ -14,9 +14,12 @@ namespace CrazyToys.Entities.OrderEntities
         public string Name { get; set; }
         public int StatusCode { get; set; }
 
-        public StatusType(string iD, string name, int statusCode)
+        public StatusType()
         {
-            ID = iD;
+        }
+
+        public StatusType(string name, int statusCode)
+        {
             Name = name;
             StatusCode = statusCode;
         }

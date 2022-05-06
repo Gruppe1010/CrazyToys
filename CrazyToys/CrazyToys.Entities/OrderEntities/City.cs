@@ -14,9 +14,12 @@ namespace CrazyToys.Entities.OrderEntities
         public string CityName { get; set; }
         public string PostalCode { get; set; }
 
-        public City(string iD, string cityName, string postalCode)
+        public City()
         {
-            ID = iD;
+        }
+
+        public City(string cityName, string postalCode)
+        {
             CityName = cityName;
             PostalCode = postalCode;
         }

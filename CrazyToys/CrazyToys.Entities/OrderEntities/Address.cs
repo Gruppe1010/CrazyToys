@@ -15,9 +15,12 @@ namespace CrazyToys.Entities.OrderEntities
         public string Street { get; set; }
         public Country Country { get; set; }
 
-        public Address(string iD, City city, string street, Country country)
+        public Address()
         {
-            ID = iD;
+        }
+
+        public Address(City city, string street, Country country)
+        {
             City = city;
             Street = street;
             Country = country;
