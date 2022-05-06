@@ -10,63 +10,63 @@ using System.Threading.Tasks;
 
 namespace CrazyToys.Services.SalesDbServices
 {
-    public class CustomerDbService : IEntityCRUD<Customer>
+    public class CountryDbService : IEntityCRUD<Country>
     {
 
         private readonly SalesContext _salesContext;
 
-        public CustomerDbService(SalesContext salesContext)
+        public CountryDbService(SalesContext salesContext)
         {
             _salesContext = salesContext;
         }
 
-        public Task<Customer> Create(Customer customer)
+        public Task<Country> Create(Country country)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Customer> CreateOrUpdate(Customer customer)
+        public Task<Country> CreateOrUpdate(Country country)
         {
             throw new NotImplementedException();
         }
 
-        public Task DeleteRange(IList<Customer> customers)
+        public Task DeleteRange(IList<Country> countries)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<Customer>> GetAll()
+        public Task<List<Country>> GetAll()
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<Customer>> GetAllWithRelations()
+        public Task<List<Country>> GetAllWithRelations()
         {
             throw new NotImplementedException();
         }
 
-        public Task<Customer> GetById(string id)
+        public Task<Country> GetById(string id)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Customer> GetByEmail(string email)
+        public async Task<Country> GetByName(string name)
         {
-            if (!string.IsNullOrWhiteSpace(email))
+            if (!string.IsNullOrWhiteSpace(name))
             {
-                var customer = await _salesContext.Customers
-                    .FirstOrDefaultAsync(c => c.Email == email);
-                return customer;
+                var country = await _salesContext.Countries
+                    .FirstOrDefaultAsync(c => c.Name == name);
+                return country;
             }
             return null;
         }
 
-        public Task<Customer> Update(Customer customer)
+        public Task<Country> Update(Country country)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Customer> Delete(string id)
+        public Task<Country> Delete(string id)
         {
             throw new NotImplementedException();
         }

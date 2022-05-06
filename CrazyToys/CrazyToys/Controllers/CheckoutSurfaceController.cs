@@ -1,7 +1,9 @@
 ﻿using CrazyToys.Entities.DTOs;
 using CrazyToys.Entities.Entities;
+using CrazyToys.Entities.OrderEntities;
 using CrazyToys.Entities.SolrModels;
 using CrazyToys.Interfaces;
+using CrazyToys.Services;
 using CrazyToys.Services.ProductDbServices;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -25,6 +27,7 @@ namespace CrazyToys.Web.Controllers
         private readonly ToyDbService _toyDbService;
         private readonly ISearchService<SolrToy> _solrToyService;
         private readonly IHangfireService _hangfireService;
+        private readonly SalesDataService _salesDataService;
 
         public CheckoutSurfaceController(
             IUmbracoContextAccessor umbracoContextAccessor,
@@ -36,26 +39,41 @@ namespace CrazyToys.Web.Controllers
             ISessionService sessionService,
             ToyDbService toyDbService,
             ISearchService<SolrToy> solrToyService,
-            IHangfireService hangfireService)
+            IHangfireService hangfireService,
+            SalesDataService salesDataService)
             : base(umbracoContextAccessor, databaseFactory, services, appCaches, profilingLogger, publishedUrlProvider)
         {
             _sessionService = sessionService;
             _toyDbService = toyDbService;
             _solrToyService = solrToyService;
             _hangfireService = hangfireService;
+            _salesDataService = salesDataService;
         }
 
 
         [HttpPost]
         public async Task<IActionResult> Submit(CheckoutUserModel model)
         {
-            string UrlPath = Environment.GetEnvironmentVariable("UrlPath");
+            string urlPath = Environment.GetEnvironmentVariable("UrlPath");
 
             if (!ModelState.IsValid)
             {
                 return CurrentUmbracoPage();
             }
-            
+
+
+            Order newOrder = await _salesDataService.CreateSale(model);
+
+            if (newOrder != null)
+            {
+                // redirect til ny side/returner view med ordrenummer
+            }
+
+
+
+
+
+
             var orderConfirmationToyList = new List<ShoppingCartToyDTO>();
             var sessionUser = _sessionService.GetNewOrExistingSessionUser(HttpContext);
             foreach (var item in sessionUser.Cart)
@@ -84,11 +102,13 @@ namespace CrazyToys.Web.Controllers
             //Laver job i hangfire og kalder metode der sender OrderConfirmation til kunden
             _hangfireService.CreateOrderConfirmationJob(model, orderConfirmationToyList);
 
+
+
             sessionUser.Cart.Clear();
             _sessionService.Update(HttpContext, sessionUser);
 
             // TODO smid ordrenr. på redirect
-            return Redirect($"{UrlPath}/order-confirmation");
+            return Redirect($"{urlPath}/order-confirmation");
         }
     }
 }

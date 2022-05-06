@@ -18,6 +18,11 @@ namespace CrazyToys.Entities.OrderEntities
         {
         }
 
+        public Country(string name)
+        {
+            Name = name;
+        }
+
         public Country(string name, string countryCode)
         {
             Name = name;

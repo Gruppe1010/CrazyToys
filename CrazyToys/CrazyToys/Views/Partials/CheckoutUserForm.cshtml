@@ -15,19 +15,19 @@
                 <div class="col-lg-6">
                     <div class="checkout__input">
                         <p>Fornavn<span>*</span></p>
-                        @Html.TextBoxFor(m => m.Firstname, new { @placeholder = "Fx. Ole", @required  = "required"})
+                        @Html.TextBoxFor(m => m.FirstName, new { @placeholder = "Fx. Ole", @required  = "required"})
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="checkout__input">
                         <p>Efternavn<span>*</span></p>
-                        @Html.TextBoxFor(m => m.Lastname, new { @placeholder = "Fx. Olesen", @required  = "required"})
+                        @Html.TextBoxFor(m => m.LastName, new { @placeholder = "Fx. Olesen", @required  = "required"})
                     </div>
                 </div>
             </div>
             <div class="checkout__input">
                 <p>Land<span>*</span></p>
-                @Html.TextBoxFor(m => m.Country, new { @placeholder = "Fx. Danmark", @required  = "required"})
+                @Html.TextBoxFor(m => m.CountryName, new { @placeholder = "Fx. Danmark", @required  = "required"})
             </div>
             <div class="checkout__input">
                 <p>By<span>*</span></p>
@@ -35,17 +35,17 @@
             </div>
             <div class="checkout__input">
                 <p>Adresse<span>*</span></p>
-                @Html.TextBoxFor(m => m.Address, new { @placeholder = "Fx. Gothersgade 14", @required  = "required"})
+                @Html.TextBoxFor(m => m.StreetAddress, new { @placeholder = "Fx. Gothersgade 14", @required  = "required"})
             </div>
             <div class="checkout__input">
                 <p>Postnummer<span>*</span></p>
-                @Html.TextBoxFor(m => m.Postcode, new { @placeholder = "Fx. 1123", @required  = "required"})
+                @Html.TextBoxFor(m => m.PostalCode, new { @placeholder = "Fx. 1123", @required  = "required"})
             </div>
             <div class="row">
                 <div class="col-lg-6">
                     <div class="checkout__input">
                         <p>Tlf. nr.<span>*</span></p>
-                        @Html.TextBoxFor(m => m.Phone, new { @placeholder = "Fx. 70206538", @required  = "required"})
+                        @Html.TextBoxFor(m => m.PhoneNumber, new { @placeholder = "Fx. 70206538", @required  = "required"})
                     </div>
                 </div>
                 <div class="col-lg-6">

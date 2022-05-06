@@ -12,17 +12,17 @@ namespace CrazyToys.Entities.OrderEntities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string ID { get; set; }
         public City City { get; set; }
-        public string Street { get; set; }
+        public string StreetAddress { get; set; }
         public Country Country { get; set; }
 
         public Address()
         {
         }
 
-        public Address(City city, string street, Country country)
+        public Address(City city, string streetAddress, Country country)
         {
             City = city;
-            Street = street;
+            StreetAddress = streetAddress;
             Country = country;
         }
     }

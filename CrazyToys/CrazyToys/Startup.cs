@@ -1,10 +1,12 @@
 using CrazyToys.Data.Data;
 using CrazyToys.Entities.Entities;
+using CrazyToys.Entities.OrderEntities;
 using CrazyToys.Entities.SolrModels;
 using CrazyToys.Interfaces;
 using CrazyToys.Interfaces.EntityDbInterfaces;
 using CrazyToys.Services;
 using CrazyToys.Services.ProductDbServices;
+using CrazyToys.Services.SalesDbServices;
 using Hangfire;
 using Hangfire.SqlServer;
 using Microsoft.AspNetCore.Builder;
@@ -61,6 +63,12 @@ namespace CrazyToys.Web
                 options.EnableSensitiveDataLogging();
             });
 
+            services.AddDbContext<SalesContext>(options => {
+                options.UseSqlServer(
+               _config.GetConnectionString("salesContext"));
+                options.EnableSensitiveDataLogging();
+            });
+
             // Add Hangfire services.
             services.AddHangfire(configuration => configuration
               .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
@@ -92,6 +100,11 @@ namespace CrazyToys.Web
 
             services.AddScoped<IcecatDataService>();
             services.AddScoped<ISessionService, SessionService>();
+
+
+            services.AddScoped<SalesDataService>();
+            services.AddScoped<IEntityCRUD<Customer>, CustomerDbService>();
+
 
 
             //Umbraco
