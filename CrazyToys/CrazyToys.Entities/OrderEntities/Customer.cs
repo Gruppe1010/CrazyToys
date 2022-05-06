@@ -22,6 +22,11 @@ namespace CrazyToys.Entities.OrderEntities
         {
         }
 
+        public Customer(string email)
+        {
+            Email = email;
+        }
+
         public Customer(string firstName, string lastName, string email, Address billingAddress)
         {
             FirstName = firstName;

@@ -147,8 +147,6 @@ namespace CrazyToys.Data.Data
                 }
             }
 
-            /*
-
             if (!salesContext.Countries.Any())
             {
                 var countries = new Country[]
@@ -161,8 +159,6 @@ namespace CrazyToys.Data.Data
                     salesContext.Countries.Add(country);
                 }
             }
-            */
-
 
             salesContext.SaveChanges();
         }

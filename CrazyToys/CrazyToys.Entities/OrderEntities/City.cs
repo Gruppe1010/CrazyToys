@@ -11,16 +11,16 @@ namespace CrazyToys.Entities.OrderEntities
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string ID { get; set; }
-        public string CityName { get; set; }
+        public string Name { get; set; }
         public string PostalCode { get; set; }
 
         public City()
         {
         }
 
-        public City(string cityName, string postalCode)
+        public City(string name, string postalCode)
         {
-            CityName = cityName;
+            Name = name;
             PostalCode = postalCode;
         }
     }
