@@ -19,7 +19,7 @@
         {
             FirstName = firstName;
             LastName = lastName;
-            CountryName = country;
+            CountryName = countryName;
             StreetAddress = streetAddress;
             CityName = cityName;
             PostalCode = postalCode;
