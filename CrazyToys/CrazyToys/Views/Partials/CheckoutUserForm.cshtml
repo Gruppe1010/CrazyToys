@@ -43,8 +43,9 @@
             */
             
             <div class="checkout__input">
-                <p>Land<span>*</span></p>
-                @Html.TextBoxFor(m => m.CountryName, Model.CountryName = "Danmark", new { @readonly = "readonly" })
+                <p>Land<span></span></p>
+                @Html.TextBoxFor(m => m.CountryName, Model.CountryName = "Danmark", new { @readonly = "readonly", 
+                @class = "country-background"})
             </div>
             
             <div class="checkout__input">
