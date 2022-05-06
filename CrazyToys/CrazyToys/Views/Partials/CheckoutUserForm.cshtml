@@ -38,11 +38,13 @@
                 ) 
                 )
             </div>
+
+            new { Value = "Danmark" })
             */
             
             <div class="checkout__input">
                 <p>Land<span>*</span></p>
-                @Html.TextBoxFor(m => m.CountryName, new { @Value = "Danmark" })
+                @Html.TextBoxFor(m => m.CountryName, Model.CountryName = "Danmark", new { @readonly = "readonly" })
             </div>
             
             <div class="checkout__input">
