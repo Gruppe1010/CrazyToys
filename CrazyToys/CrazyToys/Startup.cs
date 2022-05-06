@@ -102,8 +102,8 @@ namespace CrazyToys.Web
             services.AddScoped<ISessionService, SessionService>();
 
 
-            services.AddScoped<SalesDataService>();
             services.AddScoped<IEntityCRUD<Customer>, CustomerDbService>();
+            services.AddScoped<SalesDataService>();
 
 
 

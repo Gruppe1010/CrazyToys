@@ -60,12 +60,8 @@ namespace CrazyToys.Services
 
             }
 
+            // TODO test om den laver en fejl hvis man prøver med den præcis samme addresse to gange i streg
             customer.BillingAddress = new Address(new City(model.CityName, model.PostalCode), model.StreetAddress, countryFromDb);
-
-            
-
-            
-
 
 
 
