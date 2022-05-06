@@ -521,6 +521,7 @@ namespace CrazyToys.Services
         public async Task<ColourGroup> GetOrCreateColour(string name)
         {
             //tjek om den er i db
+
             var colour = await _colourGroupDbService.GetByName(name);
 
             if (colour == null)

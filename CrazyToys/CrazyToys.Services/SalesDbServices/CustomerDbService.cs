@@ -70,5 +70,10 @@ namespace CrazyToys.Services.SalesDbServices
         {
             throw new NotImplementedException();
         }
+
+        public Task<Customer> GetByName(string name)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
