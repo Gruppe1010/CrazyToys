@@ -22,9 +22,15 @@ namespace CrazyToys.Data
 
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddDbContext<SalesContext>(options =>
+                options.UseSqlServer(_config.GetConnectionString("salesContext")));
+
+
             services.AddDbContext<Context>(options =>
-            options.UseSqlServer(
-                _config.GetConnectionString("context")));
+            options.UseSqlServer(_config.GetConnectionString("context")));
+
+
 
         }
 

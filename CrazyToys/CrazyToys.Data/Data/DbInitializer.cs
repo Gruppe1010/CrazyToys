@@ -1,4 +1,5 @@
 ﻿using CrazyToys.Entities.Entities;
+using CrazyToys.Entities.OrderEntities;
 using System.Linq;
 
 
@@ -122,6 +123,48 @@ namespace CrazyToys.Data.Data
             }
 
             context.SaveChanges();
+        }
+
+        public static void InitializeSales(SalesContext salesContext)
+        {
+            salesContext.Database.EnsureCreated();
+
+            if (!salesContext.StatusTypes.Any())
+            {
+                var statusTypes = new StatusType[]
+                {
+                    new StatusType("Created", 1),
+                    new StatusType("Packaged", 2),
+                    new StatusType("Shipped", 3),
+                    new StatusType("Returned", 4),
+                    new StatusType("Cancelled", 5)
+
+                };
+
+                foreach (StatusType statusType in statusTypes)
+                {
+                    salesContext.StatusTypes.Add(statusType);
+                }
+            }
+
+            /*
+
+            if (!salesContext.Countries.Any())
+            {
+                var countries = new Country[]
+                {
+                    new Country("Danmark", "45")
+                };
+
+                foreach (Country country in countries)
+                {
+                    salesContext.Countries.Add(country);
+                }
+            }
+            */
+
+
+            salesContext.SaveChanges();
         }
     }
 }

@@ -33,10 +33,17 @@ namespace CrazyToys.Data
                 var services = scope.ServiceProvider;
                 try
                 {
+
+                    var salesContext = services.GetRequiredService<SalesContext>();
+                    DbInitializer.InitializeSales(salesContext);
+
+
                     // i Context står de klasser vi vil have i db
                     var context = services.GetRequiredService<Context>();
+
                     // Initialiserer db med de klasser
                     DbInitializer.Initialize(context);
+
                 }
                 catch (Exception ex)
                 {
