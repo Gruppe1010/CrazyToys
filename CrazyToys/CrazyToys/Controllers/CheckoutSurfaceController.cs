@@ -62,17 +62,16 @@ namespace CrazyToys.Web.Controllers
             }
 
 
-            Order newOrder = await _salesDataService.CreateSale(model);
+            Order newOrder = await _salesDataService.CreateSale(model, _sessionService.GetNewOrExistingSessionUser(HttpContext).Cart);
 
             if (newOrder != null)
             {
                 // redirect til ny side/returner view med ordrenummer
             }
 
+            // noget andet fordi så er der nok sket en fejl
 
-
-
-
+            /*
 
             var orderConfirmationToyList = new List<ShoppingCartToyDTO>();
             var sessionUser = _sessionService.GetNewOrExistingSessionUser(HttpContext);
@@ -106,6 +105,7 @@ namespace CrazyToys.Web.Controllers
 
             sessionUser.Cart.Clear();
             _sessionService.Update(HttpContext, sessionUser);
+            */
 
             // TODO smid ordrenr. på redirect
             return Redirect($"{urlPath}/order-confirmation");
