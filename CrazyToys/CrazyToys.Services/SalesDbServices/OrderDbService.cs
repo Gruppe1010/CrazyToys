@@ -48,12 +48,7 @@ namespace CrazyToys.Services.SalesDbServices
             throw new NotImplementedException();
         }
 
-        public Task<Order> GetById(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<Order> GetByEmail(string id)
+        public async Task<Order> GetById(string id)
         {
             if (!string.IsNullOrWhiteSpace(id))
             {
@@ -70,6 +65,11 @@ namespace CrazyToys.Services.SalesDbServices
         }
 
         public Task<Order> Delete(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Order> GetByName(string name)
         {
             throw new NotImplementedException();
         }
