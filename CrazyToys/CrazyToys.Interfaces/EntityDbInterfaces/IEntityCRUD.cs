@@ -12,8 +12,6 @@ namespace CrazyToys.Interfaces.EntityDbInterfaces
 
         Task<T> GetById(string id);
 
-        Task<T> GetByName(string name);
-
         Task<T> Update(T t);
 
         Task<T> Create(T t);
@@ -22,7 +20,7 @@ namespace CrazyToys.Interfaces.EntityDbInterfaces
 
         Task DeleteRange(IList<T> tList);
 
-        //Task<Object> Delete(string id);
+        Task<T> Delete(string id);
 
 
 

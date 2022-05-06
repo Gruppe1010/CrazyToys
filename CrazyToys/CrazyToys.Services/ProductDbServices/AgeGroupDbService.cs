@@ -6,53 +6,59 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CrazyToys.Services.EntityDbServices
+namespace CrazyToys.Services.ProductDbServices
 {
-    public class PriceGroupDbService : IEntityCRUD<PriceGroup>
+    public class AgeGroupDbService : IEntityCRUD<AgeGroup>
     {
+
         private readonly Context _context;
 
-        public PriceGroupDbService(Context context)
+        public AgeGroupDbService(Context context)
         {
             _context = context;
         }
 
-        public Task<PriceGroup> Create(PriceGroup t)
+        public Task<AgeGroup> Create(AgeGroup t)
         {
             throw new NotImplementedException();
         }
 
-        public Task<PriceGroup> CreateOrUpdate(PriceGroup t)
+        public Task<AgeGroup> CreateOrUpdate(AgeGroup t)
         {
             throw new NotImplementedException();
         }
 
-        public Task DeleteRange(IList<PriceGroup> tList)
+        public Task<AgeGroup> Delete(string id)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<List<PriceGroup>> GetAll()
-        {
-            return await _context.PriceGroups.ToListAsync();
-        }
-
-        public Task<List<PriceGroup>> GetAllWithRelations()
+        public Task DeleteRange(IList<AgeGroup> tList)
         {
             throw new NotImplementedException();
         }
 
-        public Task<PriceGroup> GetById(string id)
+        public async Task<List<AgeGroup>> GetAll()
+        {
+            return await _context.AgeGroups.ToListAsync();
+        }
+
+        public Task<List<AgeGroup>> GetAllWithRelations()
         {
             throw new NotImplementedException();
         }
 
-        public Task<PriceGroup> GetByName(string name)
+        public Task<AgeGroup> GetById(string id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<PriceGroup> Update(PriceGroup t)
+        public Task<AgeGroup> GetByName(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<AgeGroup> Update(AgeGroup t)
         {
             throw new NotImplementedException();
         }

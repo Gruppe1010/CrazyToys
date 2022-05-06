@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CrazyToys.Services.EntityDbServices
+namespace CrazyToys.Services.ProductDbServices
 {
     public class BrandDbService : IEntityCRUD<Brand>
     {
@@ -24,6 +24,11 @@ namespace CrazyToys.Services.EntityDbServices
         }
 
         public Task<Brand> CreateOrUpdate(Brand brand)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Brand> Delete(string id)
         {
             throw new NotImplementedException();
         }

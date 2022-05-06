@@ -1,5 +1,5 @@
 ﻿using CrazyToys.Interfaces;
-using CrazyToys.Services.EntityDbServices;
+using CrazyToys.Services.ProductDbServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.Extensions.Logging;

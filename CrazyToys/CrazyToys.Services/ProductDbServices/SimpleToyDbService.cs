@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CrazyToys.Services.EntityDbServices
+namespace CrazyToys.Services.ProductDbServices
 {
     public class SimpleToyDbService : IEntityCRUD<SimpleToy>, ISimpleToyDbService
     {
@@ -79,6 +79,11 @@ namespace CrazyToys.Services.EntityDbServices
         }
 
         public Task DeleteRange(IList<SimpleToy> tList)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<SimpleToy> Delete(string id)
         {
             throw new NotImplementedException();
         }

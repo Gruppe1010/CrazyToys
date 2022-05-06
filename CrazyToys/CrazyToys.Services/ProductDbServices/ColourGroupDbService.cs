@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CrazyToys.Services.EntityDbServices
+namespace CrazyToys.Services.ProductDbServices
 {
     public class ColourGroupDbService : IEntityCRUD<ColourGroup>
     {
@@ -82,6 +82,11 @@ namespace CrazyToys.Services.EntityDbServices
         }
 
         public Task DeleteRange(IList<ColourGroup> tList)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ColourGroup> Delete(string id)
         {
             throw new NotImplementedException();
         }

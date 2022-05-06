@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CrazyToys.Services.EntityDbServices
+namespace CrazyToys.Services.ProductDbServices
 {
     public class ImageDbService : IEntityCRUD<Image>
     {
@@ -59,5 +59,9 @@ namespace CrazyToys.Services.EntityDbServices
             await _context.SaveChangesAsync();
         }
 
+        public Task<Image> Delete(string id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

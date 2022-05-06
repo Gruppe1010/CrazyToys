@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CrazyToys.Services.EntityDbServices
+namespace CrazyToys.Services.ProductDbServices
 {
     public class SubCategoryDbService : IEntityCRUD<SubCategory>
     {
@@ -26,6 +26,11 @@ namespace CrazyToys.Services.EntityDbServices
         }
 
         public Task<SubCategory> CreateOrUpdate(SubCategory t)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<SubCategory> Delete(string id)
         {
             throw new NotImplementedException();
         }

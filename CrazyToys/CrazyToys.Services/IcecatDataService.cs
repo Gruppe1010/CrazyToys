@@ -1,8 +1,7 @@
 ﻿using CrazyToys.Entities.Entities;
 using CrazyToys.Interfaces;
 using CrazyToys.Interfaces.EntityDbInterfaces;
-using CrazyToys.Services.EntityDbServices;
-using CrazyToys.Web.Logging;
+using CrazyToys.Services.ProductDbServices;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json.Linq;
 using System;

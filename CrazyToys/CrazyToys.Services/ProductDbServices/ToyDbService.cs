@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CrazyToys.Services.EntityDbServices
+namespace CrazyToys.Services.ProductDbServices
 {
     public class ToyDbService : IEntityCRUD<Toy>, IToyDbService
     {
@@ -58,7 +58,7 @@ namespace CrazyToys.Services.EntityDbServices
             }
 
             var toy = await _context.Toys
-                .Include(t => t.Images) 
+                .Include(t => t.Images)
                 .Include(t => t.Brand)
                 .Include(t => t.SubCategory)
                 .Include(t => t.PriceGroup)
@@ -140,6 +140,11 @@ namespace CrazyToys.Services.EntityDbServices
         }
 
         public Task DeleteRange(IList<Toy> tList)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Toy> Delete(string id)
         {
             throw new NotImplementedException();
         }

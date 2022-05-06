@@ -4,7 +4,7 @@ using CrazyToys.Entities.SolrModels;
 using CrazyToys.Interfaces;
 using CrazyToys.Interfaces.EntityDbInterfaces;
 using CrazyToys.Services;
-using CrazyToys.Services.EntityDbServices;
+using CrazyToys.Services.ProductDbServices;
 using Hangfire;
 using Hangfire.SqlServer;
 using Microsoft.AspNetCore.Builder;
