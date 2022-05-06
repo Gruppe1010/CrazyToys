@@ -12,7 +12,7 @@ namespace CrazyToys.Entities.OrderEntities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string ID { get; set; }
         public int OrderNumber { get; set; }
-        public Country Customer { get; set; }
+        public Customer Customer { get; set; }
         public IList<Status> Statuses { get; set; }
         public Address ShippingAddress { get; set; }
         public IList<OrderLine> OrderLines { get; set; }
@@ -21,7 +21,7 @@ namespace CrazyToys.Entities.OrderEntities
         {
         }
 
-        public Order(int orderNumber, Country customer, Address shippingAddress)
+        public Order(int orderNumber, Customer customer, Address shippingAddress)
         {
             OrderNumber = orderNumber;
             Customer = customer;
@@ -34,14 +34,10 @@ namespace CrazyToys.Entities.OrderEntities
         {
             double totalPrice = 0;
 
-
             foreach (OrderLine orderLine in OrderLines)
             {
                 totalPrice += orderLine.CalculateSubTotal();
-
             }
-
-
 
             return totalPrice;
         }

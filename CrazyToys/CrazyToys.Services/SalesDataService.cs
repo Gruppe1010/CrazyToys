@@ -19,42 +19,39 @@ namespace CrazyToys.Services
         private readonly CustomerDbService _customerDbService;
         private readonly CountryDbService _countrybService;
         private readonly OrderedToyDbService _orderedToyDbService;
-
-
+        private readonly OrderDbService _orderDbService;
 
 
         public SalesDataService(
             ISessionService sessionService,
             CustomerDbService customerDbService, 
             CountryDbService countrybService,
-            OrderedToyDbService orderedToyDbService)
+            OrderedToyDbService orderedToyDbService,
+            OrderDbService orderDbService)
         {
             _customerDbService = customerDbService;
             _countrybService = countrybService;
             _orderedToyDbService = orderedToyDbService;
+            _orderDbService = orderDbService;
         }
+
+
 
         public async Task<Order> CreateSale(CheckoutUserModel model, Dictionary<string, int> cart)
         {
-            Order order = new Order();
-
-            // opret eller få fat i den eksisterende bruger
-            Customer customer = await GetOrCreateCustomer(model.Email);
-
-            // Opdaterer navn og BillingAddress
-            await UpdateCustomerDetails(model, customer);
-
-            // opret ny ordre ud fra de toys der er i sessionUserCart
             Order newOrder = new Order();
-            newOrder.OrderLines = ConvertCartToOrderLines(cart);
 
+            // opret eller få fat i den eksisterende kunde, og tilknyt den ordren
+            newOrder.Customer = await GetOrCreateCustomer(model.Email);
+           
+            // Opdaterer navn og BillingAddress
+            await UpdateCustomerDetails(model, newOrder.Customer);
 
             // tilføj til customers ordrelist
+            newOrder.OrderLines = ConvertCartToOrderLines(cart);
 
             // gem ned
-
-
-            return order;
+            return await _orderDbService.Create(newOrder);
         }
 
         public async Task<Customer> GetOrCreateCustomer(string email)
@@ -64,7 +61,6 @@ namespace CrazyToys.Services
             return customerFromDb != null ? customerFromDb : await _customerDbService.Create(new Customer(email));
         }
 
-
         /**
          Ændrer navn og billingaddress til det nye
          
@@ -73,7 +69,6 @@ namespace CrazyToys.Services
         {
             customer.FirstName = model.FirstName;
             customer.LastName = model.LastName;
-
 
             // hent Country
             Country countryFromDb = await _countrybService.GetByName(model.CountryName);
@@ -94,9 +89,15 @@ namespace CrazyToys.Services
 
             foreach (var item in cart)
             {
+                // tjek om dette toy allerede allerede er blevet tilføjet til OrderedToy
+                OrderedToy orderedToy = await _orderedToyDbService.GetByProductId(item.Value.Prod);
 
-                // tjek om dette toy allerede ligger i tabllen 
-                _orderedToyDbService
+                // GetOrCreate
+
+
+
+
+                //TODO toyStock skal IKKE ændres - den skal ændre i reservedAmount
 
 
                 /*
@@ -123,6 +124,10 @@ namespace CrazyToys.Services
             }
 
             return orderLines;
+        }
+
+        public OrderedToy GetOrCreateOrderedToy(string)
+        {
 
         }
 

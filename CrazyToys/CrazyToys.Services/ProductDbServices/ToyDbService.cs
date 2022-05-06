@@ -67,6 +67,23 @@ namespace CrazyToys.Services.ProductDbServices
             return toy;
         }
 
+        public async Task<Toy> GetByProductId(string productId)
+        {
+            if (productId == null)
+            {
+                return null;
+            }
+
+            var toy = await _context.Toys
+                .Include(t => t.Images)
+                .Include(t => t.Brand)
+                .Include(t => t.SubCategory)
+                .Include(t => t.PriceGroup)
+                .FirstOrDefaultAsync(t => t.ProductId.Equals(productId));
+
+            return toy;
+        }
+
         public Task<Toy> GetByName(string name)
         {
             throw new NotImplementedException();

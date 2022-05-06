@@ -20,9 +20,12 @@ namespace CrazyToys.Services.SalesDbServices
             _salesContext = salesContext;
         }
 
-        public Task<Customer> Create(Customer customer)
+        public async Task<Customer> Create(Customer customer)
         {
-            throw new NotImplementedException();
+            _salesContext.Customers.Add(customer);
+            await _salesContext.SaveChangesAsync();
+
+            return customer;
         }
 
         public Task<Customer> CreateOrUpdate(Customer customer)

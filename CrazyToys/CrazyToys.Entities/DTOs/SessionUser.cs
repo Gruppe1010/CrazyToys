@@ -4,8 +4,9 @@ namespace CrazyToys.Entities.DTOs
 {
     public class SessionUser
     {
-        // Dict indeholder toyID og quantity
         public HashSet<string> Wishlist { get; set; }
+        // Dict indeholder toyID og quantity
+        // TODO denne skal nu ændres til ProductId
         public Dictionary<string, int> Cart { get; set; }
 
         public SessionUser()
