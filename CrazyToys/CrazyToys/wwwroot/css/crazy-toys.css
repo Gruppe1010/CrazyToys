@@ -238,3 +238,13 @@
     border: 1px solid #e5e5e5;
     height: 42px;
 }
+
+.country-background {
+    background: #f3f2ee;
+    color: black !important;
+    font-weight: bold;
+}
+
+.font-colour-black {
+    color: black !important
+}
