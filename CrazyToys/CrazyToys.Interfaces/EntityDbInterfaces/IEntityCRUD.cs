@@ -21,11 +21,6 @@ namespace CrazyToys.Interfaces.EntityDbInterfaces
         Task DeleteRange(IList<T> tList);
 
         Task<T> Delete(string id);
-
-
-
-
-
-
+        Task<T> GetByName(string name);
     }
 }
