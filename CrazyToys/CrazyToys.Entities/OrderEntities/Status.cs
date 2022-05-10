@@ -11,16 +11,16 @@ namespace CrazyToys.Entities.OrderEntities
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string ID { get; set; }
-        public StatusType Type { get; set; }
+        public StatusType StatusType { get; set; }
         public DateTime TimeStamp { get; set; }
 
         public Status()
         {
         }
 
-        public Status(StatusType type, DateTime timeStamp)
+        public Status(StatusType statusType, DateTime timeStamp)
         {
-            Type = type;
+            StatusType = statusType;
             TimeStamp = timeStamp;
         }
     }

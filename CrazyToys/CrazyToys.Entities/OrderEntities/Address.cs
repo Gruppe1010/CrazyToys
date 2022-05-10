@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CrazyToys.Entities.DTOs.OrderDTOs;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -24,6 +25,11 @@ namespace CrazyToys.Entities.OrderEntities
             City = city;
             StreetAddress = streetAddress;
             Country = country;
+        }
+
+        public AddressDTO ConvertToAddressDTO()
+        {
+            return new AddressDTO(StreetAddress, City.PostalCode + ", " + City.Name, Country.Name);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using CrazyToys.Entities.DTOs;
+using CrazyToys.Entities.DTOs.OrderDTOs;
 using CrazyToys.Entities.Entities;
 using CrazyToys.Entities.OrderEntities;
 using CrazyToys.Entities.SolrModels;
@@ -25,6 +26,8 @@ namespace CrazyToys.Web.Controllers
     {
         private readonly ISessionService _sessionService;
         private readonly SalesDataService _salesDataService;
+        private readonly IHangfireService _hangfireService;
+
 
         public CheckoutSurfaceController(
             IUmbracoContextAccessor umbracoContextAccessor,
@@ -34,17 +37,20 @@ namespace CrazyToys.Web.Controllers
             IProfilingLogger profilingLogger,
             IPublishedUrlProvider publishedUrlProvider,
             ISessionService sessionService,
-            SalesDataService salesDataService)
+            SalesDataService salesDataService,
+            IHangfireService hangfireService)
             : base(umbracoContextAccessor, databaseFactory, services, appCaches, profilingLogger, publishedUrlProvider)
         {
             _sessionService = sessionService;
             _salesDataService = salesDataService;
+            _hangfireService = hangfireService;
         }
 
 
         [HttpPost]
         public async Task<IActionResult> Submit(CheckoutUserModel model)
         {
+
             string urlPath = Environment.GetEnvironmentVariable("UrlPath");
 
             if (!ModelState.IsValid)
@@ -53,62 +59,38 @@ namespace CrazyToys.Web.Controllers
             }
 
             SessionUser sessionUser = _sessionService.GetNewOrExistingSessionUser(HttpContext);
+            Dictionary<string, int> cart = sessionUser.Cart;
 
-
-            Order newOrder = await _salesDataService.CreateSale(model, sessionUser.Cart);
-
-            if (newOrder != null)
+            if(cart.Count == 0)
             {
-                // slet cart på sessionUser
-                _sessionService.
-
-
-                sessionUser.
-
-
-                // redirect til ny side/returner view med ordrenummer
+                // TODO tag imod denne i html
+                ViewData["ErrorMessage"] = "Der ligger ikke noget i din kurv";
+                return CurrentUmbracoPage();
             }
 
-            // noget andet fordi så er der nok sket en fejl
+            Order newOrder = await _salesDataService.CreateSale(model, cart);
 
-            /*
-
-            var orderConfirmationToyList = new List<ShoppingCartToyDTO>();
-            var sessionUser = _sessionService.GetNewOrExistingSessionUser(HttpContext);
-            foreach (var item in sessionUser.Cart)
+            if (newOrder == null)
             {
-                Toy toy = await _toyDbService.GetById(item.Key);
-                orderConfirmationToyList.Add(toy.ConvertToShoppingCartToyDTO(item.Value));
-
-                if (toy.Stock >= item.Value)
-                {
-                    toy.Stock = toy.Stock - item.Value;
-                    await _toyDbService.Update(toy);
-                    if (toy.Stock == 0)
-                    {
-                        _solrToyService.Delete(new SolrToy(toy));
-                    }
-                }
-                else
-                {
-                    //TODO Hvis 7 købes men kun 5 på lager. skriv 5 købt
-                    toy.Stock = 0;
-                    await _toyDbService.Update(toy);
-                    _solrToyService.Delete(new SolrToy(toy));
-                }
+                return Redirect($"{urlPath}/shopping-cart");
             }
 
-            //Laver job i hangfire og kalder metode der sender OrderConfirmation til kunden
-            _hangfireService.CreateOrderConfirmationJob(model, orderConfirmationToyList);
+            // lav liste med toys som skal vises i orderConfirmation
+            List<ShoppingCartToyDTO> orderConfirmationToyList = await _salesDataService.ConvertOrderLinesToShoppingCartToyDTOs(newOrder.OrderLines);
 
 
 
+            // Opret orderConfirmationJob
+            OrderConfirmationDTO orderConfirmationDTO = newOrder.ConvertToOrderConfirmationDTO(orderConfirmationToyList);
+            _hangfireService.CreateOrderConfirmationJob(model, orderConfirmationDTO);
+
+            // slet cart på sessionUser
             sessionUser.Cart.Clear();
             _sessionService.Update(HttpContext, sessionUser);
-            */
 
-            // TODO smid ordrenr. på redirect
-            return Redirect($"{urlPath}/order-confirmation");
+            // redirect til ny side/returner view med ordrenummer
+
+            return Redirect($"{urlPath}/order-confirmation?id={newOrder.OrderNumber}");
         }
     }
 }

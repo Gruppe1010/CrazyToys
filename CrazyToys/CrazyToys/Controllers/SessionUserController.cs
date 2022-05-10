@@ -45,31 +45,34 @@ namespace CrazyToys.Web.Controllers
 
             return StatusCode(500);
         }
-        //TODO
-        [HttpPost]
-        public async Task<ActionResult> CheckIfAvailable()
+      
+
+        /*
+        Denne metode tjekker om kunden skal have lav til at gå videre til checkout-siden.
+        Kunden skal IKKE kunne gå videre hvis:
+         - Der ikke er noget i Cart
+         - Der er for lidt i stock på en vare 
+         */
+        [HttpGet]
+        public async Task<ActionResult> CheckCart()
         {
-            var sessionUser = _sessionService.GetNewOrExistingSessionUser(HttpContext);
+            var cart = _sessionService.GetNewOrExistingSessionUser(HttpContext).Cart;
 
-            List<ShoppingCartToyDTO> shoppingCartToyDTOs = new List<ShoppingCartToyDTO>();
+            if(cart.Count == 0)
+            {
+                // vi kan få denne fejlbesked frem i js via: await response.text();
+                return BadRequest("Der er ikke noget i kurven");
+            }
 
-            foreach (var entry in sessionUser.Cart)
+            foreach (var entry in cart)
             {
                 Toy toy = await _toyDbService.GetById(entry.Key);
-                if(toy.Stock >= entry.Value)
+                if(toy.Stock < entry.Value)
                 {
-                    shoppingCartToyDTOs.Add(toy.ConvertToShoppingCartToyDTO(entry.Value));
-                }
-                else
-                {
-                    return BadRequest();
+                    return BadRequest($"Der er kun {toy.Stock} tilbage af {toy.Name}. Ret venligst din kurv.");
                 }
             }
 
-            if(shoppingCartToyDTOs.Count != sessionUser.Cart.Count)
-            {
-                return BadRequest();
-            }
             return Ok();
         }
 

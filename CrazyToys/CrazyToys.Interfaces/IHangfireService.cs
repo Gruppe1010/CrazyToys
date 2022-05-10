@@ -1,4 +1,6 @@
 ﻿using CrazyToys.Entities.DTOs;
+using CrazyToys.Entities.DTOs.OrderDTOs;
+using CrazyToys.Entities.OrderEntities;
 using Hangfire.Server;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -13,7 +15,7 @@ namespace CrazyToys.Interfaces
 
         void DeleteSolrDb();
 
-        void CreateOrderConfirmationJob(CheckoutUserModel model, List<ShoppingCartToyDTO> list);
+        void CreateOrderConfirmationJob(CheckoutUserModel model, OrderConfirmationDTO orderConfirmationDTO);
 
     }
 }

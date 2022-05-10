@@ -1,5 +1,7 @@
 ﻿using CrazyToys.Entities.DTOs;
+using CrazyToys.Entities.DTOs.OrderDTOs;
 using CrazyToys.Entities.Entities;
+using CrazyToys.Entities.OrderEntities;
 using CrazyToys.Entities.SolrModels;
 using CrazyToys.Interfaces;
 using CrazyToys.Interfaces.EntityDbInterfaces;
@@ -54,24 +56,23 @@ namespace CrazyToys.Services
             });
         }
 
-        public void CreateOrderConfirmationJob(CheckoutUserModel model, List<ShoppingCartToyDTO> list)
+        public void CreateOrderConfirmationJob(CheckoutUserModel model, OrderConfirmationDTO orderConfirmationDTO)
         {
-            BackgroundJob.Enqueue(() => SendOrderConfirmation(model, list));
+            BackgroundJob.Enqueue(() => SendOrderConfirmation(model, orderConfirmationDTO));
         }
 
-        public void SendOrderConfirmation(CheckoutUserModel model, List<ShoppingCartToyDTO> list)
+        public void SendOrderConfirmation(CheckoutUserModel model, OrderConfirmationDTO orderConfirmationDTO)
         {
             string bodyText = "";
             double subTotal = 0;
             double totalPrice;
         
-            foreach (ShoppingCartToyDTO toy in list)
+            foreach (ShoppingCartToyDTO toy in orderConfirmationDTO.ShoppingCartToyDTOs)
             {
                 var subAmount = toy.CalculateTotalPrice();
 
                 bodyText = bodyText + "<tr></tr>" +  "<tr>" + "<td>" + "<img width='90' height='90' src='" + toy.Image + "'>" + "</td>" + "<td>" + "&nbsp;&nbsp;&nbsp;&nbsp;" + toy.Name + "&nbsp;&nbsp;&nbsp;&nbsp;" + "</td>" + "<td>" + "&nbsp;&nbsp;&nbsp;&nbsp;" + toy.Quantity + " stk.&nbsp;&nbsp;&nbsp;&nbsp;" + "</td>" + "<td align='right'>" + subAmount + " DKK" + "</td>" + "</tr>";
                 subTotal = subTotal + subAmount;
-
             }
 
             string freightPrice = "39 DKK";
@@ -83,7 +84,6 @@ namespace CrazyToys.Services
             else
             {
                 totalPrice = subTotal + 39;
-
             }
 
 
@@ -91,18 +91,39 @@ namespace CrazyToys.Services
 
             msgMail.From = new MailAddress("gruppe1010@hotmail.com");
             msgMail.To.Add(new MailAddress(model.Email));
-            msgMail.Subject = "Ordrebekræftelse fra Crazy Toys";
+            msgMail.Subject = $"Din bestilling er modtaget! ({orderConfirmationDTO.OrderNumber}) ";
 
-            msgMail.Body = "<h1> Tak for din ordre. </h1>" +
+            msgMail.Body =
+                $"<h1> Hej {orderConfirmationDTO.FirstName}!</h1>" +
+                $"<h2> Tak for din ordre!</h2>" +
+
+
+                $"<h2>Oplysninger </h2>" +
+                $"<h4> Ordrenummer: {orderConfirmationDTO.OrderNumber} </h4>" +
+                $"<h4> Ordredato: {orderConfirmationDTO.Date}</h4>" +
+                $"<h4> Faktureringsadresse:</h4>" +
+                $"<p>{orderConfirmationDTO.FirstName} {orderConfirmationDTO.LastName}</p>" +
+                $"<p>{orderConfirmationDTO.BillingAddress.StreetAddress}</p>" +
+                $"<p>{orderConfirmationDTO.BillingAddress.City}</p>" +
+                $"<p>{orderConfirmationDTO.BillingAddress.Country}</p>" +
+
+
+                $"<h4> Leveringssadresse:</h4>" +
+                $"<p>{orderConfirmationDTO.FirstName} {orderConfirmationDTO.LastName}</p>" +
+                $"<p>{orderConfirmationDTO.ShippingAddress.StreetAddress}</p>" +
+                $"<p>{orderConfirmationDTO.ShippingAddress.City}</p>" +
+                $"<p>{orderConfirmationDTO.ShippingAddress.Country}</p>" +
+
+
                 "<h2> Følgende varer vil blive sendt til din adresse hurtigst muligt </h2>" +
                 "<table>" +
                     "<tr> <th align='left'> Produkt </th> <th> </th> <th> Antal </th> <th align='right'> Pris </th></tr>" + 
-                    "<tbody>" + bodyText + "</tbody>" +
-                    "<tr><td>&nbsp;</td></tr>" +
-                    "<tr><th align='left'> Subtotal </th> <th> </th> <th> </th> <th align='right'>" + subTotal + " DKK" + "</th></tr>" +
-                    "<tr><th align='left'> Fragt </th> <th> </th> <th> </th> <th align='right'>" + freightPrice  + "</th></tr>" +
+                    $"<tbody>{bodyText}</tbody>" +
+                    $"<tr><td>&nbsp;</td></tr>" +
+                    $"<tr><th align='left'> Subtotal </th> <th> </th> <th> </th> <th align='right'> {subTotal} DKK" + "</th></tr>" +
+                    $"<tr><th align='left'> Fragt </th> <th> </th> <th> </th> <th align='right'>{freightPrice} </th></tr>" +
                      "<tr><td>&nbsp;</td></tr>" +
-                    "<tr><th align='left'> Total </th> <th> </th> <th> </th> <th align='right'>" + totalPrice + " DKK" + "</th></tr>" +
+                    $"<tr><th align='left'> Total </th> <th> </th> <th> </th> <th align='right'>{ totalPrice} DKK" + "</th></tr>" +
                 "</table>";
 
             msgMail.IsBodyHtml = true;

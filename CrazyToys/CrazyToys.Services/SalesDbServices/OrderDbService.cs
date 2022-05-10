@@ -59,9 +59,13 @@ namespace CrazyToys.Services.SalesDbServices
             return null;
         }
 
-        public Task<Order> Update(Order order)
+        public async Task<Order> Update(Order order)
         {
-            throw new NotImplementedException();
+            _salesContext.Update(order);
+            _salesContext.Entry(order).Property(nameof(Order.OrderNumber)).IsModified = false;
+            await _salesContext.SaveChangesAsync();
+
+            return order;
         }
 
         public Task<Order> Delete(string id)

@@ -50,9 +50,13 @@ namespace CrazyToys.Services.SalesDbServices
             throw new NotImplementedException();
         }
 
-        public Task<StatusType> GetByName(string name)
+        public async Task<StatusType> GetByName(string name)
         {
-            throw new NotImplementedException();
+            if (name == null)
+            {
+                return null;
+            }
+            return await _salesContext.StatusTypes.FirstOrDefaultAsync(s => s.Name.Equals(name));
         }
 
         public Task<StatusType> Update(StatusType statusType)

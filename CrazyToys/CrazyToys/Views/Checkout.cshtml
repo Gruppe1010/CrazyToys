@@ -3,6 +3,8 @@
 @using Umbraco.Cms.Web.Common.PublishedModels;
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Checkout>
 @{
+    //Console.WriteLine($"HER {errorMessage}");
+
     Layout = "Master.cshtml";
     List<ShoppingCartToyDTO> shoppingCartToyDTOs = ViewData["ShoppingCartToytDTOs"] as List<ShoppingCartToyDTO>;
 
@@ -18,8 +20,8 @@
     }
 
     double total = subtotal + deliveryPrice;
-
 }
+
 
 <!-- Checkout Section Begin -->
 <section class="checkout spad">

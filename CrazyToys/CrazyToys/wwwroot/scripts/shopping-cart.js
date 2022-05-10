@@ -127,20 +127,20 @@ function decQuantity(id) { //
 }
 
 function goToCheckout() {
-
-    fetch(`/api/sessionuser/CheckIfAvailable`, {
-        method: 'POST'
-    }).then(response => {
+    fetch(`/api/sessionuser/CheckCart`, {
+        method: 'GET'
+    }).then(async response =>  {
         if (response.ok) {
-
             window.location.replace("/checkout")
-            
         } else {
-            alert("Der skete en fejl");
-            window.location.replace("/shopping-cart");
-
+            const errorMessage = await response.text(); // denne her henter fejlbeskeden som vi har sendt med fra controlleren
+            alert(errorMessage);
+            window.location.replace("/shopping-cart"); // vi redirecter til samme side, fordi så viser den de toys som er unavailable (hvis det er det der er fejlen)
         }
-    }).catch(error => console.log);
+    }).catch(error => {
+        console.log("error: ", error.message)
+        debugger;
+    });
 }
 
 function updateTotal(id, price) {

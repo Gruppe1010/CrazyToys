@@ -23,6 +23,7 @@ namespace CrazyToys.Services
         private readonly CountryDbService _countrybService;
         private readonly ToyDbService _toyDbService;
         private readonly OrderDbService _orderDbService;
+        private readonly StatusTypeDbService _statusTypeDbService;
 
 
         public SalesDataService(
@@ -31,17 +32,23 @@ namespace CrazyToys.Services
             CustomerDbService customerDbService, 
             CountryDbService countrybService,
             ToyDbService toyDbService,
-            OrderDbService orderDbService)
+            OrderDbService orderDbService,
+            StatusTypeDbService statusTypeDbService)
         {
             _solrToyService = solrToyService;
             _customerDbService = customerDbService;
             _countrybService = countrybService;
             _toyDbService = toyDbService;
             _orderDbService = orderDbService;
+            _statusTypeDbService = statusTypeDbService;
         }
 
 
-
+        /**
+         Der skal altid være noget i cart-obj 
+         
+         
+         */
         public async Task<Order> CreateSale(CheckoutUserModel model, Dictionary<string, int> cart)
         {
             Order newOrder = new Order();
@@ -53,13 +60,25 @@ namespace CrazyToys.Services
             await UpdateCustomerDetails(model, newOrder.Customer);
 
             // tilføj til customers ordrelist
-            newOrder.OrderLines = await ConvertCartToOrderLines(cart);
+            List<OrderLine> orderLines = await ConvertCartToOrderLines(cart);
 
-            // TODO sørg for at den returnerer denne eller noget, fordi den skal sendes med - kig på gammel kode - her på mandag - nu skal i afsted og vinde trofæet
-            //orderConfirmationToyList.Add(toy.ConvertToShoppingCartToyDTO(item.Value));
+            if(orderLines.Count > 0)
+            {
+                newOrder.OrderLines = orderLines;
 
-            // gem ned
-            return await _orderDbService.Create(newOrder);
+                // TODO denne skal i fremtiden ændres så den ikke bare bliver til billing altid, men kan tilføjes seperat ude i formen på siden
+                newOrder.ShippingAddress = newOrder.Customer.BillingAddress;
+                // gem ned og returner
+
+                newOrder = await _orderDbService.Create(newOrder);
+                if(newOrder.ID != null) // hvis den faktisk er blevet oprettet, så skal den tilføje "Created-status"
+                {
+                    StatusType createdStatusType = await _statusTypeDbService.GetByName("Created");
+                    newOrder.Statuses.Add(new Status(createdStatusType, DateTime.Now));
+                    return await _orderDbService.Update(newOrder);
+                }
+            }
+            return null;
         }
 
         public async Task<Customer> GetOrCreateCustomer(string email)
@@ -93,7 +112,7 @@ namespace CrazyToys.Services
 
         public async Task<List<OrderLine>> ConvertCartToOrderLines(Dictionary<string, int> cart)
         {
-            List<OrderLine> orderLines = new List <OrderLine>();
+            List<OrderLine> orderLines = new List<OrderLine>();
 
             foreach (var item in cart)
             {
@@ -132,16 +151,24 @@ namespace CrazyToys.Services
             return orderLines;
         }
 
-
-
         /*
-
-        public async Task<Address> GetOrCreateCustomer(string email)
+     Den tager imod de orderLines der er på den nyoprettede order, 
+        og laver en liste med ShoppingCartToyDTO'er som vi skal bruge til at vise hvilke toys kunden har bestil i ordrebekræftelsen
+     */
+        public async Task<List<ShoppingCartToyDTO>> ConvertOrderLinesToShoppingCartToyDTOs(IList<OrderLine> orderLines)
         {
-            Customer customerFromDb = await _customerDbService.GetByEmail(email);
+            List<ShoppingCartToyDTO> orderConfirmationToyList = new List<ShoppingCartToyDTO>();
 
-            return customerFromDb != null ? customerFromDb : await _customerDbService.Create(new Customer(email));
+            foreach (OrderLine orderLine in orderLines)
+            {
+                Toy toy = await _toyDbService.GetById(orderLine.OrderedToyId);
+                orderConfirmationToyList.Add(toy.ConvertToShoppingCartToyDTO(orderLine.Quantity));
+            }
+
+            return orderConfirmationToyList;
         }
-        */
+
+
+
     }
 }

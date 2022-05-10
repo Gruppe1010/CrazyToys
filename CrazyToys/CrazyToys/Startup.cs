@@ -106,7 +106,6 @@ namespace CrazyToys.Web
             services.AddScoped<CountryDbService>();
             services.AddScoped<OrderDbService>();
             services.AddScoped<StatusTypeDbService>();
-            services.AddScoped<OrderedToyDbService>();
             services.AddScoped<SalesDataService>();
 
 
@@ -172,7 +171,7 @@ namespace CrazyToys.Web
             recurringJobManager.AddOrUpdate<HangfireService>("IndexIcecat", hangfireService => hangfireService.GetProductsDataService(indexUrl, null), Cron.Never);
             recurringJobManager.AddOrUpdate<HangfireService>("DailyIcecat", hangfireService => hangfireService.GetProductsDataService(dailyUrl, null), "00 01 * * *");
 
-            // TODO denne er bare for convenience 
+            // TODO denne er bare for convenience - så vi kan trykke på dem inde i hangfire
             recurringJobManager.AddOrUpdate<HangfireService>("UpdateSolrDb", hangfireService => hangfireService.UpdateSolrDb(), Cron.Never);
             recurringJobManager.AddOrUpdate<HangfireService>("DeleteSolrDb", hangfireService => hangfireService.DeleteSolrDb(), Cron.Never);
         }
