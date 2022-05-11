@@ -20,7 +20,7 @@ namespace CrazyToys.Services
         private readonly ISessionService _sessionService;
         private readonly ISearchService<SolrToy> _solrToyService;
         private readonly CustomerDbService _customerDbService;
-        private readonly CountryDbService _countrybService;
+        private readonly CountryDbService _countryDbService;
         private readonly ToyDbService _toyDbService;
         private readonly OrderDbService _orderDbService;
         private readonly StatusTypeDbService _statusTypeDbService;
@@ -30,14 +30,14 @@ namespace CrazyToys.Services
             ISessionService sessionService,
             ISearchService<SolrToy> solrToyService,
             CustomerDbService customerDbService, 
-            CountryDbService countrybService,
+            CountryDbService countryDbService,
             ToyDbService toyDbService,
             OrderDbService orderDbService,
             StatusTypeDbService statusTypeDbService)
         {
             _solrToyService = solrToyService;
             _customerDbService = customerDbService;
-            _countrybService = countrybService;
+            _countryDbService = countryDbService;
             _toyDbService = toyDbService;
             _orderDbService = orderDbService;
             _statusTypeDbService = statusTypeDbService;
@@ -90,7 +90,6 @@ namespace CrazyToys.Services
 
         /**
          Ændrer navn og billingaddress til det nye
-         
          */
         public async Task UpdateCustomerDetails(CheckoutUserModel model, Customer customer)
         {
@@ -98,7 +97,7 @@ namespace CrazyToys.Services
             customer.LastName = model.LastName;
 
             // hent Country
-            Country countryFromDb = await _countrybService.GetByName(model.CountryName);
+            Country countryFromDb = await _countryDbService.GetByName(model.CountryName);
 
             if(countryFromDb == null)
             {
