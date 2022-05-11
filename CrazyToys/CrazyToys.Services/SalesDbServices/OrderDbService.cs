@@ -59,6 +59,22 @@ namespace CrazyToys.Services.SalesDbServices
             return null;
         }
 
+        public async Task<Order> GetByOrderNumber(int orderNumber)
+        {
+            if (orderNumber != 0)
+            {
+                var order = await _salesContext.Orders
+                    .Include(o => o.Customer)
+                    .FirstOrDefaultAsync(o => o.OrderNumber == orderNumber);
+                return order;
+            }
+            return null;
+        }
+
+
+
+        
+
         public async Task<Order> Update(Order order)
         {
             _salesContext.Update(order);

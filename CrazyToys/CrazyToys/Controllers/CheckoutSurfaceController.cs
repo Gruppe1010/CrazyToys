@@ -90,7 +90,7 @@ namespace CrazyToys.Web.Controllers
 
             // redirect til ny side/returner view med ordrenummer
 
-            return Redirect($"{urlPath}/order-confirmation?id={newOrder.OrderNumber}");
+            return Redirect($"{urlPath}/order-confirmation?orderNumber={newOrder.OrderNumber}");
         }
     }
 }

@@ -106,6 +106,10 @@ namespace CrazyToys.Web
             services.AddScoped<CountryDbService>();
             services.AddScoped<OrderDbService>();
             services.AddScoped<StatusTypeDbService>();
+            services.AddScoped<CityDbService>();
+            services.AddScoped<AddressDbService>();
+
+
             services.AddScoped<SalesDataService>();
 
 

@@ -1,8 +1,13 @@
-﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+﻿@using CrazyToys.Entities.OrderEntities
+@using Umbraco.Cms.Web.Common.PublishedModels;
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<OrderConfirmation>
 @{
     Layout = "Master.cshtml";
-    var orderNumber = ViewData["OrderNumber"];
+    var order = ViewData["Order"] as Order;
+    var isAnOrder = (bool)ViewData["IsAnOrder"];
+
+    Console.WriteLine(isAnOrder);
+
 }
 
 <section class="about spad">
@@ -10,9 +15,19 @@
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12" style="text-align: center">
                 <div class="about__item">
-                    <h2>@Model.Title</h2>
-                    <h5>Dit ordrenummer er:  @orderNumber</h5>
-                    <h4>@Model.MainContent</h4>
+                @{
+                        @if (isAnOrder)
+                        {
+                            <h2>@Model.Title, @order.Customer.FirstName</h2>
+                            <h5>Dit ordrenummer er:  @order.OrderNumber</h5>
+
+                        } else
+                        {
+                            <h2>Denne ordre findes ikke</h2>
+                        }
+
+                }
+                   
                 </div>
             </div>
         </div>

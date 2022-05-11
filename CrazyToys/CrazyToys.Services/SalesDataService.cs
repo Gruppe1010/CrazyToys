@@ -17,23 +17,26 @@ namespace CrazyToys.Services
 {
     public class SalesDataService : ISalesDataService
     {
-        private readonly ISessionService _sessionService;
         private readonly ISearchService<SolrToy> _solrToyService;
         private readonly CustomerDbService _customerDbService;
         private readonly CountryDbService _countryDbService;
         private readonly ToyDbService _toyDbService;
         private readonly OrderDbService _orderDbService;
         private readonly StatusTypeDbService _statusTypeDbService;
+        private readonly CityDbService _cityDbService;
+        private readonly AddressDbService _addressDbService;
+
 
 
         public SalesDataService(
-            ISessionService sessionService,
             ISearchService<SolrToy> solrToyService,
             CustomerDbService customerDbService, 
             CountryDbService countryDbService,
             ToyDbService toyDbService,
             OrderDbService orderDbService,
-            StatusTypeDbService statusTypeDbService)
+            StatusTypeDbService statusTypeDbService,
+            CityDbService cityDbService,
+            AddressDbService addressDbService)
         {
             _solrToyService = solrToyService;
             _customerDbService = customerDbService;
@@ -41,6 +44,8 @@ namespace CrazyToys.Services
             _toyDbService = toyDbService;
             _orderDbService = orderDbService;
             _statusTypeDbService = statusTypeDbService;
+            _cityDbService = cityDbService;
+            _addressDbService = addressDbService;
         }
 
 
@@ -53,11 +58,19 @@ namespace CrazyToys.Services
         {
             Order newOrder = new Order();
 
+            // tjek først for valid postalCode
+            City city = await _cityDbService.GetByPostalCode(model.PostalCode);
+
+            if (city == null || !city.Name.Equals(model.CityName))
+            {
+                return null;
+            }
+
             // opret eller få fat i den eksisterende kunde, og tilknyt den ordren
             newOrder.Customer = await GetOrCreateCustomer(model.Email);
            
             // Opdaterer navn og BillingAddress
-            await UpdateCustomerDetails(model, newOrder.Customer);
+            await UpdateCustomerDetails(model, newOrder.Customer, city);
 
             // tilføj til customers ordrelist
             List<OrderLine> orderLines = await ConvertCartToOrderLines(cart);
@@ -91,7 +104,7 @@ namespace CrazyToys.Services
         /**
          Ændrer navn og billingaddress til det nye
          */
-        public async Task UpdateCustomerDetails(CheckoutUserModel model, Customer customer)
+        public async Task UpdateCustomerDetails(CheckoutUserModel model, Customer customer, City city)
         {
             customer.FirstName = model.FirstName;
             customer.LastName = model.LastName;
@@ -102,11 +115,16 @@ namespace CrazyToys.Services
             if(countryFromDb == null)
             {
                 // TODO lav en fejl hvis den ikke har country i db - så er der sket en fejl i formen eller noget for det er en hardcodet select 
-
             }
 
-            // TODO test om den laver en fejl hvis man prøver med den præcis samme addresse to gange i streg
-            customer.BillingAddress = new Address(new City(model.CityName, model.PostalCode), model.StreetAddress, countryFromDb);
+            customer.BillingAddress = await GetOrCreateAddress(city, model.StreetAddress, countryFromDb);
+        }
+
+        public async Task<Address> GetOrCreateAddress(City city, string streetAddress, Country country)
+        {
+            Address address = await _addressDbService.GetByCityAndStreetAddress(city, streetAddress);
+
+            return address != null ? address : new Address(city, streetAddress, country);
         }
 
         public async Task<List<OrderLine>> ConvertCartToOrderLines(Dictionary<string, int> cart)
