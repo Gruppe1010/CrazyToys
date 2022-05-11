@@ -26,7 +26,7 @@ namespace CrazyToys.Services.SalesDbServices
             if (city != null && !String.IsNullOrWhiteSpace(streetAddress))
             {
                 var address = await _salesContext.Addresses
-                    .FirstOrDefaultAsync(o => o.City.Equals(city) && o.StreetAddress.Equals(streetAddress));
+                    .FirstOrDefaultAsync(o => o.City.Equals(city) && o.StreetAddress.Replace(" ", "").Equals(streetAddress.Replace(" ", "")));
                 return address;
             }
             return null;
