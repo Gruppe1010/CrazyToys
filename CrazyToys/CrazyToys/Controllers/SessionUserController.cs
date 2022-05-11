@@ -69,7 +69,7 @@ namespace CrazyToys.Web.Controllers
                 Toy toy = await _toyDbService.GetById(entry.Key);
                 if(toy.Stock < entry.Value)
                 {
-                    return BadRequest($"Der er kun {toy.Stock} tilbage af {toy.Name}. Ret venligst din kurv.");
+                    return BadRequest($"Der er kun {toy.Stock} tilbage af {toy.Name}. Ret venligst din kurv."); // TODO tjek lige at denne virker
                 }
             }
 
