@@ -69,14 +69,6 @@ namespace CrazyToys.Web.Controllers
             [FromQuery(Name = "search")] string search,
             [FromQuery(Name = "sort")] string sort)
         {
-
-
-
-            var toy = _solrToyService.GetById("6026e20f-2a78-40d6-b409-b1040229f0c2");
-
-
-
-
             dynamic content = await _solrToyService.GetContent(categories, subCategory, brand, priceGroup, ageGroupIntervals, colourGroups, pageNumber, search, sort);
 
             Dictionary<int, List<ShopToyDTO>> toyDict = _solrToyService.GetToysFromContent(content);

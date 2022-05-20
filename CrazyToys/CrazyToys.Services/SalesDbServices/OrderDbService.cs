@@ -72,7 +72,18 @@ namespace CrazyToys.Services.SalesDbServices
         }
 
 
-
+        public async Task<List<Order>> GetRelatedOrders(string orderedToyId)
+        {
+            if(orderedToyId != null)
+            {
+                var orders = await _salesContext.Orders
+                    .Include(o => o.OrderLines)
+                    .Where(o => o.OrderLines.Any(ol => ol.OrderedToyId == orderedToyId))
+                    .ToListAsync();
+                return orders;
+            }
+            return null;
+        }
         
 
         public async Task<Order> Update(Order order)

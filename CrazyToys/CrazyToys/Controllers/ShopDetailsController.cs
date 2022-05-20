@@ -1,4 +1,5 @@
-﻿using CrazyToys.Interfaces;
+﻿using CrazyToys.Entities.DTOs;
+using CrazyToys.Interfaces;
 using CrazyToys.Services.ProductDbServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
@@ -14,18 +15,22 @@ namespace CrazyToys.Web.Controllers
     {
         private readonly ToyDbService _toyDbService;
         private readonly ISessionService _sessionService;
+        private readonly IRecommendationService _recommendationService;
+
 
         public ShopDetailsController(
             ILogger<RenderController> logger, 
             ICompositeViewEngine compositeViewEngine, 
             IUmbracoContextAccessor umbracoContextAccessor, 
             ToyDbService toyDbService,
-            ISessionService sessionService
+            ISessionService sessionService,
+            IRecommendationService recommendationService
             ) 
             : base(logger, compositeViewEngine, umbracoContextAccessor)
         {
             _toyDbService = toyDbService;
             _sessionService = sessionService;
+            _recommendationService = recommendationService;
         }
 
         [HttpGet]
@@ -35,12 +40,17 @@ namespace CrazyToys.Web.Controllers
             var toy = await _toyDbService.GetById(id);
 
             var sessionUser = _sessionService.GetNewOrExistingSessionUser(HttpContext);
-
             HashSet<string> wishlistToys = sessionUser.Wishlist;
+
+            List<string> relatedToyIds = await _recommendationService.FindRelatedToyIds(id);
+
+            List<ShopToyDTO> relatedToys = _recommendationService.GetRelatedShopToyDTOs(relatedToyIds, 8);
+
 
             ViewBag.Current = "Legetøjs Detaljer";
             ViewData["Toy"] = toy;
             ViewData["WishlistToys"] = wishlistToys;
+            ViewData["RelatedToys"] = relatedToys;
             return CurrentTemplate(CurrentPage);
         }
     }

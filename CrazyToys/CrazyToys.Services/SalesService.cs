@@ -61,6 +61,7 @@ namespace CrazyToys.Services
 
             if (city == null || !city.Name.Equals(model.CityName))
             {
+                // TODO ret lige her at den godt må skrive 
                 return null;
             }
 
@@ -206,6 +207,8 @@ namespace CrazyToys.Services
                 }
             }
         }
+
+
 
     }
 }

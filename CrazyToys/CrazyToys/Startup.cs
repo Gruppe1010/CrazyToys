@@ -100,6 +100,8 @@ namespace CrazyToys.Web
 
             services.AddScoped<IcecatDataService>();
             services.AddScoped<ISessionService, SessionService>();
+            services.AddScoped<IRecommendationService, RecommendationService>();
+
 
 
             services.AddScoped<CustomerDbService>();

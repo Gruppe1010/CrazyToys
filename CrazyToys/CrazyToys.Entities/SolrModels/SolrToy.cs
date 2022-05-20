@@ -1,4 +1,5 @@
-﻿using CrazyToys.Entities.Entities;
+﻿using CrazyToys.Entities.DTOs;
+using CrazyToys.Entities.Entities;
 using SolrNet.Attributes;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,15 +13,15 @@ namespace CrazyToys.Entities.SolrModels
         [SolrField("productId")]
         public string ProductId { get; set; }
         [SolrField("name")]
-        public ICollection<string> Name { get; set; }
+        public IList<string> Name { get; set; }
         [SolrField("brand")]
         public string Brand { get; set; }
         [SolrField("colours")]
-        public ICollection<string> Colours { get; set; }
+        public IList<string> Colours { get; set; }
         [SolrField("colourGroups")]
         public List<string> ColourGroups { get; set; }
         [SolrField("ageGroup")]
-        public ICollection<string> AgeGroup { get; set; }
+        public IList<string> AgeGroup { get; set; }
         [SolrField("ageGroupIntervals")]
         public IList<string> AgeGroupIntevals { get; set; }
         [SolrField("image")]
@@ -28,7 +29,7 @@ namespace CrazyToys.Entities.SolrModels
         [SolrField("categories")]
         public IList<string> Categories { get; set; }
         [SolrField("subCategory")]
-        public ICollection<string> SubCategory { get; set; }
+        public IList<string> SubCategory { get; set; }
         [SolrField("price")]
         public int Price { get; set; }
         [SolrField("priceGroup")]
@@ -59,6 +60,11 @@ namespace CrazyToys.Entities.SolrModels
             SubCategory = new List<string>();
             SubCategory.Add(toy.SubCategory.Name);
             PriceGroup = toy.PriceGroup.Interval;
+        }
+
+        public ShopToyDTO ConvertToShopToyDTO()
+        {
+            return new ShopToyDTO(Id, Name[0], Price, Image);
         }
     }
 }
