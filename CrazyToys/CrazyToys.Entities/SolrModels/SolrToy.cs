@@ -12,15 +12,15 @@ namespace CrazyToys.Entities.SolrModels
         [SolrField("productId")]
         public string ProductId { get; set; }
         [SolrField("name")]
-        public string Name { get; set; }
+        public ICollection<string> Name { get; set; }
         [SolrField("brand")]
         public string Brand { get; set; }
         [SolrField("colours")]
-        public string Colours { get; set; }
+        public ICollection<string> Colours { get; set; }
         [SolrField("colourGroups")]
         public List<string> ColourGroups { get; set; }
         [SolrField("ageGroup")]
-        public string AgeGroup { get; set; }
+        public ICollection<string> AgeGroup { get; set; }
         [SolrField("ageGroupIntervals")]
         public IList<string> AgeGroupIntevals { get; set; }
         [SolrField("image")]
@@ -28,27 +28,40 @@ namespace CrazyToys.Entities.SolrModels
         [SolrField("categories")]
         public IList<string> Categories { get; set; }
         [SolrField("subCategory")]
-        public string SubCategory { get; set; }
+        public ICollection<string> SubCategory { get; set; }
         [SolrField("price")]
         public int Price { get; set; }
         [SolrField("priceGroup")]
         public string PriceGroup { get; set; }
 
+        public SolrToy()
+        {
+        }
+
         public SolrToy(Toy toy)
         {
             Id = toy.ID;
             ProductId = toy.ProductId;
-            Name = toy.Name;
+            Name = new List<string>();  
+
+            Name.Add(toy.Name);
             Categories = toy.SubCategory.Categories.Select(c => c.Name).ToList();
             Price = toy.Price;
             Brand = toy.Brand.Name;
-            Colours = toy.Colours;
+            Colours = new List<string>();
+
+            Colours.Add(toy.Colours);
             ColourGroups = toy.ColourGroups.Select(c => c.Name).ToList();
-            AgeGroup = toy.AgeGroup;
+            AgeGroup = new List<string>();
+
+            AgeGroup.Add(toy.AgeGroup);
             AgeGroupIntevals = toy.AgeGroups.Select(a => a.Interval).ToList();
             // TODO ændr på imag
             Image = toy.Images[0].UrlHigh;
-            SubCategory = toy.SubCategory.Name;
+
+            SubCategory = new List<string>();
+
+            SubCategory.Add(toy.SubCategory.Name);
             PriceGroup = toy.PriceGroup.Interval;
         }
     }

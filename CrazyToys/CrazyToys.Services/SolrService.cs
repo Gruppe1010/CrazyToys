@@ -1,4 +1,5 @@
 ﻿using CrazyToys.Entities.DTOs;
+using CrazyToys.Entities.SolrModels;
 using CrazyToys.Interfaces;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json.Linq;
@@ -22,6 +23,13 @@ namespace CrazyToys.Services
         {
             _solr = (TSolrOperations)solr;
             _httpClientFactory = httpClientFactory;
+        }
+
+        public T GetById(string id)
+        {
+            var toy = _solr.Query(new SolrQueryByField("id", id));
+
+            return toy.Count > 0 ? toy[0] : default(T);
         }
 
         // TODO overvej at lav ISearhcService og SolrService om så den ikke bruger solrNet men kun HttpClient og http-kald
@@ -220,7 +228,7 @@ namespace CrazyToys.Services
                     string id = toy.id;
                     string name = toy.name[0];
                     int price = toy.price;
-                    string imageUrl = toy.image[0];
+                    string imageUrl = toy.image;
 
                     shopToyDTOs.Add(new ShopToyDTO(id, name, price, imageUrl));
                 }

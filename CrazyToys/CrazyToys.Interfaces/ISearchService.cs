@@ -1,5 +1,6 @@
 ﻿
 using CrazyToys.Entities.DTOs;
+using CrazyToys.Entities.SolrModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -10,6 +11,8 @@ namespace CrazyToys.Interfaces
         bool CreateOrUpdate(T document);
         void DeleteAll();
         void Delete(T document);
+
+        T GetById(string id);
 
         SortedDictionary<string, int> GetBrandFacet();
 

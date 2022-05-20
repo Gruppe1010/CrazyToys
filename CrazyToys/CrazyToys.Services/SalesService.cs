@@ -51,8 +51,6 @@ namespace CrazyToys.Services
 
         /**
          Der skal altid være noget i cart-obj 
-         
-         
          */
         public async Task<Order> CreateSale(CheckoutUserModel model, Dictionary<string, int> cart)
         {
@@ -190,6 +188,28 @@ namespace CrazyToys.Services
         }
 
 
+
+        public void UpdateSoldAmountInSolrToys(IList<OrderLine> orderLines)
+        {
+
+            foreach (OrderLine orderLine in orderLines)
+            {
+                SolrToy solrToy = _solrToyService.GetById(orderLine.OrderedToyId);
+
+                if (solrToy != null)
+                {
+                    //solrToy.Sol
+                }
+                else 
+                {
+                    // TODO lav en fejl
+                }
+
+            }
+
+
+
+        }
 
     }
 }
