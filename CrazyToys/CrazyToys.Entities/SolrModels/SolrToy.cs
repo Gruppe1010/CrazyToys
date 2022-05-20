@@ -33,6 +33,8 @@ namespace CrazyToys.Entities.SolrModels
         public int Price { get; set; }
         [SolrField("priceGroup")]
         public string PriceGroup { get; set; }
+        [SolrField("soldAmount")]
+        public int SoldAmount { get; set; }
 
         public SolrToy()
         {
@@ -63,6 +65,7 @@ namespace CrazyToys.Entities.SolrModels
 
             SubCategory.Add(toy.SubCategory.Name);
             PriceGroup = toy.PriceGroup.Interval;
+            // TODO SoldAmout = noget order.quantity
         }
     }
 }
