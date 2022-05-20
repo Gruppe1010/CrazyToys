@@ -110,7 +110,7 @@ namespace CrazyToys.Web
             services.AddScoped<AddressDbService>();
 
 
-            services.AddScoped<SalesDataService>();
+            services.AddScoped<SalesService>();
 
 
 

@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace CrazyToys.Services
 {
-    public class SalesDataService : ISalesDataService
+    public class SalesService : ISalesService
     {
         private readonly ISearchService<SolrToy> _solrToyService;
         private readonly CustomerDbService _customerDbService;
@@ -28,7 +28,7 @@ namespace CrazyToys.Services
 
 
 
-        public SalesDataService(
+        public SalesService(
             ISearchService<SolrToy> solrToyService,
             CustomerDbService customerDbService, 
             CountryDbService countryDbService,
@@ -86,6 +86,8 @@ namespace CrazyToys.Services
                 newOrder = await _orderDbService.Create(newOrder);
                 if(newOrder.ID != null) // hvis den faktisk er blevet oprettet, så skal den tilføje "Created-status"
                 {
+                    // TODO her skal UpdateSoldAmountInSolrToys() kaldes
+
                     StatusType createdStatusType = await _statusTypeDbService.GetByName("Created");
                     newOrder.Statuses.Add(new Status(createdStatusType, DateTime.Now));
                     return await _orderDbService.Update(newOrder);
@@ -127,6 +129,8 @@ namespace CrazyToys.Services
             return address != null ? address : new Address(city, streetAddress, country);
         }
 
+
+        // 
         public async Task<List<OrderLine>> ConvertCartToOrderLines(Dictionary<string, int> cart)
         {
             List<OrderLine> orderLines = new List<OrderLine>();

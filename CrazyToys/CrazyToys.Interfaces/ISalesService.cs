@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CrazyToys.Interfaces
 {
-    public interface ISalesDataService
+    public interface ISalesService
     {
         Task<Order> CreateSale(CheckoutUserModel model, Dictionary<string, int> cart);
 

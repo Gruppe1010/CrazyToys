@@ -25,7 +25,7 @@ namespace CrazyToys.Web.Controllers
     public class CheckoutSurfaceController : SurfaceController
     {
         private readonly ISessionService _sessionService;
-        private readonly SalesDataService _salesDataService;
+        private readonly SalesService _salesService;
         private readonly IHangfireService _hangfireService;
 
 
@@ -37,12 +37,12 @@ namespace CrazyToys.Web.Controllers
             IProfilingLogger profilingLogger,
             IPublishedUrlProvider publishedUrlProvider,
             ISessionService sessionService,
-            SalesDataService salesDataService,
+            SalesService salesDataService,
             IHangfireService hangfireService)
             : base(umbracoContextAccessor, databaseFactory, services, appCaches, profilingLogger, publishedUrlProvider)
         {
             _sessionService = sessionService;
-            _salesDataService = salesDataService;
+            _salesService = salesDataService;
             _hangfireService = hangfireService;
         }
 
@@ -68,7 +68,7 @@ namespace CrazyToys.Web.Controllers
                 return CurrentUmbracoPage();
             }
 
-            Order newOrder = await _salesDataService.CreateSale(model, cart);
+            Order newOrder = await _salesService.CreateSale(model, cart);
 
             if (newOrder == null)
             {
@@ -76,9 +76,7 @@ namespace CrazyToys.Web.Controllers
             }
 
             // lav liste med toys som skal vises i orderConfirmation
-            List<ShoppingCartToyDTO> orderConfirmationToyList = await _salesDataService.ConvertOrderLinesToShoppingCartToyDTOs(newOrder.OrderLines);
-
-
+            List<ShoppingCartToyDTO> orderConfirmationToyList = await _salesService.ConvertOrderLinesToShoppingCartToyDTOs(newOrder.OrderLines);
 
             // Opret orderConfirmationJob
             OrderConfirmationDTO orderConfirmationDTO = newOrder.ConvertToOrderConfirmationDTO(orderConfirmationToyList);

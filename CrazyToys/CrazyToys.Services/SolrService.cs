@@ -158,7 +158,7 @@ namespace CrazyToys.Services
             }
            
 
-            // sort=price asc
+            // sort=price_desc
             sort = sort != null ? "&sort=" + sort.Replace("_", "%20") : null;
             //det sted hvor den skal starte (fordi page 2 starter på 30: 2 * 30 == 60 --> 60 - 30 --> 30)
             // "" hvis page 0 fordi så bruger den default-start 0
