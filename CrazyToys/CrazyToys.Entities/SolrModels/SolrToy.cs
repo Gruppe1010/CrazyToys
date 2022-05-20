@@ -45,27 +45,20 @@ namespace CrazyToys.Entities.SolrModels
             Id = toy.ID;
             ProductId = toy.ProductId;
             Name = new List<string>();  
-
             Name.Add(toy.Name);
             Categories = toy.SubCategory.Categories.Select(c => c.Name).ToList();
             Price = toy.Price;
             Brand = toy.Brand.Name;
             Colours = new List<string>();
-
             Colours.Add(toy.Colours);
             ColourGroups = toy.ColourGroups.Select(c => c.Name).ToList();
             AgeGroup = new List<string>();
-
             AgeGroup.Add(toy.AgeGroup);
             AgeGroupIntevals = toy.AgeGroups.Select(a => a.Interval).ToList();
-            // TODO ændr på imag
             Image = toy.Images[0].UrlHigh;
-
             SubCategory = new List<string>();
-
             SubCategory.Add(toy.SubCategory.Name);
             PriceGroup = toy.PriceGroup.Interval;
-            // TODO SoldAmout = noget order.quantity
         }
     }
 }

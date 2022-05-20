@@ -191,24 +191,20 @@ namespace CrazyToys.Services
 
         public void UpdateSoldAmountInSolrToys(IList<OrderLine> orderLines)
         {
-
             foreach (OrderLine orderLine in orderLines)
             {
                 SolrToy solrToy = _solrToyService.GetById(orderLine.OrderedToyId);
 
                 if (solrToy != null)
                 {
-                    //solrToy.Sol
+                    solrToy.SoldAmount += orderLine.Quantity;
+                    _solrToyService.CreateOrUpdate(solrToy);
                 }
                 else 
                 {
-                    // TODO lav en fejl
+                    // TODO throw en exception
                 }
-
             }
-
-
-
         }
 
     }

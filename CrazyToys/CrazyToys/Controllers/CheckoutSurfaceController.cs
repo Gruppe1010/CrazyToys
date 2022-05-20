@@ -76,7 +76,7 @@ namespace CrazyToys.Web.Controllers
             }
 
             // Opdater SolrToys soldAmount
-            await _salesService.UpdateSoldAmountInSolrToys(newOrder.OrderLines);
+            _salesService.UpdateSoldAmountInSolrToys(newOrder.OrderLines);
 
             // lav liste med toys som skal vises i orderConfirmation
             List<ShoppingCartToyDTO> orderConfirmationToyList = await _salesService.ConvertOrderLinesToShoppingCartToyDTOs(newOrder.OrderLines);
