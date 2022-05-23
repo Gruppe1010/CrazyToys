@@ -136,7 +136,7 @@
 </section>
 <!-- Shop Details Section End -->
 <!-- Related Section Begin -->
-<section class="related">
+<section class="@(relatedToys.Count == 0 ? "hidden" : "") related">
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
@@ -156,11 +156,11 @@
                                     // Vi tjekker om toy er på sessionusers wishlist allerede og sætter onclick funktion efter dette
                                     if (!wishlistToys.Contains(relatedToys[i].ID))
                                     {
-                                            <li id="wishlist-il-@relatedToys[i].ID"><button id="wishlist-btn-@relatedToys[i].ID" class="shop-hover-btn" onclick='addToWishlist("@relatedToys[i].ID")'><img id="wishlist-icon-@relatedToys[i].ID" class="hover-icon" src="img/icon/heart.png" alt=""></button></li>
+                                         <li id="wishlist-il-@relatedToys[i].ID"><button id="wishlist-btn-@relatedToys[i].ID" class="shop-hover-btn" onclick='addToWishlist("@relatedToys[i].ID")'><img id="wishlist-icon-@relatedToys[i].ID" class="hover-icon" src="img/icon/heart.png" alt=""></button></li>
                                     }
                                     else
                                     {
-                                            <li id="wishlist-il-@relatedToys[i].ID"><button id="wishlist-btn-@relatedToys[i].ID" class="shop-hover-btn" onclick='removeFromWishlist("@relatedToys[i].ID")'><img id="wishlist-icon-@relatedToys[i].ID" class="hover-icon" src="img/icon/filledheart.png" alt=""></button></li>
+                                         <li id="wishlist-il-@relatedToys[i].ID"><button id="wishlist-btn-@relatedToys[i].ID" class="shop-hover-btn" onclick='removeFromWishlist("@relatedToys[i].ID")'><img id="wishlist-icon-@relatedToys[i].ID" class="hover-icon" src="img/icon/filledheart.png" alt=""></button></li>
                                     }
                                 }
                             </ul>
