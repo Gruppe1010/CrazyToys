@@ -61,6 +61,7 @@ function updateCartNumber() {
         .catch(error => console.log);
 }
 
+// Relaterede produkter carousel
 $('.owl-carousel').owlCarousel({
     items: 4,
     loop: true,
