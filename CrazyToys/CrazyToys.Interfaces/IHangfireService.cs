@@ -11,7 +11,7 @@ namespace CrazyToys.Interfaces
     {
         Task GetProductsDataService(string url, PerformContext context);
 
-        Task UpdateSolrDb();
+        Task UpdateSolrDb(bool isDaily);
 
         void DeleteSolrDb();
 

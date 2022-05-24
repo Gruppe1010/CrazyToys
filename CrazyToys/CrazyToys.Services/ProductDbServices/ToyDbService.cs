@@ -166,5 +166,30 @@ namespace CrazyToys.Services.ProductDbServices
             throw new NotImplementedException();
         }
 
+
+        public async Task<List<Toy>> GetToysToUpdateWithRelations(string dateString)
+        {
+            var toys = await _context.Toys
+               .Include(t => t.Images)
+               .Include(t => t.SubCategory)
+               .Include(t => t.ColourGroups)
+               .Include(t => t.AgeGroups)
+               .Include(t => t.PriceGroup)
+               .Where(t => t.SimpleToy.OnMarket.Equals("1") && t.Stock != 0 && t.SimpleToy.DateString.Contains(dateString))
+               .ToListAsync();
+
+            foreach (var toy in toys)
+            {
+                toy.SubCategory.Categories = await _context.Categories
+                    .Include(s => s.SubCategories)
+                    .Where(s => s.SubCategories.Contains(toy.SubCategory))
+                    .ToListAsync();
+                toy.SubCategory.Categories.ToList().ForEach(c => c.SubCategories = null);
+            }
+            return toys;
+
+
+        }
+
     }
 }

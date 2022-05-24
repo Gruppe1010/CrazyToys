@@ -8,6 +8,7 @@ using CrazyToys.Interfaces.EntityDbInterfaces;
 using CrazyToys.Services.ProductDbServices;
 using Hangfire;
 using Hangfire.Server;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -43,19 +44,29 @@ namespace CrazyToys.Services
         public async Task GetProductsDataService(string url, PerformContext context)
         {
             await _icecatDataService.GetProductsFromIcecat(url);
-            BackgroundJob.ContinueJobWith(context.BackgroundJob.Id, () => UpdateSolrDb());
+            BackgroundJob.ContinueJobWith(context.BackgroundJob.Id, () => UpdateSolrDb(url.Contains("daily"))); // TODO send tjek med om det er daily url - hvis nej skal den ikke lave solrting
         }
 
-        public async Task UpdateSolrDb()
+        public async Task UpdateSolrDb(bool isDaily)
         {
             // hent alle Toys op fra db
-            List<Toy> toys = await _toyDbService.GetAllWithRelations();
+            string dateString = DateTime.Now.ToShortDateString();
+
+            List<Toy> toys = await _toyDbService.GetToysToUpdateWithRelations(dateString);
 
             toys.ForEach(toy => {
 
-                // TODO HER
+                SolrToy newSolrToy = new SolrToy(toy);
 
-                _solrToyService.CreateOrUpdate(new SolrToy(toy));
+                // hvis det er daily, så ligger der allerede solrToys på solr, og vi skal derfor hente dem ned for at få fat i soldAmount, så det kan komme med i opdateringen
+                if (isDaily)
+                {
+                    SolrToy solrToy = _solrToyService.GetById(toy.ID);
+                    newSolrToy.SoldAmount = solrToy.SoldAmount;
+                }
+                
+
+                _solrToyService.CreateOrUpdate(newSolrToy);
             });
         }
 

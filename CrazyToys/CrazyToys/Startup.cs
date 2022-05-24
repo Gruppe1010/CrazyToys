@@ -178,7 +178,8 @@ namespace CrazyToys.Web
             recurringJobManager.AddOrUpdate<HangfireService>("DailyIcecat", hangfireService => hangfireService.GetProductsDataService(dailyUrl, null), "00 01 * * *");
 
             // TODO denne er bare for convenience - så vi kan trykke på dem inde i hangfire
-            recurringJobManager.AddOrUpdate<HangfireService>("UpdateSolrDb", hangfireService => hangfireService.UpdateSolrDb(), Cron.Never);
+            recurringJobManager.AddOrUpdate<HangfireService>("UpdateSolrDb", hangfireService => hangfireService.UpdateSolrDb(true), Cron.Never);
+            recurringJobManager.AddOrUpdate<HangfireService>("UpdateSolrDbWithoutSoldAmount", hangfireService => hangfireService.UpdateSolrDb(false), Cron.Never);
             recurringJobManager.AddOrUpdate<HangfireService>("DeleteSolrDb", hangfireService => hangfireService.DeleteSolrDb(), Cron.Never);
         }
     }
