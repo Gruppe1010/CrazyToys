@@ -31,6 +31,7 @@
                                         <a class="item-link" href="/shop-details?id=@wishlistToys[j].ID"></a>
                                         <ul class="product__hover">
                                             <li><button class="shop-hover-btn" onclick='removeFromWishlist("@wishlistToys[j].ID")'><img class="hover-icon" src="img/icon/close.png" alt=""></button></li>
+                                            <li id="cart-il-@wishlistToys[j].ID"><button id="cart-btn-@wishlistToys[j].ID" class="shop-hover-btn" onclick='addToCart("@wishlistToys[j].ID")'><img id="cart-icon-@wishlistToys[j].ID" class="hover-icon" src="img/icon/cart.png" alt=""></button></li>
                                         </ul>
                                     </div>
                                     <div class="product__item__text remove-opacity">

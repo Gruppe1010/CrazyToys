@@ -6,7 +6,6 @@ window.onload = function () {
 function setSorter() {
     // Henter URL og select
     var currentUrl = window.location.href;
-    debugger;
     var sorterSelect = document.getElementById("sorter");
     // Sætter substring
     var priceDesc = "sort=price_desc"

@@ -52,6 +52,9 @@ namespace CrazyToys.Services
             List<Toy> toys = await _toyDbService.GetAllWithRelations();
 
             toys.ForEach(toy => {
+
+                // TODO HER
+
                 _solrToyService.CreateOrUpdate(new SolrToy(toy));
             });
         }

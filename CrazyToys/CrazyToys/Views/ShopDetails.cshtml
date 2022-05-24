@@ -76,15 +76,9 @@
                         </div>
                         <div id="shop-details-wishlist" class="product__details__btns__option">
                             @{
-                            // Vi tjekker om toy er på sessionusers wishlist allerede og sætter onclick funktion efter dette
-                            if (!wishlistToys.Contains(@toy.ID))
-                            {
-                                <a id="wishlist-link-@toy.ID" href="javascript:void(0);" onclick='addToWishlist("@toy.ID")'><img id="wishlist-img-@toy.ID" class="shop-deatils-heart-icons" src="img/icon/heart.png" alt=""> Tilføj til ønskeliste</a>
-                            }
-                            else
-                            {
-                                <a id="wishlist-link-@toy.ID" href="javascript:void(0);" onclick='removeFromWishlist("@toy.ID")'><img id="wishlist-img-@toy.ID" class="shop-deatils-heart-icons" src="img/icon/filledheart.png" alt=""> Tilføj til ønskeliste</a>
-                            }
+                                // alt efter om wishListen container toyId'et, skal den vise enten et fyldt eller tomt hjerte - så vi ændrer src'en alt efter om den er på eller ej
+                                string src = wishlistToys.Contains(@toy.ID) ? "img/icon/filledheart.png" : "img/icon/heart.png";
+                                <a id="wishlist-link-@toy.ID" href="javascript:void(0);" onclick='addToOrRemoveFromWishlist("@toy.ID")'><img class="shop-deatils-heart-icons wishlist-img-@toy.ID" src="@src" alt=""> Tilføj til ønskeliste</a>
                             }
                         </div>
                         <p>@toy.ShortDescription</p>
@@ -145,32 +139,26 @@
         </div>
         <div class="owl-carousel">
             @{
-                for (int i = 0; i < relatedToys.Count; i++)
-                {
-                    <div class="product__item item">
-                        <div class="product__item__pic set-bg" data-setbg="@(relatedToys[i].Image ?? relatedToys[i].Name)">
-                            <a class="item-link" href="/shop-details?id=@relatedToys[i].ID"></a>
-                            <ul class="product__hover">
-                                <li id="cart-il-@relatedToys[i].ID"><button id="cart-btn-@relatedToys[i].ID" class="shop-hover-btn" onclick='addToCart("@relatedToys[i].ID")'><img id="cart-icon-@relatedToys[i].ID" class="hover-icon" src="img/icon/cart.png" alt=""></button></li>
-                                @{
-                                    // Vi tjekker om toy er på sessionusers wishlist allerede og sætter onclick funktion efter dette
-                                    if (!wishlistToys.Contains(relatedToys[i].ID))
-                                    {
-                                         <li id="wishlist-il-@relatedToys[i].ID"><button id="wishlist-btn-@relatedToys[i].ID" class="shop-hover-btn" onclick='addToWishlist("@relatedToys[i].ID")'><img id="wishlist-icon-@relatedToys[i].ID" class="hover-icon" src="img/icon/heart.png" alt=""></button></li>
-                                    }
-                                    else
-                                    {
-                                         <li id="wishlist-il-@relatedToys[i].ID"><button id="wishlist-btn-@relatedToys[i].ID" class="shop-hover-btn" onclick='removeFromWishlist("@relatedToys[i].ID")'><img id="wishlist-icon-@relatedToys[i].ID" class="hover-icon" src="img/icon/filledheart.png" alt=""></button></li>
-                                    }
-                                }
-                            </ul>
-                        </div>
-                        <div class="product__item__text remove-opacity">
-                            <h6>@relatedToys[i].Name</h6>
-                            <h5>@relatedToys[i].Price DKK</h5>
-                        </div>
+            for (int i = 0; i < relatedToys.Count; i++)
+            {
+                <div class="product__item item">
+                    <div class="product__item__pic set-bg" data-setbg="@(relatedToys[i].Image ?? relatedToys[i].Name)">
+                        <a class="item-link" href="/shop-details?id=@relatedToys[i].ID"></a>
+                        <ul class="product__hover">
+                            <li id="cart-il-@relatedToys[i].ID"><button id="cart-btn-@relatedToys[i].ID" class="shop-hover-btn" onclick='addToCart("@relatedToys[i].ID")'><img id="cart-icon-@relatedToys[i].ID" class="hover-icon" src="img/icon/cart.png" alt=""></button></li>
+                            @{
+                                // alt efter om wishListen container toyId'et, skal den vise enten et fyldt eller tomt hjerte - så vi ændrer src'en alt efter om den er på eller ej
+                                src = wishlistToys.Contains(@relatedToys[i].ID) ? "img/icon/filledheart.png" : "img/icon/heart.png";
+                                <li id="wishlist-il-@relatedToys[i].ID"><button id="wishlist-btn-@relatedToys[i].ID" class="shop-hover-btn" onclick='addToOrRemoveFromWishlist("@relatedToys[i].ID")'><img class="hover-icon wishlist-img-@relatedToys[i].ID" src="@src" alt=""></button></li>
+                            }
+                        </ul>
                     </div>
-                }
+                    <div class="product__item__text remove-opacity">
+                        <h6>@relatedToys[i].Name</h6>
+                        <h5>@relatedToys[i].Price DKK</h5>
+                    </div>
+                </div>
+            }
             }
         </div>
     </div>

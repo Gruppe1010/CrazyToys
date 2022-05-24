@@ -1,4 +1,42 @@
 ﻿
+
+
+function addToOrRemoveFromWishlist(toyId) {
+
+    debugger;
+ 
+    const wishlistImages = document.getElementsByClassName(`wishlist-img-${toyId}`);
+
+    if (wishlistImages.length === 0) {
+        // puha gør noget
+        alert("Der skete en fejl");
+        return;
+    }
+
+    const src = wishlistImages[0].src;
+    let newSrc;
+
+    if (src.includes("filledheart")) {
+        removeFromWishlist(toyId);
+        newSrc = src.replace("filledheart", "heart");
+
+    } else {
+        addToWishlist(toyId);
+        newSrc = src.replace("heart", "filledheart");
+    }
+
+    Array.from(wishlistImages).forEach(imgEl => changeSrc(imgEl, newSrc));
+}
+
+function changeSrc(el, src) {
+    el.src = src;
+}
+
+
+
+
+
+
 function addToWishlist(toyId) {
 
     const selectedToy = {
@@ -14,8 +52,8 @@ function addToWishlist(toyId) {
     })
         .then(response => {
             if (response.ok) {
-                changeOnclickAndFillHeartShop(toyId)
-                changeOnclickAndFillHeartShopDetails(toyId)
+                //changeOnclickAndFillHeartShop(toyId)
+                //changeOnclickAndFillHeartShopDetails(toyId)
                 console.log("Toy blev tilføjet til ønskelisten");
             } else {
                 console.log("Toy kunne ikke tilføjet til ønskelisten");
@@ -24,14 +62,15 @@ function addToWishlist(toyId) {
 }
 
 function removeFromWishlist(toyId) {
+    debugger;
 
     fetch(`/api/sessionuser/RemoveToyFromSessionUsersWishlist?id=${toyId}`, {
         method: 'DELETE',
     })
         .then(response => {
             if (response.ok) {
-                changeOnclickAndUnfillHeartShop(toyId)
-                changeOnclickAndUnfillHeartShopDetails(toyId)
+                //changeOnclickAndUnfillHeartShop(toyId)
+                //changeOnclickAndUnfillHeartShopDetails(toyId)
                 removeChildNodeFromWishlist(toyId);
                 console.log("Toy blev fjernet fra ønskelisten");
             } else {
@@ -43,6 +82,8 @@ function removeFromWishlist(toyId) {
 // hvis toyet blev fjernet successfuldt fra sessionUsers wishlist
 // så fjern "wishlist-toy-${toyId}"-elementet fra siden
 function removeChildNodeFromWishlist(toyId) {
+
+    debugger;
 
     var wishlistToyRow = document.getElementById('wishlist-toy-row');
 
