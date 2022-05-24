@@ -89,7 +89,7 @@ namespace CrazyToys.Web
 
             // DbServices
             services.AddScoped<IEntityCRUD<Brand>, BrandDbService>();
-            services.AddScoped<IEntityCRUD<Category>, CategoryDbService>();
+            services.AddScoped<CategoryDbService>();
             services.AddScoped<IEntityCRUD<SubCategory>, SubCategoryDbService>();
             services.AddScoped<IEntityCRUD<ColourGroup>, ColourGroupDbService>();
             services.AddScoped<ToyDbService>();

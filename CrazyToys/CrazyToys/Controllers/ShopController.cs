@@ -28,7 +28,7 @@ namespace CrazyToys.Web.Controllers
         private readonly IEntityCRUD<ColourGroup> _colourGroupDbService;
         private readonly IEntityCRUD<AgeGroup> _ageGroupDbService;
         private readonly IEntityCRUD<PriceGroup> _priceGroupDbService;
-        private readonly IEntityCRUD<Category> _categoryDbService;
+        private readonly CategoryDbService _categoryDbService;
 
         public ShopController(
             ILogger<HomeController> logger,
@@ -42,7 +42,7 @@ namespace CrazyToys.Web.Controllers
             IEntityCRUD<ColourGroup> colourGroupDbService,
             IEntityCRUD<AgeGroup> ageGroupDbService,
             IEntityCRUD<PriceGroup> priceGroupDbService,
-            IEntityCRUD<Category> categoryDbService)
+            CategoryDbService categoryDbService)
             : base(logger, compositeViewEngine, umbracoContextAccessor)
         {
             _hangfireService = hangfireService;
@@ -69,7 +69,9 @@ namespace CrazyToys.Web.Controllers
             [FromQuery(Name = "search")] string search,
             [FromQuery(Name = "sort")] string sort)
         {
-            dynamic content = await _solrToyService.GetContent(categories, subCategory, brand, priceGroup, ageGroupIntervals, colourGroups, pageNumber, search, sort);
+
+            string url = _solrToyService.CreateSearchUrl(categories, subCategory, brand, priceGroup, ageGroupIntervals, colourGroups, pageNumber, search, sort);
+            dynamic content = await _solrToyService.GetContent(url);
 
             Dictionary<int, List<ShopToyDTO>> toyDict = _solrToyService.GetToysFromContent(content);
             Dictionary<string, Dictionary<string, int>> facetFieldDict = _solrToyService.GetFacetFieldsFromContent(content);

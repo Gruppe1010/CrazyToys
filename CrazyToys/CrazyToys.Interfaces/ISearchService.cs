@@ -20,7 +20,7 @@ namespace CrazyToys.Interfaces
 
         SortedDictionary<string, int> GetSubCategoryFacet();
 
-        Task<dynamic> GetContent(
+        string CreateSearchUrl(
             string category, 
             string subCategory,
             string brands, 
@@ -30,6 +30,8 @@ namespace CrazyToys.Interfaces
             int page, 
             string search, 
             string sort);
+
+        Task<dynamic> GetContent(string url);
 
         Dictionary<int, List<ShopToyDTO>> GetToysFromContent(dynamic content);
 

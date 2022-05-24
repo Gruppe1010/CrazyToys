@@ -4,6 +4,7 @@ using CrazyToys.Interfaces.EntityDbInterfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CrazyToys.Services.ProductDbServices
@@ -55,6 +56,22 @@ namespace CrazyToys.Services.ProductDbServices
                 }
             }
             return categories;
+        }
+
+        public async Task<List<Category>> GetAllFromToyId(Toy toy)
+        {
+
+            if (toy != null)
+            {
+                var categories = await _context.Categories
+                    .Include(c => c.SubCategories)
+                    .Where(c => c.SubCategories.Contains(toy.SubCategory))
+                    .ToListAsync();
+
+                categories.ForEach(c => c.SubCategories = null);
+                return categories;
+            }
+            return null;
         }
 
         public Task<Category> GetById(string id)

@@ -103,7 +103,8 @@ namespace CrazyToys.Services
             return categoryDict;
         }
 
-        // _colour.rød.blå.grøn ---> (colour: rød OR blå OR grøn)
+        // param == _colour.rød.blå.grøn ---> returnerer == (colour: rød OR blå OR grøn)
+        // s == 
         public string CreateFilterParam(string param)
         {
             if (param == null)
@@ -143,7 +144,9 @@ namespace CrazyToys.Services
             throw new NotImplementedException();
         }
 
-        public async Task<dynamic> GetContent(string category, string subCategory,
+  
+
+        public string CreateSearchUrl(string category, string subCategory,
             string brands, string priceGroup,
             string ageGroups, string colours, // fx: rød.blå.grøn
             int page, string search, string sort)
@@ -186,8 +189,11 @@ namespace CrazyToys.Services
                 ? urlParams.Substring(0, urlParams.Length - 1)
                 : "";
 
-            string url = "http://solr:8983/solr/toys/select?" + mainQuery + paging + sort + "&" + urlParams.Replace("+", "%20"); 
+            return "http://solr:8983/solr/toys/select?" + mainQuery + paging + sort + "&" + urlParams.Replace("+", "%20");
+        }
 
+        public async Task<dynamic> GetContent(string url)
+        {
             var httpRequestMessage = new HttpRequestMessage(
                 HttpMethod.Get, url)
             {
@@ -210,6 +216,7 @@ namespace CrazyToys.Services
 
             return null;
         }
+
 
         public Dictionary<int, List<ShopToyDTO>> GetToysFromContent(dynamic content)
         {

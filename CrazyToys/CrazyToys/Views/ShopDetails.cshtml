@@ -7,6 +7,9 @@
     Toy toy = ViewData["Toy"] as Toy;
     var wishlistToys = ViewData["WishlistToys"] as HashSet<string>;
     var relatedToys = ViewData["RelatedToys"] as List<ShopToyDTO>;
+    var mostPopularToys = ViewData["MostPopularToys"] as List<ShopToyDTO>;
+    var category = ViewData["Category"] as Category;
+
     string active = "active";
 }
 
@@ -164,3 +167,40 @@
     </div>
 </section>
 <!-- Related Section End -->
+<!-- Most popular Section Begin-->
+
+<section class="@(mostPopularToys.Count == 0 ? "hidden" : "") related">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h3 class="related-title">Mest populære produkter fra kategorien @category.Name</h3>
+            </div>
+        </div>
+        <div class="owl-carousel">
+            @{
+            for (int i = 0; i < mostPopularToys.Count; i++)
+            {
+                <div class="product__item item">
+                    <div class="product__item__pic set-bg" data-setbg="@(mostPopularToys[i].Image ?? mostPopularToys[i].Name)">
+                        <a class="item-link" href="/shop-details?id=@mostPopularToys[i].ID"></a>
+                        <ul class="product__hover">
+                            <li id="cart-il-@mostPopularToys[i].ID"><button id="cart-btn-@mostPopularToys[i].ID" class="shop-hover-btn" onclick='addToCart("@mostPopularToys[i].ID")'><img id="cart-icon-@mostPopularToys[i].ID" class="hover-icon" src="img/icon/cart.png" alt=""></button></li>
+                            @{
+                                // alt efter om wishListen container toyId'et, skal den vise enten et fyldt eller tomt hjerte - så vi ændrer src'en alt efter om den er på eller ej
+                                src = wishlistToys.Contains(@mostPopularToys[i].ID) ? "img/icon/filledheart.png" : "img/icon/heart.png";
+                                <li id="wishlist-il-@mostPopularToys[i].ID"><button id="wishlist-btn-@mostPopularToys[i].ID" class="shop-hover-btn" onclick='addToOrRemoveFromWishlist("@mostPopularToys[i].ID")'><img class="hover-icon wishlist-img-@mostPopularToys[i].ID" src="@src" alt=""></button></li>
+                            }
+                        </ul>
+                    </div>
+                    <div class="product__item__text remove-opacity">
+                        <h6>@mostPopularToys[i].Name</h6>
+                        <h5>@mostPopularToys[i].Price DKK</h5>
+                    </div>
+                </div>
+            }
+            }
+        </div>
+    </div>
+</section>
+
+<!-- Most popular Section End-->

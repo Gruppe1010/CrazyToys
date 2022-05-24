@@ -1,4 +1,5 @@
 ﻿using CrazyToys.Entities.DTOs;
+using CrazyToys.Entities.Entities;
 using CrazyToys.Entities.OrderEntities;
 using CrazyToys.Entities.SolrModels;
 using CrazyToys.Interfaces;
@@ -14,15 +15,15 @@ namespace CrazyToys.Services
     public class RecommendationService : IRecommendationService
     {
 
-        private readonly ISearchService<SolrToy> _solrToyService;
+        private readonly ISearchService<SolrToy> _solrService;
         private readonly OrderDbService _orderDbService;
 
 
         public RecommendationService(
-            ISearchService<SolrToy> solrToyService,
+            ISearchService<SolrToy> solrService,
             OrderDbService orderDbService)
         {
-            _solrToyService = solrToyService;
+            _solrService = solrService;
             _orderDbService = orderDbService;
         }
 
@@ -70,7 +71,7 @@ namespace CrazyToys.Services
 
             for (int i = 0; i < amountToGet && i < relatedToyIds.Count; i++)
             {
-                SolrToy solrToy = _solrToyService.GetById(relatedToyIds[i]);
+                SolrToy solrToy = _solrService.GetById(relatedToyIds[i]);
 
                 if(solrToy != null)
                 {
@@ -79,6 +80,36 @@ namespace CrazyToys.Services
             }
 
             return shopToyDTOs;
+        }
+
+
+        public async Task<List<ShopToyDTO>> GetMostPopularToys(List<Category> categories, int wantedAmount)
+        {
+            string query = ConvertCategoriesToQuery(categories);
+
+            // category%3A"Bamser"OR"Dukker"
+            string url = $"http://solr:8983/solr/toys/select?q={query}&rows={wantedAmount}";
+
+            dynamic content = await _solrService.GetContent(url);
+
+            Dictionary<int, List<ShopToyDTO>> toyDict = _solrService.GetToysFromContent(content);
+
+            return toyDict.ElementAt(0).Value;
+        }
+
+        public string ConvertCategoriesToQuery(List<Category> categories)
+        {
+            //category % 3A % 22{ category}% 22
+
+            string s = "category%3A";
+
+            foreach (var category in categories)
+            {
+                s = $"%22{category.Name}%22OR";
+
+            }
+
+            return s.Substring(0, s.Length - 2);
         }
 
     }

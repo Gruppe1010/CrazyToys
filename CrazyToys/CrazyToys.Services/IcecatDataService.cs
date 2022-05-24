@@ -18,7 +18,7 @@ namespace CrazyToys.Services
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IEntityCRUD<Brand> _brandDbService;
-        private readonly IEntityCRUD<Category> _categoryDbService;
+        private readonly CategoryDbService _categoryDbService;
         private readonly IEntityCRUD<SubCategory> _subCategoryDbService;
         private readonly IEntityCRUD<ColourGroup> _colourGroupDbService;
         private readonly ToyDbService _toyDbService;
@@ -37,8 +37,8 @@ namespace CrazyToys.Services
 
 
         public IcecatDataService(
-            IHttpClientFactory httpClientFactory, IEntityCRUD<Brand> brandDbService, 
-            IEntityCRUD<Category> categoryDbService,IEntityCRUD<SubCategory> subCategoryDbService, 
+            IHttpClientFactory httpClientFactory, IEntityCRUD<Brand> brandDbService,
+            CategoryDbService categoryDbService,IEntityCRUD<SubCategory> subCategoryDbService, 
             IEntityCRUD<ColourGroup> colourGroupDbService, ToyDbService toyDbService, 
             SimpleToyDbService simpleToyDbService,IEntityCRUD<AgeGroup> ageGroupDbService, 
             ImageDbService imageDbService,IEntityCRUD<PriceGroup> priceGroupDbService)
