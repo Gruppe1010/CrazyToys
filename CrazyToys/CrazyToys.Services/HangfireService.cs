@@ -44,14 +44,16 @@ namespace CrazyToys.Services
         public async Task GetProductsDataService(string url, PerformContext context)
         {
             await _icecatDataService.GetProductsFromIcecat(url);
-            BackgroundJob.ContinueJobWith(context.BackgroundJob.Id, () => UpdateSolrDb(url.Contains("daily"))); // TODO send tjek med om det er daily url - hvis nej skal den ikke lave solrting
+            BackgroundJob.ContinueJobWith(context.BackgroundJob.Id, () => UpdateSolrDb(url.Contains("daily")));
         }
+
+
 
         public async Task UpdateSolrDb(bool isDaily)
         {
-            // hent alle Toys op fra db
             string dateString = DateTime.Now.ToShortDateString();
 
+            // hent alle Toys op fra db
             List<Toy> toys = await _toyDbService.GetToysToUpdateWithRelations(dateString);
 
             toys.ForEach(toy => {
@@ -62,14 +64,26 @@ namespace CrazyToys.Services
                 if (isDaily)
                 {
                     SolrToy solrToy = _solrToyService.GetById(toy.ID);
-                    newSolrToy.SoldAmount = solrToy.SoldAmount;
+                    if (solrToy != null)
+                    {
+                        newSolrToy.SoldAmount = solrToy.SoldAmount;
+                    }
                 }
-                
 
                 _solrToyService.CreateOrUpdate(newSolrToy);
             });
         }
 
+
+
+
+
+
+        /*
+                 
+
+
+                 */
         public void CreateOrderConfirmationJob(CheckoutUserModel model, OrderConfirmationDTO orderConfirmationDTO)
         {
             BackgroundJob.Enqueue(() => SendOrderConfirmation(model, orderConfirmationDTO));
