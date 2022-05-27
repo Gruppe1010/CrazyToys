@@ -49,7 +49,7 @@ namespace CrazyToys.Web.Controllers
             // find den nyoprettede ordre
             Order order = await _orderDbService.GetByOrderNumber(orderNumber);
 
-            if(order != null)
+            if(order != null) // 
             {
                 // Opdater SolrToys soldAmount
                 _salesService.UpdateSoldAmountInSolrToys(order.OrderLines);

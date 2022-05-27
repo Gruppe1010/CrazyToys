@@ -21,6 +21,7 @@ namespace CrazyToys.Entities.OrderEntities
         public Status(StatusType statusType)
         {
             StatusType = statusType;
+            TimeStamp = DateTime.Now;
         }
 
         public Status(StatusType statusType, DateTime timeStamp)

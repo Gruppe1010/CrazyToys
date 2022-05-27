@@ -86,7 +86,7 @@ namespace CrazyToys.Services
                 if(newOrder.ID != null) // hvis den faktisk er blevet oprettet, så skal den tilføje "Created-status"
                 {
                     StatusType createdStatusType = await _statusTypeDbService.GetByName("Created");
-                    newOrder.Statuses.Add(new Status(createdStatusType, DateTime.Now));
+                    newOrder.Statuses.Add(new Status(createdStatusType));
                     return await _orderDbService.Update(newOrder);
                 }
             }
@@ -210,7 +210,6 @@ namespace CrazyToys.Services
         public async Task AddStatusType(Order order, int statusCode)
         {
             StatusType statusType = await _statusTypeDbService.GetByStatusCode(statusCode);
-
 
             order.Statuses.Add(new Status(statusType));
             await _orderDbService.Update(order);
