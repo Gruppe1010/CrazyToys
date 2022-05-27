@@ -222,10 +222,10 @@ namespace CrazyToys.Services
 
             if(order == null)
             {
-                return 1002;
+                return 2000;
             }
 
-            return order.OrderNumber + 2;
+            return order.OrderNumber + 1;
         }
 
 
