@@ -134,11 +134,11 @@ namespace CrazyToys.Data.Data
                 var statusTypes = new StatusType[]
                 {
                     new StatusType("Created", 1),
-                    new StatusType("Packaged", 2),
-                    new StatusType("Shipped", 3),
-                    new StatusType("Returned", 4),
-                    new StatusType("Cancelled", 5)
-
+                    new StatusType("Approved", 2),
+                    new StatusType("Packaged", 3),
+                    new StatusType("Shipped", 4),
+                    new StatusType("Returned", 5),
+                    new StatusType("Cancelled", 6)
                 };
 
                 foreach (StatusType statusType in statusTypes)
