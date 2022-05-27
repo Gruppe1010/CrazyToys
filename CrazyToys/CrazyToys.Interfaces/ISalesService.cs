@@ -10,5 +10,8 @@ namespace CrazyToys.Interfaces
     {
         Task<Order> CreateSale(CheckoutUserModel model, Dictionary<string, int> cart);
 
+        Task AddStatusType(Order order, int statusCode);
+
+
     }
 }

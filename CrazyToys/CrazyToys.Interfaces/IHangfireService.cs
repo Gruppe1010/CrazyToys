@@ -15,7 +15,7 @@ namespace CrazyToys.Interfaces
 
         void DeleteSolrDb();
 
-        void CreateOrderConfirmationJob(CheckoutUserModel model, OrderConfirmationDTO orderConfirmationDTO);
+        void CreateOrderConfirmationJob(OrderConfirmationDTO orderConfirmationDTO);
 
     }
 }

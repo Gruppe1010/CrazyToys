@@ -26,8 +26,7 @@ namespace CrazyToys.Web.Controllers
     {
         private readonly ISessionService _sessionService;
         private readonly SalesService _salesService;
-        private readonly IHangfireService _hangfireService;
-
+        private readonly IPaymentService _paymentService;
 
         public CheckoutSurfaceController(
             IUmbracoContextAccessor umbracoContextAccessor,
@@ -38,25 +37,26 @@ namespace CrazyToys.Web.Controllers
             IPublishedUrlProvider publishedUrlProvider,
             ISessionService sessionService,
             SalesService salesDataService,
-            IHangfireService hangfireService)
+            IPaymentService paymentService)
             : base(umbracoContextAccessor, databaseFactory, services, appCaches, profilingLogger, publishedUrlProvider)
         {
             _sessionService = sessionService;
             _salesService = salesDataService;
-            _hangfireService = hangfireService;
+            _paymentService = paymentService;
+
         }
 
 
         [HttpPost]
         public async Task<IActionResult> Submit(CheckoutUserModel model)
         {
-
-            string urlPath = Environment.GetEnvironmentVariable("UrlPath");
-
             if (!ModelState.IsValid)
             {
                 return CurrentUmbracoPage();
             }
+
+            string urlPath = Environment.GetEnvironmentVariable("UrlPath");
+           
 
             SessionUser sessionUser = _sessionService.GetNewOrExistingSessionUser(HttpContext);
             Dictionary<string, int> cart = sessionUser.Cart;
@@ -75,23 +75,14 @@ namespace CrazyToys.Web.Controllers
                 return Redirect($"{urlPath}/shopping-cart");
             }
 
-            // Opdater SolrToys soldAmount
-            _salesService.UpdateSoldAmountInSolrToys(newOrder.OrderLines);
+           // ellers opret payment
 
-            // lav liste med toys som skal vises i orderConfirmation
-            List<ShoppingCartToyDTO> orderConfirmationToyList = await _salesService.ConvertOrderLinesToShoppingCartToyDTOs(newOrder.OrderLines);
+            Random rand = new Random();
+            string testOrdeNummer = rand.Next(1111, 1111111).ToString();
 
-            // Opret orderConfirmationJob
-            OrderConfirmationDTO orderConfirmationDTO = newOrder.ConvertToOrderConfirmationDTO(orderConfirmationToyList);
-            _hangfireService.CreateOrderConfirmationJob(model, orderConfirmationDTO);
+            string paymentUrl = await _paymentService.CreatePaymentLink(testOrdeNummer, "dkk", 550.53);
 
-            // slet cart på sessionUser
-            sessionUser.Cart.Clear();
-            _sessionService.Update(HttpContext, sessionUser);
-
-            // redirect til ny side/returner view med ordrenummer
-
-            return Redirect($"{urlPath}/order-confirmation?orderNumber={newOrder.OrderNumber}");
+            return Redirect(paymentUrl);
         }
     }
 }

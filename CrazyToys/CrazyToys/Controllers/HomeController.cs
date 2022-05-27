@@ -14,6 +14,7 @@ namespace CrazyToys.Web.Controllers
         private readonly ISessionService _sessionService;
         private readonly IHangfireService _hangfireService;
 
+
         public HomeController(ILogger<HomeController> logger, ICompositeViewEngine compositeViewEngine, 
             IUmbracoContextAccessor umbracoContextAccessor, IHangfireService hangfireService, ISessionService sessionsService)
             : base(logger, compositeViewEngine, umbracoContextAccessor)
@@ -25,6 +26,7 @@ namespace CrazyToys.Web.Controllers
         public override IActionResult Index()
         {
             ViewBag.Current = "Forside";
+
 
             // return a 'model' to the selected template/view for this page.
             return CurrentTemplate(CurrentPage);

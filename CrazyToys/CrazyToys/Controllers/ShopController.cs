@@ -30,6 +30,7 @@ namespace CrazyToys.Web.Controllers
         private readonly IEntityCRUD<PriceGroup> _priceGroupDbService;
         private readonly CategoryDbService _categoryDbService;
 
+
         public ShopController(
             ILogger<HomeController> logger,
             ICompositeViewEngine compositeViewEngine,
@@ -55,6 +56,8 @@ namespace CrazyToys.Web.Controllers
             _ageGroupDbService = ageGroupDbService;
             _priceGroupDbService = priceGroupDbService;
             _categoryDbService = categoryDbService;
+
+
         }
 
         [HttpGet]
@@ -69,7 +72,6 @@ namespace CrazyToys.Web.Controllers
             [FromQuery(Name = "search")] string search,
             [FromQuery(Name = "sort")] string sort)
         {
-
             string url = _solrToyService.CreateSearchUrl(categories, subCategory, brand, priceGroup, ageGroupIntervals, colourGroups, pageNumber, search, sort);
             dynamic content = await _solrToyService.GetContent(url);
 

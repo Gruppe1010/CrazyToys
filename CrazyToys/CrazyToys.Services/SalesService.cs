@@ -81,12 +81,10 @@ namespace CrazyToys.Services
                 // TODO denne skal i fremtiden ændres så den ikke bare bliver til billing altid, men kan tilføjes seperat ude i formen på siden
                 newOrder.ShippingAddress = newOrder.Customer.BillingAddress;
                 // gem ned og returner
-
+                newOrder.OrderNumber = await GenerateOrderNumber();
                 newOrder = await _orderDbService.Create(newOrder);
                 if(newOrder.ID != null) // hvis den faktisk er blevet oprettet, så skal den tilføje "Created-status"
                 {
-                    // TODO her skal UpdateSoldAmountInSolrToys() kaldes
-
                     StatusType createdStatusType = await _statusTypeDbService.GetByName("Created");
                     newOrder.Statuses.Add(new Status(createdStatusType, DateTime.Now));
                     return await _orderDbService.Update(newOrder);
@@ -208,6 +206,24 @@ namespace CrazyToys.Services
             }
         }
 
+
+        public async Task AddStatusType(Order order, int statusCode)
+        {
+            order.Statuses.Add(new Status(new StatusType(statusCode)));
+            await _orderDbService.Update(order);
+        }
+
+        public async Task<int> GenerateOrderNumber()
+        {
+            Order order = await _orderDbService.GetLatest();
+
+            if(order == null)
+            {
+                return 1000;
+            }
+
+            return order.OrderNumber + 1;
+        }
 
 
     }

@@ -48,7 +48,6 @@ namespace CrazyToys.Services
         }
 
 
-
         public async Task UpdateSolrDb(bool isDaily)
         {
             string dateString = DateTime.Now.ToShortDateString();
@@ -75,21 +74,13 @@ namespace CrazyToys.Services
         }
 
 
-
-
-
-
-        /*
-                 
-
-
-                 */
-        public void CreateOrderConfirmationJob(CheckoutUserModel model, OrderConfirmationDTO orderConfirmationDTO)
+        public void CreateOrderConfirmationJob(OrderConfirmationDTO orderConfirmationDTO)
         {
-            BackgroundJob.Enqueue(() => SendOrderConfirmation(model, orderConfirmationDTO));
+            BackgroundJob.Enqueue(() => SendOrderConfirmation(orderConfirmationDTO));
         }
 
-        public void SendOrderConfirmation(CheckoutUserModel model, OrderConfirmationDTO orderConfirmationDTO)
+
+        public void SendOrderConfirmation(OrderConfirmationDTO orderConfirmationDTO)
         {
             string bodyText = "";
             double subTotal = 0;
@@ -118,7 +109,7 @@ namespace CrazyToys.Services
             var msgMail = new MailMessage();
 
             msgMail.From = new MailAddress("gruppe1010@hotmail.com");
-            msgMail.To.Add(new MailAddress(model.Email));
+            msgMail.To.Add(new MailAddress(orderConfirmationDTO.Email));
             msgMail.Subject = $"Din bestilling er modtaget! ({orderConfirmationDTO.OrderNumber}) ";
 
             msgMail.Body =

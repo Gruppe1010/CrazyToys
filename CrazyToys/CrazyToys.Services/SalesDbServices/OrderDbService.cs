@@ -104,5 +104,10 @@ namespace CrazyToys.Services.SalesDbServices
         {
             throw new NotImplementedException();
         }
+
+        public async Task<Order> GetLatest()
+        {
+            return await _salesContext.Orders.OrderByDescending(x => x.OrderNumber).FirstOrDefaultAsync();
+        }
     }
 }

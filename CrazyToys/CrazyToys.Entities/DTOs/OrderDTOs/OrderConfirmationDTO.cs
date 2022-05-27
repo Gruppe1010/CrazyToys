@@ -7,6 +7,7 @@ namespace CrazyToys.Entities.DTOs.OrderDTOs
         public int OrderNumber { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string Email { get; set; }
         public string Status { get; set; }
         public string Date { get; set; }
         // TODO også en payment-method
@@ -14,11 +15,12 @@ namespace CrazyToys.Entities.DTOs.OrderDTOs
         public AddressDTO ShippingAddress { get; set; }
         public List<ShoppingCartToyDTO> ShoppingCartToyDTOs { get; set; }
 
-        public OrderConfirmationDTO(int orderNumber, string firstName, string lastName, string status, string date, AddressDTO billingAddress, AddressDTO shippingAddress, List<ShoppingCartToyDTO> shoppingCartToyDTOs)
+        public OrderConfirmationDTO(int orderNumber, string firstName, string lastName, string email, string status, string date, AddressDTO billingAddress, AddressDTO shippingAddress, List<ShoppingCartToyDTO> shoppingCartToyDTOs)
         {
             OrderNumber = orderNumber;
             FirstName = firstName;
             LastName = lastName;
+            Email = email;
             Status = status;
             Date = date;
             BillingAddress = billingAddress;

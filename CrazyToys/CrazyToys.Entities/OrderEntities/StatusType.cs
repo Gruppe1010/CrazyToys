@@ -18,10 +18,16 @@ namespace CrazyToys.Entities.OrderEntities
         {
         }
 
+        public StatusType(int statusCode)
+        {
+            StatusCode = statusCode;
+        }
+
         public StatusType(string name, int statusCode)
         {
             Name = name;
             StatusCode = statusCode;
         }
+
     }
 }

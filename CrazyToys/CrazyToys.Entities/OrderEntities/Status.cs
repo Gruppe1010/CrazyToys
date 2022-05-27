@@ -18,6 +18,11 @@ namespace CrazyToys.Entities.OrderEntities
         {
         }
 
+        public Status(StatusType statusType)
+        {
+            StatusType = statusType;
+        }
+
         public Status(StatusType statusType, DateTime timeStamp)
         {
             StatusType = statusType;

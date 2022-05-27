@@ -16,7 +16,6 @@ namespace CrazyToys.Entities.OrderEntities
         
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string ID { get; set; }
-        [Range(100000, 999999)]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int OrderNumber { get; set; }
         public Customer Customer { get; set; }
@@ -60,7 +59,7 @@ namespace CrazyToys.Entities.OrderEntities
                 string date = Statuses[0].TimeStamp.ToString("dddd, dd MMMM yyyy", new CultureInfo("da-DK"));
                 date = char.ToUpper(date[0]) + date.Substring(1);
 
-                return new OrderConfirmationDTO(OrderNumber, Customer.FirstName, Customer.LastName, Statuses[0].StatusType.Name, date, billingAddress, shippingAddress, shoppingCartToyDTOs);
+                return new OrderConfirmationDTO(OrderNumber, Customer.FirstName, Customer.LastName, Customer.Email, Statuses[0].StatusType.Name, date, billingAddress, shippingAddress, shoppingCartToyDTOs);
             }
             return null;
         }

@@ -111,6 +111,9 @@ namespace CrazyToys.Web
             services.AddScoped<CityDbService>();
             services.AddScoped<AddressDbService>();
 
+            services.AddScoped<IPaymentService, QuickPayService>();
+
+
 
             services.AddScoped<SalesService>();
 
