@@ -16,7 +16,6 @@ namespace CrazyToys.Entities.OrderEntities
         
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string ID { get; set; }
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int OrderNumber { get; set; }
         public Customer Customer { get; set; }
         public IList<Status> Statuses { get; set; }
@@ -54,7 +53,7 @@ namespace CrazyToys.Entities.OrderEntities
             if(Statuses.Count > 0)
             {
                 AddressDTO billingAddress = Customer.BillingAddress.ConvertToAddressDTO();
-                AddressDTO shippingAddress = ShippingAddress.ConvertToAddressDTO();
+                AddressDTO shippingAddress = ShippingAddress != null ? ShippingAddress.ConvertToAddressDTO() : Customer.BillingAddress.ConvertToAddressDTO();
 
                 string date = Statuses[0].TimeStamp.ToString("dddd, dd MMMM yyyy", new CultureInfo("da-DK"));
                 date = char.ToUpper(date[0]) + date.Substring(1);

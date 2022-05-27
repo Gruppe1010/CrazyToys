@@ -76,11 +76,13 @@ namespace CrazyToys.Web.Controllers
             }
 
            // ellers opret payment
-
+           /*
             Random rand = new Random();
-            string testOrdeNummer = rand.Next(1111, 1111111).ToString();
+            string testOrdeNummer = rand.Next(1111, 1111111).ToString();*/
 
-            string paymentUrl = await _paymentService.CreatePaymentLink(testOrdeNummer, "dkk", 550.53);
+            // TODO RET TALLET
+
+            string paymentUrl = await _paymentService.CreatePaymentLink(newOrder.OrderNumber.ToString(), "dkk", 550.53);
 
             return Redirect(paymentUrl);
         }

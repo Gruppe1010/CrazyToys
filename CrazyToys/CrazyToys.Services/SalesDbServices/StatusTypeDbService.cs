@@ -68,5 +68,16 @@ namespace CrazyToys.Services.SalesDbServices
         {
             throw new NotImplementedException();
         }
+
+        public async Task<StatusType> GetByStatusCode(int statusCode)
+        {
+            if(statusCode == 0)
+            {
+                return null;
+            }
+            return await _salesContext.StatusTypes.Where(s => s.StatusCode == statusCode).FirstOrDefaultAsync();
+        }
+
+
     }
 }

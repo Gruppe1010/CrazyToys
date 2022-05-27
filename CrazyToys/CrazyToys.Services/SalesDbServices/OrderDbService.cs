@@ -65,6 +65,10 @@ namespace CrazyToys.Services.SalesDbServices
             {
                 var order = await _salesContext.Orders
                     .Include(o => o.Customer)
+                    .Include(o => o.OrderLines)
+                    .Include(o => o.ShippingAddress).ThenInclude(s => s.City)
+                    .Include(o => o.ShippingAddress).ThenInclude(s => s.Country)
+                    .Include(o => o.Statuses).ThenInclude(s => s.StatusType)
                     .FirstOrDefaultAsync(o => o.OrderNumber == orderNumber);
                 return order;
             }

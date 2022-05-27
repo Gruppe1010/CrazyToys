@@ -209,7 +209,10 @@ namespace CrazyToys.Services
 
         public async Task AddStatusType(Order order, int statusCode)
         {
-            order.Statuses.Add(new Status(new StatusType(statusCode)));
+            StatusType statusType = await _statusTypeDbService.GetByStatusCode(statusCode);
+
+
+            order.Statuses.Add(new Status(statusType));
             await _orderDbService.Update(order);
         }
 
@@ -219,10 +222,10 @@ namespace CrazyToys.Services
 
             if(order == null)
             {
-                return 1000;
+                return 1002;
             }
 
-            return order.OrderNumber + 1;
+            return order.OrderNumber + 2;
         }
 
 
