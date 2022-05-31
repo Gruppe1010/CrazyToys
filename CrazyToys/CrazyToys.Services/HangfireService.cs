@@ -152,7 +152,7 @@ namespace CrazyToys.Services
             server.Port = 587;
             server.EnableSsl = true;
             //TODO Sikkerhedsbrud!
-            server.Credentials = new NetworkCredential("gruppe1010@hotmail.com", "DAT20v1!DAT");
+            server.Credentials = new NetworkCredential("gruppe1010@hotmail.com", "mGG9-!SN=2Gb2Q#");
             server.Send(msgMail);
         }
 

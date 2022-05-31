@@ -75,14 +75,7 @@ namespace CrazyToys.Web.Controllers
                 return Redirect($"{urlPath}/shopping-cart");
             }
 
-           // ellers opret payment
-           /*
-            Random rand = new Random();
-            string testOrdeNummer = rand.Next(1111, 1111111).ToString();*/
-
-            // TODO RET TALLET
-
-            string paymentUrl = await _paymentService.CreatePaymentLink(newOrder.OrderNumber.ToString(), "dkk", 550.53);
+            string paymentUrl = await _paymentService.CreatePaymentLink(newOrder.OrderNumber.ToString(), "dkk", newOrder.CalculateTotalPrice());
 
             return Redirect(paymentUrl);
         }

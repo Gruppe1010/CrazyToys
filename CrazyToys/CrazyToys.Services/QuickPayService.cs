@@ -31,7 +31,7 @@ namespace CrazyToys.Services
                 string callbackUrl = $"{urlPath}/CALLBACK"; // TODO ret
 
                 // constructor for paymentLink: int paymentId, int amount, bool autoCapture, bool autoFee, string language, string paymentMethods, string continueUrl, string cancelUrl, string callbackUrl, bool framed
-                var link = await quickPayClient.Payments.CreateOrUpdatePaymentLink(payment.Id, totalPriceInInt, false, false, "Danish", null, continueUrl, cancelUrl, callbackUrl, false).ConfigureAwait(false);
+                var link = await quickPayClient.Payments.CreateOrUpdatePaymentLink(payment.Id, totalPriceInInt, false, false, "da", null, continueUrl, cancelUrl, callbackUrl, false).ConfigureAwait(false);
 
                 url = link.Url;
             }

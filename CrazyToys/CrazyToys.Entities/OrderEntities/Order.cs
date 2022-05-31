@@ -22,6 +22,9 @@ namespace CrazyToys.Entities.OrderEntities
         public Address ShippingAddress { get; set; }
         public IList<OrderLine> OrderLines { get; set; }
 
+
+      
+
         public Order()
         {
             Statuses = new List<Status>();
@@ -38,6 +41,7 @@ namespace CrazyToys.Entities.OrderEntities
 
         public double CalculateTotalPrice()
         {
+            double shippingPrice = 39;
             double totalPrice = 0;
 
             foreach (OrderLine orderLine in OrderLines)
@@ -45,7 +49,7 @@ namespace CrazyToys.Entities.OrderEntities
                 totalPrice += orderLine.CalculateSubTotal();
             }
 
-            return totalPrice;
+            return totalPrice > 499 ? totalPrice : totalPrice + shippingPrice;
         }
 
         public OrderConfirmationDTO ConvertToOrderConfirmationDTO(List<ShoppingCartToyDTO> shoppingCartToyDTOs)
