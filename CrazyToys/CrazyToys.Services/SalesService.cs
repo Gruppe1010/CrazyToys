@@ -26,6 +26,8 @@ namespace CrazyToys.Services
         private readonly CityDbService _cityDbService;
         private readonly AddressDbService _addressDbService;
 
+        
+
 
 
         public SalesService(
@@ -221,10 +223,16 @@ namespace CrazyToys.Services
 
             if(order == null)
             {
-                return 2000;
+                return 1050;
             }
 
             return order.OrderNumber + 1;
+        }
+
+        public async Task AddPaymentIdToOrder(Order order, int paymentId)
+        {
+            order.PaymentID = paymentId;
+            await _orderDbService.Update(order);
         }
 
 

@@ -28,6 +28,8 @@ namespace CrazyToys.Services.SalesDbServices
             return order;
         }
 
+        
+
         public Task<Order> CreateOrUpdate(Order order)
         {
             throw new NotImplementedException();
@@ -43,9 +45,17 @@ namespace CrazyToys.Services.SalesDbServices
             throw new NotImplementedException();
         }
 
-        public Task<List<Order>> GetAllWithRelations()
+        public async Task<List<Order>> GetAllWithRelations()
         {
-            throw new NotImplementedException();
+            var orders = await _salesContext.Orders
+                .Include(o => o.Customer)
+                .Include(o => o.OrderLines)
+                .Include(o => o.ShippingAddress).ThenInclude(s => s.City)
+                .Include(o => o.ShippingAddress).ThenInclude(s => s.Country)
+                .Include(o => o.Statuses).ThenInclude(s => s.StatusType)
+                .ToListAsync();
+            return orders;
+          
         }
 
         public async Task<Order> GetById(string id)
@@ -53,6 +63,7 @@ namespace CrazyToys.Services.SalesDbServices
             if (!string.IsNullOrWhiteSpace(id))
             {
                 var order = await _salesContext.Orders
+                    .Include(o => o.OrderLines)
                     .FirstOrDefaultAsync(o => o.ID == id);
                 return order;
             }

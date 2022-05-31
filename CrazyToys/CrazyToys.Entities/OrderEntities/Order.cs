@@ -17,6 +17,7 @@ namespace CrazyToys.Entities.OrderEntities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string ID { get; set; }
         public int OrderNumber { get; set; }
+        public int PaymentID { get; set; }
         public Customer Customer { get; set; }
         public IList<Status> Statuses { get; set; }
         public Address ShippingAddress { get; set; }
@@ -43,12 +44,12 @@ namespace CrazyToys.Entities.OrderEntities
         {
             double shippingPrice = 39;
             double totalPrice = 0;
-
+            // if(OrderLines != null){
             foreach (OrderLine orderLine in OrderLines)
             {
                 totalPrice += orderLine.CalculateSubTotal();
             }
-
+            // }
             return totalPrice > 499 ? totalPrice : totalPrice + shippingPrice;
         }
 
@@ -68,7 +69,10 @@ namespace CrazyToys.Entities.OrderEntities
         }
 
      
-
+        public OrderDTO ConvertToOrderDTO()
+        {
+            return new OrderDTO(ID, OrderNumber, Statuses);
+        }
      
     }
 }

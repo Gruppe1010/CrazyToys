@@ -75,9 +75,22 @@ namespace CrazyToys.Web.Controllers
                 return Redirect($"{urlPath}/shopping-cart");
             }
 
-            string paymentUrl = await _paymentService.CreatePaymentLink(newOrder.OrderNumber.ToString(), "dkk", newOrder.CalculateTotalPrice());
+            int paymentId = await _paymentService.CreatePayment(newOrder.OrderNumber.ToString(), "dkk");
 
-            return Redirect(paymentUrl);
+
+            if (paymentId != 0)
+            {
+                // tilføj paymentId til newOrder og gem
+                await _salesService.AddPaymentIdToOrder(newOrder, paymentId);
+
+                string paymentUrl = await _paymentService.CreatePaymentLink(newOrder.OrderNumber, paymentId, newOrder.CalculateTotalPrice());
+
+                return Redirect(paymentUrl);
+            }
+
+            // TODO tag imod denne i html
+            ViewData["ErrorMessage"] = "Der gik noget galt i betalingen";
+            return CurrentUmbracoPage();
         }
     }
 }
