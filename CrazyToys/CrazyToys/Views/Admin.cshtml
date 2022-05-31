@@ -14,8 +14,8 @@
         <div class="row">
             <section class="col-lg-12">
 
-        <h1>Hej min admin-buddyyyyyyy - her er der ordrer du kan shippe!!</h1>
-
+            <h1>Ordreoversigt</h1>
+            <br></br>
         
             <table class="table">
                 <thead>
@@ -43,7 +43,6 @@
                             <td>
                                 @(@orderDTO.FindLatestStatus().StatusType.Name)
                             </td>
-
                             <td>
                                 @if(orderDTO.HasStatus("Shipped")){
                                     <a class="active-filter ship-button red" href="javascript:void(0);" onclick=''>Returner</a>
