@@ -53,6 +53,8 @@ namespace CrazyToys.Entities.OrderEntities
             return totalPrice > 499 ? totalPrice : totalPrice + shippingPrice;
         }
 
+        // TODO slet denn emetode!!!!!
+        // TODO slet orderConfirmationDTO-klassen
         public OrderConfirmationDTO ConvertToOrderConfirmationDTO(List<ShoppingCartToyDTO> shoppingCartToyDTOs)
         {
             if(Statuses.Count > 0)
@@ -68,7 +70,23 @@ namespace CrazyToys.Entities.OrderEntities
             return null;
         }
 
-     
+        public AddressDTO CreateBillingAddressDTO()
+        {
+            return Customer.BillingAddress.ConvertToAddressDTO();
+        }
+
+        public AddressDTO CreateShppingAddressDTO()
+        {
+            return ShippingAddress != null ? ShippingAddress.ConvertToAddressDTO() : Customer.BillingAddress.ConvertToAddressDTO();
+        }
+
+        public string CreateDateString()
+        {
+            string date = Statuses[0].TimeStamp.ToString("dddd, dd MMMM yyyy", new CultureInfo("da-DK"));
+            return char.ToUpper(date[0]) + date.Substring(1);
+        }
+
+
         public OrderDTO ConvertToOrderDTO()
         {
             return new OrderDTO(ID, OrderNumber, Statuses);

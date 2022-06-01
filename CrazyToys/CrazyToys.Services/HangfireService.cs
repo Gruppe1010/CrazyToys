@@ -74,11 +74,35 @@ namespace CrazyToys.Services
         }
 
 
-        public void CreateOrderConfirmationJob(OrderConfirmationDTO orderConfirmationDTO)
+        public void CreateMailJob(MailDTO mailDTO)
         {
-            BackgroundJob.Enqueue(() => SendOrderConfirmation(orderConfirmationDTO));
+            BackgroundJob.Enqueue(() => SendMail(mailDTO));
         }
 
+
+        public void SendMail(MailDTO mailDTO)
+        {
+            var msgMail = new MailMessage();
+
+            msgMail.From = new MailAddress(mailDTO.EmailFrom);
+            msgMail.To.Add(new MailAddress(mailDTO.EmailTo));
+            msgMail.Subject = mailDTO.Subject;
+
+            msgMail.Body = mailDTO.Body;
+
+            msgMail.IsBodyHtml = true;
+
+            SmtpClient server = new SmtpClient();
+            server.Host = "smtp.office365.com";
+            server.Port = 587;
+            server.EnableSsl = true;
+            //TODO Sikkerhedsbrud!
+            server.Credentials = new NetworkCredential("gruppe1010@hotmail.com", "mGG9-!SN=2Gb2Q#");
+            server.Send(msgMail);
+        }
+
+
+        /*
 
         public void SendOrderConfirmation(OrderConfirmationDTO orderConfirmationDTO)
         {
@@ -155,6 +179,7 @@ namespace CrazyToys.Services
             server.Credentials = new NetworkCredential("gruppe1010@hotmail.com", "mGG9-!SN=2Gb2Q#");
             server.Send(msgMail);
         }
+        */
 
         public void DeleteSolrDb()
         {

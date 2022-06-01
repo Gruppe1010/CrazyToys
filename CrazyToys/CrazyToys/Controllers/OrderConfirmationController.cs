@@ -22,24 +22,26 @@ namespace CrazyToys.Web.Controllers
 
         private readonly OrderDbService _orderDbService;
         private readonly SalesService _salesService;
+        private readonly MailService _mailService;
         private readonly IHangfireService _hangfireService;
         private readonly ISessionService _sessionService;
 
 
         public OrderConfirmationController(
-            ILogger<HomeController> logger, 
+            ILogger<HomeController> logger,
             ICompositeViewEngine compositeViewEngine,
             SalesService salesDataService,
+            MailService mailService,
             IHangfireService hangfireService,
             ISessionService sessionService,
-
             IUmbracoContextAccessor umbracoContextAccessor, OrderDbService orderDbService)
             : base(logger, compositeViewEngine, umbracoContextAccessor)
         {
             _orderDbService = orderDbService;
+            _sessionService = sessionService;
             _salesService = salesDataService;
             _hangfireService = hangfireService;
-            _sessionService = sessionService;
+            _mailService = mailService;
         }
 
         [HttpGet]
@@ -58,8 +60,9 @@ namespace CrazyToys.Web.Controllers
                 List<ShoppingCartToyDTO> orderConfirmationToyList = await _salesService.ConvertOrderLinesToShoppingCartToyDTOs(order.OrderLines);
 
                 // Send email til bruger
-                OrderConfirmationDTO orderConfirmationDTO = order.ConvertToOrderConfirmationDTO(orderConfirmationToyList);
-                _hangfireService.CreateOrderConfirmationJob(orderConfirmationDTO);
+
+                MailDTO mailDTO = _mailService.CreateOrderConfirmation(order, orderConfirmationToyList);
+                _hangfireService.CreateMailJob(mailDTO);
 
                 // tilføjer Approved StatusType til ordren
                 await _salesService.AddStatusType(order, 2);

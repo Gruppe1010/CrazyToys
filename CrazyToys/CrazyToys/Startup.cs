@@ -87,24 +87,26 @@ namespace CrazyToys.Web
             services.AddHangfireServer();
             services.AddScoped<IHangfireService, HangfireService>();
 
-            // DbServices
+            services.AddScoped<IcecatDataService>();
+            services.AddScoped<ISessionService, SessionService>();
+            services.AddScoped<IRecommendationService, RecommendationService>();
+            services.AddScoped<MailService>();
+            services.AddScoped<AdminService>();
+            services.AddScoped<IPaymentService, QuickPayService>();
+            services.AddScoped<SalesService>();
+
+            // product-db services
             services.AddScoped<IEntityCRUD<Brand>, BrandDbService>();
             services.AddScoped<CategoryDbService>();
             services.AddScoped<IEntityCRUD<SubCategory>, SubCategoryDbService>();
             services.AddScoped<IEntityCRUD<ColourGroup>, ColourGroupDbService>();
             services.AddScoped<ToyDbService>();
             services.AddScoped<ImageDbService>();
-            services.AddScoped<AdminService>();
             services.AddScoped<SimpleToyDbService>();
             services.AddScoped<IEntityCRUD<AgeGroup>, AgeGroupDbService>();
             services.AddScoped< IEntityCRUD<PriceGroup>, PriceGroupDbService> ();
 
-            services.AddScoped<IcecatDataService>();
-            services.AddScoped<ISessionService, SessionService>();
-            services.AddScoped<IRecommendationService, RecommendationService>();
-
-
-
+            // sales-db services
             services.AddScoped<CustomerDbService>();
             services.AddScoped<CountryDbService>();
             services.AddScoped<OrderDbService>();
@@ -112,15 +114,7 @@ namespace CrazyToys.Web
             services.AddScoped<CityDbService>();
             services.AddScoped<AddressDbService>();
 
-            services.AddScoped<IPaymentService, QuickPayService>();
-
-
-
-            services.AddScoped<SalesService>();
-
-
-
-
+            
             //Umbraco
             //pragma warning disable IDE0022 // Use expression body for methods
             services.AddUmbraco(_env, _config)

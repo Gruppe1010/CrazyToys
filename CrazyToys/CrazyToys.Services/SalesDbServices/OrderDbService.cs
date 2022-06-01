@@ -60,10 +60,14 @@ namespace CrazyToys.Services.SalesDbServices
 
         public async Task<Order> GetById(string id)
         {
-            if (!string.IsNullOrWhiteSpace(id))
+            if (!String.IsNullOrWhiteSpace(id))
             {
                 var order = await _salesContext.Orders
+                    .Include(o => o.Customer)
                     .Include(o => o.OrderLines)
+                    .Include(o => o.ShippingAddress).ThenInclude(s => s.City)
+                    .Include(o => o.ShippingAddress).ThenInclude(s => s.Country)
+                    .Include(o => o.Statuses).ThenInclude(s => s.StatusType)
                     .FirstOrDefaultAsync(o => o.ID == id);
                 return order;
             }
