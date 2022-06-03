@@ -15,6 +15,8 @@ namespace CrazyToys.Entities.DTOs.OrderDTOs
         public AddressDTO ShippingAddress { get; set; }
         public List<ShoppingCartToyDTO> ShoppingCartToyDTOs { get; set; }
 
+
+
         public OrderConfirmationDTO(int orderNumber, string firstName, string lastName, string email, string status, string date, AddressDTO billingAddress, AddressDTO shippingAddress, List<ShoppingCartToyDTO> shoppingCartToyDTOs)
         {
             OrderNumber = orderNumber;

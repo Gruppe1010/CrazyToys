@@ -1,0 +1,79 @@
+﻿@using CrazyToys.Entities.DTOs.OrderDTOs
+@using Newtonsoft.Json
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+	Layout = "Master.cshtml";
+
+    var orderDTOs = ViewData["OrderDTOs"] as List<OrderDTO>;
+
+}
+
+<section class="shop spad">
+    <div class="container">
+        <div class="row">
+            <section class="col-lg-12">
+
+            <h1>Ordreoversigt</h1>
+            <br></br>
+        
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>
+                        Ordernummer
+                    </th>
+                    <th>
+                        Status
+                    </th>
+                    <th>
+                        Afsend
+                    </th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var orderDTO in orderDTOs) {
+                    <tr>
+                        <td>
+                            @orderDTO.OrderNumber
+                        </td>
+
+                        @if(orderDTO.Statuses.Count > 0){
+                            <td>
+                                @(@orderDTO.FindLatestStatus().StatusType.Name)
+                            </td>
+                            <td>
+                                @if(orderDTO.HasStatus("Shipped")){
+                                    <a class="active-filter ship-button red" href="javascript:void(0);" onclick=''>Returner</a>
+                                } else if(orderDTO.HasStatus("Approved")) {
+                                    <a class="active-filter ship-button bisque" href="javascript:void(0);" onclick='shipOrder("@orderDTO.ID")'>Afsend ordre</a>
+                                    <!--TODO insæt en cancel button her-->
+                                } else
+                                {
+                                    
+                                }
+                                </td>
+                        } else {
+                            <td>
+                                @("Ingen status")
+                            </td>
+                        }
+
+                    </tr>
+                }
+                </tbody>
+            </table>
+            
+          </div>
+          </div>
+          </div>
+
+</section>
+
+
+@{
+    
+  
+    
+}

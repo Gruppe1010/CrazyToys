@@ -75,16 +75,22 @@ namespace CrazyToys.Web.Controllers
                 return Redirect($"{urlPath}/shopping-cart");
             }
 
-           // ellers opret payment
-           /*
-            Random rand = new Random();
-            string testOrdeNummer = rand.Next(1111, 1111111).ToString();*/
+            int paymentId = await _paymentService.CreatePayment(newOrder.OrderNumber.ToString(), "dkk");
 
-            // TODO RET TALLET
 
-            string paymentUrl = await _paymentService.CreatePaymentLink(newOrder.OrderNumber.ToString(), "dkk", 550.53);
+            if (paymentId != 0)
+            {
+                // tilføj paymentId til newOrder og gem
+                await _salesService.AddPaymentIdToOrder(newOrder, paymentId);
 
-            return Redirect(paymentUrl);
+                string paymentUrl = await _paymentService.CreatePaymentLink(newOrder.OrderNumber, paymentId, newOrder.CalculateTotalPrice());
+
+                return Redirect(paymentUrl);
+            }
+
+            // TODO tag imod denne i html
+            ViewData["ErrorMessage"] = "Der gik noget galt i betalingen";
+            return CurrentUmbracoPage();
         }
     }
 }

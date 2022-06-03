@@ -195,11 +195,11 @@
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6">
                             <div class="shop__product__option__right">
-                                <p>Sorter efter pris:</p>
+                                <p>Sorter efter:</p>
                                 <select id="sorter" onchange='createUrlFromParams(@pageNumber, @Html.Raw(JsonConvert.SerializeObject(@paramsDict)))'>
                                     <option value="">Mest Populære</option>
-                                    <option value="sort=price_asc">Lav til Høj</option>
-                                    <option value="sort=price_desc">Høj til Lav</option>
+                                    <option value="sort=price_asc">Pris: Lav til Høj</option>
+                                    <option value="sort=price_desc">Pris: Høj til Lav</option>
                                 </select>
                             </div>
                         </div>

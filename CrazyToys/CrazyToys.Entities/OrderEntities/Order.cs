@@ -17,10 +17,14 @@ namespace CrazyToys.Entities.OrderEntities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string ID { get; set; }
         public int OrderNumber { get; set; }
+        public int PaymentID { get; set; }
         public Customer Customer { get; set; }
         public IList<Status> Statuses { get; set; }
         public Address ShippingAddress { get; set; }
         public IList<OrderLine> OrderLines { get; set; }
+
+
+      
 
         public Order()
         {
@@ -38,16 +42,19 @@ namespace CrazyToys.Entities.OrderEntities
 
         public double CalculateTotalPrice()
         {
+            double shippingPrice = 39;
             double totalPrice = 0;
-
+            // if(OrderLines != null){
             foreach (OrderLine orderLine in OrderLines)
             {
                 totalPrice += orderLine.CalculateSubTotal();
             }
-
-            return totalPrice;
+            // }
+            return totalPrice > 499 ? totalPrice : totalPrice + shippingPrice;
         }
 
+        // TODO slet denn emetode!!!!!
+        // TODO slet orderConfirmationDTO-klassen
         public OrderConfirmationDTO ConvertToOrderConfirmationDTO(List<ShoppingCartToyDTO> shoppingCartToyDTOs)
         {
             if(Statuses.Count > 0)
@@ -63,8 +70,27 @@ namespace CrazyToys.Entities.OrderEntities
             return null;
         }
 
-     
+        public AddressDTO CreateBillingAddressDTO()
+        {
+            return Customer.BillingAddress.ConvertToAddressDTO();
+        }
 
+        public AddressDTO CreateShppingAddressDTO()
+        {
+            return ShippingAddress != null ? ShippingAddress.ConvertToAddressDTO() : Customer.BillingAddress.ConvertToAddressDTO();
+        }
+
+        public string CreateDateString()
+        {
+            string date = Statuses[0].TimeStamp.ToString("dddd, dd MMMM yyyy", new CultureInfo("da-DK"));
+            return char.ToUpper(date[0]) + date.Substring(1);
+        }
+
+
+        public OrderDTO ConvertToOrderDTO()
+        {
+            return new OrderDTO(ID, OrderNumber, Statuses);
+        }
      
     }
 }

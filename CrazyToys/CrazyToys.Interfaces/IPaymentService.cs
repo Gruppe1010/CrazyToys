@@ -9,9 +9,12 @@ namespace CrazyToys.Interfaces
     public interface IPaymentService
     {
 
-        Task<string> CreatePaymentLink(string orderId, string currency, double totalPrice);
+        Task<int> CreatePayment(string orderId, string currency);
 
 
+        Task<string> CreatePaymentLink(int orderNumber, int paymentId, double totalPrice);
+
+        Task<bool> CapturePayment(int paymentId, double totalPrice);
 
 
     }
