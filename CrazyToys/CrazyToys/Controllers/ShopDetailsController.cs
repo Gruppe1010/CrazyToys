@@ -47,8 +47,7 @@ namespace CrazyToys.Web.Controllers
             var sessionUser = _sessionService.GetNewOrExistingSessionUser(HttpContext);
             HashSet<string> wishlistToys = sessionUser.Wishlist;
 
-            List<string> relatedToyIds = await _recommendationService.FindRelatedToyIds(id);
-            List<ShopToyDTO> relatedToys = _recommendationService.GetRelatedShopToyDTOs(relatedToyIds, 8);
+            List<ShopToyDTO> relatedToys = await _recommendationService.GetRelatedToys(id, 8);
 
             List<Category> categories = await _categoryDbService.GetAllFromToyId(toy);
             List<ShopToyDTO> mostPopularToys = await _recommendationService.GetMostPopularToys(categories, 8);

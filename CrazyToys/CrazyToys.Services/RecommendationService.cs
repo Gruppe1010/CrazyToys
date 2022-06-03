@@ -64,8 +64,10 @@ namespace CrazyToys.Services
             return relatedToyIds;
         }
 
-        public List<ShopToyDTO> GetRelatedShopToyDTOs(List<string> relatedToyIds, int amountToGet)
+        public async Task<List<ShopToyDTO>> GetRelatedToys(string toyId, int amountToGet)
         {
+
+            List<string> relatedToyIds = await FindRelatedToyIds(toyId);
 
             List<ShopToyDTO> shopToyDTOs = new List<ShopToyDTO>();
 
