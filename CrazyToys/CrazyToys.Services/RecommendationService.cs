@@ -28,7 +28,6 @@ namespace CrazyToys.Services
         }
 
 
-
         public async Task<List<string>> FindRelatedToyIds(string toyId)
         {
             List<string> relatedToyIds = new List<string>();
@@ -101,17 +100,18 @@ namespace CrazyToys.Services
 
         public string ConvertCategoriesToQuery(List<Category> categories)
         {
-            //category % 3A % 22{ category}% 22
-
+            //category %3A %22{categoryNavn} %22 --> fx : category:"Bamser"OR"Dukker"
             string s = "category%3A";
+            string s2 = "";
 
             foreach (var category in categories)
             {
-                s = $"%22{category.Name}%22OR";
-
+                s2 = $"{s2}%22{category.Name}%22OR";
             }
 
-            return s.Substring(0, s.Length - 2);
+            string s3 = $"{s}{s2}";
+
+            return s3.Substring(0, s3.Length - 2);
         }
 
     }
