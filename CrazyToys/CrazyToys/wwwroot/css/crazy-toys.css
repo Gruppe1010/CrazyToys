@@ -255,6 +255,11 @@
 .max-width-40{
     max-width: 40% !important;
 }
+.max-height-width-20{
+    max-height: 20px !important;
+    max-width: 20px !important;
+
+}
 
 .search-input {
     width: 100%;
