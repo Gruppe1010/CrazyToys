@@ -14,5 +14,18 @@ namespace CrazyToys.Interfaces.EntityDbInterfaces
 
         Task<Toy> GetByProductId(string productId);
 
+        Task<Toy> CreateOrUpdate(Toy toy);
+
+        Task<Toy> Create(Toy toy);
+
+        Task<List<Toy>> GetAll();
+
+        Task<Toy> GetById(string id);
+
+        Task<Toy> Update(Toy toy);
+
+        Task<List<Toy>> GetAllWithRelations();
+
+        Task<List<Toy>> GetToysToUpdateWithRelations(string dateString);
     }
 }
