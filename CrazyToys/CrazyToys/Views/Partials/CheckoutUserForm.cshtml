@@ -73,17 +73,13 @@
                         @Html.TextBoxFor(m => m.Email, new { @placeholder = "Fx. Ole@hotmail.dk", @required  = "required", @class = "font-colour-black"})
                     </div>
                 </div>
-            <div class="col-lg-6">
-                <div class="checkout__input">
-                    <p>Jeg giver CrazyToys samtykke til at gemme mine kontaktoplysninger<span>*</span></p> 
-                    @Html.CheckBox("Accepted", false, new { @required = "required", @class = "max-height-width-20"})
+                <div class="col-lg-6">
+                    <div class="checkout__input">
+                        <p>Jeg giver CrazyToys samtykke til at gemme mine kontaktoplysninger<span>*</span></p> 
+                        @Html.CheckBox("Accepted", false, new { @required = "required", @class = "max-height-width-20"})
+                    </div>
                 </div>
             </div>
-
-
-            </div>
-                
-
              <button type="submit" class="site-btn" style="width:750px">KØB NU</button>
              
         
