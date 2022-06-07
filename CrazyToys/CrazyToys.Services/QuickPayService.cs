@@ -66,15 +66,5 @@ namespace CrazyToys.Services
 
             return capture.Accepted;
         }
-
-
-        //metode til hæv penge
-        //CaptureZeMoney()
-
-        // TODO find lige ud af hvad vi skal bruge denne på
-        //var capture = await quickPayClient.Payments.Capture(payment.Id, totalPriceInInt).ConfigureAwait(false);
-
-
-
     }
 }
