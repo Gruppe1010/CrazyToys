@@ -56,7 +56,6 @@ namespace CrazyToys.Web.Controllers
             }
 
             string urlPath = Environment.GetEnvironmentVariable("UrlPath");
-           
 
             SessionUser sessionUser = _sessionService.GetNewOrExistingSessionUser(HttpContext);
             Dictionary<string, int> cart = sessionUser.Cart;

@@ -212,7 +212,6 @@ function removeToyFromCart(id, price) { //
             deleteToyRowFromView(id);
             deleteUnavailableToyRowFromView(id);
 
-
             // opdater updateCartTotal(shoppingCartToyDTO)
             updateCartTotal(-price * quantity);
             updateCartNumber();

@@ -47,7 +47,7 @@ namespace CrazyToys.Web.Controllers
             if(orderId != null)
             {
                 Order order = await _orderDbService.GetById(orderId);
-                StatusType statusType = await _statusTypeDbService.GetByStatusCode(4);
+                StatusType statusType = await _statusTypeDbService.GetByName("Shipped");
                 order.Statuses.Add(new Status(statusType));
                 await _orderDbService.Update(order);
                 // send shipping mail

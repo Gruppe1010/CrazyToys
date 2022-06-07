@@ -26,10 +26,6 @@ namespace CrazyToys.Services
         private readonly CityDbService _cityDbService;
         private readonly AddressDbService _addressDbService;
 
-        
-
-
-
         public SalesService(
             ISearchService<SolrToy> solrToyService,
             CustomerDbService customerDbService, 
@@ -129,8 +125,6 @@ namespace CrazyToys.Services
             return address != null ? address : new Address(city, streetAddress, country);
         }
 
-
-        // 
         public async Task<List<OrderLine>> ConvertCartToOrderLines(Dictionary<string, int> cart)
         {
             List<OrderLine> orderLines = new List<OrderLine>();
@@ -163,12 +157,7 @@ namespace CrazyToys.Services
                     await _toyDbService.Update(toy);
                     _solrToyService.Delete(new SolrToy(toy));
                 }
-
-                //TODO toyStock skal IKKE ændres - den skal ændre i reservedAmount
-
-
             }
-
             return orderLines;
         }
 
