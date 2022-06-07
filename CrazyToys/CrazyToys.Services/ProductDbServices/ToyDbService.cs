@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace CrazyToys.Services.ProductDbServices
 {
-    public class ToyDbService : IToyDbService
+    public class ToyDbService : IEntityCRUD<Toy>, IToyDbService
     {
         private readonly Context _context;
         private readonly ISearchService<SolrToy> _solrService; // haaay
@@ -84,6 +84,11 @@ namespace CrazyToys.Services.ProductDbServices
             return toy;
         }
 
+        public Task<Toy> GetByName(string name)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<List<ColourGroup>> GetColours(string toyId)
         {
             var query = from colour in _context.Colours
@@ -151,6 +156,16 @@ namespace CrazyToys.Services.ProductDbServices
             return toys;
         }
 
+        public Task DeleteRange(IList<Toy> tList)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Toy> Delete(string id)
+        {
+            throw new NotImplementedException();
+        }
+
 
         public async Task<List<Toy>> GetToysToUpdateWithRelations(string dateString)
         {
@@ -172,6 +187,8 @@ namespace CrazyToys.Services.ProductDbServices
                 toy.SubCategory.Categories.ToList().ForEach(c => c.SubCategories = null);
             }
             return toys;
+
+
         }
 
     }

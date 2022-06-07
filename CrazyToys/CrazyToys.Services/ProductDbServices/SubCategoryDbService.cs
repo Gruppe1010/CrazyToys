@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CrazyToys.Services.ProductDbServices
 {
-    public class SubCategoryDbService : ISubCategoryDbService
+    public class SubCategoryDbService : IEntityCRUD<SubCategory>
     {
         private readonly Context _context;
 
@@ -23,6 +23,26 @@ namespace CrazyToys.Services.ProductDbServices
             await _context.SaveChangesAsync();
 
             return subCategory;
+        }
+
+        public Task<SubCategory> CreateOrUpdate(SubCategory t)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<SubCategory> Delete(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteRange(IList<SubCategory> tList)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<SubCategory>> GetAll()
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<List<SubCategory>> GetAllWithRelations()
@@ -43,5 +63,17 @@ namespace CrazyToys.Services.ProductDbServices
                 .FirstOrDefaultAsync(b => b.ID == id);
             return subCategory;
         }
+
+        public Task<SubCategory> GetByName(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<SubCategory> Update(SubCategory t)
+        {
+            throw new NotImplementedException();
+        }
+
+       
     }
 }
