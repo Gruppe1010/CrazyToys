@@ -16,7 +16,7 @@ namespace CrazyToys.Services
             string privateKey = "4cb0257e7b52b9b07405a07ba9620285220e8f1838f83bb0e6ec5e86be1ba3d7";
             string userKey = "0aebd9aa01ce5b73ff3216a22c131da6d8987d9d4446e339ea3052516abc29ae";
 
-            return new QuickPay.SDK.QuickPayClient(apiUserKey, privateKey, userKey);
+            return new QuickPayClient(apiUserKey, privateKey, userKey);
         }
 
         public async Task<int> CreatePayment(string orderId, string currency)
@@ -27,7 +27,7 @@ namespace CrazyToys.Services
             if (orderId.Length > 3 && orderId.Length < 21)
             {
                 var quickPayClient = CreateQuickPayClient();
-                var payment = await quickPayClient.Payments.Create(currency, orderId, new Dictionary<string, string> { { "Hej", "12345" } }).ConfigureAwait(false);
+                var payment = await quickPayClient.Payments.Create(currency, orderId, null).ConfigureAwait(false);
 
                 newPaymentId = payment.Id;
             }
