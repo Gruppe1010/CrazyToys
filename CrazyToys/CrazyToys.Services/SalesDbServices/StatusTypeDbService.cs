@@ -56,7 +56,7 @@ namespace CrazyToys.Services.SalesDbServices
             {
                 return null;
             }
-            return await _salesContext.StatusTypes.FirstOrDefaultAsync(s => s.Name.Equals(name));
+            return await _salesContext.StatusTypes.FirstOrDefaultAsync(s => s.Name.ToLower().Equals(name.ToLower()));
         }
 
         public Task<StatusType> Update(StatusType statusType)

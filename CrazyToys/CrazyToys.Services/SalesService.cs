@@ -63,7 +63,6 @@ namespace CrazyToys.Services
 
             if (city == null || !city.Name.Equals(model.CityName))
             {
-                // TODO ret lige her at den godt må skrive 
                 return null;
             }
 
@@ -80,8 +79,10 @@ namespace CrazyToys.Services
             {
                 newOrder.OrderLines = orderLines;
 
-                // TODO denne skal i fremtiden ændres så den ikke bare bliver til billing altid, men kan tilføjes seperat ude i formen på siden
+                // TODO denne skal i fremtiden ændres så den ikke bare bliver til billing address altid,
+                //      men kan tilføjes seperat ude i formen på siden
                 newOrder.ShippingAddress = newOrder.Customer.BillingAddress;
+
                 // gem ned og returner
                 newOrder.OrderNumber = await GenerateOrderNumber();
                 newOrder = await _orderDbService.Create(newOrder);

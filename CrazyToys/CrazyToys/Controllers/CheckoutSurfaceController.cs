@@ -87,7 +87,6 @@ namespace CrazyToys.Web.Controllers
 
                 return Redirect(paymentUrl);
             }
-
             // TODO tag imod denne i html
             ViewData["ErrorMessage"] = "Der gik noget galt i betalingen";
             return CurrentUmbracoPage();
