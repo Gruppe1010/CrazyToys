@@ -14,12 +14,10 @@ namespace CrazyToys.Services.ProductDbServices
     public class ToyDbService : IEntityCRUD<Toy>, IToyDbService
     {
         private readonly Context _context;
-        private readonly ISearchService<SolrToy> _solrService; // haaay
 
-        public ToyDbService(Context context, ISearchService<SolrToy> solrService)
+        public ToyDbService(Context context)
         {
             _context = context;
-            _solrService = solrService;
         }
 
         public async Task<Toy> Create(Toy toy)
