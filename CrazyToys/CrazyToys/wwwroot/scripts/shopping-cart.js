@@ -198,7 +198,10 @@ function removeToyFromCart(id, price) { //
 
     // fjern én fra quantity på sessionsUser
     fetch(`/api/sessionuser/RemoveToyFromSessionUser?id=${id}`, {
-        method: 'DELETE'
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json; charset=UTF-8' // denne linje siger at dataen som vi sender er en string 
+        }
     }).then(response => {
         if (response.ok) {
 

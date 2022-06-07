@@ -30,7 +30,7 @@ namespace CrazyToys.Web.Controllers
             return Ok(JsonConvert.SerializeObject(sessionUser));
         }
 
-        [HttpDelete]
+        [HttpPost]
         public async Task<ActionResult<SessionUser>> RemoveToyFromSessionUser([FromQuery(Name = "id")] string id)
         {
             var sessionUser = _sessionService.GetNewOrExistingSessionUser(HttpContext);

@@ -104,7 +104,7 @@ namespace CrazyToys.Web
             services.AddScoped<ImageDbService>();
             services.AddScoped<SimpleToyDbService>();
             services.AddScoped<IEntityCRUD<AgeGroup>, AgeGroupDbService>();
-            services.AddScoped< IEntityCRUD<PriceGroup>, PriceGroupDbService> ();
+            services.AddScoped<IEntityCRUD<PriceGroup>, PriceGroupDbService> ();
 
             // sales-db services
             services.AddScoped<CustomerDbService>();
