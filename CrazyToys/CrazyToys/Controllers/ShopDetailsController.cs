@@ -39,7 +39,6 @@ namespace CrazyToys.Web.Controllers
         }
 
         [HttpGet]
-        //[FromQuery bruges til at tage imod query parameter fra url]
         public async Task<IActionResult> Index([FromQuery(Name = "id")] string id)
         {
             var toy = await _toyDbService.GetById(id);
@@ -49,10 +48,9 @@ namespace CrazyToys.Web.Controllers
 
             List<ShopToyDTO> relatedToys = await _recommendationService.GetRelatedToys(id, 8);
 
-            List<Category> categories = await _categoryDbService.GetAllFromToyId(toy);
-            List<ShopToyDTO> mostPopularToys = await _recommendationService.GetMostPopularToys(categories, 8);
+            List<Category> categories = await _categoryDbService.GetAllFromToy(toy);
+            List<ShopToyDTO> mostPopularToys = await _recommendationService.GetMostPopularToys(toy, 8);
 
-            ViewBag.Current = "Legetøjs Detaljer";
             ViewData["Toy"] = toy;
             ViewData["WishlistToys"] = wishlistToys;
             ViewData["RelatedToys"] = relatedToys;

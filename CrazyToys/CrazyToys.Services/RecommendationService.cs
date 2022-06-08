@@ -3,6 +3,7 @@ using CrazyToys.Entities.Entities;
 using CrazyToys.Entities.OrderEntities;
 using CrazyToys.Entities.SolrModels;
 using CrazyToys.Interfaces;
+using CrazyToys.Services.ProductDbServices;
 using CrazyToys.Services.SalesDbServices;
 using System;
 using System.Collections.Generic;
@@ -16,13 +17,17 @@ namespace CrazyToys.Services
     {
         private readonly ISearchService<SolrToy> _solrService;
         private readonly OrderDbService _orderDbService;
+        private readonly CategoryDbService _categoryDbService;
+
 
         public RecommendationService(
             ISearchService<SolrToy> solrService,
-            OrderDbService orderDbService)
+            OrderDbService orderDbService,
+            CategoryDbService categoryDbService)
         {
             _solrService = solrService;
             _orderDbService = orderDbService;
+            _categoryDbService = categoryDbService;
         }
 
         public async Task<List<ShopToyDTO>> GetRelatedToys(string toyId, int wantedAmount)
@@ -43,8 +48,10 @@ namespace CrazyToys.Services
             return shopToyDTOs;
         }
 
-        public async Task<List<ShopToyDTO>> GetMostPopularToys(List<Category> categories, int wantedAmount)
+        public async Task<List<ShopToyDTO>> GetMostPopularToys(Toy toy, int wantedAmount)
         {
+            List<Category> categories = await _categoryDbService.GetAllFromToy(toy);
+
             string query = ConvertCategoriesToQuery(categories);
 
             // category%3A"Bamser"OR"Dukker"

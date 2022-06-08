@@ -58,7 +58,7 @@ namespace CrazyToys.Services.ProductDbServices
             return categories;
         }
 
-        public async Task<List<Category>> GetAllFromToyId(Toy toy)
+        public async Task<List<Category>> GetAllFromToy(Toy toy)
         {
 
             if (toy != null)

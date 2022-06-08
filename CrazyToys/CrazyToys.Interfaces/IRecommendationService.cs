@@ -10,7 +10,7 @@ namespace CrazyToys.Interfaces
     {
         Task<List<ShopToyDTO>> GetRelatedToys(string toyId, int wantedAmount);
 
-        Task<List<ShopToyDTO>> GetMostPopularToys(List<Category> categories, int wantedAmount);
+        Task<List<ShopToyDTO>> GetMostPopularToys(Toy toy, int wantedAmount);
     }
 }
 
