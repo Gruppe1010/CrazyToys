@@ -25,7 +25,7 @@ namespace CrazyToys.Entities.DTOs.OrderDTOs
         {
             foreach(var status in Statuses)
             {
-                if(status.StatusType.Name.Equals(statusTypeName))
+                if(status.StatusType.Name.ToLower().Equals(statusTypeName.ToLower()))
                 {
                     return true;
                 }

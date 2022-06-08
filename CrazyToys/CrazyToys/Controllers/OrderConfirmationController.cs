@@ -51,7 +51,8 @@ namespace CrazyToys.Web.Controllers
             // find den nyoprettede ordre
             Order order = await _orderDbService.GetByOrderNumber(orderNumber);
 
-            if(order != null) // 
+            // hvis der er en ordre og den allerede har statustypen approved har de fået vist ordrebekræftelsen før, og følgende ting skal altså ikke ske igen
+            if(order != null && !order.HasStatus("Approved"))
             {
                 // Opdater SolrToys soldAmount
                 _salesService.UpdateSoldAmountInSolrToys(order.OrderLines);
@@ -60,7 +61,6 @@ namespace CrazyToys.Web.Controllers
                 List<ShoppingCartToyDTO> orderConfirmationToyList = await _salesService.ConvertOrderLinesToShoppingCartToyDTOs(order.OrderLines);
 
                 // Send email til bruger
-
                 MailDTO mailDTO = _mailService.CreateOrderConfirmation(order, orderConfirmationToyList);
                 _hangfireService.CreateMailJob(mailDTO);
 

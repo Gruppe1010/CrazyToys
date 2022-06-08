@@ -91,6 +91,19 @@ namespace CrazyToys.Entities.OrderEntities
         {
             return new OrderDTO(ID, OrderNumber, Statuses);
         }
-     
+
+
+        public bool HasStatus(string statusTypeName)
+        {
+            foreach (var status in Statuses)
+            {
+                if (status.StatusType.Name.ToLower().Equals(statusTypeName.ToLower()))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
     }
 }
