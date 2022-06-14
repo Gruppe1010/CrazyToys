@@ -89,11 +89,15 @@ namespace CrazyToys.Services
             double subTotal = 0;
             double totalPrice;
 
+
+
+            string urlPath = Environment.GetEnvironmentVariable("UrlPath");
+
             foreach (ShoppingCartToyDTO toy in shoppingCartToyDTOs)
             {
                 var subAmount = toy.CalculateTotalPrice();
 
-                bodyText = bodyText + "<tr></tr>" + "<tr>" + "<td>" + "<img width='90' height='90' src='" + toy.Image + "'>" + "</td>" + "<td>" + "&nbsp;&nbsp;&nbsp;&nbsp;" + toy.Name + "&nbsp;&nbsp;&nbsp;&nbsp;" + "</td>" + "<td>" + "&nbsp;&nbsp;&nbsp;&nbsp;" + toy.Quantity + " stk.&nbsp;&nbsp;&nbsp;&nbsp;" + "</td>" + "<td align='right'>" + subAmount + " DKK" + "</td>" + "</tr>";
+                bodyText = bodyText + "<tr></tr>" + $"<tr><td><a href='{urlPath}/shop-details?id={toy.ID}' ><img width='90' height='90' src='{toy.Image}'></a></td><td>&nbsp;&nbsp;&nbsp;&nbsp; <a style='text-decoration:none' style='color:black' href='{urlPath}/shop-details?id={toy.ID}'>{toy.Name} </a> &nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp; {toy.Quantity} stk.&nbsp;&nbsp;&nbsp;&nbsp;</td><td align='right'> {subAmount} DKK </td></a></tr>";
                 subTotal = subTotal + subAmount;
             }
 
