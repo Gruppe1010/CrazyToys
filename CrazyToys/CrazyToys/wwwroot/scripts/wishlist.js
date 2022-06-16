@@ -6,6 +6,10 @@ function addToOrRemoveFromWishlist(toyId) {
     debugger;
  
     const wishlistImages = document.getElementsByClassName(`wishlist-img-${toyId}`);
+    const wishlistLink = document.getElementById(`wishlist-span-${toyId}`);
+
+
+    let text = "Fjern fra ønskeliste";
 
     if (wishlistImages.length === 0) {
         // puha gør noget
@@ -19,11 +23,20 @@ function addToOrRemoveFromWishlist(toyId) {
     if (src.includes("filledheart")) {
         removeFromWishlist(toyId);
         newSrc = src.replace("filledheart", "heart");
+        text = "Tilføj til ønskeliste"
 
     } else {
         addToWishlist(toyId);
         newSrc = src.replace("heart", "filledheart");
+       
     }
+
+    
+    if (wishlistLink != undefined) {
+        wishlistLink.innerText =  text;
+    }
+    
+    
 
     Array.from(wishlistImages).forEach(imgEl => changeSrc(imgEl, newSrc));
 }

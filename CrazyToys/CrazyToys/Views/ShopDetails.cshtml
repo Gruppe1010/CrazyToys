@@ -79,9 +79,21 @@
                         </div>
                         <div id="shop-details-wishlist" class="product__details__btns__option">
                             @{
+                                string src = "img/icon/heart.png";
+                                string text = "Tilføj til ønskeliste";
+
+                                if( wishlistToys.Contains(@toy.ID)){
+                                    src = "img/icon/filledheart.png";
+                                    text = "Fjern fra ønskeliste";
+                                }
+
+                                /*
                                 // alt efter om wishListen container toyId'et, skal den vise enten et fyldt eller tomt hjerte - så vi ændrer src'en alt efter om den er på eller ej
                                 string src = wishlistToys.Contains(@toy.ID) ? "img/icon/filledheart.png" : "img/icon/heart.png";
-                                <a id="wishlist-link-@toy.ID" href="javascript:void(0);" onclick='addToOrRemoveFromWishlist("@toy.ID")'><img class="shop-deatils-heart-icons wishlist-img-@toy.ID" src="@src" alt=""> Tilføj til ønskeliste</a>
+
+                                */
+
+                                <a id="wishlist-link-@toy.ID" href="javascript:void(0);" onclick='addToOrRemoveFromWishlist("@toy.ID")'><img class="shop-deatils-heart-icons wishlist-img-@toy.ID" src="@src" alt=""> <span id="wishlist-span-@toy.ID">@text</span> </a>
                             }
                         </div>
                         <p>@toy.ShortDescription</p>
