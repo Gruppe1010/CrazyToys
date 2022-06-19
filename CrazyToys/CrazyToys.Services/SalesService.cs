@@ -57,12 +57,12 @@ namespace CrazyToys.Services
             // tjek først for valid postalCode
             City city = await _cityDbService.GetByPostalCode(model.PostalCode);
 
-            if (city == null || !city.Name.Equals(model.CityName))
+            if (city == null || !city.Name.ToLower().Equals(model.CityName.ToLower()))
             {
                 return null;
             }
 
-            // opret eller få fat i den eksisterende kunde, og tilknyt den ordren
+            // opret eller få den eksisterende kunde, og tilknyt den ordren
             newOrder.Customer = await GetOrCreateCustomer(model.Email);
            
             // Opdaterer navn og BillingAddress
@@ -112,7 +112,7 @@ namespace CrazyToys.Services
 
             if(countryFromDb == null)
             {
-                // TODO lav en fejl hvis den ikke har country i db - så er der sket en fejl i formen eller noget for det er en hardcodet select 
+                // TODO lav en fejl hvis den ikke har country i db - så er der sket en fejl i formen eller noget for det er en hardcodet select
             }
 
             customer.BillingAddress = await GetOrCreateAddress(city, model.StreetAddress, countryFromDb);
@@ -131,8 +131,7 @@ namespace CrazyToys.Services
 
             foreach (var item in cart)
             {
-                // hent Toy op fra db
-                Toy toy = await _toyDbService.GetById(item.Key);
+                Toy toy = await _toyDbService.GetById(item.Key); // hent Toy op fra db
 
                 if (toy.Stock >= item.Value)
                 {
@@ -144,13 +143,17 @@ namespace CrazyToys.Services
                     }
 
                     // lav en ny OrderLine
-                    OrderLine orderLine = new OrderLine(item.Key, item.Value, toy.Price, 0); // altid 0 i rabat, fordi vi ikke har rabatter
+                    // altid 0 i rabat, fordi vi ikke har rabatter
+                    OrderLine orderLine = new OrderLine(item.Key, item.Value, toy.Price, 0); 
                     orderLines.Add(orderLine);
                 }
-                else // hvis der er færre på lager end der er i min kurv, så skal den tilføje det antal som er på lager - 
+                // hvis der er færre på lager end der er i min kurv, men stadig over 0,
+                // så skal den tilføje det antal som er på lager
+                else if (toy.Stock > 0) 
                 {
                     // TODO lav noget sådan så man kan se at man kun har fået 5 og ikke de 7 man faktisk ville have
-                    OrderLine orderLine = new OrderLine(item.Key, toy.Stock, toy.Price, 0); // altid 0 i rabat, fordi vi ikke har rabatter
+                    // altid 0 i rabat, fordi vi ikke har rabatter
+                    OrderLine orderLine = new OrderLine(item.Key, toy.Stock, toy.Price, 0); 
                     orderLines.Add(orderLine);
 
                     toy.Stock = 0;

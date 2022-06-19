@@ -12,14 +12,12 @@ namespace CrazyToys.Services.SalesDbServices
 {
     public class CityDbService
     {
-
         private readonly SalesContext _salesContext;
 
         public CityDbService(SalesContext salesContext)
         {
             _salesContext = salesContext;
         }
-
 
         public async Task<City> GetByPostalCode(string postalCode)
         {
@@ -31,7 +29,5 @@ namespace CrazyToys.Services.SalesDbServices
             }
             return null;
         }
-
-     
     }
 }

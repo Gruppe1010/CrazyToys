@@ -28,25 +28,6 @@ namespace CrazyToys.Web.Controllers
         private readonly SalesService _salesService;
         private readonly IPaymentService _paymentService;
 
-        public CheckoutSurfaceController(
-            IUmbracoContextAccessor umbracoContextAccessor,
-            IUmbracoDatabaseFactory databaseFactory,
-            ServiceContext services,
-            AppCaches appCaches,
-            IProfilingLogger profilingLogger,
-            IPublishedUrlProvider publishedUrlProvider,
-            ISessionService sessionService,
-            SalesService salesDataService,
-            IPaymentService paymentService)
-            : base(umbracoContextAccessor, databaseFactory, services, appCaches, profilingLogger, publishedUrlProvider)
-        {
-            _sessionService = sessionService;
-            _salesService = salesDataService;
-            _paymentService = paymentService;
-
-        }
-
-
         [HttpPost]
         public async Task<IActionResult> Submit(CheckoutUserModel model)
         {
@@ -55,14 +36,11 @@ namespace CrazyToys.Web.Controllers
                 return CurrentUmbracoPage();
             }
 
-            string urlPath = Environment.GetEnvironmentVariable("UrlPath");
-
             SessionUser sessionUser = _sessionService.GetNewOrExistingSessionUser(HttpContext);
             Dictionary<string, int> cart = sessionUser.Cart;
 
             if(cart.Count == 0)
             {
-                // TODO tag imod denne i html
                 ViewData["ErrorMessage"] = "Der ligger ikke noget i din kurv";
                 return CurrentUmbracoPage();
             }
@@ -71,11 +49,11 @@ namespace CrazyToys.Web.Controllers
 
             if (newOrder == null)
             {
+                string urlPath = Environment.GetEnvironmentVariable("UrlPath");
                 return Redirect($"{urlPath}/shopping-cart");
             }
 
             int paymentId = await _paymentService.CreatePayment(newOrder.OrderNumber.ToString(), "dkk");
-
 
             if (paymentId != 0)
             {
@@ -86,9 +64,28 @@ namespace CrazyToys.Web.Controllers
 
                 return Redirect(paymentUrl);
             }
-            // TODO tag imod denne i html
             ViewData["ErrorMessage"] = "Der gik noget galt i betalingen";
             return CurrentUmbracoPage();
+        }
+
+
+
+        public CheckoutSurfaceController(
+      IUmbracoContextAccessor umbracoContextAccessor,
+      IUmbracoDatabaseFactory databaseFactory,
+      ServiceContext services,
+      AppCaches appCaches,
+      IProfilingLogger profilingLogger,
+      IPublishedUrlProvider publishedUrlProvider,
+      ISessionService sessionService,
+      SalesService salesDataService,
+      IPaymentService paymentService)
+      : base(umbracoContextAccessor, databaseFactory, services, appCaches, profilingLogger, publishedUrlProvider)
+        {
+            _sessionService = sessionService;
+            _salesService = salesDataService;
+            _paymentService = paymentService;
+
         }
     }
 }

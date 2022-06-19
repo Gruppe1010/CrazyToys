@@ -1,15 +1,8 @@
 ﻿@using CrazyToys.Web.Controllers
 @model CrazyToys.Entities.DTOs.CheckoutUserModel;
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-
 
 @using (Html.BeginUmbracoForm<CheckoutSurfaceController>(nameof(CheckoutSurfaceController.Submit)))
 {
-        
             <h6 class="checkout__title">LEVERINGSADRESSE</h6>
             <div class="row">
                 <div class="col-lg-6">
@@ -25,29 +18,11 @@
                     </div>
                 </div>
             </div>
-
-            /*
-             <div class="checkout__input">
-                <p>Land<span>*</span></p>
-                @Html.DropDownListFor(m => m.CountryName, new SelectList( new List<Object> {
-                    new { value = 0 , text = "Danmark"}
-                },
-                "value",
-                "text",
-                Model.CountryName
-                ) 
-                )
-            </div>
-
-            new { Value = "Danmark" })
-            */
-            
             <div class="checkout__input">
                 <p>Land<span></span></p>
                 @Html.TextBoxFor(m => m.CountryName, Model.CountryName = "Danmark", new { @readonly = "readonly", 
                 @class = "country-background"})
             </div>
-            
             <div class="checkout__input">
                 <p>By<span>*</span></p>
                 @Html.TextBoxFor(m => m.CityName, new { @placeholder = "Fx. København", @required  = "required", @class = "font-colour-black"})
@@ -81,7 +56,6 @@
                 </div>
             </div>
              <button type="submit" class="site-btn" style="width:750px">KØB NU</button>
-             
-        
-   
 }
+
+
